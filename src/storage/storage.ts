@@ -2,8 +2,9 @@ import Row from "../row";
 
 
 abstract class Storage<T> {
-  abstract getRows(): Row<T>[];
-  abstract setRows(rows: Row<T>[]);
+  abstract get(): Iterable<Row<T>>;
+  abstract set(rows: Iterable<Row<T>>): void;
+  abstract get length(): number;
 }
 
 export default Storage;

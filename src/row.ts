@@ -1,18 +1,21 @@
+import Cell from "./cell";
 
 
-class Row<T> {
-  private data: T;
+class Row<T> implements Iterable<Cell<T>> {
+  private cells: Iterable<Cell<T>>;
 
-  constructor(data: T) {
-    this.data = data;
+  constructor(cells: Iterable<Cell<T>>) {
+    this.cells = cells;
   }
 
-  public getData(): T {
-    return this.data;
+  *[Symbol.iterator](): Iterator<Cell<T>> {
+    for (let cell of this.cells) {
+      yield cell;
+    }
   }
 
-  public setData(data: T) {
-    this.data = data;
+  get length(): number {
+    return Array.from(this.cells).length;
   }
 }
 
