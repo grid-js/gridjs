@@ -2,9 +2,9 @@ import Row from "../row";
 
 
 abstract class Storage<T> {
-  abstract get(): Iterable<Row<T>>;
-  abstract set(rows: Iterable<Row<T>>): void;
-  abstract get length(): number;
+  abstract async get(): Promise<Iterable<Row<T>>>;
+  abstract async set(rows: Iterable<Row<T>>): Promise<boolean>;
+  abstract get length(): Promise<number>;
 }
 
 export default Storage;

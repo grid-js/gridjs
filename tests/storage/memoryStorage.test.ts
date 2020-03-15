@@ -3,22 +3,23 @@ import Row from "../../src/row";
 import Cell from "../../src/cell";
 
 describe( 'MemoryStorage class', () => {
-  it('should return the correct length', () => {
+  it('should return the correct length', async () => {
     const memoryStorage = new MemoryStorage();
 
     const row1 = new Row([new Cell("b1")]);
-    memoryStorage.set([row1]);
+    await memoryStorage.set([row1]);
 
-    expect(memoryStorage).toHaveLength(1);
+    expect(await memoryStorage.length).toBe(1);
   });
 
-  it('should set and get rows', () => {
+  it('should set and get rows', async () => {
     const memoryStorage = new MemoryStorage();
 
     const row1 = new Row([new Cell("c1")]);
     const row2 = new Row([new Cell("c2")]);
-    memoryStorage.set([row1, row2]);
 
-    expect(memoryStorage.get()).toStrictEqual([row1, row2]);
+    await memoryStorage.set([row1, row2]);
+
+    expect(await memoryStorage.get()).toStrictEqual([row1, row2]);
   });
 });
