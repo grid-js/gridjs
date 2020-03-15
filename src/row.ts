@@ -9,7 +9,7 @@ class Row<T> implements Iterable<Cell<T>> {
   }
 
   *[Symbol.iterator](): Iterator<Cell<T>> {
-    for (let cell of this.cells) {
+    for (const cell of this.cells) {
       yield cell;
     }
   }

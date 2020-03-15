@@ -11,7 +11,7 @@ class Cell<T> {
     return this.data;
   }
 
-  public setData(data: T) {
+  public setData(data: T): void {
     this.data = data;
   }
 }
