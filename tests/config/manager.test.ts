@@ -1,10 +1,10 @@
-import ConfigManager from "../../src/config/configManager";
+import Manager from "../../src/config/manager";
 
 describe( 'ConfigManager class', () => {
   let configManager = null;
 
   beforeEach(() => {
-    configManager = new ConfigManager();
+    configManager = new Manager();
     configManager.set('key1', 1);
     configManager.set('key2', 2);
   });

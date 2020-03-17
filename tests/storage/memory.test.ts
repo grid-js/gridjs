@@ -1,4 +1,4 @@
-import MemoryStorage from "../../src/storage/memoryStorage";
+import MemoryStorage from "../../src/storage/memory";
 import Row from "../../src/row";
 import Cell from "../../src/cell";
 

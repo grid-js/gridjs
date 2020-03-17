@@ -1,4 +1,4 @@
-import Pipeline from "../src/pipeline";
+import Pipeline from "../src/pipeline/pipeline";
 
 describe( 'Pipeline class', () => {
   it('should inherit Promise', () => {

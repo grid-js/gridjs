@@ -1,5 +1,5 @@
-import ConfigManager from "./config/configManager";
-import MemoryStorage from "./storage/memoryStorage";
+import ConfigManager from "./config/manager";
+import MemoryStorage from "./storage/memory";
 
 class Grid {
   private config: ConfigManager;
