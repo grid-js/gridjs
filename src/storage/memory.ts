@@ -2,7 +2,7 @@ import Row from "../row";
 import Storage from "./storage";
 
 class MemoryStorage<T> extends Storage<T> {
-  private rows: Iterable<Row<T>>;
+  private rows: Iterable<Row<T>> = [];
 
   public async get(): Promise<Iterable<Row<T>>> {
     return new Promise((resolve) => {

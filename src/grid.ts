@@ -1,11 +1,11 @@
-import ConfigManager from "./config/manager";
+import Config from "./config";
 import MemoryStorage from "./storage/memory";
 
 class Grid {
-  private config: ConfigManager;
+  private config: Config;
 
   constructor() {
-    this.config = new ConfigManager();
+    this.config = new Config();
 
     this.bootstrap();
   }
