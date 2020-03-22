@@ -1,9 +1,12 @@
+import Base from "./base";
 
 
-class Cell<T> {
+class Cell<T> extends Base {
   private data: T;
 
   constructor(data: T) {
+    super();
+
     this.setData(data);
   }
 

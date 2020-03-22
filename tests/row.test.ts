@@ -10,10 +10,12 @@ describe( 'Row class', () => {
     expect(row).toHaveLength(2);
   });
 
-  it('should accept iterable', () => {
+  it('should accept empty constructor', () => {
     const cell1 = new Cell(1);
     const cell2 = new Cell(2);
-    const row = new Row(new Set([cell1, cell2, cell2]));
+    const row = new Row();
+    row.pushCell(cell1);
+    row.pushCell(cell2);
 
     expect(row).toHaveLength(2);
   });

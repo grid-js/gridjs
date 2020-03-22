@@ -1,11 +1,22 @@
 import Cell from "./cell";
+import Base from "./base";
 
 
-class Row<T> implements Iterable<Cell<T>> {
-  private cells: Iterable<Cell<T>>;
+class Row<T> extends Base implements Iterable<Cell<T>> {
+  private cells: Cell<T>[];
 
-  constructor(cells: Iterable<Cell<T>>) {
+  constructor(cells?: Cell<T>[]) {
+    super();
+
+    this.setCells(cells || []);
+  }
+
+  public setCells(cells: Cell<T>[]): void {
     this.cells = cells;
+  }
+
+  public pushCell(cell: Cell<T>): void {
+    this.cells.push(cell);
   }
 
   *[Symbol.iterator](): Iterator<Cell<T>> {
@@ -15,7 +26,7 @@ class Row<T> implements Iterable<Cell<T>> {
   }
 
   get length(): number {
-    return Array.from(this.cells).length;
+    return this.cells.length;
   }
 }
 
