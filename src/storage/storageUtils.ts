@@ -8,9 +8,10 @@ class StorageUtils {
    *
    * @param config
    */
-  public static createFromConfig<T>(config: Config): Storage<T>|null {
-    if (config.get('data')) {
-      return new MemoryStorage<T>();
+  public static createFromConfig(config: Config): Storage|null {
+    // `data` array is provided
+    if (config.data) {
+      return new MemoryStorage(config);
     }
 
     return null;

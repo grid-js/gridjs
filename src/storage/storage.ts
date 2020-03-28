@@ -1,11 +1,15 @@
-import Row from "../row";
 import Config from "../config";
 
 
-abstract class Storage<T> {
-  abstract async load(config: Config): Promise<boolean>;
-  abstract async get(): Promise<Iterable<Row<T>>>;
-  abstract async set(rows: Iterable<Row<T>>): Promise<boolean>;
+abstract class Storage {
+  protected config;
+
+  protected constructor(config: Config) {
+    this.config = config;
+  }
+
+  abstract async get(): Promise<any[][]>;
+  abstract async set(rows: any[][]): Promise<boolean>;
   abstract get length(): Promise<number>;
 }
 

@@ -2,24 +2,24 @@ import Cell from "./cell";
 import Base from "./base";
 
 
-class Row<T> extends Base implements Iterable<Cell<T>> {
-  private cells: Cell<T>[];
+class Row extends Base implements Iterable<Cell> {
+  private cells: Cell[];
 
-  constructor(cells?: Cell<T>[]) {
+  constructor(cells?: Cell[]) {
     super();
 
     this.setCells(cells || []);
   }
 
-  public setCells(cells: Cell<T>[]): void {
+  public setCells(cells: Cell[]): void {
     this.cells = cells;
   }
 
-  public pushCell(cell: Cell<T>): void {
+  public pushCell(cell: Cell): void {
     this.cells.push(cell);
   }
 
-  *[Symbol.iterator](): Iterator<Cell<T>> {
+  *[Symbol.iterator](): Iterator<Cell> {
     for (const cell of this.cells) {
       yield cell;
     }

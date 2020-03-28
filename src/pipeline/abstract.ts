@@ -1,8 +1,5 @@
-import Config from "../config";
-import Storage from "../storage/storage";
-
-abstract class PipelineAbstract<T> {
-  abstract new(config: Config, ...args): Promise<Storage<T>>;
+abstract class PipelineAbstract {
+  abstract execute(...args): Promise<any>;
 }
 
 export default PipelineAbstract;

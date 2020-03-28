@@ -1,11 +1,11 @@
 import React from "react";
 import Cell from "../cell";
 
-export interface TDProps<T> {
-  cell: Cell<T>
+export interface TDProps {
+  cell: Cell
 }
 
-export class TD<T> extends React.Component<TDProps<T>, {}> {
+export class TD extends React.Component<TDProps, {}> {
   render() {
     return <td>{ this.props.cell.getData() }</td>;
   }

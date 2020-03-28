@@ -3,14 +3,14 @@ import Row from "../row";
 import Cell from "../cell";
 import {TD} from "./td";
 
-export interface TRProps<T> {
-  row: Row<T>
+export interface TRProps {
+  row: Row
 }
 
-export class TR<T> extends React.Component<TRProps<T>, {}> {
+export class TR extends React.Component<TRProps, {}> {
   render() {
     return <tr>
-      { Array.from(this.props.row).map((cell: Cell<T>) => {
+      { Array.from(this.props.row).map((cell: Cell) => {
         return <TD key={cell.id} cell={cell}></TD>;
       }) }
     </tr>;

@@ -1,25 +1,35 @@
 import MemoryStorage from "../../src/storage/memory";
-import Row from "../../src/row";
-import Cell from "../../src/cell";
+import Config from "../../src/config";
 
 describe( 'MemoryStorage class', () => {
-  it('should return the correct length', async () => {
-    const memoryStorage = new MemoryStorage();
+  let config: Config = null;
 
-    const row1 = new Row([new Cell("b1")]);
-    await memoryStorage.set([row1]);
+  beforeEach(() => {
+    config = new Config();
+    config.data = [
+      [1, 2, 3],
+      [4, 5, 6]
+    ];
+  });
+
+  it('should load from the config', async () => {
+    const memoryStorage = new MemoryStorage(config);
+    expect(await memoryStorage.length).toBe(2);
+  });
+
+  it('should return the correct length', async () => {
+    const memoryStorage = new MemoryStorage(config);
+
+    await memoryStorage.set([[1, 2, 3]]);
 
     expect(await memoryStorage.length).toBe(1);
   });
 
   it('should set and get rows', async () => {
-    const memoryStorage = new MemoryStorage();
+    const memoryStorage = new MemoryStorage(config);
 
-    const row1 = new Row([new Cell("c1")]);
-    const row2 = new Row([new Cell("c2")]);
+    await memoryStorage.set([['a', 'b', 'c']]);
 
-    await memoryStorage.set([row1, row2]);
-
-    expect(await memoryStorage.get()).toStrictEqual([row1, row2]);
+    expect(await memoryStorage.get()).toStrictEqual([['a', 'b', 'c']]);
   });
 });
