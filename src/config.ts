@@ -8,6 +8,10 @@ interface Config {
   limit?: number
 }
 
-class Config {}
+class Config {
+  constructor(config?: Config) {
+    Object.assign(this, config);
+  }
+}
 
 export default Config;

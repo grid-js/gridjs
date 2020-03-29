@@ -7,10 +7,10 @@ import StorageError from "./error/storage";
 
 
 class Grid {
-  private readonly config: Config;
+  private _config: Config;
 
   constructor(config: Config) {
-    this.config = config;
+    this.config = new Config(config);
     this.bootstrap();
   }
 
@@ -26,6 +26,14 @@ class Grid {
     }
 
     this.config.storage = storage;
+  }
+
+  set config(config: Config) {
+    this._config = config;
+  }
+
+  get config(): Config {
+    return this._config;
   }
 
   createElement(): ReactElement {
