@@ -3,20 +3,20 @@ import {TCell} from "./types";
 
 
 class Cell extends Base {
-  private data: TCell;
+  private _data: TCell;
 
   constructor(data: TCell) {
     super();
 
-    this.setData(data);
-  }
-
-  public getData(): TCell {
-    return this.data;
-  }
-
-  public setData(data: TCell): void {
     this.data = data;
+  }
+
+  public get data(): TCell {
+    return this._data;
+  }
+
+  public set data(data: TCell) {
+    this._data = data;
   }
 }
 

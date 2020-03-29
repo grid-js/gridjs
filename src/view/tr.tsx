@@ -10,7 +10,7 @@ export interface TRProps {
 export class TR extends React.Component<TRProps, {}> {
   render() {
     return <tr>
-      { Array.from(this.props.row).map((cell: Cell) => {
+      { this.props.row.cells.map((cell: Cell) => {
         return <TD key={cell.id} cell={cell}></TD>;
       }) }
     </tr>;

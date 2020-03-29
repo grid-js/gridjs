@@ -7,6 +7,6 @@ export interface TDProps {
 
 export class TD extends React.Component<TDProps, {}> {
   render() {
-    return <td>{ this.props.cell.getData() }</td>;
+    return <td>{ this.props.cell.data }</td>;
   }
 }

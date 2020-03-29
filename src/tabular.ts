@@ -1,32 +1,35 @@
 import Base from "./base";
 import Row from "./row";
+import Cell from "./cell";
 
 
-class Tabular extends Base implements Iterable<Row> {
-  private rows: Row[];
+class Tabular extends Base {
+  private _rows: Row[];
 
   constructor(rows?: Row[]) {
     super();
 
-    this.setRows(rows || []);
+    this.rows = rows || [];
   }
 
-  public setRows(rows: Row[]): void {
-    this.rows = rows;
+  get rows(): Row[] {
+    return this._rows;
   }
 
-  public pushRow(row: Row): void {
-    this.rows.push(row);
-  }
-
-  *[Symbol.iterator](): Iterator<Row> {
-    for (const row of this.rows) {
-      yield row;
-    }
+  set rows(rows: Row[]) {
+    this._rows = rows;
   }
 
   get length(): number {
     return this.rows.length;
+  }
+
+  static fromRows(rows: Row[]): Tabular {
+    return new Tabular(rows.map((row) => new Row(row.cells.map((cell) => new Cell(cell.data)))));
+  }
+
+  static fromArray(data: any[][]): Tabular {
+    return new Tabular(data.map(row => new Row(row.map(cell => new Cell(cell)))));
   }
 }
 

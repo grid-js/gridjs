@@ -14,8 +14,8 @@ describe( 'Row class', () => {
     const cell1 = new Cell(1);
     const cell2 = new Cell(2);
     const row = new Row();
-    row.pushCell(cell1);
-    row.pushCell(cell2);
+    row.cells.push(cell1);
+    row.cells.push(cell2);
 
     expect(row).toHaveLength(2);
   });
