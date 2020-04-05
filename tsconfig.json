@@ -19,6 +19,7 @@
     "strictNullChecks": false
   },
   "include": [
+    "index.ts",
     "src/**/*",
     "tests/**/*"
   ]
