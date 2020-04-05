@@ -1,4 +1,10 @@
 import { generateID, ID } from './util/id';
+import { EventEmitter } from "./util/eventEmitter";
+import applyMixins from "./util/applyMixin";
+
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface Base extends EventEmitter {}
 
 class Base {
   private readonly _id: ID;
@@ -7,9 +13,11 @@ class Base {
     this._id = id || generateID();
   }
 
-  public get id(): ID {
+  get id(): ID {
     return this._id;
   }
 }
+
+applyMixins(Base, [EventEmitter]);
 
 export default Base;
