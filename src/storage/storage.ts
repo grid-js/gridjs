@@ -1,5 +1,4 @@
-import Config from "../config";
-
+import Config from '../config';
 
 abstract class Storage {
   protected config;

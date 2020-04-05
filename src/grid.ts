@@ -1,10 +1,9 @@
-import Config from "./config";
-import React, {ReactElement} from "react";
-import ReactDOM from "react-dom";
-import {Table} from "./view/table";
-import StorageUtils from "./storage/storageUtils";
-import StorageError from "./error/storage";
-
+import Config from './config';
+import React, { ReactElement } from 'react';
+import ReactDOM from 'react-dom';
+import { Table } from './view/table';
+import StorageUtils from './storage/storageUtils';
+import StorageError from './error/storage';
 
 class Grid {
   private _config: Config;
@@ -22,7 +21,7 @@ class Grid {
     const storage = StorageUtils.createFromConfig(this.config);
 
     if (!storage) {
-      throw new StorageError("Could not determine the storage type");
+      throw new StorageError('Could not determine the storage type');
     }
 
     this.config.storage = storage;
@@ -38,12 +37,12 @@ class Grid {
 
   createElement(): ReactElement {
     return React.createElement(Table, {
-      config: this.config
+      config: this.config,
     });
   }
 
   render(container: Element) {
-    ReactDOM.render(this.createElement(), container)
+    ReactDOM.render(this.createElement(), container);
   }
 }
 

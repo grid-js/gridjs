@@ -1,18 +1,17 @@
 import Grid from '../src/grid';
-import StorageError from "../src/error/storage";
-import MemoryStorage from "../src/storage/memory";
+import StorageError from '../src/error/storage';
+import MemoryStorage from '../src/storage/memory';
 
-
-describe( 'Grid class', () => {
+describe('Grid class', () => {
   it('should raise an exception with empty config', () => {
     expect(() => {
       new Grid({});
-    }).toThrow(StorageError)
+    }).toThrow(StorageError);
   });
 
   it('should init a memory storage', () => {
     const grid = new Grid({
-      data: [[1, 2, 3]]
+      data: [[1, 2, 3]],
     });
 
     expect(grid.config.storage).toBeInstanceOf(MemoryStorage);
@@ -21,7 +20,7 @@ describe( 'Grid class', () => {
   it('should set the config correctly', () => {
     const config = {
       data: [[1, 2, 3]],
-      limit: 10
+      limit: 10,
     };
 
     const grid = new Grid(config);
@@ -33,7 +32,7 @@ describe( 'Grid class', () => {
   it('config should be immutable', () => {
     const config = {
       data: [[1, 2, 3]],
-      limit: 10
+      limit: 10,
     };
 
     const grid = new Grid(config);

@@ -1,5 +1,4 @@
-import {generateID, ID} from "./util/id";
-
+import { generateID, ID } from './util/id';
 
 class Base {
   private readonly _id: ID;
@@ -11,7 +10,6 @@ class Base {
   public get id(): ID {
     return this._id;
   }
-
 }
 
 export default Base;

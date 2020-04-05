@@ -1,8 +1,8 @@
-import Config from "../src/config";
-import MemoryStorage from "../src/storage/memory";
-import Storage from "../src/storage/storage";
+import Config from '../src/config';
+import MemoryStorage from '../src/storage/memory';
+import Storage from '../src/storage/storage';
 
-describe( 'Config', () => {
+describe('Config', () => {
   let config: Config = null;
 
   beforeEach(() => {
@@ -13,7 +13,7 @@ describe( 'Config', () => {
   });
 
   it('should have data property', () => {
-    expect(config.data).toStrictEqual([[1, 2, 3,]]);
+    expect(config.data).toStrictEqual([[1, 2, 3]]);
   });
 
   it('should have limit property', () => {

@@ -1,6 +1,5 @@
-import Base from "./base";
-import {TCell} from "./types";
-
+import Base from './base';
+import { TCell } from './types';
 
 class Cell extends Base {
   private _data: TCell;

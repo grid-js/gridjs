@@ -1,7 +1,7 @@
 import Row from '../src/row';
-import Cell from "../src/cell";
+import Cell from '../src/cell';
 
-describe( 'Row class', () => {
+describe('Row class', () => {
   it('should init with value', () => {
     const cell1 = new Cell(1);
     const cell2 = new Cell(2);

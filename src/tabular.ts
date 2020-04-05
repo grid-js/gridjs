@@ -1,7 +1,6 @@
-import Base from "./base";
-import Row from "./row";
-import Cell from "./cell";
-
+import Base from './base';
+import Row from './row';
+import Cell from './cell';
 
 class Tabular extends Base {
   private _rows: Row[];
@@ -25,11 +24,13 @@ class Tabular extends Base {
   }
 
   static fromRows(rows: Row[]): Tabular {
-    return new Tabular(rows.map((row) => Row.fromCells(row.cells)));
+    return new Tabular(rows.map(row => Row.fromCells(row.cells)));
   }
 
   static fromArray(data: any[][]): Tabular {
-    return new Tabular(data.map(row => new Row(row.map(cell => new Cell(cell)))));
+    return new Tabular(
+      data.map(row => new Row(row.map(cell => new Cell(cell)))),
+    );
   }
 }
 

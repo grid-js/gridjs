@@ -1,4 +1,4 @@
-import BaseError from "./base";
+import BaseError from './base';
 
 class StorageError extends BaseError {}
 export default StorageError;

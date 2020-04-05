@@ -1,14 +1,14 @@
-import MemoryStorage from "../../src/storage/memory";
-import Config from "../../src/config";
+import MemoryStorage from '../../src/storage/memory';
+import Config from '../../src/config';
 
-describe( 'MemoryStorage class', () => {
+describe('MemoryStorage class', () => {
   let config: Config = null;
 
   beforeEach(() => {
     config = new Config();
     config.data = [
       [1, 2, 3],
-      [4, 5, 6]
+      [4, 5, 6],
     ];
   });
 

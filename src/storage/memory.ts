@@ -1,5 +1,5 @@
-import Storage from "./storage";
-import Config from "../config";
+import Storage from './storage';
+import Config from '../config';
 
 class MemoryStorage extends Storage {
   private rows: any[][] = [];
@@ -21,7 +21,7 @@ class MemoryStorage extends Storage {
 
   public get length(): Promise<number> {
     return new Promise<number>(resolve =>
-      resolve(Array.from(this.rows).length)
+      resolve(Array.from(this.rows).length),
     );
   }
 }

@@ -1,6 +1,5 @@
-import Cell from "./cell";
-import Base from "./base";
-
+import Cell from './cell';
+import Base from './base';
 
 class Row extends Base {
   private _cells: Cell[];
@@ -20,7 +19,7 @@ class Row extends Base {
   }
 
   static fromCells(cells: Cell[]): Row {
-    return new Row(cells.map((cell) => new Cell(cell.data)))
+    return new Row(cells.map(cell => new Cell(cell.data)));
   }
 
   get length(): number {

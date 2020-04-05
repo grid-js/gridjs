@@ -1,6 +1,6 @@
-import Config from "../config";
-import MemoryStorage from "./memory";
-import Storage from "./storage";
+import Config from '../config';
+import MemoryStorage from './memory';
+import Storage from './storage';
 
 class StorageUtils {
   /**
@@ -8,7 +8,7 @@ class StorageUtils {
    *
    * @param config
    */
-  public static createFromConfig(config: Config): Storage|null {
+  public static createFromConfig(config: Config): Storage | null {
     // `data` array is provided
     if (config.data) {
       return new MemoryStorage(config);
