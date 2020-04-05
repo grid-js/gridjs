@@ -19,6 +19,10 @@ class Row extends Base {
     this._cells = cells;
   }
 
+  static fromCells(cells: Cell[]): Row {
+    return new Row(cells.map((cell) => new Cell(cell.data)))
+  }
+
   get length(): number {
     return this.cells.length;
   }

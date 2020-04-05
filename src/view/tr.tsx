@@ -2,12 +2,13 @@ import React from "react";
 import Row from "../row";
 import Cell from "../cell";
 import {TD} from "./td";
+import {BaseComponent} from "./base";
 
 export interface TRProps {
   row: Row
 }
 
-export class TR extends React.Component<TRProps, {}> {
+export class TR extends BaseComponent<TRProps, {}> {
   render() {
     return <tr>
       { this.props.row.cells.map((cell: Cell) => {

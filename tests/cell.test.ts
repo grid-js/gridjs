@@ -16,4 +16,9 @@ describe( 'Cell class', () => {
     const cell = new Cell(1);
     expect(cell.data).toBe(1);
   });
+
+  it('should accept boolean', () => {
+    const cell = new Cell(true);
+    expect(cell.data).toBe(true);
+  });
 });

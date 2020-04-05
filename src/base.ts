@@ -2,14 +2,10 @@ import {generateID, ID} from "./util/id";
 
 
 class Base {
-  private _id: ID;
+  private readonly _id: ID;
 
-  constructor() {
-    this.setID();
-  }
-
-  private setID(): void {
-    this._id = generateID();
+  constructor(id?: ID) {
+    this._id = id || generateID();
   }
 
   public get id(): ID {

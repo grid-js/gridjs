@@ -2,7 +2,7 @@ import Tabular from "../tabular";
 
 
 export default function (keyword: string, tabular: Tabular): Tabular {
-  return Tabular.fromRows(tabular.rows.filter((row) =>
-    row.cells.filter(((cell) =>
+  return new Tabular(tabular.rows.filter((row) =>
+    row.cells.some(((cell) =>
       new RegExp(String(keyword), 'gi').test(String(cell.data))))));
 }

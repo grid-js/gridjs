@@ -25,7 +25,7 @@ class Tabular extends Base {
   }
 
   static fromRows(rows: Row[]): Tabular {
-    return new Tabular(rows.map((row) => new Row(row.cells.map((cell) => new Cell(cell.data)))));
+    return new Tabular(rows.map((row) => Row.fromCells(row.cells)));
   }
 
   static fromArray(data: any[][]): Tabular {
