@@ -23,10 +23,24 @@ class Tabular extends Base {
     return this.rows.length;
   }
 
+  /**
+   * Creates a new Tabular from an array of Row(s)
+   * This method generates a new ID for the Tabular and all nested elements
+   *
+   * @param rows
+   * @returns Tabular
+   */
   static fromRows(rows: Row[]): Tabular {
     return new Tabular(rows.map(row => Row.fromCells(row.cells)));
   }
 
+  /**
+   * Creates a new Tabular from a 2D array
+   * This method generates a new ID for the Tabular and all nested elements
+   *
+   * @param data
+   * @returns Tabular
+   */
   static fromArray(data: any[][]): Tabular {
     return new Tabular(
       data.map(row => new Row(row.map(cell => new Cell(cell)))),

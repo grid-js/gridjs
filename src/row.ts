@@ -18,6 +18,13 @@ class Row extends Base {
     this._cells = cells;
   }
 
+  /**
+   * Creates a new Row from an array of Cell(s)
+   * This method generates a new ID for the Row and all nested elements
+   *
+   * @param cells
+   * @returns Row
+   */
   static fromCells(cells: Cell[]): Row {
     return new Row(cells.map(cell => new Cell(cell.data)));
   }

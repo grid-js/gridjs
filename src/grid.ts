@@ -27,10 +27,18 @@ class Grid {
     this.config.storage = storage;
   }
 
+  /**
+   * Accepts a Config object and sets it as the instance config
+   *
+   * @param config
+   */
   set config(config: Config) {
     this._config = config;
   }
 
+  /**
+   * Returns the current config object
+   */
   get config(): Config {
     return this._config;
   }

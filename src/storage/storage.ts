@@ -1,5 +1,8 @@
 import Config from '../config';
 
+/**
+ * Base Storage class. All storage implementation must inherit this class
+ */
 abstract class Storage {
   protected config;
 
