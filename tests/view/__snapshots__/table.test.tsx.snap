@@ -1,3 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Table component should render a table 1`] = `<table />`;
+exports[`Table component should render a table 1`] = `
+<table>
+  <tbody>
+    <tr>
+      <td>
+        1
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        3
+      </td>
+    </tr>
+    <tr>
+      <td>
+        a
+      </td>
+      <td>
+        b
+      </td>
+      <td>
+        c
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;

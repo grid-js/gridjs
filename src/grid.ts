@@ -1,9 +1,9 @@
 import Config from './config';
 import React, { ReactElement } from 'react';
 import ReactDOM from 'react-dom';
-import { Table } from './view/table';
 import StorageUtils from './storage/storageUtils';
 import StorageError from './error/storage';
+import {Container} from "./view/container";
 
 class Grid {
   private _config: Config;
@@ -44,7 +44,7 @@ class Grid {
   }
 
   createElement(): ReactElement {
-    return React.createElement(Table, {
+    return React.createElement(Container, {
       config: this.config,
     });
   }
