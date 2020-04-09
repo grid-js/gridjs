@@ -1,4 +1,4 @@
-import React from "react";
+import { h } from "preact";
 import Cell from "../cell";
 import {BaseComponent} from "./base";
 

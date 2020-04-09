@@ -1,4 +1,4 @@
-import React from "react";
+import { h } from "preact";
 import Row from "../row";
 import Cell from "../cell";
 import {TD} from "./td";

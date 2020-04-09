@@ -1,14 +1,14 @@
-import React from "react";
+import {mount} from 'enzyme';
+import { h } from "preact";
 import { TD } from '../../src/view/td';
-import renderer from 'react-test-renderer';
 import Cell from "../../src/cell";
 
 
 describe('TD component', () => {
-  it('should render a tr element', () => {
-    const td = renderer.create(
+  it('should match the snapshot', () => {
+    const td = mount(
       <TD cell={new Cell('boo')} />
     );
-    expect(td).toMatchSnapshot();
+    expect(td.html()).toMatchSnapshot();
   });
 });

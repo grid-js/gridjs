@@ -1,15 +1,15 @@
-import renderer from 'react-test-renderer';
-import React from "react";
+import { mount } from 'enzyme';
+import { h } from "preact";
 import {Table} from "../../src/view/table";
 import Tabular from "../../src/tabular";
 
 
 describe('Table component', () => {
   it('should render a table', () => {
-    const table = renderer.create(
+    const table = mount(
       <Table tabular={Tabular.fromArray([[1, 2, 3], ['a', 'b', 'c']])} />
     );
 
-    expect(table).toMatchSnapshot();
+    expect(table.html()).toMatchSnapshot();
   });
 });

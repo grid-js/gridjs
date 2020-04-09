@@ -1,4 +1,4 @@
-import React from "react";
+import { h } from "preact";
 import Tabular from "../tabular";
 import Config from "../config";
 import Storage from "../storage/storage";
@@ -43,8 +43,8 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
   }
 
   render() {
-    return <div>
+    return (<div>
       <Table tabular={this.state.tabular} />
-    </div>;
+    </div>);
   }
 }

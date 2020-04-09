@@ -1,3 +1,4 @@
-import React from "react";
+import { Component } from 'preact';
 
-export class BaseComponent<P, S> extends React.Component<P, S> {}
+
+export abstract class BaseComponent<P, S> extends Component<P, S> {}

@@ -1,6 +1,5 @@
 import Config from './config';
-import React, { ReactElement } from 'react';
-import ReactDOM from 'react-dom';
+import {h, render, VNode} from "preact";
 import StorageUtils from './storage/storageUtils';
 import StorageError from './error/storage';
 import {Container} from "./view/container";
@@ -43,14 +42,14 @@ class Grid {
     return this._config;
   }
 
-  createElement(): ReactElement {
-    return React.createElement(Container, {
+  createElement(): VNode {
+    return h(Container, {
       config: this.config,
     });
   }
 
   render(container: Element) {
-    ReactDOM.render(this.createElement(), container);
+    render(this.createElement(), container);
   }
 }
 
