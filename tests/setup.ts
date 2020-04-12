@@ -1,4 +1,6 @@
+// eslint-disable-next-line
 /// <reference types="enzyme-adapter-preact-pure"/>
+import "enzyme-adapter-preact-pure"
 
 import { JSDOM } from 'jsdom';
 import { configure } from 'enzyme';
@@ -10,14 +12,23 @@ const dom = new JSDOM('', {
   pretendToBeVisual: true,
 });
 
+// eslint-disable-next-line
 // @ts-ignore
 global.Event = dom.window.Event;
+
+// eslint-disable-next-line
 // @ts-ignore
 global.Node = dom.window.Node;
+
+// eslint-disable-next-line
 // @ts-ignore
 global.window = dom.window;
+
+// eslint-disable-next-line
 // @ts-ignore
 global.document = dom.window.document;
+
+// eslint-disable-next-line
 // @ts-ignore
 global.requestAnimationFrame = dom.window.requestAnimationFrame;
 
