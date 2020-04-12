@@ -1,8 +1,9 @@
-import { TCell } from './types';
+import { OneDArray, TCell } from './types';
 import Storage from './storage/storage';
 
 interface Config {
   data?: TCell[][];
+  header?: OneDArray;
   storage?: Storage;
   limit?: number;
 }

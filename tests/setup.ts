@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 /// <reference types="enzyme-adapter-preact-pure"/>
-import "enzyme-adapter-preact-pure"
+import 'enzyme-adapter-preact-pure';
 
 import { JSDOM } from 'jsdom';
 import { configure } from 'enzyme';

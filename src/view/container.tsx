@@ -5,6 +5,7 @@ import Storage from "../storage/storage";
 import {BaseComponent} from "./base";
 import {Table} from "./table";
 import {Status} from "../types";
+import Header from "../header";
 
 interface ContainerProps {
   config: Config
@@ -12,7 +13,8 @@ interface ContainerProps {
 
 interface ContainerState {
   status: Status,
-  tabular?: Tabular
+  data?: Tabular,
+  header?: Header
 }
 
 export class Container extends BaseComponent<ContainerProps, ContainerState> {
@@ -24,27 +26,30 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
     this.state = {
       status: Status.Init,
-      tabular: null
+      data: null,
+      header: Header.fromArray(this.props.config.header)
     };
 
     this.config = this.props.config;
     this.storage = this.config.storage;
   }
 
-  async componentDidMount() {
+  componentWillMount(): void {
     this.setState({
       status: Status.Loading
     });
+  }
 
+  async componentDidMount() {
     this.setState({
-      tabular: Tabular.fromArray(await this.storage.get()),
+      data: Tabular.fromArray(await this.storage.get()),
       status: Status.Loaded
     })
   }
 
   render() {
     return (<div>
-      <Table tabular={this.state.tabular} />
+      <Table data={this.state.data} header={this.state.header} />
     </div>);
   }
 }

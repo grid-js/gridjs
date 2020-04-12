@@ -1,8 +1,8 @@
 import Config from './config';
-import {h, render, VNode} from "preact";
+import { h, render, VNode } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import StorageError from './error/storage';
-import {Container} from "./view/container";
+import { Container } from './view/container';
 
 class Grid {
   private _config: Config;

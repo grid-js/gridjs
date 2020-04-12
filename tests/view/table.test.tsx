@@ -7,7 +7,7 @@ import Tabular from "../../src/tabular";
 describe('Table component', () => {
   it('should render a table', () => {
     const table = mount(
-      <Table tabular={Tabular.fromArray([[1, 2, 3], ['a', 'b', 'c']])} />
+      <Table data={Tabular.fromArray([[1, 2, 3], ['a', 'b', 'c']])} />
     );
 
     expect(table.html()).toMatchSnapshot();

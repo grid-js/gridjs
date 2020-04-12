@@ -1,7 +1,6 @@
 import { generateID, ID } from './util/id';
-import { EventEmitter } from "./util/eventEmitter";
-import applyMixins from "./util/applyMixin";
-
+import { EventEmitter } from './util/eventEmitter';
+import applyMixins from './util/applyMixin';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Base extends EventEmitter {}

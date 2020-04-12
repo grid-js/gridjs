@@ -12,7 +12,7 @@ export class EventEmitter {
   // see src/base.ts and src/util/applyMixin.ts
   private init(event?: string): void {
     if (!this.callbacks) {
-      this.callbacks = {}
+      this.callbacks = {};
     }
 
     if (event && !this.callbacks[event]) {
@@ -35,7 +35,9 @@ export class EventEmitter {
       return this;
     }
 
-    this.callbacks[event] = this.callbacks[event].filter(value => value != listener);
+    this.callbacks[event] = this.callbacks[event].filter(
+      value => value != listener,
+    );
 
     return this;
   }

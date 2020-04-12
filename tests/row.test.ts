@@ -27,8 +27,8 @@ describe('Row class', () => {
     const args = [1, 2, 3, true];
 
     const callback = jest.fn();
-    row.on("boo", callback);
-    row.emit("boo", ...args);
+    row.on('boo', callback);
+    row.emit('boo', ...args);
 
     expect(callback).toBeCalledTimes(1);
     expect(callback).toBeCalledWith(...args);

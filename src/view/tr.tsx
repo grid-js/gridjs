@@ -1,18 +1,18 @@
-import { h } from "preact";
+import {Attributes, ComponentClass, h} from "preact";
 import Row from "../row";
 import Cell from "../cell";
-import {TD} from "./td";
 import {BaseComponent} from "./base";
 
 export interface TRProps {
-  row: Row
+  row: Row,
+  children: ComponentClass
 }
 
 export class TR extends BaseComponent<TRProps, {}> {
   render() {
     return <tr>
       { this.props.row.cells.map((cell: Cell) => {
-        return <TD key={cell.id} cell={cell}></TD>;
+        return h(this.props.children, { cell: cell, key: cell.id } as Attributes);
       }) }
     </tr>;
   }
