@@ -1,20 +1,20 @@
-import { h } from "preact";
-import Tabular from "../tabular";
-import Config from "../config";
-import Storage from "../storage/storage";
-import {BaseComponent} from "./base";
-import {Table} from "./table";
-import {Status} from "../types";
-import Header from "../header";
+import { h } from 'preact';
+import Tabular from '../tabular';
+import Config from '../config';
+import Storage from '../storage/storage';
+import { BaseComponent } from './base';
+import { Table } from './table';
+import { Status } from '../types';
+import Header from '../header';
 
 interface ContainerProps {
-  config: Config
+  config: Config;
 }
 
 interface ContainerState {
-  status: Status,
-  data?: Tabular,
-  header?: Header
+  status: Status;
+  data?: Tabular;
+  header?: Header;
 }
 
 export class Container extends BaseComponent<ContainerProps, ContainerState> {
@@ -27,7 +27,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     this.state = {
       status: Status.Init,
       data: null,
-      header: Header.fromArray(this.props.config.header)
+      header: Header.fromArray(this.props.config.header),
     };
 
     this.config = this.props.config;
@@ -36,20 +36,22 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
   componentWillMount(): void {
     this.setState({
-      status: Status.Loading
+      status: Status.Loading,
     });
   }
 
   async componentDidMount() {
     this.setState({
       data: Tabular.fromArray(await this.storage.get()),
-      status: Status.Loaded
-    })
+      status: Status.Loaded,
+    });
   }
 
   render() {
-    return (<div>
-      <Table data={this.state.data} header={this.state.header} />
-    </div>);
+    return (
+      <div>
+        <Table data={this.state.data} header={this.state.header} />
+      </div>
+    );
   }
 }
