@@ -1,7 +1,9 @@
 {
   "name": "@usablica/gridjs",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Scalable Table Plugin",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "engines": {
     "node": ">= 12.13 <13"
   },

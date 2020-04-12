@@ -3,9 +3,11 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "build",
+    "declaration": true,
     "removeComments": true
   },
   "include": [
+    "index.ts",
     "src/**/*"
   ]
 }

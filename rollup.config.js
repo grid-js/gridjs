@@ -36,7 +36,12 @@ export default [
       resolve(),
       typescript({
         tsconfig: "tsconfig.release.json",
-        tsconfigOverride: { compilerOptions : { module: "es2015" } }
+        tsconfigOverride: {
+          compilerOptions: {
+            module: "es2015",
+            declaration: false
+          }
+        }
       }),
       terser(),
       size({
