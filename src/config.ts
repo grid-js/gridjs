@@ -1,5 +1,6 @@
 import { OneDArray, TCell } from './types';
 import Storage from './storage/storage';
+import ConfigError from "./error/config";
 
 interface Config {
   data?: TCell[][];
@@ -26,6 +27,10 @@ class Config {
   }
 
   static get current(): Config {
+    if (!Config._current) {
+      throw new ConfigError('Current config is not set');
+    }
+
     return Config._current;
   }
 

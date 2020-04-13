@@ -14,7 +14,7 @@ export default class App extends Component {
     return (
 			<div>
         <h1>Hello, World!</h1>
-        <div id="container"></div>
+        <div id="container"/>
       </div>
     );
   }
