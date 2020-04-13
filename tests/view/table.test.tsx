@@ -3,8 +3,13 @@ import { h } from 'preact';
 import { Table } from '../../src/view/table';
 import Tabular from '../../src/tabular';
 import Header from '../../src/header';
+import Config from "../../src/config";
 
 describe('Table component', () => {
+  beforeAll(() => {
+    (new Config()).setCurrent();
+  });
+
   it('should render a table', () => {
     const table = mount(
       <Table

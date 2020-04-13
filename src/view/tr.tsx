@@ -1,9 +1,9 @@
 import { Attributes, ComponentClass, h } from 'preact';
 import Row from '../row';
 import Cell from '../cell';
-import { BaseComponent } from './base';
+import {BaseComponent, BaseProps} from './base';
 
-export interface TRProps {
+export interface TRProps extends BaseProps {
   row: Row;
   children: ComponentClass;
 }

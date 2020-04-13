@@ -1,2 +1,4 @@
 /**/*.js
 examples/
+dist/
+build/

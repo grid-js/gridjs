@@ -1,8 +1,8 @@
 import { h } from 'preact';
 import Cell from '../cell';
-import { BaseComponent } from './base';
+import {BaseComponent, BaseProps} from './base';
 
-export interface TDProps {
+export interface TDProps extends BaseProps {
   cell: Cell;
 }
 

@@ -1,11 +1,11 @@
 import { h } from 'preact';
 import Tabular from '../tabular';
 import { TBody } from './tbody';
-import { BaseComponent } from './base';
+import {BaseComponent, BaseProps} from './base';
 import Header from '../header';
 import { THead } from './thead';
 
-interface TableProps {
+interface TableProps extends BaseProps {
   data?: Tabular;
   header?: Header;
 }

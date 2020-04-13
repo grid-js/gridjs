@@ -6,11 +6,34 @@ interface Config {
   header?: OneDArray;
   storage?: Storage;
   limit?: number;
+  classNamePrefix: string;
 }
 
 class Config {
-  constructor(config?: Config) {
-    Object.assign(this, config);
+  public static _current: Config;
+
+  constructor(config?: object) {
+    const updatedConfig = {
+      ...Config.defaultConfig(),
+      ...config
+    };
+
+    Object.assign(this, updatedConfig);
+  }
+
+  setCurrent(): void {
+    Config._current = this;
+  }
+
+  static get current(): Config {
+    return Config._current;
+  }
+
+  static defaultConfig(): Config {
+    return {
+      classNamePrefix: 'gridjs',
+      limit: 15
+    } as Config;
   }
 }
 

@@ -2,4 +2,4 @@
 
 exports[`Table component should render a table 1`] = `"<table><tbody><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>a</td><td>b</td><td>c</td></tr></tbody></table>"`;
 
-exports[`Table component should render a table with header 1`] = `"<table><thead><tr><th>h1</th><th>h2</th><th>h3</th></tr></thead><tbody><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>a</td><td>b</td><td>c</td></tr></tbody></table>"`;
+exports[`Table component should render a table with header 1`] = `"<table><thead class=\\"gridjs gridjs-thead\\"><tr><th>h1</th><th>h2</th><th>h3</th></tr></thead><tbody><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>a</td><td>b</td><td>c</td></tr></tbody></table>"`;

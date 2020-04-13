@@ -2,8 +2,8 @@
   "name": "@usablica/gridjs",
   "version": "0.1.2",
   "description": "Scalable Table Plugin",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "dist/gridjs.production.min.js",
+  "types": "dist/index.d.ts",
   "engines": {
     "node": ">= 12.13 <13"
   },
@@ -19,10 +19,14 @@
     "eslint": "~6.8.0",
     "eslint-config-prettier": "~6.10.0",
     "eslint-plugin-jest": "~23.7.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "~25.1.0",
+    "node-sass": "^4.13.1",
+    "node-sass-chokidar": "^1.4.0",
     "prettier": "~1.19.1",
     "rimraf": "~3.0.2",
     "rollup": "^2.6.0",
+    "rollup-plugin-scss": "^2.2.0",
     "rollup-plugin-sizes": "^1.0.2",
     "rollup-plugin-terser": "^5.3.0",
     "rollup-plugin-typescript2": "^0.27.0",
@@ -34,8 +38,10 @@
   },
   "scripts": {
     "clean": "rimraf coverage build tmp",
-    "build": "tsc -p tsconfig.release.json",
-    "build:watch": "tsc -w -p tsconfig.release.json",
+    "build": "rollup -c",
+    "build:watch": "rollup -c --watch",
+    "build-tsc": "tsc -p tsconfig.release.json",
+    "build-tsc:watch": "tsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
@@ -44,6 +50,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "preact": "^10.4.0",
+    "rollup-plugin-postcss": "^2.5.0",
     "tslib": "~1.10.0"
   }
 }

@@ -7,7 +7,7 @@ import { Container } from './view/container';
 class Grid {
   private _config: Config;
 
-  constructor(config: Config) {
+  constructor(config: object) {
     this.config = new Config(config);
     this.bootstrap();
   }
@@ -33,6 +33,8 @@ class Grid {
    */
   set config(config: Config) {
     this._config = config;
+    // sets the current global config
+    config.setCurrent();
   }
 
   /**

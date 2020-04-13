@@ -19,6 +19,9 @@ module.exports = {
   setupFiles: [
     './tests/setup.ts'
   ],
+  "moduleNameMapper": {
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+  },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)x?$',
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
