@@ -5,7 +5,11 @@ import Grid from '@usablica/gridjs';
 export default class App extends Component {
   componentDidMount() {
     new Grid({
-      data: [[1, 2, 3], ['a', 'b', 'b'], ["hello", "world", "!"]],
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'b'],
+        ["hello", "world", "!"]
+      ],
       header: ['h1', 'h2', 'h3']
     }).render(document.getElementById('container'));
   }
