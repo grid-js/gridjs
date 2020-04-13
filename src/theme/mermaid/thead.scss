@@ -1,8 +1,10 @@
-.gridjs {
-  background-color: #000066;
+*, :after, :before {
+  box-sizing: border-box;
+  border: 0 solid #d2d6dc;
 }
-
-thead {
-  background-color: #000066;
-  color: red;
+.gridjs {
+  &-thead {
+    color: #6b7280;
+    background-color: #f9fafb;
+  }
 }

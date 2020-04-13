@@ -1,4 +1,5 @@
 import { h } from 'preact';
+
 import Tabular from '../tabular';
 import Config from '../config';
 import Storage from '../storage/storage';
@@ -6,6 +7,9 @@ import {BaseComponent, BaseProps} from './base';
 import { Table } from './table';
 import { Status } from '../types';
 import Header from '../header';
+
+import "../theme/mermaid/container.scss";
+import className from "../util/className";
 
 interface ContainerProps extends BaseProps {
   config: Config;
@@ -49,7 +53,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
   render() {
     return (
-      <div>
+      <div className={className(Config.current.classNamePrefix, "container")}>
         <Table data={this.state.data} header={this.state.header} classNamePrefix={this.config.classNamePrefix} />
       </div>
     );

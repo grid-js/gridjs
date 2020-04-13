@@ -18,7 +18,10 @@ export default [
     },
     plugins: [
       resolve(),
-      scss(),
+      scss({
+        // FIXME: this should not be hardcoded here
+        output: 'dist/theme/mermaid.css'
+      }),
       typescript({
         tsconfig: "tsconfig.json",
         tsconfigOverride: { compilerOptions : { module: "es2015" } }
@@ -36,7 +39,9 @@ export default [
     },
     plugins: [
       resolve(),
-      scss(),
+      scss({
+        output: 'dist/theme/mermaid.css'
+      }),
       typescript({
         tsconfig: "tsconfig.release.json",
         tsconfigOverride: {
