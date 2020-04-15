@@ -1,7 +1,7 @@
 {
-  "name": "@usablica/gridjs",
+  "name": "gridjs",
   "version": "0.1.2",
-  "description": "Scalable Table Plugin",
+  "description": "Fast and extensible table library",
   "main": "dist/gridjs.production.min.js",
   "types": "dist/index.d.ts",
   "engines": {

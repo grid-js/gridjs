@@ -1,6 +1,6 @@
 import './style';
 import { Component } from 'preact';
-import Grid from '@usablica/gridjs';
+import Grid from 'gridjs';
 
 export default class App extends Component {
   render() {
