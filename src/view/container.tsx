@@ -3,13 +3,13 @@ import { h } from 'preact';
 import Tabular from '../tabular';
 import Config from '../config';
 import Storage from '../storage/storage';
-import {BaseComponent, BaseProps} from './base';
+import { BaseComponent, BaseProps } from './base';
 import { Table } from './table';
-import { Status } from '../types';
+import { Status, TBodyCell } from '../types';
 import Header from '../header';
+import className from '../util/className';
 
-import "../theme/mermaid/container.scss";
-import className from "../util/className";
+import '../theme/mermaid/container.scss';
 
 interface ContainerProps extends BaseProps {
   config: Config;
@@ -17,7 +17,7 @@ interface ContainerProps extends BaseProps {
 
 interface ContainerState {
   status: Status;
-  data?: Tabular;
+  data?: Tabular<TBodyCell>;
   header?: Header;
 }
 
@@ -31,7 +31,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     this.state = {
       status: Status.Init,
       data: null,
-      header: Header.fromArray(this.props.config.header),
+      header: this.props.config.header,
     };
 
     this.config = this.props.config;
@@ -53,8 +53,12 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
   render() {
     return (
-      <div className={className(Config.current.classNamePrefix, "container")}>
-        <Table data={this.state.data} header={this.state.header} classNamePrefix={this.config.classNamePrefix} />
+      <div className={className(Config.current.classNamePrefix, 'container')}>
+        <Table
+          data={this.state.data}
+          header={this.state.header}
+          classNamePrefix={this.config.classNamePrefix}
+        />
       </div>
     );
   }

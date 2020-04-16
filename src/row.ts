@@ -1,20 +1,20 @@
 import Cell from './cell';
 import Base from './base';
 
-class Row extends Base {
-  private _cells: Cell[];
+class Row<T> extends Base {
+  private _cells: Cell<T>[];
 
-  constructor(cells?: Cell[]) {
+  constructor(cells?: Cell<T>[]) {
     super();
 
     this.cells = cells || [];
   }
 
-  public get cells(): Cell[] {
+  public get cells(): Cell<T>[] {
     return this._cells;
   }
 
-  public set cells(cells: Cell[]) {
+  public set cells(cells: Cell<T>[]) {
     this._cells = cells;
   }
 
@@ -25,7 +25,7 @@ class Row extends Base {
    * @param cells
    * @returns Row
    */
-  static fromCells(cells: Cell[]): Row {
+  static fromCells<T>(cells: Cell<T>[]): Row<T> {
     return new Row(cells.map(cell => new Cell(cell.data)));
   }
 

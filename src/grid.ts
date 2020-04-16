@@ -1,52 +1,41 @@
-import Config from './config';
+import Config, { UserConfig } from './config';
 import { h, render, VNode } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import StorageError from './error/storage';
 import { Container } from './view/container';
 
 class Grid {
-  private _config: Config;
-
-  constructor(config: object) {
-    this.config = new Config(config);
-    this.bootstrap();
+  constructor(userConfig?: UserConfig) {
+    this.bootstrap(userConfig);
   }
 
-  bootstrap(): void {
+  bootstrap(userConfig?: UserConfig): void {
+    this.setConfig(userConfig);
     this.setStorage();
   }
 
+  private setConfig(userConfig?: UserConfig): void {
+    // sets the current global config
+    Config.fromUserConfig(userConfig).setCurrent();
+  }
+
   private setStorage(): void {
-    const storage = StorageUtils.createFromConfig(this.config);
+    const storage = StorageUtils.createFromConfig(Config.current);
 
     if (!storage) {
       throw new StorageError('Could not determine the storage type');
     }
 
-    this.config.storage = storage;
+    Config.current.storage = storage;
   }
 
-  /**
-   * Accepts a Config object and sets it as the instance config
-   *
-   * @param config
-   */
-  set config(config: Config) {
-    this._config = config;
-    // sets the current global config
-    config.setCurrent();
-  }
-
-  /**
-   * Returns the current config object
-   */
   get config(): Config {
-    return this._config;
+    return Config.current;
   }
 
   createElement(): VNode {
     return h(Container, {
-      config: this.config,
+      config: Config.current,
     });
   }
 

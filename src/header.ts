@@ -1,11 +1,23 @@
 import Tabular from './tabular';
-import { OneDArray } from './types';
+import { OneDArray, THeaderCell } from './types';
 import Row from './row';
 import Cell from './cell';
 
-class Header extends Tabular {
-  static fromArray(data: OneDArray): Header {
-    return new Tabular(new Row(data.map(cell => new Cell(cell))));
+class Header extends Tabular<THeaderCell> {
+  constructor(props) {
+    super(props);
+  }
+  static fromArrayOfString(data: OneDArray<string>): Header {
+    return new Header(
+      new Row<THeaderCell>(
+        data.map(
+          cell =>
+            new Cell<THeaderCell>({
+              name: cell,
+            }),
+        ),
+      ),
+    );
   }
 }
 

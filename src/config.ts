@@ -1,22 +1,38 @@
-import { OneDArray, TCell } from './types';
+import {
+  OneDArray,
+  ProtoExtends,
+  TBodyCell,
+  THeaderCell,
+  TwoDArray,
+} from './types';
 import Storage from './storage/storage';
-import ConfigError from "./error/config";
+import ConfigError from './error/config';
+import { isArrayOfType } from './util/type';
+import Header from './header';
 
+// Config type used internally
 interface Config {
-  data?: TCell[][];
-  header?: OneDArray;
-  storage?: Storage;
-  limit?: number;
+  data?: TwoDArray<TBodyCell>;
+  header?: Header;
+  storage: Storage;
+  limit: number;
   classNamePrefix: string;
 }
 
-class Config {
-  public static _current: Config;
+// Config type used by the consumers
+interface UserConfigExtend {
+  header?: OneDArray<THeaderCell | string>;
+}
 
-  constructor(config?: object) {
+export type UserConfig = ProtoExtends<Partial<Config>, UserConfigExtend>;
+
+class Config {
+  private static _current: Config;
+
+  constructor(config?: UserConfig) {
     const updatedConfig = {
       ...Config.defaultConfig(),
-      ...config
+      ...config,
     };
 
     Object.assign(this, updatedConfig);
@@ -37,8 +53,23 @@ class Config {
   static defaultConfig(): Config {
     return {
       classNamePrefix: 'gridjs',
-      limit: 15
+      limit: 15,
     } as Config;
+  }
+
+  static fromUserConfig(userConfig?: UserConfig): Config {
+    const config = new Config(userConfig);
+
+    if (!userConfig) return config;
+
+    // casting header type
+    if (isArrayOfType<string>(userConfig.header, 'toLowerCase')) {
+      config.header = Header.fromArrayOfString(
+        userConfig.header as OneDArray<string>,
+      );
+    }
+
+    return config;
   }
 }
 

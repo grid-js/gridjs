@@ -1,7 +1,10 @@
 import { Component } from 'preact';
 
 export interface BaseProps {
-  classNamePrefix?: string
+  classNamePrefix?: string;
 }
 
-export abstract class BaseComponent<P extends BaseProps, S> extends Component<P, S> {}
+export abstract class BaseComponent<P extends BaseProps, S> extends Component<
+  P,
+  S
+> {}

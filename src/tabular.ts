@@ -4,10 +4,10 @@ import Cell from './cell';
 import { OneDArray, TwoDArray } from './types';
 import { oneDtoTwoD } from './util/cast';
 
-class Tabular extends Base {
-  private _rows: Row[];
+class Tabular<T> extends Base {
+  private _rows: Row<T>[];
 
-  constructor(rows?: Row[] | Row) {
+  constructor(rows?: Row<T>[] | Row<T>) {
     super();
 
     if (rows instanceof Array) {
@@ -19,11 +19,11 @@ class Tabular extends Base {
     }
   }
 
-  get rows(): Row[] {
+  get rows(): Row<T>[] {
     return this._rows;
   }
 
-  set rows(rows: Row[]) {
+  set rows(rows: Row<T>[]) {
     this._rows = rows;
   }
 
@@ -38,7 +38,7 @@ class Tabular extends Base {
    * @param rows
    * @returns Tabular
    */
-  static fromRows(rows: Row[]): Tabular {
+  static fromRows<T>(rows: Row<T>[]): Tabular<T> {
     return new Tabular(rows.map(row => Row.fromCells(row.cells)));
   }
 
@@ -49,7 +49,7 @@ class Tabular extends Base {
    * @param data
    * @returns Tabular
    */
-  static fromArray(data: OneDArray | TwoDArray): Tabular {
+  static fromArray<T>(data: OneDArray<T> | TwoDArray<T>): Tabular<T> {
     data = oneDtoTwoD(data);
 
     return new Tabular(

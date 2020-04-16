@@ -2,11 +2,11 @@ import { mount } from 'enzyme';
 import { h } from 'preact';
 import { TD } from '../../src/view/td';
 import Cell from '../../src/cell';
-import Config from "../../src/config";
+import Config from '../../src/config';
 
 describe('TD component', () => {
   beforeAll(() => {
-    (new Config()).setCurrent();
+    new Config().setCurrent();
   });
 
   it('should match the snapshot', () => {
