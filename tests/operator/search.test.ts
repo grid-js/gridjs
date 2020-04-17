@@ -2,7 +2,7 @@ import Cell from '../../src/cell';
 import Tabular from '../../src/tabular';
 import Row from '../../src/row';
 import search from '../../src/operator/search';
-import {TBodyCell} from "../../src/types";
+import { TBodyCell } from '../../src/types';
 
 describe('search', () => {
   const row1 = new Row([new Cell('hello'), new Cell('world'), new Cell('!')]);

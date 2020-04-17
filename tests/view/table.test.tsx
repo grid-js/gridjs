@@ -4,7 +4,7 @@ import { Table } from '../../src/view/table';
 import Tabular from '../../src/tabular';
 import Header from '../../src/header';
 import Config from '../../src/config';
-import {TBodyCell} from "../../src/types";
+import { TBodyCell } from '../../src/types';
 
 describe('Table component', () => {
   beforeAll(() => {
