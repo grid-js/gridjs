@@ -8,8 +8,11 @@ describe('Pipeline', () => {
   });
 
   it('should not register a processor without type', () => {
-    class NoopProcessor implements PipelineProcessor<string> {
-      type: ProcessorType = null;
+    class NoopProcessor extends PipelineProcessor<string, {}> {
+      get type(): ProcessorType {
+        return null;
+      }
+
       process(data: string): string {
         return data;
       }
@@ -25,7 +28,7 @@ describe('Pipeline', () => {
   });
 
   it('should register and process a processor', () => {
-    class StringProcessor implements PipelineProcessor<string> {
+    class StringProcessor extends PipelineProcessor<string, {}> {
       type: ProcessorType = ProcessorType.Search;
       process(data: string): string {
         return data;
@@ -40,7 +43,7 @@ describe('Pipeline', () => {
   });
 
   it('should register and process processors', () => {
-    class StringProcessor implements PipelineProcessor<string> {
+    class StringProcessor extends PipelineProcessor<string, {}> {
       type: ProcessorType = ProcessorType.Search;
       process(data: string): string {
         return data.substr(1);
@@ -56,7 +59,7 @@ describe('Pipeline', () => {
   });
 
   it('should register and process number processors', () => {
-    class NumberProcessor implements PipelineProcessor<number> {
+    class NumberProcessor extends PipelineProcessor<number, {}> {
       type: ProcessorType = ProcessorType.Search;
       process(data: number): number {
         return data + 2;
@@ -72,7 +75,7 @@ describe('Pipeline', () => {
   });
 
   it('should register processors using the constructor', () => {
-    class NumberProcessor implements PipelineProcessor<number> {
+    class NumberProcessor extends PipelineProcessor<number, {}> {
       type: ProcessorType = ProcessorType.Search;
       process(data: number): number {
         return data + 2;
@@ -86,5 +89,32 @@ describe('Pipeline', () => {
 
     expect(pipeline.steps).toHaveLength(2);
     expect(pipeline.process(4)).toBe(8);
+  });
+
+  it('should trigger callbacks when props are updated', () => {
+    class NumberProcessor extends PipelineProcessor<number, { acc: number }> {
+      type: ProcessorType = ProcessorType.Search;
+      process(data: number): number {
+        return data + this.props.acc;
+      }
+    }
+
+    const p1 = new NumberProcessor({ acc: 2 });
+    const p2 = new NumberProcessor({ acc: 3 });
+    const pipeline = new Pipeline([p1, p2]);
+
+    expect(pipeline.process(4)).toBe(9);
+
+    const updatedCallback = jest.fn();
+    const propsUpdatedCallback = jest.fn();
+
+    pipeline.updated(updatedCallback);
+    pipeline.propsUpdated(propsUpdatedCallback);
+
+    p1.setProps({ acc: 5 });
+
+    expect(updatedCallback).toBeCalledTimes(1);
+    expect(propsUpdatedCallback).toBeCalledTimes(1);
+    expect(pipeline.process(4)).toBe(12);
   });
 });

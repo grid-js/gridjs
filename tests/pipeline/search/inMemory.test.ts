@@ -13,10 +13,28 @@ describe('InMemorySearch', () => {
   });
 
   it('should process string', () => {
-    expect(new InMemorySearch().process(data, 'a')).toHaveLength(1);
+    expect(
+      new InMemorySearch().setProps({ keyword: 'a' }).process(data),
+    ).toHaveLength(1);
   });
 
   it('should process int', () => {
-    expect(new InMemorySearch().process(data, '1')).toHaveLength(3);
+    expect(
+      new InMemorySearch().setProps({ keyword: '1' }).process(data),
+    ).toHaveLength(3);
+  });
+
+  it('should accept props constructor', () => {
+    expect(new InMemorySearch({ keyword: '1' }).process(data)).toHaveLength(3);
+  });
+
+  it('should call propsUpdated', () => {
+    const callback = jest.fn();
+    new InMemorySearch()
+      .propsUpdated(callback)
+      .setProps({ keyword: '1' })
+      .setProps({ keyword: '2' })
+      .process(data);
+    expect(callback).toBeCalledTimes(2);
   });
 });

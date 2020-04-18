@@ -1,13 +1,26 @@
 import search from '../../operator/search';
 import { TBodyCell } from '../../types';
 import Tabular from '../../tabular';
-import { PipelineProcessor, ProcessorType } from '../processor';
+import {
+  PipelineProcessor,
+  PipelineProcessorProps,
+  ProcessorType,
+} from '../processor';
 
-class InMemorySearch implements PipelineProcessor<Tabular<TBodyCell>> {
-  type: ProcessorType = ProcessorType.Search;
+interface InMemorySearchProps extends PipelineProcessorProps {
+  keyword: string;
+}
 
-  process(data: Tabular<TBodyCell>, keyword: string): Tabular<TBodyCell> {
-    return search(keyword, data);
+class InMemorySearch extends PipelineProcessor<
+  Tabular<TBodyCell>,
+  InMemorySearchProps
+> {
+  get type(): ProcessorType {
+    return ProcessorType.Search;
+  }
+
+  process(data: Tabular<TBodyCell>): Tabular<TBodyCell> {
+    return search(this.props.keyword, data);
   }
 }
 
