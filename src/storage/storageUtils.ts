@@ -1,6 +1,7 @@
 import Config from '../config';
 import MemoryStorage from './memory';
 import Storage from './storage';
+import StorageError from '../error/storage';
 
 class StorageUtils {
   /**
@@ -9,12 +10,17 @@ class StorageUtils {
    * @param config
    */
   public static createFromConfig(config: Config): Storage | null {
+    let storage = null;
     // `data` array is provided
     if (config.data) {
-      return new MemoryStorage(config);
+      storage = new MemoryStorage(config.data);
     }
 
-    return null;
+    if (!storage) {
+      throw new StorageError('Could not determine the storage type');
+    }
+
+    return storage;
   }
 }
 

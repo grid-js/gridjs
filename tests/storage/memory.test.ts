@@ -1,24 +1,22 @@
 import MemoryStorage from '../../src/storage/memory';
-import Config from '../../src/config';
 
 describe('MemoryStorage class', () => {
-  let config: Config = null;
+  let data;
 
   beforeEach(() => {
-    config = new Config();
-    config.data = [
+    data = [
       [1, 2, 3],
       [4, 5, 6],
     ];
   });
 
   it('should load from the config', async () => {
-    const memoryStorage = new MemoryStorage(config);
+    const memoryStorage = new MemoryStorage(data);
     expect(await memoryStorage.length).toBe(2);
   });
 
   it('should return the correct length', async () => {
-    const memoryStorage = new MemoryStorage(config);
+    const memoryStorage = new MemoryStorage(data);
 
     await memoryStorage.set([[1, 2, 3]]);
 
@@ -26,7 +24,7 @@ describe('MemoryStorage class', () => {
   });
 
   it('should set and get rows', async () => {
-    const memoryStorage = new MemoryStorage(config);
+    const memoryStorage = new MemoryStorage(data);
 
     await memoryStorage.set([['a', 'b', 'c']]);
 

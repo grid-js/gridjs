@@ -1,4 +1,6 @@
 export enum ProcessorType {
+  Extractor,
+  Transformer,
   Search,
   Sort,
 }
@@ -11,7 +13,7 @@ export abstract class PipelineProcessor<T, P extends PipelineProcessorProps> {
   private propsUpdatedCallback: Set<(...args) => void> = new Set();
 
   abstract get type(): ProcessorType;
-  abstract process(data: T, ...args): T;
+  abstract process(...args): T | Promise<T>;
 
   constructor(props?: P) {
     this._props = {} as P;

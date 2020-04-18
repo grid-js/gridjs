@@ -27,7 +27,7 @@ describe('Pipeline', () => {
     expect(pipeline.steps).toHaveLength(0);
   });
 
-  it('should register and process a processor', () => {
+  it('should register and process a processor', async () => {
     class StringProcessor extends PipelineProcessor<string, {}> {
       type: ProcessorType = ProcessorType.Search;
       process(data: string): string {
@@ -39,10 +39,10 @@ describe('Pipeline', () => {
     pipeline.register(new StringProcessor());
 
     expect(pipeline.steps).toHaveLength(1);
-    expect(pipeline.process('Hello!')).toBe('Hello!');
+    expect(await pipeline.process('Hello!')).toBe('Hello!');
   });
 
-  it('should register and process processors', () => {
+  it('should register and process processors', async () => {
     class StringProcessor extends PipelineProcessor<string, {}> {
       type: ProcessorType = ProcessorType.Search;
       process(data: string): string {
@@ -55,10 +55,10 @@ describe('Pipeline', () => {
     pipeline.register(new StringProcessor());
 
     expect(pipeline.steps).toHaveLength(2);
-    expect(pipeline.process('Hello World')).toBe('llo World');
+    expect(await pipeline.process('Hello World')).toBe('llo World');
   });
 
-  it('should register and process number processors', () => {
+  it('should register and process number processors', async () => {
     class NumberProcessor extends PipelineProcessor<number, {}> {
       type: ProcessorType = ProcessorType.Search;
       process(data: number): number {
@@ -71,10 +71,10 @@ describe('Pipeline', () => {
     pipeline.register(new NumberProcessor());
 
     expect(pipeline.steps).toHaveLength(2);
-    expect(pipeline.process(4)).toBe(8);
+    expect(await pipeline.process(4)).toBe(8);
   });
 
-  it('should register processors using the constructor', () => {
+  it('should register processors using the constructor', async () => {
     class NumberProcessor extends PipelineProcessor<number, {}> {
       type: ProcessorType = ProcessorType.Search;
       process(data: number): number {
@@ -88,10 +88,10 @@ describe('Pipeline', () => {
     ]);
 
     expect(pipeline.steps).toHaveLength(2);
-    expect(pipeline.process(4)).toBe(8);
+    expect(await pipeline.process(4)).toBe(8);
   });
 
-  it('should trigger callbacks when props are updated', () => {
+  it('should trigger callbacks when props are updated', async () => {
     class NumberProcessor extends PipelineProcessor<number, { acc: number }> {
       type: ProcessorType = ProcessorType.Search;
       process(data: number): number {
@@ -103,7 +103,7 @@ describe('Pipeline', () => {
     const p2 = new NumberProcessor({ acc: 3 });
     const pipeline = new Pipeline([p1, p2]);
 
-    expect(pipeline.process(4)).toBe(9);
+    expect(await pipeline.process(4)).toBe(9);
 
     const updatedCallback = jest.fn();
     const propsUpdatedCallback = jest.fn();
@@ -115,6 +115,6 @@ describe('Pipeline', () => {
 
     expect(updatedCallback).toBeCalledTimes(1);
     expect(propsUpdatedCallback).toBeCalledTimes(1);
-    expect(pipeline.process(4)).toBe(12);
+    expect(await pipeline.process(4)).toBe(12);
   });
 });

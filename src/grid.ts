@@ -1,8 +1,10 @@
 import Config, { UserConfig } from './config';
 import { h, render, VNode } from 'preact';
 import StorageUtils from './storage/storageUtils';
-import StorageError from './error/storage';
 import { Container } from './view/container';
+import Pipeline from './pipeline/pipeline';
+import StorageExtractor from './pipeline/extractor/storage';
+import ArrayToTabularTransformer from './pipeline/transformer/arrayToTabular';
 
 class Grid {
   constructor(userConfig?: UserConfig) {
@@ -12,6 +14,7 @@ class Grid {
   bootstrap(userConfig?: UserConfig): void {
     this.setConfig(userConfig);
     this.setStorage();
+    this.setPipeline();
   }
 
   private setConfig(userConfig?: UserConfig): void {
@@ -20,13 +23,14 @@ class Grid {
   }
 
   private setStorage(): void {
-    const storage = StorageUtils.createFromConfig(Config.current);
+    Config.current.storage = StorageUtils.createFromConfig(Config.current);
+  }
 
-    if (!storage) {
-      throw new StorageError('Could not determine the storage type');
-    }
-
-    Config.current.storage = storage;
+  private setPipeline(): void {
+    Config.current.pipeline = new Pipeline([
+      new StorageExtractor({ storage: this.config.storage }),
+      new ArrayToTabularTransformer(),
+    ]);
   }
 
   get config(): Config {

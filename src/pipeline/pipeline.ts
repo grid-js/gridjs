@@ -1,12 +1,12 @@
 import { PipelineProcessor } from './processor';
 
-class Pipeline<T, P> {
+class Pipeline<T, P = {}> {
   // available steps for this pipeline
   private readonly _steps: PipelineProcessor<T, P>[] = [];
   private propsUpdatedCallback: Set<(...args) => void> = new Set();
   private updatedCallback: Set<(...args) => void> = new Set();
 
-  constructor(steps?: PipelineProcessor<T, P>[]) {
+  constructor(steps?: PipelineProcessor<any, any>[]) {
     if (steps) {
       steps.forEach(step => this.register(step));
     }
@@ -26,11 +26,13 @@ class Pipeline<T, P> {
     return this._steps;
   }
 
-  process(data: T): T {
-    return this._steps.reduce(
-      (previous, current) => current.process(previous),
-      data,
-    );
+  async process(data?: T): Promise<T> {
+    let prev = data;
+    for (const step of this._steps) {
+      prev = await step.process(prev);
+    }
+
+    return prev;
   }
 
   private trigger(fns: Set<(...args) => void>, ...args): void {

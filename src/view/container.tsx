@@ -2,7 +2,6 @@ import { h } from 'preact';
 
 import Tabular from '../tabular';
 import Config from '../config';
-import Storage from '../storage/storage';
 import { BaseComponent, BaseProps } from './base';
 import { Table } from './table';
 import { Status, TBodyCell } from '../types';
@@ -23,7 +22,6 @@ interface ContainerState {
 
 export class Container extends BaseComponent<ContainerProps, ContainerState> {
   private readonly config: Config;
-  private storage: Storage;
 
   constructor(props) {
     super(props);
@@ -35,7 +33,6 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     };
 
     this.config = this.props.config;
-    this.storage = this.config.storage;
   }
 
   componentWillMount(): void {
@@ -46,7 +43,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
   async componentDidMount() {
     this.setState({
-      data: Tabular.fromArray(await this.storage.get()),
+      data: await this.config.pipeline.process(),
       status: Status.Loaded,
     });
   }

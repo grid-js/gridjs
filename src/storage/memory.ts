@@ -1,13 +1,11 @@
 import Storage from './storage';
-import Config from '../config';
 
 class MemoryStorage extends Storage {
   private rows: any[][] = [];
 
-  constructor(config: Config) {
-    super(config);
-
-    this.set(config.data);
+  constructor(data: any[][]) {
+    super();
+    this.set(data);
   }
 
   public async get(): Promise<any[][]> {

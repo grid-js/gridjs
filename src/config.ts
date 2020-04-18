@@ -9,12 +9,15 @@ import Storage from './storage/storage';
 import ConfigError from './error/config';
 import { isArrayOfType } from './util/type';
 import Header from './header';
+import Pipeline from './pipeline/pipeline';
+import Tabular from './tabular';
 
 // Config type used internally
 interface Config {
   data?: TwoDArray<TBodyCell>;
   header?: Header;
   storage: Storage;
+  pipeline: Pipeline<Tabular<TBodyCell>>;
   limit: number;
   classNamePrefix: string;
 }
