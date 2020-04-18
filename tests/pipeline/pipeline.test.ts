@@ -70,4 +70,21 @@ describe('Pipeline', () => {
     expect(pipeline.steps).toHaveLength(2);
     expect(pipeline.process(4)).toBe(8);
   });
+
+  it('should register processors using the constructor', () => {
+    class NumberProcessor implements PipelineProcessor<number> {
+      type: ProcessorType = ProcessorType.Search;
+      process(data: number): number {
+        return data + 2;
+      }
+    }
+
+    const pipeline = new Pipeline([
+      new NumberProcessor(),
+      new NumberProcessor(),
+    ]);
+
+    expect(pipeline.steps).toHaveLength(2);
+    expect(pipeline.process(4)).toBe(8);
+  });
 });
