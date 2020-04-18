@@ -20,7 +20,11 @@ class InMemorySearch extends PipelineProcessor<
   }
 
   process(data: Tabular<TBodyCell>): Tabular<TBodyCell> {
-    return search(this.props.keyword, data);
+    if (this.props.keyword) {
+      return search(this.props.keyword, data);
+    }
+
+    return data;
   }
 }
 

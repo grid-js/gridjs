@@ -9,6 +9,7 @@ import Header from '../header';
 import className from '../util/className';
 
 import '../theme/mermaid/container.scss';
+import { Search } from './plugin/search';
 
 interface ContainerProps extends BaseProps {
   config: Config;
@@ -46,11 +47,18 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
       data: await this.config.pipeline.process(),
       status: Status.Loaded,
     });
+
+    this.config.pipeline.updated(async () => {
+      this.setState({
+        data: await this.config.pipeline.process(),
+      });
+    });
   }
 
   render() {
     return (
       <div className={className(Config.current.classNamePrefix, 'container')}>
+        <Search />
         <Table
           data={this.state.data}
           header={this.state.header}
