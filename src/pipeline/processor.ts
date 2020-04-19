@@ -1,3 +1,5 @@
+// The order of enum items define the processing order of the processor type
+// e.g. Extractor = 0 will be processed before Transformer = 1
 export enum ProcessorType {
   Extractor,
   Transformer,

@@ -1,8 +1,11 @@
-import { PipelineProcessor } from './processor';
+import { PipelineProcessor, ProcessorType } from './processor';
 
 class Pipeline<T, P = {}> {
   // available steps for this pipeline
-  private readonly _steps: PipelineProcessor<T, P>[] = [];
+  private readonly _steps: Map<
+    ProcessorType,
+    PipelineProcessor<T, P>[]
+  > = new Map<ProcessorType, PipelineProcessor<T, P>[]>();
   private propsUpdatedCallback: Set<(...args) => void> = new Set();
   private updatedCallback: Set<(...args) => void> = new Set();
 
@@ -12,23 +15,80 @@ class Pipeline<T, P = {}> {
     }
   }
 
-  register(processor: PipelineProcessor<T, P>): void {
+  /**
+   * Registers a new processor
+   *
+   * @param processor
+   * @param priority
+   */
+  register(processor: PipelineProcessor<T, P>, priority: number = null): void {
     if (processor.type === null) {
       throw Error('Processor type is not defined');
     }
 
+    // binding the propsUpdated callback to the Pipeline
     processor.propsUpdated(this.processorPropsUpdated.bind(this));
-    this._steps.push(processor);
+
+    this.addTaskByPriority(processor, priority);
+
     this.trigger(this.updatedCallback, processor);
   }
 
+  private addTaskByPriority(
+    processor: PipelineProcessor<T, P>,
+    priority: number,
+  ): void {
+    let subSteps = this._steps.get(processor.type);
+
+    if (!subSteps) {
+      const newSubStep = [];
+      this._steps.set(processor.type, newSubStep);
+      subSteps = newSubStep;
+    }
+
+    if (priority === null || priority < 0) {
+      subSteps.push(processor);
+    } else {
+      if (!subSteps[priority]) {
+        // slot is empty
+        subSteps[priority] = processor;
+      } else {
+        // slot is NOT empty
+        const first = subSteps.slice(0, priority - 1);
+        const second = subSteps.slice(priority + 1);
+
+        this._steps.set(processor.type, first.concat(processor).concat(second));
+      }
+    }
+  }
+
+  /**
+   * Flattens the _steps Map and returns a list of steps with their correct priorities
+   */
   get steps(): PipelineProcessor<T, P>[] {
-    return this._steps;
+    let steps: PipelineProcessor<T, P>[] = [];
+
+    for (const type of this.getSortedProcessorTypes()) {
+      const subSteps = this._steps.get(type);
+
+      if (subSteps && subSteps.length) {
+        steps = steps.concat(subSteps);
+      }
+    }
+
+    // to remove any undefined elements
+    return steps.filter(s => s);
+  }
+
+  private getSortedProcessorTypes(): ProcessorType[] {
+    return Object.keys(ProcessorType)
+      .filter(key => !isNaN(Number(key)))
+      .map(key => Number(key));
   }
 
   async process(data?: T): Promise<T> {
     let prev = data;
-    for (const step of this._steps) {
+    for (const step of this.steps) {
       prev = await step.process(prev);
     }
 

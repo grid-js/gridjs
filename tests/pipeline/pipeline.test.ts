@@ -1,6 +1,36 @@
 import Pipeline from '../../src/pipeline/pipeline';
 import { PipelineProcessor, ProcessorType } from '../../src/pipeline/processor';
 
+class NoopProcessor extends PipelineProcessor<string, {}> {
+  get type(): ProcessorType {
+    return null;
+  }
+  process(data: string): string {
+    return data;
+  }
+}
+
+class StringProcessor extends PipelineProcessor<string, {}> {
+  type: ProcessorType = ProcessorType.Search;
+  process(data: string): string {
+    return data;
+  }
+}
+
+class SubStrProcessor extends PipelineProcessor<string, {}> {
+  type: ProcessorType = ProcessorType.Search;
+  process(data: string): string {
+    return data.substr(1);
+  }
+}
+
+class NumberProcessor extends PipelineProcessor<number, { acc: number }> {
+  type: ProcessorType = ProcessorType.Search;
+  process(data: number): number {
+    return data + (this.props.acc || 2);
+  }
+}
+
 describe('Pipeline', () => {
   it('should init with value', () => {
     const pipeline = new Pipeline();
@@ -8,16 +38,6 @@ describe('Pipeline', () => {
   });
 
   it('should not register a processor without type', () => {
-    class NoopProcessor extends PipelineProcessor<string, {}> {
-      get type(): ProcessorType {
-        return null;
-      }
-
-      process(data: string): string {
-        return data;
-      }
-    }
-
     const pipeline = new Pipeline();
 
     expect(() => {
@@ -28,13 +48,6 @@ describe('Pipeline', () => {
   });
 
   it('should register and process a processor', async () => {
-    class StringProcessor extends PipelineProcessor<string, {}> {
-      type: ProcessorType = ProcessorType.Search;
-      process(data: string): string {
-        return data;
-      }
-    }
-
     const pipeline = new Pipeline();
     pipeline.register(new StringProcessor());
 
@@ -43,29 +56,15 @@ describe('Pipeline', () => {
   });
 
   it('should register and process processors', async () => {
-    class StringProcessor extends PipelineProcessor<string, {}> {
-      type: ProcessorType = ProcessorType.Search;
-      process(data: string): string {
-        return data.substr(1);
-      }
-    }
-
     const pipeline = new Pipeline();
-    pipeline.register(new StringProcessor());
-    pipeline.register(new StringProcessor());
+    pipeline.register(new SubStrProcessor());
+    pipeline.register(new SubStrProcessor());
 
     expect(pipeline.steps).toHaveLength(2);
     expect(await pipeline.process('Hello World')).toBe('llo World');
   });
 
   it('should register and process number processors', async () => {
-    class NumberProcessor extends PipelineProcessor<number, {}> {
-      type: ProcessorType = ProcessorType.Search;
-      process(data: number): number {
-        return data + 2;
-      }
-    }
-
     const pipeline = new Pipeline();
     pipeline.register(new NumberProcessor());
     pipeline.register(new NumberProcessor());
@@ -75,13 +74,6 @@ describe('Pipeline', () => {
   });
 
   it('should register processors using the constructor', async () => {
-    class NumberProcessor extends PipelineProcessor<number, {}> {
-      type: ProcessorType = ProcessorType.Search;
-      process(data: number): number {
-        return data + 2;
-      }
-    }
-
     const pipeline = new Pipeline([
       new NumberProcessor(),
       new NumberProcessor(),
@@ -92,13 +84,6 @@ describe('Pipeline', () => {
   });
 
   it('should trigger callbacks when props are updated', async () => {
-    class NumberProcessor extends PipelineProcessor<number, { acc: number }> {
-      type: ProcessorType = ProcessorType.Search;
-      process(data: number): number {
-        return data + this.props.acc;
-      }
-    }
-
     const p1 = new NumberProcessor({ acc: 2 });
     const p2 = new NumberProcessor({ acc: 3 });
     const pipeline = new Pipeline([p1, p2]);
@@ -116,5 +101,21 @@ describe('Pipeline', () => {
     expect(updatedCallback).toBeCalledTimes(1);
     expect(propsUpdatedCallback).toBeCalledTimes(1);
     expect(await pipeline.process(4)).toBe(12);
+  });
+
+  it('should register processor with correct priority', async () => {
+    const p1 = new NumberProcessor({ acc: 2 });
+    const p2 = new NumberProcessor({ acc: 3 });
+    const p3 = new NumberProcessor({ acc: 4 });
+
+    const pipeline = new Pipeline();
+    pipeline.register(p1, 2);
+    pipeline.register(p2, 1);
+    pipeline.register(p3);
+
+    expect(pipeline.steps).toHaveLength(3);
+    expect(pipeline.steps[0]).toBe(p2);
+    expect(pipeline.steps[1]).toBe(p1);
+    expect(pipeline.steps[2]).toBe(p3);
   });
 });
