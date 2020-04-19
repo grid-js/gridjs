@@ -8,7 +8,7 @@ describe('Config', () => {
   beforeEach(() => {
     config = new Config();
     config.data = [[1, 2, 3]];
-    config.storage = new MemoryStorage(config);
+    config.storage = new MemoryStorage(config.data);
     config.limit = 4;
   });
 
