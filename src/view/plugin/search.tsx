@@ -5,6 +5,9 @@ import Config from '../../config';
 import { TBodyCell } from '../../types';
 import Tabular from '../../tabular';
 import InMemorySearch from '../../pipeline/search/inMemory';
+import className from '../../util/className';
+
+import '../../theme/mermaid/input.scss';
 
 interface SearchState {
   keyword?: string;
@@ -26,12 +29,15 @@ export class Search extends BaseComponent<{}, SearchState> {
 
   render() {
     return (
-      <input
-        type="text"
-        placeholder="Type a keyword..."
-        onInput={this.onChange.bind(this)}
-        value={this.state.keyword}
-      />
+      <div className={className(Config.current.classNamePrefix, 'search')}>
+        <input
+          type="text"
+          placeholder="Type a keyword..."
+          onInput={this.onChange.bind(this)}
+          className={className(Config.current.classNamePrefix, 'input')}
+          value={this.state.keyword}
+        />
+      </div>
     );
   }
 

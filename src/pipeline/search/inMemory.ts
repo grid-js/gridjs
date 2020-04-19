@@ -21,7 +21,7 @@ class InMemorySearch extends PipelineProcessor<
 
   process(data: Tabular<TBodyCell>): Tabular<TBodyCell> {
     if (this.props.keyword) {
-      return search(this.props.keyword, data);
+      return search(String(this.props.keyword).trim(), data);
     }
 
     return data;

@@ -3,13 +3,14 @@ import { h } from 'preact';
 import Tabular from '../tabular';
 import Config from '../config';
 import { BaseComponent, BaseProps } from './base';
-import { Table } from './table';
+import className from '../util/className';
 import { Status, TBodyCell } from '../types';
 import Header from '../header';
-import className from '../util/className';
+import { Table } from './table';
+import { Head } from './head';
 
 import '../theme/mermaid/container.scss';
-import { Search } from './plugin/search';
+import '../theme/mermaid/wrapper.scss';
 
 interface ContainerProps extends BaseProps {
   config: Config;
@@ -58,12 +59,15 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
   render() {
     return (
       <div className={className(Config.current.classNamePrefix, 'container')}>
-        <Search />
-        <Table
-          data={this.state.data}
-          header={this.state.header}
-          classNamePrefix={this.config.classNamePrefix}
-        />
+        <Head />
+
+        <div className={className(Config.current.classNamePrefix, 'wrapper')}>
+          <Table
+            data={this.state.data}
+            header={this.state.header}
+            classNamePrefix={this.config.classNamePrefix}
+          />
+        </div>
       </div>
     );
   }

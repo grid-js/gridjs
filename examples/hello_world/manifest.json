@@ -1,3 +1,8 @@
+      "src": "/assets/icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
 {
   "name": "hello_world",
   "short_name": "hello_world",

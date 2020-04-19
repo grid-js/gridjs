@@ -1,8 +1,9 @@
-*, :after, :before {
-  box-sizing: border-box;
-  border: 0 solid #d2d6dc;
-}
 .gridjs {
+  *, :after, :before {
+    box-sizing: border-box;
+    border: 0 solid #d2d6dc;
+  }
+
   &-thead {
     color: #6b7280;
     background-color: #f9fafb;
