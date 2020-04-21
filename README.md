@@ -2,7 +2,7 @@
 
 <p align="center">
 <a href="https://gridjs.io" target="_blank">
-	
+	<img src="./assets/logo/logo_name.png" height="200" alt="Grid.js" />
 </a>
 </p>
 <p align="center">Fast and extensible table library.</p>
