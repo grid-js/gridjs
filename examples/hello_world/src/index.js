@@ -1,5 +1,6 @@
 import './style';
 import { Component } from 'preact';
+import Wrapper from '../../shared/component/wrapper';
 import Grid from 'gridjs';
 
 export default class App extends Component {
@@ -14,12 +15,13 @@ export default class App extends Component {
     }).createElement();
 
     return (
-			<div>
-        <h1>Hello, World!</h1>
-        <div id="container">
-          { grid }
+      <Wrapper title="Hello, World!">
+        <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="px-4 py-5 sm:p-6">
+            { grid }
+          </div>
         </div>
-      </div>
+      </Wrapper>
     );
   }
 }
