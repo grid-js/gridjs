@@ -11,7 +11,7 @@ export class Head extends BaseComponent<{}, {}> {
   render() {
     return (
       <div className={className(Config.current.classNamePrefix, 'head')}>
-        <Search />
+        <Search {...Config.current.search} />
       </div>
     );
   }

@@ -11,6 +11,7 @@ import { isArrayOfType } from './util/type';
 import Header from './header';
 import Pipeline from './pipeline/pipeline';
 import Tabular from './tabular';
+import { SearchProps } from './view/plugin/search';
 
 // Config type used internally
 interface Config {
@@ -20,6 +21,7 @@ interface Config {
   pipeline: Pipeline<Tabular<TBodyCell>>;
   limit: number;
   classNamePrefix: string;
+  search: SearchProps;
 }
 
 // Config type used by the consumers

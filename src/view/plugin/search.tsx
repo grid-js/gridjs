@@ -1,9 +1,6 @@
 import { h } from 'preact';
-import { BaseComponent } from '../base';
-import Pipeline from '../../pipeline/pipeline';
+import { BaseComponent, BaseProps } from '../base';
 import Config from '../../config';
-import { TBodyCell } from '../../types';
-import Tabular from '../../tabular';
 import InMemorySearch from '../../pipeline/search/inMemory';
 import className from '../../util/className';
 
@@ -13,21 +10,37 @@ interface SearchState {
   keyword?: string;
 }
 
-export class Search extends BaseComponent<{}, SearchState> {
-  private pipeline: Pipeline<Tabular<TBodyCell>>;
+export interface SearchProps extends BaseProps {
+  keyword?: string;
+  enabled?: boolean;
+}
+
+export class Search extends BaseComponent<SearchProps, SearchState> {
   private searchProcessor: InMemorySearch;
 
-  constructor() {
+  constructor(props: SearchProps) {
     super();
 
-    const searchProcessor = new InMemorySearch();
-    this.searchProcessor = searchProcessor;
+    const { enabled } = props;
 
-    this.pipeline = Config.current.pipeline;
-    this.pipeline.register(searchProcessor);
+    this.state = {
+      keyword: props.keyword,
+    };
+
+    if (enabled) {
+      const searchProcessor = new InMemorySearch({
+        keyword: props.keyword,
+      });
+      this.searchProcessor = searchProcessor;
+
+      // adds a new processor to the pipeline
+      Config.current.pipeline.register(searchProcessor);
+    }
   }
 
   render() {
+    if (!this.props.enabled) return null;
+
     return (
       <div className={className(Config.current.classNamePrefix, 'search')}>
         <input
