@@ -1,7 +1,7 @@
 import faker from 'faker';
 import './style';
 import { Component } from 'preact';
-import Wrapper from '../../shared/component/wrapper';
+import Example from '../../shared/component/example';
 import Grid from 'gridjs';
 
 export default class App extends Component {
@@ -15,6 +15,18 @@ export default class App extends Component {
     return data;
   }
 
+  code() {
+    return `
+    const grid = new Grid({
+      data: [
+        ['Brandy', 'Garrick.Steuber@hotmail.com', '246-082-1548'],
+        ['Myron',  'Chandler70@hotmail.com',      '218-125-8774'],
+      ],
+      header: ['Name', 'Email', 'Phone Number']
+    }).createElement();
+    `;
+  }
+
   render() {
     const grid = new Grid({
       data: this.generateData(),
@@ -22,13 +34,9 @@ export default class App extends Component {
     }).createElement();
 
     return (
-      <Wrapper title="Hello, World!">
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            { grid }
-          </div>
-        </div>
-      </Wrapper>
+      <Example title="Hello, World!" code={this.code()}>
+          { grid }
+      </Example>
     );
   }
 }

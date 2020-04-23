@@ -57,11 +57,19 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
   }
 
   render() {
+    const config = Config.current;
+
     return (
-      <div className={className(Config.current.classNamePrefix, 'container')}>
+      <div
+        className={className(Config.current.classNamePrefix, 'container')}
+        style={{ width: config.width }}
+      >
         <Head />
 
-        <div className={className(Config.current.classNamePrefix, 'wrapper')}>
+        <div
+          className={className(Config.current.classNamePrefix, 'wrapper')}
+          style={{ width: config.width }}
+        >
           <Table
             data={this.state.data}
             header={this.state.header}

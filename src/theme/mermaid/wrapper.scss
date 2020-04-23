@@ -1,19 +1,16 @@
 .gridjs {
-  font-family: "Open Sans",Roboto, Calibri, system-ui,-apple-system,Helvetica Neue,Arial,Noto Sans,sans-serif;
-  font-size: 1rem;
-  line-height: 1.25rem;
-
   &-wrapper {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.26);
-    border-radius: .5rem;
+    border-radius: 8px;
     overflow: hidden;
     display: inline-block;
 
     border-bottom-width: 1px;
     border-top-width: 1px;
     border-color: #e5e7eb;
+    border-top-color: #ececec;
   }
 }
 

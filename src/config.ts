@@ -11,7 +11,7 @@ import { isArrayOfType } from './util/type';
 import Header from './header';
 import Pipeline from './pipeline/pipeline';
 import Tabular from './tabular';
-import { SearchProps } from './view/plugin/search';
+import { SearchConfig } from './view/plugin/search';
 
 // Config type used internally
 interface Config {
@@ -21,7 +21,9 @@ interface Config {
   pipeline: Pipeline<Tabular<TBodyCell>>;
   limit: number;
   classNamePrefix: string;
-  search: SearchProps;
+  /** sets the width of container and table */
+  width: string;
+  search: SearchConfig
 }
 
 // Config type used by the consumers
@@ -59,6 +61,7 @@ class Config {
     return {
       classNamePrefix: 'gridjs',
       limit: 15,
+      width: "100%"
     } as Config;
   }
 

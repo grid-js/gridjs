@@ -10,15 +10,18 @@ interface SearchState {
   keyword?: string;
 }
 
-export interface SearchProps extends BaseProps {
+export interface SearchConfig {
   keyword?: string;
   enabled?: boolean;
 }
 
-export class Search extends BaseComponent<SearchProps, SearchState> {
+export class Search extends BaseComponent<
+  BaseProps & SearchConfig,
+  SearchState
+> {
   private searchProcessor: InMemorySearch;
 
-  constructor(props: SearchProps) {
+  constructor(props) {
     super();
 
     const { enabled } = props;
