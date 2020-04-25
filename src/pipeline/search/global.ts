@@ -7,13 +7,13 @@ import {
   ProcessorType,
 } from '../processor';
 
-interface InMemorySearchProps extends PipelineProcessorProps {
+interface GlobalSearchProps extends PipelineProcessorProps {
   keyword: string;
 }
 
-class InMemorySearch extends PipelineProcessor<
+class GlobalSearch extends PipelineProcessor<
   Tabular<TBodyCell>,
-  InMemorySearchProps
+  GlobalSearchProps
 > {
   get type(): ProcessorType {
     return ProcessorType.Search;
@@ -28,4 +28,4 @@ class InMemorySearch extends PipelineProcessor<
   }
 }
 
-export default InMemorySearch;
+export default GlobalSearch;

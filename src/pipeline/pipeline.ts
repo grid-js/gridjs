@@ -7,6 +7,7 @@ class Pipeline<T, P = {}> {
     PipelineProcessor<T, P>[]
   > = new Map<ProcessorType, PipelineProcessor<T, P>[]>();
   private propsUpdatedCallback: Set<(...args) => void> = new Set();
+  private afterRegisterCallback: Set<(...args) => void> = new Set();
   private updatedCallback: Set<(...args) => void> = new Set();
 
   constructor(steps?: PipelineProcessor<any, any>[]) {
@@ -30,8 +31,7 @@ class Pipeline<T, P = {}> {
     processor.propsUpdated(this.processorPropsUpdated.bind(this));
 
     this.addTaskByPriority(processor, priority);
-
-    this.trigger(this.updatedCallback, processor);
+    this.afterRegistered();
   }
 
   private addTaskByPriority(
@@ -89,7 +89,7 @@ class Pipeline<T, P = {}> {
   async process(data?: T): Promise<T> {
     let prev = data;
     for (const step of this.steps) {
-      prev = await step.process(prev);
+      prev = await step.processWrapper(prev);
     }
 
     return prev;
@@ -106,8 +106,18 @@ class Pipeline<T, P = {}> {
     this.trigger(this.updatedCallback);
   }
 
+  private afterRegistered(): void {
+    this.trigger(this.afterRegisterCallback);
+    this.trigger(this.updatedCallback);
+  }
+
   propsUpdated(fn: (...args) => void): this {
     this.propsUpdatedCallback.add(fn);
+    return this;
+  }
+
+  afterRegister(fn: (...args) => void): this {
+    this.afterRegisterCallback.add(fn);
     return this;
   }
 

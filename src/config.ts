@@ -12,6 +12,7 @@ import Header from './header';
 import Pipeline from './pipeline/pipeline';
 import Tabular from './tabular';
 import { SearchConfig } from './view/plugin/search';
+import { PaginationConfig } from './view/plugin/pagination';
 
 // Config type used internally
 interface Config {
@@ -19,11 +20,11 @@ interface Config {
   header?: Header;
   storage: Storage;
   pipeline: Pipeline<Tabular<TBodyCell>>;
-  limit: number;
   classNamePrefix: string;
   /** sets the width of container and table */
   width: string;
-  search: SearchConfig
+  search: SearchConfig;
+  pagination: PaginationConfig;
 }
 
 // Config type used by the consumers
@@ -60,8 +61,7 @@ class Config {
   static defaultConfig(): Config {
     return {
       classNamePrefix: 'gridjs',
-      limit: 15,
-      width: "100%"
+      width: '100%',
     } as Config;
   }
 

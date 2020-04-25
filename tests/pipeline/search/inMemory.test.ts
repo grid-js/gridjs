@@ -1,4 +1,4 @@
-import InMemorySearch from '../../../src/pipeline/search/inMemory';
+import InMemorySearch from '../../../src/pipeline/search/global';
 import Tabular from '../../../src/tabular';
 
 describe('InMemorySearch', () => {
