@@ -9,15 +9,10 @@ describe('Config', () => {
     config = new Config();
     config.data = [[1, 2, 3]];
     config.storage = new MemoryStorage(config.data);
-    config.limit = 4;
   });
 
   it('should have data property', () => {
     expect(config.data).toStrictEqual([[1, 2, 3]]);
-  });
-
-  it('should have limit property', () => {
-    expect(config.limit).toBe(4);
   });
 
   it('should return the correct values', () => {

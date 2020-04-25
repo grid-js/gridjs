@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { BaseComponent, BaseProps } from '../base';
 import Config from '../../config';
-import InMemorySearch from '../../pipeline/search/inMemory';
+import GlobalSearch from '../../pipeline/search/global';
 import className from '../../util/className';
 
 import '../../theme/mermaid/input.scss';
@@ -19,7 +19,7 @@ export class Search extends BaseComponent<
   BaseProps & SearchConfig,
   SearchState
 > {
-  private searchProcessor: InMemorySearch;
+  private searchProcessor: GlobalSearch;
 
   constructor(props) {
     super();
@@ -31,7 +31,7 @@ export class Search extends BaseComponent<
     };
 
     if (enabled) {
-      const searchProcessor = new InMemorySearch({
+      const searchProcessor = new GlobalSearch({
         keyword: props.keyword,
       });
       this.searchProcessor = searchProcessor;

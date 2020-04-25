@@ -1,0 +1,21 @@
+.gridjs-pagination {
+  color: #374151;
+
+  &::after{
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  .gridjs-summary {
+    float: left;
+
+    & span {
+      font-weight: bold;
+    }
+  }
+
+  .gridjs-pages {
+    float: right;
+  }
+}

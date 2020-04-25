@@ -11,6 +11,7 @@ import { Head } from './head';
 
 import '../theme/mermaid/container.scss';
 import '../theme/mermaid/wrapper.scss';
+import { TableFooter } from './footer';
 
 interface ContainerProps extends BaseProps {
   config: Config;
@@ -75,6 +76,8 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
             header={this.state.header}
             classNamePrefix={this.config.classNamePrefix}
           />
+
+          <TableFooter />
         </div>
       </div>
     );
