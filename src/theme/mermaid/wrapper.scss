@@ -1,3 +1,5 @@
+@import "colors";
+
 .gridjs {
   &-wrapper {
     -webkit-font-smoothing: antialiased;
@@ -9,8 +11,7 @@
 
     border-bottom-width: 1px;
     border-top-width: 1px;
-    border-color: #e5e7eb;
-    border-top-color: #ececec;
+    border-color: $gray3;
   }
 }
 

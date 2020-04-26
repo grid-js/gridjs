@@ -1,7 +1,9 @@
+@import "colors";
+
 .gridjs {
   &-td {
     padding: 12px 24px;
-    border-color: #e5e7eb;
+    border-color: $gray3;
     border-bottom-width: 1px;
   }
 }

@@ -1,10 +1,12 @@
+@import "colors";
+
 .gridjs {
   *, :after, :before {
     box-sizing: border-box;
   }
 
   &-thead {
-    color: #6b7280;
-    background-color: #f9fafb;
+    color: $gray5;
+    background-color: $gray1;
   }
 }

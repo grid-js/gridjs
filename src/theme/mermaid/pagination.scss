@@ -1,5 +1,7 @@
+@import "colors";
+
 .gridjs-pagination {
-  color: #374151;
+  color: $gray6;
 
   &::after{
     content: '';
@@ -9,6 +11,7 @@
 
   .gridjs-summary {
     float: left;
+    margin-top: 5px;
 
     & span {
       font-weight: bold;
@@ -17,5 +20,46 @@
 
   .gridjs-pages {
     float: right;
+
+    button {
+      padding: 5px 14px;
+      border: 1px solid $gray4;
+      background-color: $white;
+      border-right: none;
+      outline: none;
+      user-select: none;
+    }
+
+    button:focus {
+      box-shadow: 0 0 0 2px rgba(164,202,254,.45);
+    }
+
+    button:hover {
+      background-color: $gray2;
+      color: $darkBlue1;
+      outline: none;
+    }
+
+    button.gridjs-spread {
+      cursor: default;
+      box-shadow: none;
+      background-color: $white;
+    }
+
+    button.gridjs-currentPage {
+      background-color: $gray2;
+      font-weight: bold;
+    }
+
+    button:last-child {
+      border-bottom-right-radius: 6px;
+      border-top-right-radius: 6px;
+      border-right: 1px solid $gray4;
+    }
+
+    button:first-child {
+      border-bottom-left-radius: 6px;
+      border-top-left-radius: 6px;
+    }
   }
 }

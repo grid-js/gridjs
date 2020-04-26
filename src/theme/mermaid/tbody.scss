@@ -1,5 +1,7 @@
+@import "colors";
+
 .gridjs {
   &-tbody {
-    background-color: #fff;
+    background-color: $white;
   }
 }

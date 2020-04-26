@@ -1,6 +1,8 @@
+@import "colors";
+
 input.gridjs-input {
-  background-color: #fff;
-  border-color: #d2d6dc;
+  background-color: $white;
+  border-color: $gray4;
   border-width: 1px;
   border-radius: 5px;
   padding: 7px 10px;

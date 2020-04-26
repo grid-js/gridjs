@@ -19,7 +19,7 @@ describe('Grid class', () => {
 
   it('should set the config correctly', () => {
     const config = {
-      data: [[1, 2, 3]]
+      data: [[1, 2, 3]],
     };
 
     const grid = new Grid(config);
