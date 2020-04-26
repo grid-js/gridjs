@@ -1,13 +1,13 @@
 import { Attributes, ComponentClass, h } from 'preact';
 
-import Row from '../row';
-import Cell from '../cell';
-import { BaseComponent, BaseProps } from './base';
-import className from '../util/className';
-import Config from '../config';
-import { TBodyCell, THeaderCell } from '../types';
+import Row from '../../row';
+import Cell from '../../cell';
+import { BaseComponent, BaseProps } from '../base';
+import className from '../../util/className';
+import Config from '../../config';
+import { TBodyCell, THeaderCell } from '../../types';
 
-import '../theme/mermaid/tr.scss';
+import '../../theme/mermaid/tr.scss';
 
 export interface TRProps extends BaseProps {
   row: Row<TBodyCell | THeaderCell>;

@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
 import { h } from 'preact';
-import { Table } from '../../src/view/table';
+import { Table } from '../../src/view/table/table';
 import Tabular from '../../src/tabular';
 import Header from '../../src/header';
 import Config from '../../src/config';

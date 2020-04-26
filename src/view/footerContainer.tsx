@@ -7,7 +7,7 @@ import { Pagination } from './plugin/pagination';
 
 import '../theme/mermaid/footer.scss';
 
-export class TableFooter extends BaseComponent<{}, {}> {
+export class FooterContainer extends BaseComponent<{}, {}> {
   render() {
     return (
       <div className={className(Config.current.classNamePrefix, 'footer')}>

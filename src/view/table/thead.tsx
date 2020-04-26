@@ -1,15 +1,15 @@
 import { h } from 'preact';
 
-import Row from '../row';
+import Row from '../../row';
 import { TR } from './tr';
-import { BaseComponent, BaseProps } from './base';
-import Header from '../header';
+import { BaseComponent, BaseProps } from '../base';
+import Header from '../../header';
 import { TH } from './th';
-import className from '../util/className';
-import Config from '../config';
-import { THeaderCell } from '../types';
+import className from '../../util/className';
+import Config from '../../config';
+import { THeaderCell } from '../../types';
 
-import '../theme/mermaid/thead.scss';
+import '../../theme/mermaid/thead.scss';
 
 interface THeadProps extends BaseProps {
   header: Header;

@@ -6,12 +6,13 @@ import { BaseComponent, BaseProps } from './base';
 import className from '../util/className';
 import { Status, TBodyCell } from '../types';
 import Header from '../header';
-import { Table } from './table';
-import { Head } from './head';
+import { Table } from './table/table';
+import { HeaderContainer } from './headerContainer';
+import { FooterContainer } from './footerContainer';
 
 import '../theme/mermaid/container.scss';
 import '../theme/mermaid/wrapper.scss';
-import { TableFooter } from './footer';
+
 
 interface ContainerProps extends BaseProps {
   config: Config;
@@ -65,7 +66,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
         className={className(Config.current.classNamePrefix, 'container')}
         style={{ width: config.width }}
       >
-        <Head />
+        <HeaderContainer />
 
         <div
           className={className(Config.current.classNamePrefix, 'wrapper')}
@@ -77,7 +78,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
             classNamePrefix={this.config.classNamePrefix}
           />
 
-          <TableFooter />
+          <FooterContainer />
         </div>
       </div>
     );

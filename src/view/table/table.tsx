@@ -1,15 +1,15 @@
 import { h } from 'preact';
 
-import Tabular from '../tabular';
+import Tabular from '../../tabular';
 import { TBody } from './tbody';
 import { THead } from './thead';
-import { BaseComponent, BaseProps } from './base';
-import Header from '../header';
-import className from '../util/className';
-import Config from '../config';
-import { TBodyCell } from '../types';
+import { BaseComponent, BaseProps } from '../base';
+import Header from '../../header';
+import className from '../../util/className';
+import Config from '../../config';
+import { TBodyCell } from '../../types';
 
-import '../theme/mermaid/table.scss';
+import '../../theme/mermaid/table.scss';
 
 interface TableProps extends BaseProps {
   data?: Tabular<TBodyCell>;
