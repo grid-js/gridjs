@@ -28,10 +28,10 @@ class Pipeline<T, P = {}> {
     }
 
     // binding the propsUpdated callback to the Pipeline
-    processor.propsUpdated(this.processorPropsUpdated.bind(this));
+    processor.propsUpdated(this.processorPropsUpdated.bind(this, processor));
 
     this.addTaskByPriority(processor, priority);
-    this.afterRegistered();
+    this.afterRegistered(processor);
   }
 
   private addTaskByPriority(
@@ -101,14 +101,14 @@ class Pipeline<T, P = {}> {
     }
   }
 
-  private processorPropsUpdated(): void {
+  private processorPropsUpdated(processor): void {
     this.trigger(this.propsUpdatedCallback);
-    this.trigger(this.updatedCallback);
+    this.trigger(this.updatedCallback, processor);
   }
 
-  private afterRegistered(): void {
+  private afterRegistered(processor): void {
     this.trigger(this.afterRegisterCallback);
-    this.trigger(this.updatedCallback);
+    this.trigger(this.updatedCallback, processor);
   }
 
   propsUpdated(fn: (...args) => void): this {

@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import { h, Fragment } from 'preact';
 import { BaseComponent, BaseProps } from '../base';
 import Config from '../../config';
 import PaginationLimit from '../../pipeline/limit/pagination';
@@ -78,7 +78,21 @@ export class Pagination extends BaseComponent<
     }
   }
 
+  componentDidMount(): void {
+    Config.current.pipeline.updated(processor => {
+      // this is to ensure that the current page is set to 0
+      // when a processor is updated for some reason
+      if (processor !== this.processor) {
+        this.setPage(0);
+      }
+    });
+  }
+
   private setPage(page: number): void {
+    if (page >= this.state.pages || page < 0 || page === this.state.page) {
+      return null;
+    }
+
     this.setState({
       page: page,
     });
@@ -88,18 +102,31 @@ export class Pagination extends BaseComponent<
     });
   }
 
+  private currentPageClass(page: number): string | null {
+    if (this.state.page === page) {
+      return className(Config.current.classNamePrefix, 'currentPage');
+    }
+
+    return null;
+  }
+
   render() {
     if (!this.state.enabled) return null;
 
     // how many pagination buttons to render?
     const maxCount: number = Math.min(
-      Math.floor(this.state.pages / 2),
+      this.state.pages,
       this.props.buttonsCount,
     );
 
+    let pagePivot = Math.min(this.state.page, Math.floor(maxCount / 2));
+    if (this.state.page + Math.floor(maxCount / 2) >= this.state.pages) {
+      pagePivot = maxCount - (this.state.pages - this.state.page);
+    }
+
     return (
       <div className={className(Config.current.classNamePrefix, 'pagination')}>
-        {this.props.summary && (
+        {this.props.summary && this.state.total > 0 && (
           <div
             className={className(Config.current.classNamePrefix, 'summary')}
             title={`Page ${this.state.page + 1} of ${this.state.pages}`}
@@ -116,19 +143,61 @@ export class Pagination extends BaseComponent<
         )}
 
         <div className={className(Config.current.classNamePrefix, 'pages')}>
-          {Array.from(Array(maxCount).keys()).map(i => (
-            <button onClick={this.setPage.bind(this, i)}>{i + 1}</button>
-          ))}
-          {this.state.pages > 1 && this.state.pages > maxCount * 2 && (
-            <span>...</span>
+          {this.props.prevButton && (
+            <button onClick={this.setPage.bind(this, this.state.page - 1)}>
+              Previous
+            </button>
           )}
+
+          {this.state.pages > maxCount && this.state.page - pagePivot > 0 && (
+            <Fragment>
+              <button onClick={this.setPage.bind(this, 0)} title={`Page 1`}>
+                1
+              </button>
+              <button
+                className={className(Config.current.classNamePrefix, 'spread')}
+              >
+                ...
+              </button>
+            </Fragment>
+          )}
+
           {Array.from(Array(maxCount).keys())
-            .map(i => this.state.pages - (maxCount - i))
+            .map(i => this.state.page + (i - pagePivot))
             .map(i => (
-              <button onClick={this.setPage.bind(this, i)} title={`Page ${i}`}>
+              <button
+                onClick={this.setPage.bind(this, i)}
+                className={this.currentPageClass(i)}
+              >
                 {i + 1}
               </button>
             ))}
+
+          {this.state.pages > maxCount &&
+            this.state.pages > this.state.page + pagePivot + 1 && (
+              <Fragment>
+                <button
+                  className={className(
+                    Config.current.classNamePrefix,
+                    'spread',
+                  )}
+                >
+                  ...
+                </button>
+                <button
+                  onClick={this.setPage.bind(this, this.state.pages - 1)}
+                  title={`Page ${this.state.pages}`}
+                >
+                  {this.state.pages}
+                </button>
+              </Fragment>
+            )}
+
+          {this.props.nextButton && (
+            <button onClick={this.setPage.bind(this, this.state.page + 1)}>
+              Next
+            </button>
+          )}
         </div>
       </div>
     );
