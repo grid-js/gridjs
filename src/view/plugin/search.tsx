@@ -45,12 +45,12 @@ export class Search extends BaseComponent<
     if (!this.props.enabled) return null;
 
     return (
-      <div className={className(Config.current.classNamePrefix, 'search')}>
+      <div className={className('search')}>
         <input
           type="text"
           placeholder="Type a keyword..."
           onInput={this.onChange.bind(this)}
-          className={className(Config.current.classNamePrefix, 'input')}
+          className={className('input')}
           value={this.state.keyword}
         />
       </div>

@@ -104,7 +104,7 @@ export class Pagination extends BaseComponent<
 
   private currentPageClass(page: number): string | null {
     if (this.state.page === page) {
-      return className(Config.current.classNamePrefix, 'currentPage');
+      return className('currentPage');
     }
 
     return null;
@@ -125,10 +125,10 @@ export class Pagination extends BaseComponent<
     }
 
     return (
-      <div className={className(Config.current.classNamePrefix, 'pagination')}>
+      <div className={className('pagination')}>
         {this.props.summary && this.state.total > 0 && (
           <div
-            className={className(Config.current.classNamePrefix, 'summary')}
+            className={className('summary')}
             title={`Page ${this.state.page + 1} of ${this.state.pages}`}
           >
             Showing <span>{this.state.page * this.state.limit + 1}</span> to{' '}
@@ -142,7 +142,7 @@ export class Pagination extends BaseComponent<
           </div>
         )}
 
-        <div className={className(Config.current.classNamePrefix, 'pages')}>
+        <div className={className('pages')}>
           {this.props.prevButton && (
             <button onClick={this.setPage.bind(this, this.state.page - 1)}>
               Previous
@@ -154,11 +154,7 @@ export class Pagination extends BaseComponent<
               <button onClick={this.setPage.bind(this, 0)} title={`Page 1`}>
                 1
               </button>
-              <button
-                className={className(Config.current.classNamePrefix, 'spread')}
-              >
-                ...
-              </button>
+              <button className={className('spread')}>...</button>
             </Fragment>
           )}
 
@@ -176,14 +172,7 @@ export class Pagination extends BaseComponent<
           {this.state.pages > maxCount &&
             this.state.pages > this.state.page + pagePivot + 1 && (
               <Fragment>
-                <button
-                  className={className(
-                    Config.current.classNamePrefix,
-                    'spread',
-                  )}
-                >
-                  ...
-                </button>
+                <button className={className('spread')}>...</button>
                 <button
                   onClick={this.setPage.bind(this, this.state.pages - 1)}
                   title={`Page ${this.state.pages}`}

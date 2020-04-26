@@ -10,7 +10,7 @@ import '../theme/mermaid/footer.scss';
 export class FooterContainer extends BaseComponent<{}, {}> {
   render() {
     return (
-      <div className={className(Config.current.classNamePrefix, 'footer')}>
+      <div className={className('footer')}>
         <Pagination {...Config.current.pagination} />
       </div>
     );

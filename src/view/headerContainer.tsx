@@ -10,7 +10,7 @@ import '../theme/mermaid/head.scss';
 export class HeaderContainer extends BaseComponent<{}, {}> {
   render() {
     return (
-      <div className={className(Config.current.classNamePrefix, 'head')}>
+      <div className={className('head')}>
         <Search {...Config.current.search} />
       </div>
     );

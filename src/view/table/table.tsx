@@ -20,7 +20,7 @@ export class Table extends BaseComponent<TableProps, {}> {
   render() {
     return (
       <table
-        className={className(Config.current.classNamePrefix, 'table')}
+        className={className('table')}
         style={{ width: Config.current.width }}
       >
         <THead header={this.props.header} />

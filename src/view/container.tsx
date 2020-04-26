@@ -13,7 +13,6 @@ import { FooterContainer } from './footerContainer';
 import '../theme/mermaid/container.scss';
 import '../theme/mermaid/wrapper.scss';
 
-
 interface ContainerProps extends BaseProps {
   config: Config;
 }
@@ -62,21 +61,11 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     const config = Config.current;
 
     return (
-      <div
-        className={className(Config.current.classNamePrefix, 'container')}
-        style={{ width: config.width }}
-      >
+      <div className={className('container')} style={{ width: config.width }}>
         <HeaderContainer />
 
-        <div
-          className={className(Config.current.classNamePrefix, 'wrapper')}
-          style={{ width: config.width }}
-        >
-          <Table
-            data={this.state.data}
-            header={this.state.header}
-            classNamePrefix={this.config.classNamePrefix}
-          />
+        <div className={className('wrapper')} style={{ width: config.width }}>
+          <Table data={this.state.data} header={this.state.header} />
 
           <FooterContainer />
         </div>
