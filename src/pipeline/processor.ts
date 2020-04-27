@@ -1,5 +1,7 @@
 // The order of enum items define the processing order of the processor type
 // e.g. Extractor = 0 will be processed before Transformer = 1
+import { generateID, ID } from '../util/id';
+
 export enum ProcessorType {
   Extractor,
   Transformer,
@@ -11,30 +13,40 @@ export enum ProcessorType {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface PipelineProcessorProps {}
 
-export abstract class PipelineProcessor<T, P extends PipelineProcessorProps> {
+export abstract class PipelineProcessor<
+  T,
+  P extends Partial<PipelineProcessorProps>
+> {
+  public readonly id: ID;
   private readonly _props: P;
   private propsUpdatedCallback: Set<(...args) => void> = new Set();
   private beforeProcessCallback: Set<(...args) => void> = new Set();
   private afterProcessCallback: Set<(...args) => void> = new Set();
 
   abstract get type(): ProcessorType;
-  abstract process(...args): T | Promise<T>;
+  protected abstract _process(...args): T | Promise<T>;
+  protected validateProps?(): void;
 
-  constructor(props?: P) {
+  constructor(props?: Partial<P>) {
     this._props = {} as P;
+    this.id = generateID();
 
     if (props) this.setProps(props);
   }
 
   /**
-   * processWrapper is used to call beforeProcess and afterProcess callbacks
-   * This function is just a wrapper that calls process()
+   * process is used to call beforeProcess and afterProcess callbacks
+   * This function is just a wrapper that calls _process()
    *
    * @param args
    */
-  processWrapper(...args): T | Promise<T> {
+  process(...args): T | Promise<T> {
+    if (this.validateProps instanceof Function) {
+      this.validateProps();
+    }
+
     this.trigger(this.beforeProcessCallback, ...args);
-    const result = this.process(...args);
+    const result = this._process(...args);
     this.trigger(this.afterProcessCallback, ...args);
 
     return result;
@@ -48,7 +60,7 @@ export abstract class PipelineProcessor<T, P extends PipelineProcessorProps> {
 
   setProps(props: Partial<P>): this {
     Object.assign(this._props, props);
-    this.trigger(this.propsUpdatedCallback);
+    this.trigger(this.propsUpdatedCallback, this);
     return this;
   }
 

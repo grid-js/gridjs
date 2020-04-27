@@ -19,7 +19,7 @@ class GlobalSearch extends PipelineProcessor<
     return ProcessorType.Search;
   }
 
-  process(data: Tabular<TBodyCell>): Tabular<TBodyCell> {
+  _process(data: Tabular<TBodyCell>): Tabular<TBodyCell> {
     if (this.props.keyword) {
       return search(String(this.props.keyword).trim(), data);
     }

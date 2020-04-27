@@ -17,7 +17,7 @@ class StorageExtractor extends PipelineProcessor<
     return ProcessorType.Extractor;
   }
 
-  async process(): Promise<any[][]> {
+  async _process(): Promise<any[][]> {
     return await this.props.storage.get();
   }
 }

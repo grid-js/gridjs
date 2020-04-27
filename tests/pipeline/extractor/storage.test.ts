@@ -11,4 +11,12 @@ describe('StorageExtractor', () => {
     const processor = new StorageExtractor({ storage: storage });
     expect(await processor.process()).toStrictEqual(data);
   });
+
+  it('should have unique ID', async () => {
+    const data = [[1, 2, 3]];
+    const storage = new MemoryStorage(data);
+    const processor1 = new StorageExtractor({ storage: storage });
+    const processor2 = new StorageExtractor({ storage: storage });
+    expect(processor1.id).not.toBe(processor2.id);
+  });
 });

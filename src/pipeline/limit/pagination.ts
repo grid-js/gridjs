@@ -15,10 +15,8 @@ class PaginationLimit extends PipelineProcessor<
   Tabular<TBodyCell>,
   PaginationLimitProps
 > {
-  constructor(props) {
-    super(props);
-
-    if (isNaN(Number(props.limit)) || isNaN(Number(props.page))) {
+  protected validateProps(): void {
+    if (isNaN(Number(this.props.limit)) || isNaN(Number(this.props.page))) {
       throw Error('Invalid parameters passed');
     }
   }
@@ -27,7 +25,7 @@ class PaginationLimit extends PipelineProcessor<
     return ProcessorType.Limit;
   }
 
-  process(data: Tabular<TBodyCell>): Tabular<TBodyCell> {
+  protected _process(data: Tabular<TBodyCell>): Tabular<TBodyCell> {
     const page = this.props.page;
     const start = page * this.props.limit;
     const end = (page + 1) * this.props.limit;

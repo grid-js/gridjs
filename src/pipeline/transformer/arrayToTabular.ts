@@ -10,7 +10,7 @@ class ArrayToTabularTransformer extends PipelineProcessor<
     return ProcessorType.Transformer;
   }
 
-  process(data: any[][]): Tabular<TBodyCell> {
+  _process(data: any[][]): Tabular<TBodyCell> {
     return Tabular.fromArray(data);
   }
 }
