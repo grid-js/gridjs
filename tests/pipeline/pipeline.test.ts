@@ -5,28 +5,28 @@ class NoopProcessor extends PipelineProcessor<string, {}> {
   get type(): ProcessorType {
     return null;
   }
-  process(data: string): string {
+  _process(data: string): string {
     return data;
   }
 }
 
 class StringProcessor extends PipelineProcessor<string, {}> {
   type: ProcessorType = ProcessorType.Search;
-  process(data: string): string {
+  _process(data: string): string {
     return data;
   }
 }
 
 class SubStrProcessor extends PipelineProcessor<string, {}> {
   type: ProcessorType = ProcessorType.Search;
-  process(data: string): string {
+  _process(data: string): string {
     return data.substr(1);
   }
 }
 
 class NumberProcessor extends PipelineProcessor<number, { acc: number }> {
   type: ProcessorType = ProcessorType.Search;
-  process(data: number): number {
+  _process(data: number): number {
     return data + (this.props.acc || 2);
   }
 }
@@ -53,6 +53,14 @@ describe('Pipeline', () => {
 
     expect(pipeline.steps).toHaveLength(1);
     expect(await pipeline.process('Hello!')).toBe('Hello!');
+  });
+
+  it('should should call afterRegister', async () => {
+    const callback = jest.fn();
+    const pipeline = new Pipeline();
+    pipeline.afterRegister(callback);
+    pipeline.register(new StringProcessor());
+    expect(callback).toBeCalledTimes(1);
   });
 
   it('should register and process processors', async () => {
