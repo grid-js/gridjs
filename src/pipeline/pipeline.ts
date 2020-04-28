@@ -11,7 +11,8 @@ class Pipeline<T, P = {}> {
   private cache: Map<string, any> = new Map<string, any>();
   // keeps the index of the last updated processor in the registered
   // processors list and will be used to invalidate the cache
-  private lastProcessorIndexUpdated = 0;
+  // -1 means all new processors should be processed
+  private lastProcessorIndexUpdated = -1;
   private propsUpdatedCallback: Set<(...args) => void> = new Set();
   private afterRegisterCallback: Set<(...args) => void> = new Set();
   private updatedCallback: Set<(...args) => void> = new Set();
@@ -108,10 +109,11 @@ class Pipeline<T, P = {}> {
    * @param data
    */
   async process(data?: T): Promise<T> {
-    let prev = data;
     const lastProcessorIndexUpdated = this.lastProcessorIndexUpdated;
+    const steps = this.steps;
 
-    for (const processor of this.steps) {
+    let prev = data;
+    for (const processor of steps) {
       const processorIndex = this.findProcessorIndexByID(processor.id);
 
       if (processorIndex >= lastProcessorIndexUpdated) {
@@ -125,9 +127,10 @@ class Pipeline<T, P = {}> {
         // cached results already exist
         prev = this.cache.get(processor.id);
       }
-
-      this.lastProcessorIndexUpdated = processorIndex;
     }
+
+    // means the pipeline is up to date
+    this.lastProcessorIndexUpdated = steps.length;
 
     return prev;
   }
@@ -143,8 +146,8 @@ class Pipeline<T, P = {}> {
 
   /**
    * Sets the last updates processors index locally
-   * This is used to invalid or skip a processor while
-   * running the process() method
+   * This is used to invalid or skip a processor in
+   * the process() method
    */
   private setLastProcessorIndex(processor: PipelineProcessor<T, P>): void {
     const processorIndex = this.findProcessorIndexByID(processor.id);

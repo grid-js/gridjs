@@ -126,4 +126,69 @@ describe('Pipeline', () => {
     expect(pipeline.steps[1]).toBe(p1);
     expect(pipeline.steps[2]).toBe(p3);
   });
+
+  it('should cache the results', async () => {
+    const p1 = new NumberProcessor({ acc: 2 });
+    const p2 = new NumberProcessor({ acc: 3 });
+    const p3 = new NumberProcessor({ acc: 4 });
+
+    const callback1 = jest.fn();
+    const callback2 = jest.fn();
+    const callback3 = jest.fn();
+
+    p1.afterProcess(callback1);
+    p2.afterProcess(callback2);
+    p3.afterProcess(callback3);
+
+    const pipeline = new Pipeline();
+    pipeline.register(p1);
+    pipeline.register(p2);
+    pipeline.register(p3);
+
+    // first process() should cache the results
+    // and should not process them again
+    const d1 = await pipeline.process(1);
+    const d2 = await pipeline.process(1);
+    const d3 = await pipeline.process(1);
+
+    expect(callback1).toBeCalledTimes(1);
+    expect(callback2).toBeCalledTimes(1);
+    expect(callback3).toBeCalledTimes(1);
+    expect(d1).toBe(d2);
+    expect(d2).toBe(d3);
+  });
+
+  it('should process the newly added processor', async () => {
+    const p1 = new NumberProcessor({ acc: 2 });
+    const p2 = new NumberProcessor({ acc: 3 });
+    const p3 = new NumberProcessor({ acc: 4 });
+
+    const callback1 = jest.fn();
+    const callback2 = jest.fn();
+    const callback3 = jest.fn();
+
+    p1.afterProcess(callback1);
+    p2.afterProcess(callback2);
+    p3.afterProcess(callback3);
+
+    const pipeline = new Pipeline();
+    pipeline.register(p1);
+    pipeline.register(p2);
+
+    // first process() should cache the results
+    // and should not process them again
+    const d1 = await pipeline.process(2);
+    const d2 = await pipeline.process(2);
+
+    pipeline.register(p3);
+
+    const d3 = await pipeline.process(2);
+
+    expect(callback1).toBeCalledTimes(1);
+    expect(callback2).toBeCalledTimes(1);
+    expect(callback3).toBeCalledTimes(1);
+    expect(d1).toBe(7);
+    expect(d2).toBe(7);
+    expect(d3).toBe(11);
+  });
 });
