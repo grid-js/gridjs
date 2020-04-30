@@ -1,4 +1,4 @@
-import GlobalSearch from '../../../src/pipeline/search/global';
+import GlobalSearchFilter from '../../../src/pipeline/filter/globalSearch';
 import Tabular from '../../../src/tabular';
 
 describe('GlobalSearch', () => {
@@ -14,23 +14,23 @@ describe('GlobalSearch', () => {
 
   it('should process string', () => {
     expect(
-      new GlobalSearch().setProps({ keyword: 'a' }).process(data),
+      new GlobalSearchFilter().setProps({ keyword: 'a' }).process(data),
     ).toHaveLength(1);
   });
 
   it('should process int', () => {
     expect(
-      new GlobalSearch().setProps({ keyword: '1' }).process(data),
+      new GlobalSearchFilter().setProps({ keyword: '1' }).process(data),
     ).toHaveLength(3);
   });
 
   it('should accept props constructor', () => {
-    expect(new GlobalSearch({ keyword: '1' }).process(data)).toHaveLength(3);
+    expect(new GlobalSearchFilter({ keyword: '1' }).process(data)).toHaveLength(3);
   });
 
   it('should call propsUpdated', () => {
     const callback = jest.fn();
-    new GlobalSearch()
+    new GlobalSearchFilter()
       .propsUpdated(callback)
       .setProps({ keyword: '1' })
       .setProps({ keyword: '2' })
@@ -41,7 +41,7 @@ describe('GlobalSearch', () => {
   it('should call beforeProcess and afterProcess', () => {
     const beforeProcess = jest.fn();
     const afterProcess = jest.fn();
-    new GlobalSearch()
+    new GlobalSearchFilter()
       .beforeProcess(beforeProcess)
       .afterProcess(afterProcess)
       .setProps({ keyword: '2' })

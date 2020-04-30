@@ -11,21 +11,21 @@ class NoopProcessor extends PipelineProcessor<string, {}> {
 }
 
 class StringProcessor extends PipelineProcessor<string, {}> {
-  type: ProcessorType = ProcessorType.Search;
+  type: ProcessorType = ProcessorType.Transformer;
   _process(data: string): string {
     return data;
   }
 }
 
 class SubStrProcessor extends PipelineProcessor<string, {}> {
-  type: ProcessorType = ProcessorType.Search;
+  type: ProcessorType = ProcessorType.Transformer;
   _process(data: string): string {
     return data.substr(1);
   }
 }
 
 class NumberProcessor extends PipelineProcessor<number, { acc: number }> {
-  type: ProcessorType = ProcessorType.Search;
+  type: ProcessorType = ProcessorType.Transformer;
   _process(data: number): number {
     return data + (this.props.acc || 2);
   }

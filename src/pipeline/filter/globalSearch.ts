@@ -7,16 +7,16 @@ import {
   ProcessorType,
 } from '../processor';
 
-interface GlobalSearchProps extends PipelineProcessorProps {
+interface GlobalSearchFilterProps extends PipelineProcessorProps {
   keyword: string;
 }
 
-class GlobalSearch extends PipelineProcessor<
+class GlobalSearchFilter extends PipelineProcessor<
   Tabular<TBodyCell>,
-  GlobalSearchProps
+  GlobalSearchFilterProps
 > {
   get type(): ProcessorType {
-    return ProcessorType.Search;
+    return ProcessorType.Filter;
   }
 
   _process(data: Tabular<TBodyCell>): Tabular<TBodyCell> {
@@ -28,4 +28,4 @@ class GlobalSearch extends PipelineProcessor<
   }
 }
 
-export default GlobalSearch;
+export default GlobalSearchFilter;

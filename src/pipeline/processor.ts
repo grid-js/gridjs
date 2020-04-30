@@ -5,7 +5,7 @@ import { generateID, ID } from '../util/id';
 export enum ProcessorType {
   Extractor,
   Transformer,
-  Search,
+  Filter,
   Sort,
   Limit,
 }
