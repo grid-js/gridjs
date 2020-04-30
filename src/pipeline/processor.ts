@@ -25,7 +25,7 @@ export abstract class PipelineProcessor<
 
   abstract get type(): ProcessorType;
   protected abstract _process(...args): T | Promise<T>;
-  protected validateProps?(): void;
+  protected validateProps?(...args): void;
 
   constructor(props?: Partial<P>) {
     this._props = {} as P;
@@ -42,7 +42,7 @@ export abstract class PipelineProcessor<
    */
   process(...args): T | Promise<T> {
     if (this.validateProps instanceof Function) {
-      this.validateProps();
+      this.validateProps(...args);
     }
 
     this.trigger(this.beforeProcessCallback, ...args);
