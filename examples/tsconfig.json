@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "importHelpers": true,
+    "jsx": "react",
+    "jsxFactory": "h"
+  },
+    "include": ["src/**/*.tsx", "src/**/*.ts"]
+}
