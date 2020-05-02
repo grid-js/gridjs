@@ -1,5 +1,7 @@
 import Tabular from '../../../src/tabular';
-import NativeSort from "../../../src/pipeline/sort/native";
+import NativeSort from '../../../src/pipeline/sort/native';
+import Pipeline from '../../../src/pipeline/pipeline';
+import { TBodyCell } from '../../../src/types';
 
 describe('NativeSort', () => {
   let data: Tabular<string>;
@@ -16,7 +18,7 @@ describe('NativeSort', () => {
 
   it('should sort an array', async () => {
     const sort = new NativeSort().setProps({
-      columnIndex: 0
+      columns: [{ index: 0 }],
     });
 
     const newData = await sort.process(data);
@@ -37,16 +39,15 @@ describe('NativeSort', () => {
 
   it('should sort a numeric array asc', async () => {
     const numericData = Tabular.fromArray([
-        [4, 30],
-        [1, 10],
-        [0, 20],
-        [3, 50],
-        [2, 40],
-      ]);
+      [4, 30],
+      [1, 10],
+      [0, 20],
+      [3, 50],
+      [2, 40],
+    ]);
 
     const sort = new NativeSort().setProps({
-      columnIndex: 0,
-      order: 1
+      columns: [{ index: 0, order: 1 }],
     });
 
     const newData = await sort.process(numericData);
@@ -71,8 +72,12 @@ describe('NativeSort', () => {
     ]);
 
     const sort = new NativeSort().setProps({
-      columnIndex: 0,
-      order: -1
+      columns: [
+        {
+          index: 0,
+          order: -1,
+        },
+      ],
     });
 
     const newData = await sort.process(numericData);
@@ -90,7 +95,7 @@ describe('NativeSort', () => {
   it('should raise an error if columnIndex is invalid', async () => {
     expect(() => {
       const sort = new NativeSort().setProps({
-        columnIndex: NaN
+        columns: [{ index: NaN }],
       });
 
       sort.process(data);
@@ -98,10 +103,78 @@ describe('NativeSort', () => {
 
     expect(() => {
       const sort = new NativeSort().setProps({
-        columnIndex: 3
+        columns: [
+          {
+            index: 3,
+          },
+        ],
       });
 
       sort.process(data);
     }).toThrowError();
+  });
+
+  it('should multi sort 1', async () => {
+    const data = Tabular.fromArray([
+      ['a1', 0],
+      ['a1', 4],
+      ['c1', 3],
+      ['e1', 1],
+      ['d1', 2],
+    ]);
+
+    const pipeline = new Pipeline<Tabular<TBodyCell>>();
+
+    const sort1 = new NativeSort().setProps({
+      columns: [
+        {
+          index: 0,
+        },
+        {
+          index: 1,
+        },
+      ],
+    });
+
+    pipeline.register(sort1);
+    const output = await pipeline.process(data);
+
+    expect(output.rows[0].cells[0].data).toBe('a1');
+    expect(output.rows[1].cells[0].data).toBe('a1');
+    expect(output.rows[0].cells[1].data).toBe(0);
+    expect(output.rows[1].cells[1].data).toBe(4);
+  });
+
+  it('should multi sort 2', async () => {
+    const data = Tabular.fromArray([
+      ['a1', 0],
+      ['b1', 0],
+      ['c1', 0],
+      ['e1', 1],
+      ['d1', 2],
+    ]);
+
+    const pipeline = new Pipeline<Tabular<TBodyCell>>();
+
+    const sort1 = new NativeSort().setProps({
+      columns: [
+        {
+          index: 1,
+        },
+        {
+          index: 0,
+        },
+      ],
+    });
+
+    pipeline.register(sort1);
+    const output = await pipeline.process(data);
+
+    expect(output.rows[0].cells[0].data).toBe('a1');
+    expect(output.rows[1].cells[0].data).toBe('b1');
+    expect(output.rows[2].cells[0].data).toBe('c1');
+    expect(output.rows[0].cells[1].data).toBe(0);
+    expect(output.rows[1].cells[1].data).toBe(0);
+    expect(output.rows[2].cells[1].data).toBe(0);
   });
 });

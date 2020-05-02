@@ -8,34 +8,26 @@ import {
 import Row from '../../row';
 
 interface NativeSortProps extends PipelineProcessorProps {
-  columnIndex: number;
-  // 1 ascending, -1 descending
-  order: 1 | -1;
+  columns: {
+    index: number;
+    // 1 ascending, -1 descending
+    order?: 1 | -1;
+  }[];
 }
 
 class NativeSort extends PipelineProcessor<
   Tabular<TBodyCell>,
   NativeSortProps
 > {
-  constructor(props?: Partial<NativeSortProps>) {
-    super(props);
+  protected validateProps(): void {
+    for (const condition of this.props.columns) {
+      if (condition.order === undefined) {
+        condition.order = 1;
+      }
 
-    if (this.props.order === undefined) {
-      this.props.order = 1;
-    }
-  }
-
-  protected validateProps(data: Tabular<TBodyCell>): void {
-    if (isNaN(Number(this.props.columnIndex))) {
-      throw Error('Invalid column index');
-    }
-
-    if (this.props.columnIndex > data.rows.length - 1) {
-      throw Error(`Column index ${this.props.columnIndex} does not exist`);
-    }
-
-    if (this.props.order !== 1 && this.props.order !== -1) {
-      throw Error(`Invalid order ${this.props.order}`);
+      if (condition.order !== 1 && condition.order !== -1) {
+        throw Error(`Invalid order ${condition.order}`);
+      }
     }
   }
 
@@ -43,22 +35,40 @@ class NativeSort extends PipelineProcessor<
     return ProcessorType.Sort;
   }
 
-  private compare(a: Row<any>, b: Row<any>): number {
-    const cellA = a.cells[this.props.columnIndex];
-    const cellB = b.cells[this.props.columnIndex];
+  private compare(
+    a: Row<any>,
+    b: Row<any>,
+    index: number,
+    order: 1 | -1,
+  ): number {
+    const cellA = a.cells[index];
+    const cellB = b.cells[index];
 
     if (cellA.data > cellB.data) {
-      return 1 * this.props.order;
+      return 1 * order;
     } else if (cellA.data < cellB.data) {
-      return -1 * this.props.order;
+      return -1 * order;
     }
 
     return 0;
   }
 
+  private compareWrapper(a: Row<any>, b: Row<any>): number {
+    let cmp = 0;
+    for (const condition of this.props.columns) {
+      if (cmp === 0) {
+        cmp |= this.compare(a, b, condition.index, condition.order);
+      } else {
+        break;
+      }
+    }
+
+    return cmp;
+  }
+
   protected _process(data: Tabular<TBodyCell>): Tabular<TBodyCell> {
     const sorted = [...data.rows];
-    sorted.sort(this.compare.bind(this));
+    sorted.sort(this.compareWrapper.bind(this));
     return new Tabular(sorted);
   }
 }

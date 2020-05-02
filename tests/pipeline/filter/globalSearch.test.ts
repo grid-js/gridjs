@@ -25,7 +25,9 @@ describe('GlobalSearch', () => {
   });
 
   it('should accept props constructor', () => {
-    expect(new GlobalSearchFilter({ keyword: '1' }).process(data)).toHaveLength(3);
+    expect(new GlobalSearchFilter({ keyword: '1' }).process(data)).toHaveLength(
+      3,
+    );
   });
 
   it('should call propsUpdated', () => {
