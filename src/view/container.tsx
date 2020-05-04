@@ -5,7 +5,6 @@ import Config from '../config';
 import { BaseComponent, BaseProps } from './base';
 import className from '../util/className';
 import { Status, TBodyCell } from '../types';
-import Header from '../header';
 import { Table } from './table/table';
 import { HeaderContainer } from './headerContainer';
 import { FooterContainer } from './footerContainer';
@@ -20,7 +19,6 @@ interface ContainerProps extends BaseProps {
 interface ContainerState {
   status: Status;
   data?: Tabular<TBodyCell>;
-  header?: Header;
 }
 
 export class Container extends BaseComponent<ContainerProps, ContainerState> {
@@ -32,7 +30,6 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     this.state = {
       status: Status.Init,
       data: null,
-      header: this.props.config.header,
     };
 
     this.config = this.props.config;
@@ -65,7 +62,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
         <HeaderContainer />
 
         <div className={className('wrapper')} style={{ width: config.width }}>
-          <Table data={this.state.data} header={this.state.header} />
+          <Table data={this.state.data} header={this.config.header} />
 
           <FooterContainer />
         </div>

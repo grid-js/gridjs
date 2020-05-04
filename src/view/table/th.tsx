@@ -1,18 +1,24 @@
 import { h } from 'preact';
 
-import Cell from '../../cell';
 import { BaseComponent, BaseProps } from '../base';
 import className from '../../util/className';
 import { THeaderCell } from '../../types';
+import { Sort } from '../plugin/sort';
 
 import '../../theme/mermaid/th.scss';
 
-export interface TDProps extends BaseProps {
-  cell: Cell<THeaderCell>;
+export interface THProps extends BaseProps {
+  index: number;
+  column: THeaderCell;
 }
 
-export class TH extends BaseComponent<TDProps, {}> {
+export class TH extends BaseComponent<THProps, {}> {
   render() {
-    return <th className={className('th')}>{this.props.cell.data.name}</th>;
+    return (
+      <th className={className('th')}>
+        {this.props.column.name}
+        <Sort index={this.props.index} column={this.props.column} />
+      </th>
+    );
   }
 }

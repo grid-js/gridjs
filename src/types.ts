@@ -10,7 +10,11 @@ export type TBodyCell = number | string | boolean;
 // Table header cell type
 export interface THeaderCell {
   name: string;
+  sort?: boolean;
+  children?: THeader;
 }
+
+export type THeader = OneDArray<THeaderCell>;
 
 // container status
 export enum Status {

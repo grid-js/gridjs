@@ -11,7 +11,7 @@ interface NativeSortProps extends PipelineProcessorProps {
   columns: {
     index: number;
     // 1 ascending, -1 descending
-    order?: 1 | -1;
+    direction?: 1 | -1;
   }[];
 }
 
@@ -21,12 +21,12 @@ class NativeSort extends PipelineProcessor<
 > {
   protected validateProps(): void {
     for (const condition of this.props.columns) {
-      if (condition.order === undefined) {
-        condition.order = 1;
+      if (condition.direction === undefined) {
+        condition.direction = 1;
       }
 
-      if (condition.order !== 1 && condition.order !== -1) {
-        throw Error(`Invalid order ${condition.order}`);
+      if (condition.direction !== 1 && condition.direction !== -1) {
+        throw Error(`Invalid sort direction ${condition.direction}`);
       }
     }
   }
@@ -57,7 +57,7 @@ class NativeSort extends PipelineProcessor<
     let cmp = 0;
     for (const condition of this.props.columns) {
       if (cmp === 0) {
-        cmp |= this.compare(a, b, condition.index, condition.order);
+        cmp |= this.compare(a, b, condition.index, condition.direction);
       } else {
         break;
       }

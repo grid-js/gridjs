@@ -2,17 +2,16 @@ import {
   OneDArray,
   ProtoExtends,
   TBodyCell,
-  THeaderCell,
+  THeader,
   TwoDArray,
 } from './types';
 import Storage from './storage/storage';
 import ConfigError from './error/config';
-import { isArrayOfType } from './util/type';
-import Header from './header';
 import Pipeline from './pipeline/pipeline';
 import Tabular from './tabular';
 import { SearchConfig } from './view/plugin/search';
 import { PaginationConfig } from './view/plugin/pagination';
+import Header from './header';
 
 // Config type used internally
 interface Config {
@@ -21,7 +20,7 @@ interface Config {
   storage: Storage;
   pipeline: Pipeline<Tabular<TBodyCell>>;
   classNamePrefix: string;
-  /** sets the width of container and table */
+  /** sets the width of the container and table */
   width: string;
   search: SearchConfig;
   pagination: PaginationConfig;
@@ -29,7 +28,7 @@ interface Config {
 
 // Config type used by the consumers
 interface UserConfigExtend {
-  header?: OneDArray<THeaderCell | string>;
+  header?: THeader | OneDArray<string>;
 }
 
 export type UserConfig = ProtoExtends<Partial<Config>, UserConfigExtend>;
@@ -70,11 +69,8 @@ class Config {
 
     if (!userConfig) return config;
 
-    // casting header type
-    if (isArrayOfType<string>(userConfig.header, 'toLowerCase')) {
-      config.header = Header.fromArrayOfString(
-        userConfig.header as OneDArray<string>,
-      );
+    if (!(userConfig.header instanceof Header)) {
+      config.header = new Header(userConfig.header);
     }
 
     return config;

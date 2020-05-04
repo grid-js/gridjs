@@ -94,6 +94,16 @@ class Pipeline<T, P = {}> {
   }
 
   /**
+   * Accepts ProcessType and returns an array of the registered processes
+   * with the give type
+   *
+   * @param type
+   */
+  getStepsByType(type: ProcessorType): PipelineProcessor<T, P>[] {
+    return this.steps.filter(process => process.type === type);
+  }
+
+  /**
    * Returns a list of ProcessorType according to their priority
    */
   private getSortedProcessorTypes(): ProcessorType[] {

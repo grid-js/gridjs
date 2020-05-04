@@ -6,6 +6,7 @@ import HelloWorld from "../routes/hello_world";
 import NotFoundPage from "../routes/notfound";
 import Header from "./header";
 import Pagination from "../routes/pagiantion";
+import Sorting from "../routes/sorting";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((module as any).hot) {
@@ -33,6 +34,7 @@ export default class App extends Component {
                   <Route path="/" component={Home} />
                   <Route path="/hello-world" component={HelloWorld} />
                   <Route path="/pagination" component={Pagination} />
+                  <Route path="/sorting" component={Sorting} />
                   <NotFoundPage default />
                 </Router>
               </div>
