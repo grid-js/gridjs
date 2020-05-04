@@ -1,11 +1,33 @@
-export interface EventEmitter {
-  on(event: string, listener: (...args: any[]) => void): this;
-  off(event: string, listener: (...args: any[]) => void): this;
-  emit(event: string, ...args: any[]): boolean;
+type EventArgs<T> = [T] extends [(...args: infer U) => any]
+  ? U
+  : [T] extends [void]
+  ? []
+  : [T];
+
+export interface EventEmitter<EventTypes> {
+  addListener<EventName extends keyof EventTypes>(
+    event: EventName,
+    listener: (...args: EventArgs<EventTypes[EventName]>) => void,
+  ): EventEmitter<EventTypes>;
+
+  on<EventName extends keyof EventTypes>(
+    event: EventName,
+    listener: (...args: EventArgs<EventTypes[EventName]>) => void,
+  ): EventEmitter<EventTypes>;
+
+  off<EventName extends keyof EventTypes>(
+    event: EventName,
+    listener: (...args: EventArgs<EventTypes[EventName]>) => void,
+  ): EventEmitter<EventTypes>;
+
+  emit<EventName extends keyof EventTypes>(
+    event: EventName,
+    ...args: EventArgs<EventTypes[EventName]>
+  ): boolean;
 }
 
-export class EventEmitter {
-  public callbacks: { [event: string]: ((...args: any[]) => void)[] };
+export class EventEmitter<EventTypes> {
+  private callbacks: { [event: string]: ((...args) => void)[] };
 
   // because we are using EventEmitter as a mixin and the
   // constructor won't be called by the applyMixins function
@@ -20,33 +42,45 @@ export class EventEmitter {
     }
   }
 
-  on(event: string, listener: (...args: any[]) => void): this {
-    this.init(event);
-
-    this.callbacks[event].push(listener);
+  on<EventName extends keyof EventTypes>(
+    event: EventName,
+    listener: (...args: EventArgs<EventTypes[EventName]>) => void,
+  ): EventEmitter<EventTypes> {
+    this.init(event as string);
+    this.callbacks[event as string].push(listener);
     return this;
   }
 
-  off(event: string, listener: (...args: any[]) => void): this {
+  off<EventName extends keyof EventTypes>(
+    event: EventName,
+    listener: (...args: EventArgs<EventTypes[EventName]>) => void,
+  ): EventEmitter<EventTypes> {
+    const eventName = event as string;
+
     this.init();
 
-    if (!this.callbacks[event] || this.callbacks[event].length === 0) {
+    if (!this.callbacks[eventName] || this.callbacks[eventName].length === 0) {
       // there is no callbacks with this key
       return this;
     }
 
-    this.callbacks[event] = this.callbacks[event].filter(
+    this.callbacks[eventName] = this.callbacks[eventName].filter(
       value => value != listener,
     );
 
     return this;
   }
 
-  emit(event: string, ...args: any[]): boolean {
-    this.init(event);
+  emit<EventName extends keyof EventTypes>(
+    event: EventName,
+    ...args: EventArgs<EventTypes[EventName]>
+  ): boolean {
+    const eventName = event as string;
 
-    if (this.callbacks[event].length > 0) {
-      this.callbacks[event].forEach(value => value(...args));
+    this.init(eventName);
+
+    if (this.callbacks[eventName].length > 0) {
+      this.callbacks[eventName].forEach(value => value(...args));
       return true;
     }
 
