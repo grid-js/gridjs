@@ -12,6 +12,7 @@ import Tabular from './tabular';
 import { SearchConfig } from './view/plugin/search';
 import { PaginationConfig } from './view/plugin/pagination';
 import Header from './header';
+import { EventBus } from './eventBus';
 
 // Config type used internally
 interface Config {
@@ -19,6 +20,7 @@ interface Config {
   header?: Header;
   storage: Storage;
   pipeline: Pipeline<Tabular<TBodyCell>>;
+  events: EventBus;
   classNamePrefix: string;
   /** sets the width of the container and table */
   width: string;

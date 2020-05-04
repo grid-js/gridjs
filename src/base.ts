@@ -3,7 +3,7 @@ import { EventEmitter } from './util/eventEmitter';
 import applyMixins from './util/applyMixin';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface Base extends EventEmitter {}
+interface Base extends EventEmitter<any> {}
 
 class Base {
   private readonly _id: ID;
