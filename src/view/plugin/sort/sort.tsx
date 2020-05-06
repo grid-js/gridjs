@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import { h, JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../../base';
 import className from '../../../util/className';
@@ -8,8 +8,8 @@ import '../../../theme/mermaid/th.scss';
 import Config from '../../../config';
 import { ProcessorType } from '../../../pipeline/processor';
 import NativeSort from '../../../pipeline/sort/native';
-import store from './store';
-import actions from "./actions";
+import store, { SortStoreState } from './store';
+import actions from './actions';
 
 export interface SortProps extends BaseProps {
   index: number;
@@ -27,9 +27,8 @@ export class Sort extends BaseComponent<SortProps, SortState> {
     super(props);
 
     this.sortProcessor = this.getOrCreateSortProcessor();
-
     this.state = { direction: 0 };
-    store.on('updated', this.handleStore.bind(this));
+    store.on('updated', this.storeUpdated.bind(this));
   }
 
   componentDidMount(): void {
@@ -38,17 +37,27 @@ export class Sort extends BaseComponent<SortProps, SortState> {
     }
   }
 
-  private getState(): SortState {
-    return store.getState().find(x => x.index === this.props.index) || { direction: 0 };
+  componentWillUnmount(): void {
+    store.off('updated', this.storeUpdated.bind(this));
   }
 
-  private handleStore(sortedColumns): void {
+  private storeUpdated(sortedColumns: SortStoreState): void {
+    // updates the Sorting processor
     this.sortProcessor.setProps({
       columns: sortedColumns,
     });
 
-    console.log('current state is', this.getState());
-    this.setState(this.getState());
+    const currentColumn = store.state.find(x => x.index === this.props.index);
+
+    if (!currentColumn) {
+      this.setState({
+        direction: 0,
+      });
+    } else {
+      this.setState({
+        direction: currentColumn.direction,
+      });
+    }
   }
 
   private getOrCreateSortProcessor(): NativeSort {
@@ -69,7 +78,7 @@ export class Sort extends BaseComponent<SortProps, SortState> {
       processor = processors[0];
     } else {
       processor = new NativeSort({
-        columns: store.getState(),
+        columns: store.state,
       });
 
       Config.current.pipeline.register(processor);
@@ -78,9 +87,11 @@ export class Sort extends BaseComponent<SortProps, SortState> {
     return processor;
   }
 
-  private changeDirection(): void {
+  private changeDirection(e: JSX.TargetedMouseEvent<HTMLInputElement>): void {
+    // to sort two or more columns at the same time
+    const multiSort = e.shiftKey === true;
     const direction = this.state.direction === 1 ? -1 : 1;
-    actions.sortColumn(this.props.index, direction);
+    actions.sortColumn(this.props.index, direction, multiSort);
   }
 
   render() {

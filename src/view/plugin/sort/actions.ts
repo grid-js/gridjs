@@ -1,11 +1,19 @@
-import dispatcher from '../../util/dispatcher';
+import { BaseActions } from '../../base/actions';
 
-class SortActions {
-  sortColumn(index: number, direction: 1 | -1): void {
-    dispatcher.dispatch({
-      type: 'SORT_COLUMN',
+export interface SortActionsType {
+  SORT_COLUMN: {
+    index: number;
+    direction: 1 | -1;
+    multi?: boolean;
+  };
+}
+
+class SortActions extends BaseActions<SortActionsType> {
+  sortColumn(index: number, direction: 1 | -1, multi?: boolean): void {
+    this.dispatch('SORT_COLUMN', {
       index: index,
       direction: direction,
+      multi: multi,
     });
   }
 }

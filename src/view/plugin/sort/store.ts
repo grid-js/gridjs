@@ -1,44 +1,35 @@
-import dispatcher from '../../util/dispatcher';
-import { EventEmitter } from '../../../util/eventEmitter';
+import BaseStore from '../../base/store';
+import { SortActionsType } from './actions';
 
-interface StoreEvents {
-  updated: (state: any) => void;
-}
+export type SortStoreState = { index: number; direction: 1 | -1 }[];
 
-class SortStore extends EventEmitter<StoreEvents> {
-  private sortedColumns: { index: number; direction: 1 | -1 }[];
-
-  constructor() {
-    super();
-
-    this.sortedColumns = [];
-    dispatcher.register(action => this.handle(action));
+class SortStore extends BaseStore<SortStoreState, SortActionsType> {
+  getInitialState(): SortStoreState {
+    return [];
   }
 
-  private handle(action): void {
-    if (action.type === 'SORT_COLUMN') {
-      const existingColumn = this.sortedColumns.filter(
-        x => x.index === action.columnIndex,
-      );
+  handle(type, payload): void {
+    if (type === 'SORT_COLUMN') {
+      const existingColumn = this.state
+        .filter(x => x.index === payload.columnIndex)
+        .slice(0);
 
       // resetting the sorted columns
-      this.sortedColumns = [];
+      this.setState([]);
 
       if (existingColumn.length === 0) {
-        this.sortedColumns.push({
-          index: action.index,
-          direction: action.direction,
+        const columns = [...this.state];
+        columns.push({
+          index: payload.index,
+          direction: payload.direction,
         });
+
+        this.setState(columns);
       } else {
-        existingColumn[0].direction = action.direction;
+        existingColumn[0].direction = payload.direction;
+        this.setState(existingColumn);
       }
     }
-
-    this.emit('updated', this.sortedColumns);
-  }
-
-  getState(): any {
-    return this.sortedColumns;
   }
 }
 
