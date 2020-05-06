@@ -3,7 +3,7 @@ import { h } from 'preact';
 import { BaseComponent, BaseProps } from '../base';
 import className from '../../util/className';
 import { THeaderCell } from '../../types';
-import { Sort } from '../plugin/sort';
+import { Sort } from '../plugin/sort/sort';
 
 import '../../theme/mermaid/th.scss';
 

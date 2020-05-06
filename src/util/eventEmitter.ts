@@ -4,6 +4,14 @@ type EventArgs<T> = [T] extends [(...args: infer U) => any]
   ? []
   : [T];
 
+/**
+ * Example:
+ *
+ * export interface BaseEvents<P, S> {
+ *   SET_STATE: (component: BaseComponent<P, S>, state: S) => void;
+ * }
+ */
+
 export interface EventEmitter<EventTypes> {
   addListener<EventName extends keyof EventTypes>(
     event: EventName,
