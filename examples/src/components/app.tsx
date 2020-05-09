@@ -7,6 +7,7 @@ import NotFoundPage from "../routes/notfound";
 import Header from "./header";
 import Pagination from "../routes/pagiantion";
 import Sorting from "../routes/sorting";
+import "gridjs/dist/theme/mermaid.css";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((module as any).hot) {
