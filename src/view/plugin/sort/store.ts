@@ -8,26 +8,79 @@ class SortStore extends BaseStore<SortStoreState, SortActionsType> {
     return [];
   }
 
-  handle(type, payload): void {
+  handle(type, { index, direction, multi }): void {
     if (type === 'SORT_COLUMN') {
-      const existingColumn = this.state
-        .filter(x => x.index === payload.columnIndex)
-        .slice(0);
+      let columns = [...this.state];
+      const count = columns.length;
+      const column = columns.find(x => x.index === index)
+      const exists = column !== undefined
 
-      // resetting the sorted columns
-      this.setState([]);
+      let add = false;
+      let reset = false;
+      let remove = false;
+      let update = false;
 
-      if (existingColumn.length === 0) {
-        const columns = [...this.state];
+      if (!exists) {
+        // the column has not been sorted
+        if (count === 0) {
+          // the first column to be sorted
+          add = true;
+        } else if (count > 0 && !multi) {
+          // remove the previously sorted column
+          // and sort the current column
+          add = true;
+          reset = true;
+        } else if (count > 0 && multi) {
+          // multi-sorting
+          // sort this column as well
+          add = true;
+        }
+      } else {
+        // the column has been sorted before
+        if (!multi) {
+          // single column sorting
+          if (count === 1) {
+            update = true;
+          } else if (count > 1) {
+            // this situation happens when we have already entered
+            // multi-sorting mode but then user tries to sort a single column
+            reset = true;
+            add = true;
+          }
+        } else {
+          // multi sorting
+          if (column.direction === -1) {
+            // remove the current column from the
+            // sorted columns array
+            remove = true;
+          } else {
+            update = true;
+          }
+        }
+      }
+
+      if (reset) {
+        // resetting the sorted columns
+        columns = [];
+      }
+
+      if (add) {
         columns.push({
-          index: payload.index,
-          direction: payload.direction,
+          index: index,
+          direction: direction,
         });
 
         this.setState(columns);
-      } else {
-        existingColumn[0].direction = payload.direction;
-        this.setState(existingColumn);
+      } else if (update) {
+        const index = columns.indexOf(column)
+        columns[index].direction = direction;
+
+        this.setState(columns);
+      } else if (remove) {
+        const index = columns.indexOf(column)
+        columns.splice(index, 1);
+
+        this.setState(columns);
       }
     }
   }
