@@ -1,5 +1,6 @@
 import typescript from 'rollup-plugin-typescript2';
-import scss from 'rollup-plugin-scss'
+import autoprefixer from 'autoprefixer'
+import postcss from 'rollup-plugin-postcss'
 import { terser } from 'rollup-plugin-terser'
 import size from 'rollup-plugin-sizes'
 import resolve from '@rollup/plugin-node-resolve';
@@ -18,13 +19,22 @@ export default [
     },
     plugins: [
       resolve(),
-      scss({
-        // FIXME: this should not be hardcoded here
-        output: 'dist/theme/mermaid.css'
+      postcss({
+        use: ['sass'],
+        plugins: [
+          autoprefixer,
+        ],
+        sourceMap: true,
+        extract: 'dist/theme/mermaid.css',
+        extensions: ['.sass','.css', '.scss']
       }),
       typescript({
         tsconfig: "tsconfig.json",
-        tsconfigOverride: { compilerOptions : { module: "es2015" } }
+        tsconfigOverride: {
+          compilerOptions : {
+            module: "es2015"
+          }
+        }
       })
     ],
   },
@@ -39,8 +49,14 @@ export default [
     },
     plugins: [
       resolve(),
-      scss({
-        output: 'dist/theme/mermaid.css'
+      postcss({
+        use: ['sass'],
+        plugins: [
+          autoprefixer,
+        ],
+        extract: 'dist/theme/mermaid.min.css',
+        extensions: ['.sass','.css', '.scss'],
+        minimize: true
       }),
       typescript({
         tsconfig: "tsconfig.release.json",
