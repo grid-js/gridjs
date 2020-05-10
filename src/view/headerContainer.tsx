@@ -5,8 +5,6 @@ import { BaseComponent } from './base';
 import className from '../util/className';
 import { Search } from './plugin/search';
 
-import '../theme/mermaid/head.scss';
-
 export class HeaderContainer extends BaseComponent<{}, {}> {
   render() {
     return (

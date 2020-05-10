@@ -5,8 +5,6 @@ import { BaseComponent, BaseProps } from '../base';
 import className from '../../util/className';
 import { TBodyCell } from '../../types';
 
-import '../../theme/mermaid/td.scss';
-
 export interface TDProps extends BaseProps {
   cell: Cell<TBodyCell>;
 }

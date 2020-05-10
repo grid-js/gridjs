@@ -9,8 +9,6 @@ import className from '../../util/className';
 import Config from '../../config';
 import { TBodyCell } from '../../types';
 
-import '../../theme/mermaid/table.scss';
-
 interface TableProps extends BaseProps {
   data?: Tabular<TBodyCell>;
   header?: Header;

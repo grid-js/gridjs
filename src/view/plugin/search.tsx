@@ -4,8 +4,6 @@ import Config from '../../config';
 import GlobalSearchFilter from '../../pipeline/filter/globalSearch';
 import className from '../../util/className';
 
-import '../../theme/mermaid/input.scss';
-
 interface SearchState {
   keyword?: string;
 }

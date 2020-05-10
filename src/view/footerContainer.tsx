@@ -5,8 +5,6 @@ import { BaseComponent } from './base';
 import className from '../util/className';
 import { Pagination } from './plugin/pagination';
 
-import '../theme/mermaid/footer.scss';
-
 export class FooterContainer extends BaseComponent<{}, {}> {
   render() {
     return (

@@ -12,8 +12,8 @@ class SortStore extends BaseStore<SortStoreState, SortActionsType> {
     if (type === 'SORT_COLUMN') {
       let columns = [...this.state];
       const count = columns.length;
-      const column = columns.find(x => x.index === index)
-      const exists = column !== undefined
+      const column = columns.find(x => x.index === index);
+      const exists = column !== undefined;
 
       let add = false;
       let reset = false;
@@ -69,19 +69,15 @@ class SortStore extends BaseStore<SortStoreState, SortActionsType> {
           index: index,
           direction: direction,
         });
-
-        this.setState(columns);
       } else if (update) {
-        const index = columns.indexOf(column)
+        const index = columns.indexOf(column);
         columns[index].direction = direction;
-
-        this.setState(columns);
       } else if (remove) {
-        const index = columns.indexOf(column)
+        const index = columns.indexOf(column);
         columns.splice(index, 1);
-
-        this.setState(columns);
       }
+
+      this.setState(columns);
     }
   }
 }

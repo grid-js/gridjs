@@ -4,8 +4,6 @@ import Config from '../../config';
 import PaginationLimit from '../../pipeline/limit/pagination';
 import className from '../../util/className';
 
-import '../../theme/mermaid/pagination.scss';
-
 interface PaginationState {
   page: number;
   enabled: boolean;

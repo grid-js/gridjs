@@ -8,9 +8,7 @@ import { Status, TBodyCell } from '../types';
 import { Table } from './table/table';
 import { HeaderContainer } from './headerContainer';
 import { FooterContainer } from './footerContainer';
-
-import '../theme/mermaid/container.scss';
-import '../theme/mermaid/wrapper.scss';
+import "../theme/mermaid/container.scss";
 
 interface ContainerProps extends BaseProps {
   config: Config;

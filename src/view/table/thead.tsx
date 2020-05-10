@@ -6,8 +6,6 @@ import { TH } from './th';
 import className from '../../util/className';
 import Header from '../../header';
 
-import '../../theme/mermaid/thead.scss';
-
 interface THeadProps extends BaseProps {
   header: Header;
 }

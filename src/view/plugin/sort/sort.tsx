@@ -4,7 +4,6 @@ import { BaseComponent, BaseProps } from '../../base';
 import className from '../../../util/className';
 import { THeaderCell } from '../../../types';
 
-import '../../../theme/mermaid/th.scss';
 import Config from '../../../config';
 import { ProcessorType } from '../../../pipeline/processor';
 import NativeSort from '../../../pipeline/sort/native';
@@ -95,24 +94,21 @@ export class Sort extends BaseComponent<SortProps, SortState> {
   }
 
   render() {
-    let direction = <b>sort</b>;
-    if (this.state.direction === 1) {
-      direction = (
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAiElEQVQ4T93SIQ7CYBCE0VdQXAHBdVCYOm6AQFVxBQQKxRFIBZKE65AeAtGUNIGE/OmGNnVdOztfNrOTGTnZSL+JAxZ4oMYar668ogxmKJF/TFds0aSQCHBCkSwfcegD2OMcvHeHy6+WXrDBDfMA0ObR7ty/egqosPxTridWEWBwMSfexF55vAHykg8RKs7ZRQAAAABJRU5ErkJggg==" />
-      );
-    } else if (this.state.direction === -1) {
-      direction = (
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAh0lEQVQ4T93TMQrCUAzG8V9x8QziiYSuXdzFC7h4AcELOPQAdXYovZCHEATlgQV5GFTe1ozJlz/kS1IpjKqw3wQBVyy++JI0y1GTe7DCBbMAckeNIQKk/BanALBB+16LtnDELoMcsM/BESDlz2heDR3WePwKSLo5eoxz3z6NNcFD+vu3ij14Aqz/DxGbKB7CAAAAAElFTkSuQmCC" />
-      );
+    const direction = this.state.direction;
+    let sortClassName = 'neutral';
+
+    if (direction === 1) {
+      sortClassName = 'asc';
+    } else if (direction === -1) {
+      sortClassName = 'desc';
     }
 
     return (
       <button
-        className={className('sort')}
+        title={`Sort column ${direction === 1 ? 'descending' : 'ascending'}`}
+        className={`${className('sort')} ${className('sort', sortClassName)}`}
         onClick={this.changeDirection.bind(this)}
-      >
-        {direction}
-      </button>
+      />
     );
   }
 }

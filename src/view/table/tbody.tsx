@@ -7,8 +7,6 @@ import { BaseComponent, BaseProps } from '../base';
 import className from '../../util/className';
 import { TBodyCell } from '../../types';
 
-import '../../theme/mermaid/tbody.scss';
-
 interface TBodyProps extends BaseProps {
   data: Tabular<TBodyCell>;
 }
