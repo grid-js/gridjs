@@ -33,4 +33,4 @@ Piece of :cake:
 
 ## License
 
-[GPLv3](https://github.com/grid-js/gridjs/blob/master/LICENSE)
+[MIT](https://github.com/grid-js/gridjs/blob/master/LICENSE)
