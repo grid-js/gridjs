@@ -20,7 +20,7 @@ const Sorting: FunctionalComponent = () => {
 
   const grid = new Grid({
     data: generateData(),
-    header: [
+    columns: [
       {
         name: "Name",
         sort: true

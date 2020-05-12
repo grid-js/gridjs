@@ -20,7 +20,7 @@ const HelloWorld: FunctionalComponent = () => {
 
   const grid = new Grid({
     data: generateData(),
-    header: ["Name", "Email", "Phone Number"]
+    columns: ["Name", "Email", "Phone Number"]
   }).createElement();
 
   const code = `

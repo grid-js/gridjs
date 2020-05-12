@@ -1,4 +1,4 @@
-import { TBodyCell } from '../../types';
+import { TCell } from '../../types';
 import Tabular from '../../tabular';
 import {
   PipelineProcessor,
@@ -16,7 +16,7 @@ interface NativeSortProps extends PipelineProcessorProps {
 }
 
 class NativeSort extends PipelineProcessor<
-  Tabular<TBodyCell>,
+  Tabular<TCell>,
   NativeSortProps
 > {
   protected validateProps(): void {
@@ -66,7 +66,7 @@ class NativeSort extends PipelineProcessor<
     return cmp;
   }
 
-  protected _process(data: Tabular<TBodyCell>): Tabular<TBodyCell> {
+  protected _process(data: Tabular<TCell>): Tabular<TCell> {
     const sorted = [...data.rows];
     sorted.sort(this.compareWrapper.bind(this));
     return new Tabular(sorted);

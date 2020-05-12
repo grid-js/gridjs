@@ -4,11 +4,11 @@ import Row from '../../row';
 import Cell from '../../cell';
 import { BaseComponent, BaseProps } from '../base';
 import className from '../../util/className';
-import { TBodyCell, THeaderCell } from '../../types';
+import { TCell, TColumn } from '../../types';
 import { TD } from './td';
 
 export interface TRProps extends BaseProps {
-  row?: Row<TBodyCell | THeaderCell>;
+  row?: Row<TCell | TColumn>;
 }
 
 export class TR extends BaseComponent<TRProps, {}> {
@@ -18,7 +18,7 @@ export class TR extends BaseComponent<TRProps, {}> {
     } else {
       return (
         <tr className={className('tr')}>
-          {this.props.row.cells.map((cell: Cell<TBodyCell>) => {
+          {this.props.row.cells.map((cell: Cell<TCell>) => {
             return <TD cell={cell} key={cell.id} />;
           })}
         </tr>

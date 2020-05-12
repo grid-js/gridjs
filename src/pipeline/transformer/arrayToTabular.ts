@@ -1,16 +1,16 @@
 import { PipelineProcessor, ProcessorType } from '../processor';
 import Tabular from '../../tabular';
-import { TBodyCell } from '../../types';
+import { TCell } from '../../types';
 
 class ArrayToTabularTransformer extends PipelineProcessor<
-  Tabular<TBodyCell>,
+  Tabular<TCell>,
   {}
 > {
   get type(): ProcessorType {
     return ProcessorType.Transformer;
   }
 
-  _process(data: any[][]): Tabular<TBodyCell> {
+  _process(data: any[][]): Tabular<TCell> {
     return Tabular.fromArray(data);
   }
 }

@@ -1,5 +1,5 @@
 import search from '../../operator/search';
-import { TBodyCell } from '../../types';
+import { TCell } from '../../types';
 import Tabular from '../../tabular';
 import {
   PipelineProcessor,
@@ -12,14 +12,14 @@ interface GlobalSearchFilterProps extends PipelineProcessorProps {
 }
 
 class GlobalSearchFilter extends PipelineProcessor<
-  Tabular<TBodyCell>,
+  Tabular<TCell>,
   GlobalSearchFilterProps
 > {
   get type(): ProcessorType {
     return ProcessorType.Filter;
   }
 
-  _process(data: Tabular<TBodyCell>): Tabular<TBodyCell> {
+  _process(data: Tabular<TCell>): Tabular<TCell> {
     if (this.props.keyword) {
       return search(String(this.props.keyword).trim(), data);
     }

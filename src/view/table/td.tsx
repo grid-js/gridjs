@@ -3,10 +3,10 @@ import { h } from 'preact';
 import Cell from '../../cell';
 import { BaseComponent, BaseProps } from '../base';
 import className from '../../util/className';
-import { TBodyCell } from '../../types';
+import { TCell } from '../../types';
 
 export interface TDProps extends BaseProps {
-  cell: Cell<TBodyCell>;
+  cell: Cell<TCell>;
 }
 
 export class TD extends BaseComponent<TDProps, {}> {

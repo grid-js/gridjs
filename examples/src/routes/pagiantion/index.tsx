@@ -20,7 +20,7 @@ const Pagination: FunctionalComponent = () => {
 
   const grid = new Grid({
     data: generateData(),
-    header: ["Name", "Email", "Phone Number"],
+    columns: ["Name", "Email", "Phone Number"],
     search: {
       enabled: true
     },

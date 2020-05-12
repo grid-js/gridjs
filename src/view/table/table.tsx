@@ -6,12 +6,12 @@ import { THead } from './thead';
 import { BaseComponent, BaseProps } from '../base';
 import Header from '../../header';
 import className from '../../util/className';
-import Config from '../../config';
-import { TBodyCell } from '../../types';
+import { TCell } from '../../types';
 
 interface TableProps extends BaseProps {
-  data?: Tabular<TBodyCell>;
+  data?: Tabular<TCell>;
   header?: Header;
+  width?: string;
 }
 
 export class Table extends BaseComponent<TableProps, {}> {
@@ -19,7 +19,7 @@ export class Table extends BaseComponent<TableProps, {}> {
     return (
       <table
         className={className('table')}
-        style={{ width: Config.current.width }}
+        style={{ width: this.props.width }}
       >
         <THead header={this.props.header} />
         <TBody data={this.props.data} />

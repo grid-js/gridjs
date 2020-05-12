@@ -1,11 +1,11 @@
-import { OneDArray, THeader } from './types';
+import { OneDArray, TColumn } from './types';
 import Base from './base';
 import { isArrayOfType } from './util/type';
 
 class Header extends Base {
-  private readonly _columns: THeader;
+  private readonly _columns: OneDArray<TColumn>;
 
-  constructor(columns: THeader | OneDArray<string>) {
+  constructor(columns: OneDArray<TColumn> | OneDArray<string>) {
     super();
 
     // if an array of strings is provided
@@ -15,11 +15,11 @@ class Header extends Base {
         columns as OneDArray<string>,
       ).columns;
     } else {
-      this._columns = columns as THeader;
+      this._columns = columns as OneDArray<TColumn>;
     }
   }
 
-  get columns(): THeader {
+  get columns(): OneDArray<TColumn> {
     return this._columns;
   }
 

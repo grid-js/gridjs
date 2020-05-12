@@ -2,7 +2,7 @@ import { h, JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../../base';
 import className from '../../../util/className';
-import { THeaderCell } from '../../../types';
+import { TColumn } from '../../../types';
 
 import Config from '../../../config';
 import { ProcessorType } from '../../../pipeline/processor';
@@ -12,7 +12,7 @@ import actions from './actions';
 
 export interface SortProps extends BaseProps {
   index: number;
-  column: THeaderCell;
+  column: TColumn;
 }
 
 interface SortState {

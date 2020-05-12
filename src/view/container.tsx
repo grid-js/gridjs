@@ -4,7 +4,7 @@ import Tabular from '../tabular';
 import Config from '../config';
 import { BaseComponent, BaseProps } from './base';
 import className from '../util/className';
-import { Status, TBodyCell } from '../types';
+import { Status, TCell } from '../types';
 import { Table } from './table/table';
 import { HeaderContainer } from './headerContainer';
 import { FooterContainer } from './footerContainer';
@@ -15,7 +15,7 @@ interface ContainerProps extends BaseProps {
 
 interface ContainerState {
   status: Status;
-  data?: Tabular<TBodyCell>;
+  data?: Tabular<TCell>;
 }
 
 export class Container extends BaseComponent<ContainerProps, ContainerState> {

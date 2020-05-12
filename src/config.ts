@@ -1,8 +1,8 @@
 import {
   OneDArray,
   ProtoExtends,
-  TBodyCell,
-  THeader,
+  TCell,
+  TColumn,
   TwoDArray,
 } from './types';
 import Storage from './storage/storage';
@@ -15,10 +15,12 @@ import Header from './header';
 
 // Config type used internally
 interface Config {
-  data?: TwoDArray<TBodyCell>;
+  data?: TwoDArray<TCell>;
   header?: Header;
   storage: Storage;
-  pipeline: Pipeline<Tabular<TBodyCell>>;
+  pipeline: Pipeline<Tabular<TCell>>;
+  /** to automatically calculate the columns width */
+  autoWidth: boolean;
   classNamePrefix: string;
   /** sets the width of the container and table */
   width: string;
@@ -28,7 +30,7 @@ interface Config {
 
 // Config type used by the consumers
 interface UserConfigExtend {
-  header?: THeader | OneDArray<string>;
+  columns?: OneDArray<TColumn> | OneDArray<string>;
 }
 
 export type UserConfig = ProtoExtends<Partial<Config>, UserConfigExtend>;
@@ -61,6 +63,7 @@ class Config {
     return {
       classNamePrefix: 'gridjs',
       width: '100%',
+      autoWidth: true,
     } as Config;
   }
 
@@ -69,8 +72,8 @@ class Config {
 
     if (!userConfig) return config;
 
-    if (!(userConfig.header instanceof Header)) {
-      config.header = new Header(userConfig.header);
+    if (userConfig.columns) {
+      config.header = new Header(userConfig.columns);
     }
 
     return config;

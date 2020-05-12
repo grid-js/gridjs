@@ -4,17 +4,16 @@ export type ProtoExtends<T, U> = U & Omit<T, keyof U>;
 export type OneDArray<T> = T[];
 export type TwoDArray<T> = T[][];
 
-// Cell type
-export type TBodyCell = number | string | boolean;
+// Table cell type
+export type TCell = number | string | boolean;
 
 // Table header cell type
-export interface THeaderCell {
+export interface TColumn {
   name: string;
+  width?: string;
   sort?: boolean;
-  children?: THeader;
+  children?: OneDArray<TColumn>;
 }
-
-export type THeader = OneDArray<THeaderCell>;
 
 // container status
 export enum Status {
