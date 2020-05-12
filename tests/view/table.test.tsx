@@ -5,7 +5,6 @@ import Tabular from '../../src/tabular';
 import Header from '../../src/header';
 import Config from '../../src/config';
 import { TCell } from '../../src/types';
-import MemoryStorage from "../../src/storage/memory";
 
 describe('Table component', () => {
   beforeAll(() => {
@@ -40,15 +39,13 @@ describe('Table component', () => {
   });
 
   it('should render a table with width', () => {
-    const config = new Config();
-    config.
-
     const table = mount(
       <Table
         data={Tabular.fromArray<TCell>([
           [1, 2, 3],
           ['a', 'b', 'c'],
         ])}
+        width="300px"
         header={Header.fromArrayOfString(['h1', 'h2', 'h3'])}
       />,
     );

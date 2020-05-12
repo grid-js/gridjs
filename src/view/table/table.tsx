@@ -15,11 +15,21 @@ interface TableProps extends BaseProps {
 }
 
 export class Table extends BaseComponent<TableProps, {}> {
+  private getStyle(): { [key: string]: string } {
+    const style = {};
+
+    if (this.props.width) {
+      style["width"] = this.props.width;
+    }
+
+    return style;
+  }
+
   render() {
     return (
       <table
         className={className('table')}
-        style={{ width: this.props.width }}
+        style={this.getStyle()}
       >
         <THead header={this.props.header} />
         <TBody data={this.props.data} />
