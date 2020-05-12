@@ -26,27 +26,27 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     super(props);
 
     this.state = {
-      status: Status.Init,
+      status: Status.Loading,
       data: null,
     };
   }
 
-  componentWillMount(): void {
+  private setData(data: Tabular<TCell>): void {
     this.setState({
-      status: Status.Loading,
+      data: data,
+      status: Status.Loaded,
     });
   }
 
   async componentDidMount() {
-    this.setState({
-      data: await this.props.pipeline.process(),
-      status: Status.Loaded,
-    });
+    this.setData(await this.props.pipeline.process());
 
     this.props.pipeline.updated(async () => {
       this.setState({
-        data: await this.props.pipeline.process(),
+        status: Status.Loading,
       });
+
+      this.setData(await this.props.pipeline.process());
     });
   }
 

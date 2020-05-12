@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Container component should render a container with table 1`] = `"<div class=\\"gridjs gridjs-container\\"><div class=\\"gridjs gridjs-head\\"></div><div class=\\"gridjs gridjs-wrapper\\"><table class=\\"gridjs gridjs-table\\"><tbody class=\\"gridjs gridjs-tbody\\"><tr class=\\"gridjs gridjs-tr\\"><td class=\\"gridjs gridjs-td\\">1</td><td class=\\"gridjs gridjs-td\\">2</td><td class=\\"gridjs gridjs-td\\">3</td></tr><tr class=\\"gridjs gridjs-tr\\"><td class=\\"gridjs gridjs-td\\">a</td><td class=\\"gridjs gridjs-td\\">b</td><td class=\\"gridjs gridjs-td\\">c</td></tr></tbody></table><div class=\\"gridjs gridjs-footer\\"></div></div></div>"`;

@@ -38,8 +38,12 @@ class Grid {
   }
 
   createElement(): VNode {
+    const config = Config.current;
+
     return h(Container, {
-      config: Config.current,
+      pipeline: config.pipeline,
+      header: config.header,
+      width: config.width,
     });
   }
 
