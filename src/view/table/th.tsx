@@ -15,7 +15,9 @@ export class TH extends BaseComponent<THProps, {}> {
     return (
       <th className={className('th')}>
         {this.props.column.name}
-        { this.props.column.sort && <Sort index={this.props.index} column={this.props.column} /> }
+        {this.props.column.sort && (
+          <Sort index={this.props.index} column={this.props.column} />
+        )}
       </th>
     );
   }

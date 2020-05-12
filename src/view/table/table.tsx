@@ -9,7 +9,7 @@ import className from '../../util/className';
 import { TCell } from '../../types';
 
 interface TableProps extends BaseProps {
-  data?: Tabular<TCell>;
+  data: Tabular<TCell>;
   header?: Header;
   width?: string;
 }
@@ -19,7 +19,7 @@ export class Table extends BaseComponent<TableProps, {}> {
     const style = {};
 
     if (this.props.width) {
-      style["width"] = this.props.width;
+      style['width'] = this.props.width;
     }
 
     return style;
@@ -27,10 +27,7 @@ export class Table extends BaseComponent<TableProps, {}> {
 
   render() {
     return (
-      <table
-        className={className('table')}
-        style={this.getStyle()}
-      >
+      <table className={className('table')} style={this.getStyle()}>
         <THead header={this.props.header} />
         <TBody data={this.props.data} />
       </table>

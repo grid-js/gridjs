@@ -1,16 +1,19 @@
 import { h } from 'preact';
 
 import Tabular from '../tabular';
-import Config from '../config';
 import { BaseComponent, BaseProps } from './base';
 import className from '../util/className';
 import { Status, TCell } from '../types';
 import { Table } from './table/table';
 import { HeaderContainer } from './headerContainer';
 import { FooterContainer } from './footerContainer';
+import Pipeline from '../pipeline/pipeline';
+import Header from '../header';
 
 interface ContainerProps extends BaseProps {
-  config: Config;
+  pipeline: Pipeline<Tabular<TCell>>;
+  header?: Header;
+  width?: string;
 }
 
 interface ContainerState {
@@ -19,8 +22,6 @@ interface ContainerState {
 }
 
 export class Container extends BaseComponent<ContainerProps, ContainerState> {
-  private readonly config: Config;
-
   constructor(props) {
     super(props);
 
@@ -28,8 +29,6 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
       status: Status.Init,
       data: null,
     };
-
-    this.config = this.props.config;
   }
 
   componentWillMount(): void {
@@ -40,26 +39,34 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
   async componentDidMount() {
     this.setState({
-      data: await this.config.pipeline.process(),
+      data: await this.props.pipeline.process(),
       status: Status.Loaded,
     });
 
-    this.config.pipeline.updated(async () => {
+    this.props.pipeline.updated(async () => {
       this.setState({
-        data: await this.config.pipeline.process(),
+        data: await this.props.pipeline.process(),
       });
     });
   }
 
   render() {
-    const config = Config.current;
-
     return (
-      <div className={className('container')} style={{ width: config.width }}>
+      <div
+        className={className('container')}
+        style={{ width: this.props.width }}
+      >
         <HeaderContainer />
 
-        <div className={className('wrapper')} style={{ width: config.width }}>
-          <Table data={this.state.data} header={this.config.header} />
+        <div
+          className={className('wrapper')}
+          style={{ width: this.props.width }}
+        >
+          <Table
+            data={this.state.data}
+            header={this.props.header}
+            width={this.props.width}
+          />
 
           <FooterContainer />
         </div>

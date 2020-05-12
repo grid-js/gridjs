@@ -15,10 +15,7 @@ interface NativeSortProps extends PipelineProcessorProps {
   }[];
 }
 
-class NativeSort extends PipelineProcessor<
-  Tabular<TCell>,
-  NativeSortProps
-> {
+class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
   protected validateProps(): void {
     for (const condition of this.props.columns) {
       if (condition.direction === undefined) {

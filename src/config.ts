@@ -1,10 +1,4 @@
-import {
-  OneDArray,
-  ProtoExtends,
-  TCell,
-  TColumn,
-  TwoDArray,
-} from './types';
+import { OneDArray, ProtoExtends, TCell, TColumn, TwoDArray } from './types';
 import Storage from './storage/storage';
 import ConfigError from './error/config';
 import Pipeline from './pipeline/pipeline';
