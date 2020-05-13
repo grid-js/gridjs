@@ -6,6 +6,7 @@ import Pipeline from '../../src/pipeline/pipeline';
 import StorageExtractor from '../../src/pipeline/extractor/storage';
 import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
 import StorageUtils from '../../src/storage/storageUtils';
+import Header from "../../src/header";
 
 describe('Container component', () => {
   let config: Config;
@@ -26,9 +27,55 @@ describe('Container component', () => {
     ]);
   });
 
+  afterAll(() => {
+    config = null;
+  });
+
   it('should render a container with table', async () => {
     const container = mount(<Container pipeline={config.pipeline} />);
 
+    await container.instance().componentDidMount();
+    expect(container.html()).toMatchSnapshot();
+  });
+
+  it('should render a container with searchable table', async () => {
+    config.search = {
+      enabled: true,
+      placeholder: 'type something'
+    };
+
+    const container = mount(<Container pipeline={config.pipeline} />);
+    await container.instance().componentDidMount();
+    expect(container.html()).toMatchSnapshot();
+  });
+
+  it('should render a container with sortable and paginated table', async () => {
+    config.search = {
+      enabled: true,
+      placeholder: 'type something'
+    };
+
+    config.pagination = {
+      enabled: true,
+      limit: 5
+    };
+
+    config.header = new Header();
+    config.header.columns = [
+      {
+        name: 'c1'
+      },
+      {
+        name: 'c2',
+        sort: true
+      },
+      {
+        name: 'c3',
+        sort: true
+      }
+    ];
+
+    const container = mount(<Container pipeline={config.pipeline} header={config.header} />);
     await container.instance().componentDidMount();
     expect(container.html()).toMatchSnapshot();
   });

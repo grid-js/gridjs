@@ -3,7 +3,7 @@ import Storage from './storage/storage';
 import ConfigError from './error/config';
 import Pipeline from './pipeline/pipeline';
 import Tabular from './tabular';
-import { SearchConfig } from './view/plugin/search';
+import { SearchConfig } from './view/plugin/search/search';
 import { PaginationConfig } from './view/plugin/pagination';
 import Header from './header';
 

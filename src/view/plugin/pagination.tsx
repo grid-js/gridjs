@@ -13,7 +13,7 @@ interface PaginationState {
 }
 
 export interface PaginationConfig {
-  limit?: number;
+  limit: number;
   page?: number;
   enabled?: boolean;
   summary?: boolean;
