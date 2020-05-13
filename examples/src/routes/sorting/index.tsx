@@ -23,7 +23,8 @@ const Sorting: FunctionalComponent = () => {
     columns: [
       {
         name: "Name",
-        sort: true
+        sort: true,
+        width: "20%"
       },
       {
         name: "Email",
