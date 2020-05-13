@@ -32,10 +32,11 @@ export type UserConfig = ProtoExtends<Partial<Config>, UserConfigExtend>;
 class Config {
   private static _current: Config;
 
-  constructor(config?: UserConfig) {
+  constructor(userConfig?: UserConfig) {
+    // FIXME: not sure if this makes sense because Config is a subset of UserConfig
     const updatedConfig = {
       ...Config.defaultConfig(),
-      ...config,
+      ...userConfig,
     };
 
     Object.assign(this, updatedConfig);
@@ -66,9 +67,7 @@ class Config {
 
     if (!userConfig) return config;
 
-    if (userConfig.columns) {
-      config.header = new Header(userConfig.columns);
-    }
+    config.header = Header.fromUserConfig(config);
 
     return config;
   }
