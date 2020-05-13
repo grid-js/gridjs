@@ -1,9 +1,18 @@
 @import "colors";
 
-.gridjs {
+th.gridjs {
   &-th {
     padding: 14px 24px;
     border-color: $gray3;
     border-bottom-width: 1px;
+    user-select: none;
+
+    &-sort {
+      cursor: pointer;
+    }
+
+    &-sort:hover {
+      background-color: $gray3;
+    }
   }
 }

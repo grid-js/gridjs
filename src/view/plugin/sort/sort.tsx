@@ -30,12 +30,6 @@ export class Sort extends BaseComponent<SortProps, SortState> {
     store.on('updated', this.storeUpdated.bind(this));
   }
 
-  componentDidMount(): void {
-    if (this.props.column.sort) {
-      actions.sortColumn(this.props.index, 1);
-    }
-  }
-
   componentWillUnmount(): void {
     store.off('updated', this.storeUpdated.bind(this));
   }
@@ -86,11 +80,12 @@ export class Sort extends BaseComponent<SortProps, SortState> {
     return processor;
   }
 
-  private changeDirection(e: JSX.TargetedMouseEvent<HTMLInputElement>): void {
+  public changeDirection(e: JSX.TargetedMouseEvent<HTMLInputElement>): void {
+    e.preventDefault();
+    e.stopPropagation();
+
     // to sort two or more columns at the same time
-    const multiSort = e.shiftKey === true;
-    const direction = this.state.direction === 1 ? -1 : 1;
-    actions.sortColumn(this.props.index, direction, multiSort);
+    actions.sortToggle(this.props.index, e.shiftKey === true);
   }
 
   render() {

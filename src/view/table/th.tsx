@@ -1,9 +1,10 @@
-import { h } from 'preact';
+import { h, JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../base';
 import className from '../../util/className';
 import { TColumn } from '../../types';
 import { Sort } from '../plugin/sort/sort';
+import sortActions from '../plugin/sort/actions';
 
 export interface THProps extends BaseProps {
   index: number;
@@ -11,11 +12,28 @@ export interface THProps extends BaseProps {
 }
 
 export class TH extends BaseComponent<THProps, {}> {
+  private isSortable(): boolean {
+    return this.props.column.sort;
+  }
+
+  private onClick(e: JSX.TargetedMouseEvent<HTMLInputElement>): void {
+    e.stopPropagation();
+
+    if (this.isSortable()) {
+      sortActions.sortToggle(this.props.index, e.shiftKey === true);
+    }
+  }
+
   render() {
     return (
-      <th className={className('th')}>
+      <th
+        className={`${className('th')} ${
+          this.isSortable() ? className('th', 'sort') : ''
+        }`}
+        onClick={this.onClick.bind(this)}
+      >
         {this.props.column.name}
-        {this.props.column.sort && (
+        {this.isSortable() && (
           <Sort index={this.props.index} column={this.props.column} />
         )}
       </th>
