@@ -25,13 +25,12 @@ export class TH extends BaseComponent<THProps, {}> {
   }
 
   render() {
+    const cls = `${className('th')} ${
+      this.isSortable() ? className('th', 'sort') : ''
+    }`.trim();
+
     return (
-      <th
-        className={`${className('th')} ${
-          this.isSortable() ? className('th', 'sort') : ''
-        }`}
-        onClick={this.onClick.bind(this)}
-      >
+      <th className={cls} onClick={this.onClick.bind(this)}>
         {this.props.column.name}
         {this.isSortable() && (
           <Sort index={this.props.index} column={this.props.column} />
