@@ -12,3 +12,4 @@ import './th.scss';
 import './tr.scss';
 import './thead.scss';
 import './wrapper.scss';
+import './search.scss';

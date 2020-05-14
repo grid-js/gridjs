@@ -1,5 +1,12 @@
 .gridjs {
   &-head {
     margin-bottom: 5px;
+    padding: 5px 1px;
+
+    &::after{
+      content: '';
+      display: block;
+      clear: both;
+    }
   }
 }

@@ -60,7 +60,7 @@ export class Search extends BaseComponent<
           type="search"
           placeholder={`${this.props.placeholder || 'Type a keyword...'}`}
           onInput={this.onChange.bind(this)}
-          className={`${className('input')} ${className('search')}`}
+          className={`${className('input')} ${className('search', 'input')}`}
           value={store.state.keyword}
         />
       </div>

@@ -1,14 +1,20 @@
 @import "colors";
 
 input.gridjs-input {
+  outline: none;
   background-color: $white;
   border-color: $gray4;
   border-width: 1px;
   border-radius: 5px;
-  padding: 7px 10px;
+  padding: 10px 13px;
   font-size: 14px;
   line-height: 1.45;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(149, 189, 243, 0.50);
+    border-color: $blue1;
+  }
 }
