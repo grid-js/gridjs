@@ -1,6 +1,10 @@
-.gridjs {
+table.gridjs {
   &-table {
     border-collapse: collapse;
     text-align: left;
+    display: table;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
   }
 }

@@ -1,6 +1,9 @@
 @import "colors";
 
-.gridjs-footer {
-  padding: 12px 24px;
-  border-top: 1px solid $gray3;
+.gridjs {
+  &-footer {
+    padding: 12px 24px;
+    border-top: 1px solid $gray3;
+    background-color: $white;
+  }
 }
