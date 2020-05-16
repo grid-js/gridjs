@@ -3,6 +3,7 @@
   "version": "0.1.2",
   "description": "Fast and extensible table library",
   "main": "dist/gridjs.production.min.js",
+  "module": "dist/gridjs.production.es5.js",
   "types": "dist/index.d.ts",
   "engines": {
     "node": ">= 12.13 <13"

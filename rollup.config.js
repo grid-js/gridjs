@@ -5,18 +5,17 @@ import { terser } from 'rollup-plugin-terser'
 import size from 'rollup-plugin-sizes'
 import resolve from '@rollup/plugin-node-resolve';
 
-const globals = {}
+const lib = 'gridjs';
+
+const path = (env, postfix) => `dist/${lib}.${env}${postfix ? '.' + postfix : ''}.js`;
 
 export default [
   {
     input: 'index.ts',
-    output: {
-      name: 'Grid',
-      file: 'dist/gridjs.development.js',
-      format: 'umd',
-      sourcemap: true,
-      globals,
-    },
+    output: [
+      { file: path('development'), name: lib, format: 'umd', sourcemap: true },
+      { file: path('development', 'es5'), format: 'es', sourcemap: true },
+    ],
     plugins: [
       resolve(),
       postcss({
@@ -40,13 +39,10 @@ export default [
   },
   {
     input: 'index.ts',
-    output: {
-      name: 'Grid',
-      file: 'dist/gridjs.production.min.js',
-      format: 'umd',
-      sourcemap: true,
-      globals,
-    },
+    output: [
+      { file: path('production'), name: lib, format: 'umd', sourcemap: true },
+      { file: path('production', 'es5'), format: 'es', sourcemap: true },
+    ],
     plugins: [
       resolve(),
       postcss({
