@@ -5,6 +5,7 @@ import { Container } from './view/container';
 import Pipeline from './pipeline/pipeline';
 import StorageExtractor from './pipeline/extractor/storage';
 import ArrayToTabularTransformer from './pipeline/transformer/arrayToTabular';
+import log from './util/log';
 
 class Grid {
   constructor(userConfig?: UserConfig) {
@@ -48,6 +49,13 @@ class Grid {
   }
 
   render(container: Element) {
+    if (container.childNodes.length > 0) {
+      log.error(
+        `The container element ${container} is not empty. Make sure the container is empty and call render() again`,
+      );
+      return;
+    }
+
     render(this.createElement(), container);
   }
 }

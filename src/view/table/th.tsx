@@ -30,7 +30,11 @@ export class TH extends BaseComponent<THProps, {}> {
     }`.trim();
 
     return (
-      <th className={cls} onClick={this.onClick.bind(this)} width={this.props.column.width}>
+      <th
+        className={cls}
+        onClick={this.onClick.bind(this)}
+        width={this.props.column.width}
+      >
         {this.props.column.name}
         {this.isSortable() && (
           <Sort index={this.props.index} column={this.props.column} />

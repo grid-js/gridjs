@@ -1,7 +1,7 @@
 import BaseStore from '../../base/store';
 import { SearchActionsType } from './actions';
 
-export type SearchStoreState = { keyword: string|null };
+export type SearchStoreState = { keyword: string | null };
 
 class SearchStore extends BaseStore<SearchStoreState, SearchActionsType> {
   getInitialState(): SearchStoreState {

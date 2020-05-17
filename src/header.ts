@@ -1,7 +1,7 @@
 import { OneDArray, TColumn } from './types';
 import Base from './base';
 import { isArrayOfType } from './util/type';
-import {UserConfig} from "./config";
+import { UserConfig } from './config';
 
 class Header extends Base {
   private _columns: OneDArray<TColumn>;
@@ -57,8 +57,8 @@ class Header extends Base {
 
     for (const name of data) {
       header.columns.push({
-        name: name
-      })
+        name: name,
+      });
     }
 
     return header;

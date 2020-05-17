@@ -3,8 +3,8 @@ import { BaseComponent, BaseProps } from '../../base';
 import Config from '../../../config';
 import GlobalSearchFilter from '../../../pipeline/filter/globalSearch';
 import className from '../../../util/className';
-import store, {SearchStoreState} from "./store";
-import actions from "./actions";
+import store, { SearchStoreState } from './store';
+import actions from './actions';
 
 export interface SearchConfig {
   keyword?: string;
@@ -12,10 +12,7 @@ export interface SearchConfig {
   placeholder?: string;
 }
 
-export class Search extends BaseComponent<
-  BaseProps & SearchConfig,
-  {}
-> {
+export class Search extends BaseComponent<BaseProps & SearchConfig, {}> {
   private searchProcessor: GlobalSearchFilter;
 
   constructor(props) {
