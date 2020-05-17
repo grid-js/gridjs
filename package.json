@@ -1,10 +1,11 @@
 {
   "name": "gridjs",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Fast and extensible table library",
   "main": "dist/gridjs.production.min.js",
   "module": "dist/gridjs.production.es5.js",
   "types": "dist/index.d.ts",
+  "files": ["dist/*"],
   "engines": {
     "node": ">= 12.13 <13"
   },
@@ -49,7 +50,7 @@
     "test:watch": "jest --watch"
   },
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "dependencies": {
     "preact": "^10.4.1",
     "tslib": "~1.10.0"
