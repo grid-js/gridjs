@@ -40,8 +40,8 @@ export default [
   {
     input: 'index.ts',
     output: [
-      { file: path('production'), name: lib, format: 'umd', sourcemap: true },
-      { file: path('production', 'es5'), format: 'es', sourcemap: true },
+      { file: path('production', 'min'), name: lib, format: 'umd', sourcemap: true },
+      { file: path('production', 'es5.min'), format: 'es', sourcemap: true },
     ],
     plugins: [
       resolve(),

@@ -1,9 +1,9 @@
 {
   "name": "gridjs",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Fast and extensible table library",
   "main": "dist/gridjs.production.min.js",
-  "module": "dist/gridjs.production.es5.js",
+  "module": "dist/gridjs.production.es5.min.js",
   "types": "dist/index.d.ts",
   "files": ["dist/*"],
   "engines": {
