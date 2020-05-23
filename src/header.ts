@@ -31,7 +31,7 @@ class Header extends Base {
 
   static fromUserConfig(userConfig: UserConfig): Header | null {
     // because we should be able to render a table without the header
-    if (!userConfig.columns) {
+    if (!userConfig.columns && !userConfig.from) {
       return null;
     }
 
@@ -43,6 +43,8 @@ class Header extends Base {
       header.columns = Header.fromArrayOfString(
         userConfig.columns as OneDArray<string>,
       ).columns;
+    } else if (userConfig.from) {
+      header.columns = Header.fromHTMLTable(userConfig.from).columns;
     } else {
       header.columns = userConfig.columns as OneDArray<TColumn>;
     }
@@ -58,6 +60,20 @@ class Header extends Base {
     for (const name of data) {
       header.columns.push({
         name: name,
+      });
+    }
+
+    return header;
+  }
+
+  static fromHTMLTable(element: HTMLElement): Header {
+    const header = new Header();
+    const thead = element.querySelector('thead');
+    const ths = thead.querySelectorAll('th');
+
+    for (const th of ths) {
+      header.columns.push({
+        name: th.innerText,
       });
     }
 

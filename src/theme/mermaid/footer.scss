@@ -6,4 +6,9 @@
     border-top: 1px solid $gray3;
     background-color: $white;
   }
+
+  &-footer:empty {
+    padding: 0;
+    border: none;
+  }
 }

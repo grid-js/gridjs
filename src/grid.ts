@@ -49,6 +49,10 @@ class Grid {
   }
 
   render(container: Element) {
+    if (!container) {
+      log.error("Container element cannot be null", true);
+    }
+
     if (container.childNodes.length > 0) {
       log.error(
         `The container element ${container} is not empty. Make sure the container is empty and call render() again`,

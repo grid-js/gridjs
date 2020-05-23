@@ -15,4 +15,12 @@ th.gridjs {
       background-color: $gray3;
     }
   }
+
+  &-th:first-child {
+    border-left: none;
+  }
+
+  &-th:last-child {
+    border-right: none;
+  }
 }

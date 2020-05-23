@@ -1,10 +1,18 @@
 @import "colors";
 
-.gridjs {
+td.gridjs {
   &-td {
     padding: 12px 24px;
     border-color: $gray3;
     border-bottom-width: 1px;
     background-color: $white;
+  }
+
+  &-td:first-child {
+    border-left: none;
+  }
+
+  &-td:last-child {
+    border-right: none;
   }
 }
