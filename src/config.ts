@@ -12,7 +12,7 @@ interface Config {
   data?: TwoDArray<TCell>;
   header?: Header;
   /** to parse a HTML table and load the data */
-  from: HTMLElement,
+  from: HTMLElement;
   storage: Storage;
   pipeline: Pipeline<Tabular<TCell>>;
   /** to automatically calculate the columns width */

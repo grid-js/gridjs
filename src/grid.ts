@@ -50,7 +50,7 @@ class Grid {
 
   render(container: Element) {
     if (!container) {
-      log.error("Container element cannot be null", true);
+      log.error('Container element cannot be null', true);
     }
 
     if (container.childNodes.length > 0) {
