@@ -27,6 +27,8 @@ interface Config {
 // Config type used by the consumers
 interface UserConfigExtend {
   columns?: OneDArray<TColumn> | OneDArray<string>;
+  search: SearchConfig | boolean;
+  pagination: PaginationConfig | boolean;
 }
 
 export type UserConfig = ProtoExtends<Partial<Config>, UserConfigExtend>;
@@ -70,6 +72,17 @@ class Config {
     if (!userConfig) return config;
 
     config.header = Header.fromUserConfig(config);
+
+    // TODO: can we refactor this?
+    config.pagination = {
+      enabled: userConfig.pagination === true || userConfig.pagination instanceof Object,
+      ...userConfig.pagination as PaginationConfig
+    };
+
+    config.search = {
+      enabled: userConfig.search === true || userConfig.search instanceof Object,
+      ...userConfig.search as SearchConfig
+    };
 
     return config;
   }

@@ -13,9 +13,9 @@ interface PaginationState {
 }
 
 export interface PaginationConfig {
-  limit: number;
+  limit?: number;
   page?: number;
-  enabled?: boolean;
+  enabled: boolean;
   summary?: boolean;
   nextButton?: boolean;
   prevButton?: boolean;
@@ -33,20 +33,14 @@ export class Pagination extends BaseComponent<
     nextButton: true,
     prevButton: true,
     buttonsCount: 3,
+    limit: 10
   };
 
   constructor(props) {
     super();
 
-    let enabled = false;
-    if (props.enabled !== undefined) {
-      enabled = props.enabled;
-    } else {
-      enabled = !isNaN(Number(props.limit));
-    }
-
     this.state = {
-      enabled: enabled,
+      enabled: props.enabled,
       limit: props.limit,
       page: props.page || 0,
       total: 0,

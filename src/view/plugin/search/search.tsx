@@ -15,6 +15,10 @@ export interface SearchConfig {
 export class Search extends BaseComponent<BaseProps & SearchConfig, {}> {
   private searchProcessor: GlobalSearchFilter;
 
+  static defaultProps = {
+    placeholder: "Type a keyword..."
+  };
+
   constructor(props) {
     super();
 
@@ -55,7 +59,7 @@ export class Search extends BaseComponent<BaseProps & SearchConfig, {}> {
       <div className={className('search')}>
         <input
           type="search"
-          placeholder={`${this.props.placeholder || 'Type a keyword...'}`}
+          placeholder={this.props.placeholder}
           onInput={this.onChange.bind(this)}
           className={`${className('input')} ${className('search', 'input')}`}
           value={store.state.keyword}
