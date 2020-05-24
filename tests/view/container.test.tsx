@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
 import { h } from 'preact';
-import Config from '../../src/config';
+import { Config } from '../../src/config';
 import { Container } from '../../src/view/container';
 import Pipeline from '../../src/pipeline/pipeline';
 import StorageExtractor from '../../src/pipeline/extractor/storage';
@@ -18,8 +18,6 @@ describe('Container component', () => {
       ['a', 'b', 'c'],
     ];
 
-    config.setCurrent();
-
     config.storage = StorageUtils.createFromConfig(config);
     config.pipeline = new Pipeline([
       new StorageExtractor({ storage: config.storage }),
@@ -32,7 +30,9 @@ describe('Container component', () => {
   });
 
   it('should render a container with table', async () => {
-    const container = mount(<Container pipeline={config.pipeline} />);
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} />,
+    );
 
     await container.instance().componentDidMount();
     expect(container.html()).toMatchSnapshot();
@@ -44,7 +44,9 @@ describe('Container component', () => {
       placeholder: 'type something',
     };
 
-    const container = mount(<Container pipeline={config.pipeline} />);
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} />,
+    );
     await container.instance().componentDidMount();
     expect(container.html()).toMatchSnapshot();
   });
@@ -76,7 +78,11 @@ describe('Container component', () => {
     ];
 
     const container = mount(
-      <Container pipeline={config.pipeline} header={config.header} />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        header={config.header}
+      />,
     );
     await container.instance().componentDidMount();
     expect(container.html()).toMatchSnapshot();

@@ -5,7 +5,9 @@
   "main": "dist/gridjs.production.min.js",
   "module": "dist/gridjs.production.es5.min.js",
   "types": "dist/index.d.ts",
-  "files": ["dist/*"],
+  "files": [
+    "dist/*"
+  ],
   "engines": {
     "node": ">= 12.13 <13"
   },

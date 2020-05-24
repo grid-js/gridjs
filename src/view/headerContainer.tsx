@@ -1,15 +1,22 @@
 import { h } from 'preact';
 
-import Config from '../config';
-import { BaseComponent } from './base';
+import { BaseComponent, BaseProps } from './base';
 import className from '../util/className';
 import { Search } from './plugin/search/search';
+import { Config } from '../config';
 
-export class HeaderContainer extends BaseComponent<{}, {}> {
+interface HeaderContainerProps extends BaseProps {
+  config: Config;
+}
+
+export class HeaderContainer extends BaseComponent<HeaderContainerProps, {}> {
   render() {
     return (
       <div className={className('head')}>
-        <Search {...Config.current.search} />
+        <Search
+          pipeline={this.props.config.pipeline}
+          {...this.props.config.search}
+        />
       </div>
     );
   }

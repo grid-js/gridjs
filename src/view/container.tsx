@@ -9,8 +9,10 @@ import { HeaderContainer } from './headerContainer';
 import { FooterContainer } from './footerContainer';
 import Pipeline from '../pipeline/pipeline';
 import Header from '../header';
+import { Config } from '../config';
 
 interface ContainerProps extends BaseProps {
+  config: Config;
   pipeline: Pipeline<Tabular<TCell>>;
   header?: Header;
   width?: string;
@@ -56,19 +58,20 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
         className={className('container')}
         style={{ width: this.props.width }}
       >
-        <HeaderContainer />
+        <HeaderContainer config={this.props.config} />
 
         <div
           className={className('wrapper')}
           style={{ width: this.props.width }}
         >
           <Table
+            pipeline={this.props.pipeline}
             data={this.state.data}
             header={this.props.header}
             width={this.props.width}
           />
 
-          <FooterContainer />
+          <FooterContainer config={this.props.config} />
         </div>
       </div>
     );

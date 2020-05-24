@@ -1,4 +1,4 @@
-import Config, { UserConfig } from './config';
+import { Config, UserConfig } from './config';
 import { h, render, VNode } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import { Container } from './view/container';
@@ -8,6 +8,8 @@ import ArrayToTabularTransformer from './pipeline/transformer/arrayToTabular';
 import log from './util/log';
 
 class Grid {
+  private _config: Config;
+
   constructor(userConfig?: UserConfig) {
     this.bootstrap(userConfig);
   }
@@ -18,33 +20,37 @@ class Grid {
     this.setPipeline();
   }
 
+  get config(): Config {
+    return this._config;
+  }
+
+  set config(config: Config) {
+    this._config = config;
+  }
+
   private setConfig(userConfig?: UserConfig): void {
     // sets the current global config
-    Config.fromUserConfig(userConfig).setCurrent();
+    this.config = Config.fromUserConfig(userConfig);
   }
 
   private setStorage(): void {
-    Config.current.storage = StorageUtils.createFromConfig(Config.current);
+    this.config.storage = StorageUtils.createFromConfig(this.config);
   }
 
   private setPipeline(): void {
-    Config.current.pipeline = new Pipeline([
+    // initial state of the pipeline
+    this.config.pipeline = new Pipeline([
       new StorageExtractor({ storage: this.config.storage }),
       new ArrayToTabularTransformer(),
     ]);
   }
 
-  get config(): Config {
-    return Config.current;
-  }
-
   createElement(): VNode {
-    const config = Config.current;
-
     return h(Container, {
-      pipeline: config.pipeline,
-      header: config.header,
-      width: config.width,
+      config: this.config,
+      pipeline: this.config.pipeline,
+      header: this.config.header,
+      width: this.config.width,
     });
   }
 

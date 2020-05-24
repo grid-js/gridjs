@@ -1,4 +1,4 @@
-import Config from '../src/config';
+import { Config } from '../src/config';
 import MemoryStorage from '../src/storage/memory';
 import Storage from '../src/storage/storage';
 

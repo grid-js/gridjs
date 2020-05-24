@@ -1,10 +1,14 @@
 import { h } from 'preact';
 import { BaseComponent, BaseProps } from '../../base';
-import Config from '../../../config';
 import GlobalSearchFilter from '../../../pipeline/filter/globalSearch';
 import className from '../../../util/className';
 import store, { SearchStoreState } from './store';
 import actions from './actions';
+import Pipeline from '../../../pipeline/pipeline';
+
+export interface SearchProps extends BaseProps {
+  pipeline: Pipeline<any>;
+}
 
 export interface SearchConfig {
   keyword?: string;
@@ -12,11 +16,11 @@ export interface SearchConfig {
   placeholder?: string;
 }
 
-export class Search extends BaseComponent<BaseProps & SearchConfig, {}> {
+export class Search extends BaseComponent<SearchProps & SearchConfig, {}> {
   private searchProcessor: GlobalSearchFilter;
 
   static defaultProps = {
-    placeholder: "Type a keyword..."
+    placeholder: 'Type a keyword...',
   };
 
   constructor(props) {
@@ -36,7 +40,7 @@ export class Search extends BaseComponent<BaseProps & SearchConfig, {}> {
       this.searchProcessor = searchProcessor;
 
       // adds a new processor to the pipeline
-      Config.current.pipeline.register(searchProcessor);
+      props.pipeline.register(searchProcessor);
     }
   }
 

@@ -1,12 +1,11 @@
 import { h, Fragment } from 'preact';
 import { BaseComponent, BaseProps } from '../base';
-import Config from '../../config';
 import PaginationLimit from '../../pipeline/limit/pagination';
 import className from '../../util/className';
+import Pipeline from '../../pipeline/pipeline';
 
 interface PaginationState {
   page: number;
-  enabled: boolean;
   limit?: number;
   total: number;
   pages: number;
@@ -22,8 +21,12 @@ export interface PaginationConfig {
   buttonsCount?: number;
 }
 
+interface PaginationProps extends BaseProps {
+  pipeline: Pipeline<any>;
+}
+
 export class Pagination extends BaseComponent<
-  BaseProps & PaginationConfig,
+  PaginationProps & PaginationConfig,
   PaginationState
 > {
   private processor: PaginationLimit;
@@ -33,14 +36,13 @@ export class Pagination extends BaseComponent<
     nextButton: true,
     prevButton: true,
     buttonsCount: 3,
-    limit: 10
+    limit: 10,
   };
 
   constructor(props) {
     super();
 
     this.state = {
-      enabled: props.enabled,
       limit: props.limit,
       page: props.page || 0,
       total: 0,
@@ -49,7 +51,7 @@ export class Pagination extends BaseComponent<
   }
 
   componentWillMount(): void {
-    if (this.state.enabled) {
+    if (this.props.enabled) {
       const processor = new PaginationLimit({
         limit: this.state.limit,
         page: this.state.page,
@@ -66,12 +68,12 @@ export class Pagination extends BaseComponent<
 
       this.processor = processor;
 
-      Config.current.pipeline.register(processor);
+      this.props.pipeline.register(processor);
     }
   }
 
   componentDidMount(): void {
-    Config.current.pipeline.updated(processor => {
+    this.props.pipeline.updated(processor => {
       // this is to ensure that the current page is set to 0
       // when a processor is updated for some reason
       if (processor !== this.processor) {
@@ -103,7 +105,7 @@ export class Pagination extends BaseComponent<
   }
 
   render() {
-    if (!this.state.enabled) return null;
+    if (!this.props.enabled) return null;
 
     // how many pagination buttons to render?
     const maxCount: number = Math.min(

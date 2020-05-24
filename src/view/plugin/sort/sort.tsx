@@ -3,14 +3,15 @@ import { h, JSX } from 'preact';
 import { BaseComponent, BaseProps } from '../../base';
 import className from '../../../util/className';
 import { TColumn } from '../../../types';
-
-import Config from '../../../config';
 import { ProcessorType } from '../../../pipeline/processor';
 import NativeSort from '../../../pipeline/sort/native';
 import store, { SortStoreState } from './store';
 import actions from './actions';
+import Pipeline from '../../../pipeline/pipeline';
+import log from '../../../util/log';
 
 export interface SortProps extends BaseProps {
+  pipeline: Pipeline<any>;
   index: number;
   column: TColumn;
 }
@@ -54,15 +55,13 @@ export class Sort extends BaseComponent<SortProps, SortState> {
   }
 
   private getOrCreateSortProcessor(): NativeSort {
-    const processors = Config.current.pipeline.getStepsByType(
-      ProcessorType.Sort,
-    );
+    const processors = this.props.pipeline.getStepsByType(ProcessorType.Sort);
     let processor;
 
     // my assumption is that we only have ONE sorting processor in the
     // entire pipeline and that's why I'm displaying a warning here
     if (processors.length > 1) {
-      console.warn(
+      log.warn(
         'There are more than sorting pipeline registered, selecting the first one',
       );
     }
@@ -74,7 +73,7 @@ export class Sort extends BaseComponent<SortProps, SortState> {
         columns: store.state,
       });
 
-      Config.current.pipeline.register(processor);
+      this.props.pipeline.register(processor);
     }
 
     return processor;
