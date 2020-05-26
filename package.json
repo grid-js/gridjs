@@ -42,7 +42,7 @@
     "typescript": "^3.9.3"
   },
   "scripts": {
-    "clean": "rimraf coverage build tmp",
+    "clean": "rimraf coverage dist tmp",
     "build": "rollup -c",
     "build:watch": "rollup -c --watch",
     "lint": "eslint . --ext .ts,.tsx",
