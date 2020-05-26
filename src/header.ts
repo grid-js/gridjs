@@ -71,7 +71,7 @@ class Header extends Base {
     const thead = element.querySelector('thead');
     const ths = thead.querySelectorAll('th');
 
-    for (const th of ths) {
+    for (const th of ths as any) {
       header.columns.push({
         name: th.innerText,
       });

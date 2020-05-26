@@ -41,7 +41,7 @@ class StorageUtils {
     const tbody = element.querySelector('tbody');
     const rows = tbody.querySelectorAll('tr');
 
-    for (const row of rows) {
+    for (const row of rows as any) {
       const cells = row.querySelectorAll('td');
       const parsedRow = [];
 

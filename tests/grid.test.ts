@@ -1,12 +1,11 @@
 import Grid from '../src/grid';
-import StorageError from '../src/error/storage';
 import MemoryStorage from '../src/storage/memory';
 
 describe('Grid class', () => {
   it('should raise an exception with empty config', () => {
     expect(() => {
       new Grid({});
-    }).toThrow(StorageError);
+    }).toThrow("Could not determine the storage type");
   });
 
   it('should init a memory storage', () => {

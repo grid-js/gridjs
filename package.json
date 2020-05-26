@@ -1,9 +1,9 @@
 {
   "name": "gridjs",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Fast and extensible table library",
   "main": "dist/gridjs.production.min.js",
-  "module": "dist/gridjs.production.es5.min.js",
+  "module": "dist/gridjs.production.es.min.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/*"
@@ -14,15 +14,15 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^7.1.3",
     "@types/enzyme": "^3.10.5",
-    "@types/jest": "^25.1.5",
-    "@types/node": "^12.12.39",
+    "@types/jest": "^25.2.3",
+    "@types/node": "^12.12.42",
     "@typescript-eslint/eslint-plugin": "~2.19.2",
     "@typescript-eslint/parser": "~2.19.2",
-    "autoprefixer": "^9.7.6",
+    "autoprefixer": "^9.8.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^2.2.0",
     "eslint": "~6.8.0",
-    "eslint-config-prettier": "^6.10.1",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-jest": "~23.7.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "~25.1.0",
@@ -30,23 +30,21 @@
     "node-sass-chokidar": "^1.4.0",
     "prettier": "~1.19.1",
     "rimraf": "~3.0.2",
-    "rollup": "^2.10.0",
+    "rollup": "^2.10.9",
     "rollup-plugin-postcss": "^2.9.0",
     "rollup-plugin-sizes": "^1.0.2",
     "rollup-plugin-terser": "^5.3.0",
     "rollup-plugin-typescript2": "^0.27.1",
     "source-map-loader": "^0.2.4",
-    "ts-jest": "^25.2.1",
+    "ts-jest": "^25.5.1",
     "ts-loader": "^6.2.2",
     "tsutils": "~3.17.0",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.3"
   },
   "scripts": {
     "clean": "rimraf coverage build tmp",
     "build": "rollup -c",
     "build:watch": "rollup -c --watch",
-    "build-tsc": "tsc -p tsconfig.release.json",
-    "build-tsc:watch": "tsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
@@ -54,7 +52,7 @@
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "preact": "^10.4.1",
+    "preact": "^10.4.4",
     "tslib": "~1.10.0"
   }
 }

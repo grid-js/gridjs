@@ -14,7 +14,7 @@ export default [
     input: 'index.ts',
     output: [
       { file: path('development'), name: lib, format: 'umd', sourcemap: true },
-      { file: path('development', 'es5'), format: 'es', sourcemap: true },
+      { file: path('development', 'es'), format: 'es', sourcemap: true },
     ],
     plugins: [
       resolve(),
@@ -41,7 +41,7 @@ export default [
     input: 'index.ts',
     output: [
       { file: path('production', 'min'), name: lib, format: 'umd', sourcemap: true },
-      { file: path('production', 'es5.min'), format: 'es', sourcemap: true },
+      { file: path('production', 'es.min'), format: 'es', sourcemap: true },
     ],
     plugins: [
       resolve(),
