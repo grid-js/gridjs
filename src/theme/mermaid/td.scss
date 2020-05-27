@@ -2,9 +2,8 @@
 
 td.gridjs {
   &-td {
+    border: 1px solid $gray3;
     padding: 12px 24px;
-    border-color: $gray3;
-    border-bottom-width: 1px;
     background-color: $white;
   }
 

@@ -1,7 +1,8 @@
 {
   "name": "gridjs",
-  "version": "0.1.6",
-  "description": "Fast and extensible table library",
+  "version": "0.1.7",
+  "description": "Advanced table plugin",
+  "homepage": "https://gridjs.io",
   "main": "dist/gridjs.production.min.js",
   "module": "dist/gridjs.production.es.min.js",
   "types": "dist/index.d.ts",

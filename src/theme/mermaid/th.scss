@@ -2,9 +2,8 @@
 
 th.gridjs {
   &-th {
+    border: 1px solid $gray3;
     padding: 14px 24px;
-    border-color: $gray3;
-    border-bottom-width: 1px;
     user-select: none;
 
     &-sort {
