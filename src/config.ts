@@ -27,6 +27,8 @@ interface UserConfigExtend {
   columns?: OneDArray<TColumn> | OneDArray<string>;
   search: SearchConfig | boolean;
   pagination: PaginationConfig | boolean;
+  // implicit option to enable the sort plugin globally
+  sort: boolean;
 }
 
 export type UserConfig = ProtoExtends<

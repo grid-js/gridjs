@@ -29,6 +29,14 @@ class Header extends Base {
     }
   }
 
+  private setSort(sort = false): void {
+    if (!sort) return;
+
+    for (const column of this.columns) {
+      column.sort = true;
+    }
+  }
+
   static fromUserConfig(userConfig: UserConfig): Header | null {
     // because we should be able to render a table without the header
     if (!userConfig.columns && !userConfig.from) {
@@ -50,6 +58,7 @@ class Header extends Base {
     }
 
     header.adjustWidth(userConfig.autoWidth);
+    header.setSort(userConfig.sort);
 
     return header;
   }
