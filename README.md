@@ -33,8 +33,19 @@ Piece of :cake:
 
 - [Install](https://gridjs.io/docs/index)
 - [Getting Started](https://gridjs.io/docs/index)
-- [Documentation](https://gridjs.io/docs/index)
 - [Examples](https://gridjs.io/docs/examples/hello-world)
+
+## Documentation
+
+Full documentation of Grid.js installation, config, API and examples are available
+on Grid.js website [grid.js/docs](https://gridjs.io/docs/index). 
+
+## Community
+
+- Join our [Discord channel](https://discord.gg/K55BwDY)
+- Take a look at [gridjs](https://stackoverflow.com/questions/tagged/gridjs) tag on StackOverflow or ask your own question!
+- Read our [blog](https://gridjs.io/blog) for the latest updates and announcements
+- Follow our Twitter account [@grid_js](https://twitter.com/grid_js)
 
 ## License
 
