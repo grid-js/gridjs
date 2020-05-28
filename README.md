@@ -38,7 +38,7 @@ Piece of :cake:
 - [Getting Started](https://gridjs.io/docs/index)
 - [Examples](https://gridjs.io/docs/examples/hello-world)
 
-## Documentation
+## Documentation :book:
 
 Full documentation of Grid.js installation, config, API and examples are available
 on Grid.js website [grid.js/docs](https://gridjs.io/docs/index). 
@@ -50,13 +50,7 @@ on Grid.js website [grid.js/docs](https://gridjs.io/docs/index).
 - Read our [blog](https://gridjs.io/blog) for the latest updates and announcements
 - Follow our Twitter account [@grid_js](https://twitter.com/grid_js)
 
-## License
-
-[MIT](https://github.com/grid-js/gridjs/blob/master/LICENSE)
-
 ## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -71,4 +65,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+## License
+
+[MIT](https://github.com/grid-js/gridjs/blob/master/LICENSE)
