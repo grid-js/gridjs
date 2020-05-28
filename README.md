@@ -13,7 +13,7 @@
 **A table library that works everywhere**
 
 - Simple and lightweight implementation
-- No vendor lock-in. Grid.js can be used with most popular JavaScript frameworks (React, Angular, Preact or VanillaJS)
+- No vendor lock-in. Grid.js can be used with any JavaScript frameworks (React, Angular, Preact or VanillaJS)
 - Written in TypeScript 
 - Supports all modern browsers and IE11+
 
