@@ -1,6 +1,6 @@
 {
   "name": "gridjs",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Advanced table plugin",
   "homepage": "https://gridjs.io",
   "main": "dist/gridjs.production.min.js",
