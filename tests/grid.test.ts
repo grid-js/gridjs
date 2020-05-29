@@ -5,7 +5,7 @@ describe('Grid class', () => {
   it('should raise an exception with empty config', () => {
     expect(() => {
       new Grid({});
-    }).toThrow("Could not determine the storage type");
+    }).toThrow('Could not determine the storage type');
   });
 
   it('should init a memory storage', () => {

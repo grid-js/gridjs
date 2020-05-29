@@ -9,4 +9,9 @@
       clear: both;
     }
   }
+
+  &-head:empty {
+    padding: 0;
+    border: none;
+  }
 }

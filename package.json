@@ -2,7 +2,17 @@
   "name": "gridjs",
   "version": "0.1.10",
   "description": "Advanced table plugin",
-  "keywords": ["grid", "table", "gridjs", "list", "filter", "sort", "pagination", "react", "angular"],
+  "keywords": [
+    "grid",
+    "table",
+    "gridjs",
+    "list",
+    "filter",
+    "sort",
+    "pagination",
+    "react",
+    "angular"
+  ],
   "homepage": "https://gridjs.io",
   "main": "dist/gridjs.production.min.js",
   "module": "dist/gridjs.production.es.min.js",

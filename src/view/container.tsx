@@ -55,9 +55,15 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
   render() {
     return (
       <div
-        className={className('container')}
+        className={`${className('container')} ${
+          this.state.status === Status.Loading ? className('loading') : ''
+        }`}
         style={{ width: this.props.width }}
       >
+        {this.state.status === Status.Loading && (
+          <div className={className('loading-bar')} />
+        )}
+
         <HeaderContainer config={this.props.config} />
 
         <div
