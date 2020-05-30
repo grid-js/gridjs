@@ -68,6 +68,6 @@
   "license": "MIT",
   "dependencies": {
     "preact": "^10.4.4",
-    "tslib": "~1.10.0"
+    "tslib": "~2.0.0"
   }
 }
