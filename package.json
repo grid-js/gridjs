@@ -14,6 +14,7 @@
     "angular"
   ],
   "homepage": "https://gridjs.io",
+  "repository": "https://github.com/grid-js/gridjs",
   "main": "dist/gridjs.production.min.js",
   "module": "dist/gridjs.production.es.min.js",
   "types": "dist/index.d.ts",
@@ -38,6 +39,7 @@
     "eslint-plugin-jest": "~23.7.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "~25.1.0",
+    "lerna-changelog": "^1.0.1",
     "node-sass": "^4.14.1",
     "node-sass-chokidar": "^1.4.0",
     "prettier": "~1.19.1",
@@ -59,7 +61,8 @@
     "build:watch": "rollup -c --watch",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "changelog": "lerna-changelog"
   },
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
   "license": "MIT",
