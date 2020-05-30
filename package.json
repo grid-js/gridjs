@@ -51,7 +51,7 @@
     "rollup-plugin-typescript2": "^0.27.1",
     "source-map-loader": "^0.2.4",
     "ts-jest": "^25.5.1",
-    "ts-loader": "^6.2.2",
+    "ts-loader": "^7.0.5",
     "tsutils": "~3.17.0",
     "typescript": "^3.9.3"
   },
