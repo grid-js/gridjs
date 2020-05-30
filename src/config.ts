@@ -8,7 +8,7 @@ import Header from './header';
 
 // Config type used internally
 export interface Config {
-  data?: TwoDArray<TCell>;
+  data?: TwoDArray<TCell> | Function;
   header?: Header;
   /** to parse a HTML table and load the data */
   from: HTMLElement;

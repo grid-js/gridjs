@@ -3,7 +3,7 @@
  */
 abstract class Storage {
   abstract async get(): Promise<any[][]>;
-  abstract async set(rows: any[][]): Promise<boolean>;
+  abstract set(data: any[][] | Function): Storage;
   abstract get length(): Promise<number>;
 }
 

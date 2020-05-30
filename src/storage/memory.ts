@@ -1,25 +1,30 @@
 import Storage from './storage';
 
 class MemoryStorage extends Storage {
-  private rows: any[][] = [];
+  private data: Function;
 
-  constructor(data: any[][]) {
+  constructor(data: any[][] | Function) {
     super();
     this.set(data);
   }
 
   public async get(): Promise<any[][]> {
-    return this.rows;
+    return await this.data();
   }
 
-  public async set(rows: any[][]): Promise<boolean> {
-    this.rows = rows;
-    return true;
+  public set(data: any[][] | Function): MemoryStorage {
+    if (data instanceof Array) {
+      this.data = (): any[][] => data;
+    } else if (data instanceof Function) {
+      this.data = data;
+    }
+
+    return this;
   }
 
   public get length(): Promise<number> {
     return new Promise<number>(resolve =>
-      resolve(Array.from(this.rows).length),
+      resolve(Array.from(this.data()).length),
     );
   }
 }

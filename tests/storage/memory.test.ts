@@ -30,4 +30,24 @@ describe('MemoryStorage class', () => {
 
     expect(await memoryStorage.get()).toStrictEqual([['a', 'b', 'c']]);
   });
+
+  it('should set rows from a function', async () => {
+    const memoryStorage = new MemoryStorage(data);
+
+    await memoryStorage.set(() => [['a', 'b', 'c']]);
+
+    expect(await memoryStorage.get()).toStrictEqual([['a', 'b', 'c']]);
+  });
+
+  it('should set rows from an async function', async () => {
+    const memoryStorage = new MemoryStorage(data);
+
+    await memoryStorage.set(async () => {
+      return new Promise(resolve => {
+        setTimeout(() => resolve([['a', 'b', 'c']]), 500);
+      });
+    });
+
+    expect(await memoryStorage.get()).toStrictEqual([['a', 'b', 'c']]);
+  });
 });
