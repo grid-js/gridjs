@@ -38,7 +38,7 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-jest": "~23.7.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "~25.1.0",
+    "jest": "~25.5.4",
     "lerna-changelog": "^1.0.1",
     "node-sass": "^4.14.1",
     "node-sass-chokidar": "^1.4.0",
