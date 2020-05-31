@@ -7,10 +7,11 @@ import { TCell } from '../../types';
 
 export interface TDProps extends BaseProps {
   cell: Cell<TCell>;
+  colSpan?: number;
 }
 
 export class TD extends BaseComponent<TDProps, {}> {
   render() {
-    return <td className={className('td')}>{this.props.cell.data}</td>;
+    return <td colSpan={this.props.colSpan} className={className('td')}>{this.props.cell.data}</td>;
   }
 }

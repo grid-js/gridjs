@@ -75,6 +75,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
             data={this.state.data}
             header={this.props.header}
             width={this.props.width}
+            status={this.state.status}
           />
 
           <FooterContainer config={this.props.config} />
