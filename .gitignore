@@ -29,3 +29,6 @@ dist/
 
 # Misc
 .DS_Store
+
+# Lerna
+.changelog

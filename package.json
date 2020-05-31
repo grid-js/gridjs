@@ -69,5 +69,17 @@
   "dependencies": {
     "preact": "^10.4.4",
     "tslib": "~2.0.0"
+  },
+  "changelog": {
+    "labels": {
+      "new feature": ":rocket: New Feature",
+      "breaking change": ":boom: Breaking Change",
+      "bug fix": ":bug: Bug Fix",
+      "polish": ":nail_care: Polish",
+      "documentation": ":memo: Documentation",
+      "internal": ":house: Internal",
+      "performance": ":running_woman: Performance"
+    },
+    "cacheDir": ".changelog"
   }
 }
