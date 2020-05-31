@@ -7,6 +7,7 @@ import StorageUtils from '../../src/storage/storageUtils';
 import Pipeline from '../../src/pipeline/pipeline';
 import StorageExtractor from '../../src/pipeline/extractor/storage';
 import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
+import { Status } from '../../src/types';
 
 describe('Table component', () => {
   let config: Config;
@@ -30,6 +31,19 @@ describe('Table component', () => {
       <Table
         pipeline={config.pipeline}
         data={await config.pipeline.process()}
+        status={Status.Loaded}
+      />,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
+
+  it('should render a table with loading', async () => {
+    const table = mount(
+      <Table
+        pipeline={config.pipeline}
+        data={await config.pipeline.process()}
+        status={Status.Loading}
       />,
     );
 
@@ -42,6 +56,7 @@ describe('Table component', () => {
         pipeline={config.pipeline}
         data={await config.pipeline.process()}
         header={Header.fromArrayOfString(['h1', 'h2', 'h3'])}
+        status={Status.Loaded}
       />,
     );
 
@@ -55,6 +70,7 @@ describe('Table component', () => {
         data={await config.pipeline.process()}
         width="300px"
         header={Header.fromArrayOfString(['h1', 'h2', 'h3'])}
+        status={Status.Loaded}
       />,
     );
 
@@ -71,6 +87,7 @@ describe('Table component', () => {
         pipeline={config.pipeline}
         data={await config.pipeline.process()}
         header={header}
+        status={Status.Loaded}
       />,
     );
 
@@ -87,6 +104,7 @@ describe('Table component', () => {
         pipeline={config.pipeline}
         data={await config.pipeline.process()}
         header={header}
+        status={Status.Loaded}
       />,
     );
 

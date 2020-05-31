@@ -8,10 +8,20 @@ import { TCell } from '../../types';
 export interface TDProps extends BaseProps {
   cell: Cell<TCell>;
   colSpan?: number;
+  className?: string;
 }
 
 export class TD extends BaseComponent<TDProps, {}> {
   render() {
-    return <td colSpan={this.props.colSpan} className={className('td')}>{this.props.cell.data}</td>;
+    return (
+      <td
+        colSpan={this.props.colSpan}
+        className={`${className('td')}${
+          this.props.className ? ' ' + this.props.className : ''
+        }`}
+      >
+        {this.props.cell.data}
+      </td>
+    );
   }
 }
