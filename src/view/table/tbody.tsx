@@ -6,9 +6,8 @@ import Tabular from '../../tabular';
 import { BaseComponent, BaseProps } from '../base';
 import className from '../../util/className';
 import { Status, TCell } from '../../types';
-import Cell from '../../cell';
-import { TD } from './td';
 import Header from '../../header';
+import { MessageRow } from './messageRow';
 
 interface TBodyProps extends BaseProps {
   data: Tabular<TCell>;
@@ -33,24 +32,21 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
           })}
 
         {this.props.status === Status.Loading && (
-          <TR>
-            <TD
-              colSpan={this.headerLength()}
-              cell={new Cell('Loading...')}
-              className={`${className('message')} ${className('loading')}`}
-            />
-          </TR>
+          <MessageRow
+            message="Loading..."
+            colSpan={this.headerLength()}
+            className={className('loading')}
+          />
         )}
 
-        {this.props.status === Status.Loaded && this.props.data.length === 0 && (
-          <TR>
-            <TD
+        {this.props.status === Status.Loaded &&
+          this.props.data.length === 0 && (
+            <MessageRow
+              message="No matching records found"
               colSpan={this.headerLength()}
-              cell={new Cell('No matching records found')}
-              className={`${className('message')} ${className('notfound')}`}
+              className={className('notfound')}
             />
-          </TR>
-        )}
+          )}
       </tbody>
     );
   }
