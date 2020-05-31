@@ -14,4 +14,8 @@ td.gridjs {
   &-td:last-child {
     border-right: none;
   }
+
+  &-message {
+    text-align: center;
+  }
 }
