@@ -29,7 +29,7 @@
     "@types/enzyme": "^3.10.5",
     "@types/jest": "^25.2.3",
     "@types/node": "^12.12.42",
-    "@typescript-eslint/eslint-plugin": "~2.19.2",
+    "@typescript-eslint/eslint-plugin": "~2.34.0",
     "@typescript-eslint/parser": "~2.34.0",
     "autoprefixer": "^9.8.0",
     "enzyme": "^3.11.0",
