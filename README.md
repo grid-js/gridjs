@@ -5,7 +5,7 @@
 
 <p align="center">
     <a href="https://gridjs.io" target="_blank">
-        <img src="./assets/logo/logo_name.png" height="200" alt="Grid.js" />
+        <img src="https://gridjs.io/img/logo/text_large.png" height="200" alt="Grid.js" />
     </a>
 </p>
 <p align="center">Advanced table plugin</p>
