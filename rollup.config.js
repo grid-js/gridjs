@@ -4,6 +4,7 @@ import postcss from 'rollup-plugin-postcss'
 import { terser } from 'rollup-plugin-terser'
 import size from 'rollup-plugin-sizes'
 import resolve from '@rollup/plugin-node-resolve';
+import pathlib from 'path';
 
 const lib = 'gridjs';
 
@@ -24,7 +25,7 @@ export default [
           autoprefixer,
         ],
         sourceMap: true,
-        extract: 'dist/theme/mermaid.css',
+        extract: pathlib.resolve('./dist/theme/mermaid.css'),
         extensions: ['.sass','.css', '.scss']
       }),
       typescript({
@@ -50,7 +51,7 @@ export default [
         plugins: [
           autoprefixer,
         ],
-        extract: 'dist/theme/mermaid.min.css',
+        extract: pathlib.resolve('./dist/theme/mermaid.min.css'),
         extensions: ['.sass','.css', '.scss'],
         minimize: true
       }),
