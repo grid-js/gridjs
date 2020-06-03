@@ -18,7 +18,7 @@ describe('Container component', () => {
       ['a', 'b', 'c'],
     ];
 
-    config.storage = StorageUtils.createFromConfig(config);
+    config.storage = StorageUtils.createFromUserConfig(config);
     config.pipeline = new Pipeline([
       new StorageExtractor({ storage: config.storage }),
       new ArrayToTabularTransformer(),

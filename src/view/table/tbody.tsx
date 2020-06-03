@@ -40,6 +40,7 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
         )}
 
         {this.props.status === Status.Loaded &&
+          this.props.data &&
           this.props.data.length === 0 && (
             <MessageRow
               message="No matching records found"
@@ -47,6 +48,14 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
               className={className('notfound')}
             />
           )}
+
+        {this.props.status === Status.Error && (
+          <MessageRow
+            message="An error happened while fetching the data."
+            colSpan={this.headerLength()}
+            className={className('error')}
+          />
+        )}
       </tbody>
     );
   }

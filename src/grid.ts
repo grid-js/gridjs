@@ -16,8 +16,8 @@ class Grid {
 
   bootstrap(userConfig?: UserConfig): void {
     this.setConfig(userConfig);
-    this.setStorage();
-    this.setPipeline();
+    this.setStorage(userConfig);
+    this.setPipeline(this.config);
   }
 
   get config(): Config {
@@ -33,14 +33,14 @@ class Grid {
     this.config = Config.fromUserConfig(userConfig);
   }
 
-  private setStorage(): void {
-    this.config.storage = StorageUtils.createFromConfig(this.config);
+  private setStorage(userConfig: UserConfig): void {
+    this.config.storage = StorageUtils.createFromUserConfig(userConfig);
   }
 
-  private setPipeline(): void {
+  private setPipeline(config: Config): void {
     // initial state of the pipeline
     this.config.pipeline = new Pipeline([
-      new StorageExtractor({ storage: this.config.storage }),
+      new StorageExtractor({ storage: config.storage }),
       new ArrayToTabularTransformer(),
     ]);
   }

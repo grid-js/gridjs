@@ -3,7 +3,7 @@
  */
 abstract class Storage {
   abstract async get(): Promise<any[][]>;
-  abstract set(data: any[][] | Function): Storage;
+  set?(data: any[][] | Function): Storage;
   abstract get length(): Promise<number>;
 }
 

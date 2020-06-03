@@ -24,6 +24,12 @@ export interface Config {
 
 // Config type used by the consumers
 interface UserConfigExtend {
+  server?: {
+    url: string;
+    then?: (data: any) => any[][];
+    // fetch() opts
+    opts?: any[];
+  };
   columns?: OneDArray<TColumn> | OneDArray<string>;
   search: SearchConfig | boolean;
   pagination: PaginationConfig | boolean;

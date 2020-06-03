@@ -1,7 +1,8 @@
-import { Config } from '../config';
+import { UserConfig } from '../config';
 import MemoryStorage from './memory';
 import Storage from './storage';
 import StorageError from '../error/storage';
+import ServerStorage from './server';
 
 class StorageUtils {
   /**
@@ -9,7 +10,7 @@ class StorageUtils {
    *
    * @param config
    */
-  public static createFromConfig(config: Config): Storage | null {
+  public static createFromUserConfig(config: UserConfig): Storage | null {
     let storage = null;
     // `data` array is provided
     if (config.data) {
@@ -20,6 +21,14 @@ class StorageUtils {
       storage = new MemoryStorage(this.tableElementToArray(config.from));
       // remove the source table element from the DOM
       config.from.style.display = 'none';
+    }
+
+    if (config.server) {
+      storage = new ServerStorage(
+        config.server.url,
+        config.server.then,
+        config.server.opts,
+      );
     }
 
     if (!storage) {
