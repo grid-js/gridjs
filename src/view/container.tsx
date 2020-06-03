@@ -10,6 +10,7 @@ import { FooterContainer } from './footerContainer';
 import Pipeline from '../pipeline/pipeline';
 import Header from '../header';
 import { Config } from '../config';
+import log from '../util/log';
 
 interface ContainerProps extends BaseProps {
   config: Config;
@@ -33,22 +34,30 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     };
   }
 
-  private setData(data: Tabular<TCell>): void {
+  private async processPipeline() {
     this.setState({
-      data: data,
-      status: Status.Loaded,
+      status: Status.Loading,
     });
+
+    try {
+      this.setState({
+        data: await this.props.pipeline.process(),
+        status: Status.Loaded,
+      });
+    } catch (e) {
+      log.error(e);
+
+      this.setState({
+        status: Status.Error,
+      });
+    }
   }
 
   async componentDidMount() {
-    this.setData(await this.props.pipeline.process());
+    await this.processPipeline();
 
     this.props.pipeline.updated(async () => {
-      this.setState({
-        status: Status.Loading,
-      });
-
-      this.setData(await this.props.pipeline.process());
+      await this.processPipeline();
     });
   }
 

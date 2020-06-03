@@ -8,7 +8,7 @@ class Logger {
     return `[Grid.js] [${type.toUpperCase()}]: ${message}`;
   }
 
-  error(message: string, throwException?: boolean): void {
+  error(message: string, throwException = false): void {
     const msg = this.format(message, 'error');
 
     if (throwException) {
