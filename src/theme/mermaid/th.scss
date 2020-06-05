@@ -5,6 +5,8 @@ th.gridjs {
     border: 1px solid $gray3;
     padding: 14px 24px;
     user-select: none;
+    box-sizing: content-box;
+    white-space: nowrap;
 
     &-sort {
       cursor: pointer;

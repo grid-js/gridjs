@@ -18,9 +18,15 @@ export function px(width: number): string {
   return `${Math.floor(width)}px`;
 }
 
+/**
+ * Tries to guess the column with based on the content of elements array
+ * and the parent element padding
+ *
+ * @param elements
+ */
 export function calculateWidth(elements: string[]): number {
   // in pixels
-  const unit = 10;
+  const unit = 6;
   const paddingRight = 30;
   const paddingLeft = 30;
   const sortButton = 16;

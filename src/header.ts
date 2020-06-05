@@ -48,12 +48,16 @@ class Header extends Base {
     for (const column of this.columns) {
       if (!column.width && autoWidth) {
         const i = this.columns.indexOf(column);
-        const elements = [column.name];
+        let elements = [column.name];
 
         // adding the first and last item of the data
         if (data.length) {
-          elements.push(String(data.rows[0].cells[i].data));
-          elements.push(String(data.rows[data.length - 1].cells[i].data));
+          elements = elements.concat(
+            data.rows
+              .slice(0, 10)
+              .filter(x => x)
+              .map(row => String(row.cells[i].data)),
+          );
         }
 
         // calculates the width for header cell, first row cell content and last row cell content

@@ -5,6 +5,7 @@ td.gridjs {
     border: 1px solid $gray3;
     padding: 12px 24px;
     background-color: $white;
+    box-sizing: content-box;
   }
 
   &-td:first-child {

@@ -35,7 +35,7 @@ export class TH extends BaseComponent<THProps, {}> {
       <th
         className={cls}
         onClick={this.onClick.bind(this)}
-        width={this.props.column.width}
+        style={{ width: this.props.column.width }}
       >
         {this.props.column.name}
         {this.isSortable() && (
