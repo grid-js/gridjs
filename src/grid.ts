@@ -66,6 +66,8 @@ class Grid {
       return;
     }
 
+    this.config.container = container;
+
     render(this.createElement(), container);
   }
 }

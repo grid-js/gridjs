@@ -16,7 +16,7 @@ export class THead extends BaseComponent<THeadProps, {}> {
   render() {
     if (this.props.header) {
       return (
-        <thead className={className('thead')}>
+        <thead key={this.props.header.id} className={className('thead')}>
           <TR>
             {this.props.header.columns.map((col, i) => {
               return (

@@ -21,6 +21,7 @@ interface ContainerProps extends BaseProps {
 
 interface ContainerState {
   status: Status;
+  header?: Header;
   data?: Tabular<TCell>;
 }
 
@@ -30,6 +31,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
     this.state = {
       status: Status.Loading,
+      header: props.header,
       data: null,
     };
   }
@@ -54,7 +56,21 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
   }
 
   async componentDidMount() {
+    const config = this.props.config;
+
     await this.processPipeline();
+
+    if (config.header) {
+      // now that we have the data, let's adjust columns width
+      // note that we only calculate the columns width once
+      this.setState({
+        header: config.header.adjustWidth(
+          config.container,
+          this.state.data,
+          config.autoWidth,
+        ),
+      });
+    }
 
     this.props.pipeline.updated(async () => {
       await this.processPipeline();
@@ -82,13 +98,13 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
           <Table
             pipeline={this.props.pipeline}
             data={this.state.data}
-            header={this.props.header}
+            header={this.state.header}
             width={this.props.width}
             status={this.state.status}
           />
-
-          <FooterContainer config={this.props.config} />
         </div>
+
+        <FooterContainer config={this.props.config} />
       </div>
     );
   }

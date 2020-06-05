@@ -1,7 +1,9 @@
-import { OneDArray, TColumn } from './types';
+import { OneDArray, TCell, TColumn } from './types';
 import Base from './base';
 import { isArrayOfType } from './util/type';
 import { UserConfig } from './config';
+import Tabular from './tabular';
+import { calculateWidth, getWidth, px } from './util/width';
 
 class Header extends Base {
   private _columns: OneDArray<TColumn>;
@@ -20,13 +22,48 @@ class Header extends Base {
     this._columns = columns;
   }
 
-  adjustWidth(autoWidth?: boolean): void {
+  /**
+   * Tries to automatically adjust the width of columns based on:
+   *    - Header cell content
+   *    - Cell content of the first row
+   *    - Cell content of the last row
+   * @param autoWidth
+   * @param container
+   * @param data
+   */
+  adjustWidth(
+    container: Element,
+    data: Tabular<TCell>,
+    autoWidth = true,
+  ): this {
+    if (!container) {
+      // we can't calculate the width because the container
+      // is unknown at this stage
+      return this;
+    }
+
+    // pixels
+    const containerWidth = container.clientWidth;
+
     for (const column of this.columns) {
       if (!column.width && autoWidth) {
-        // FIXME: we should calculate the width based on the body cell content
-        column.width = `${Math.round(100 / this.columns.length)}%`;
+        const i = this.columns.indexOf(column);
+        const elements = [column.name];
+
+        // adding the first and last item of the data
+        if (data.length) {
+          elements.push(String(data.rows[0].cells[i].data));
+          elements.push(String(data.rows[data.length - 1].cells[i].data));
+        }
+
+        // calculates the width for header cell, first row cell content and last row cell content
+        column.width = px(calculateWidth(elements));
+      } else {
+        column.width = px(getWidth(column.width, containerWidth));
       }
     }
+
+    return this;
   }
 
   private setSort(sort = false): void {
@@ -57,7 +94,6 @@ class Header extends Base {
       header.columns = userConfig.columns as OneDArray<TColumn>;
     }
 
-    header.adjustWidth(userConfig.autoWidth);
     header.setSort(userConfig.sort);
 
     return header;
@@ -83,6 +119,7 @@ class Header extends Base {
     for (const th of ths as any) {
       header.columns.push({
         name: th.innerText,
+        width: th.width,
       });
     }
 
