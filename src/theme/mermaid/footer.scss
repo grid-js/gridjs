@@ -3,6 +3,8 @@
 .gridjs {
   &-footer {
     display: block;
+    position: relative;
+    z-index: 5;
     padding: 12px 24px;
     border-top: 1px solid $gray3;
     background-color: $white;
