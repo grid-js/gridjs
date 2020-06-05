@@ -8,6 +8,8 @@ import Header from './header';
 
 // Config type used internally
 export interface Config {
+  /** container element that is used to mount the Grid.js to */
+  container?: Element;
   data?: TwoDArray<TCell> | Function;
   header?: Header;
   /** to parse a HTML table and load the data */
