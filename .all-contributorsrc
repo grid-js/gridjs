@@ -14,6 +14,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "MelvinIdema",
+      "name": "Melvin Idema",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2219074?v=4",
+      "profile": "http://www.melvinidema.nl",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
