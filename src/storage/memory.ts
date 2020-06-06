@@ -23,7 +23,7 @@ class MemoryStorage extends Storage {
   }
 
   public get length(): Promise<number> {
-    return new Promise<number>(resolve =>
+    return new Promise<number>((resolve) =>
       resolve(Array.from(this.data()).length),
     );
   }

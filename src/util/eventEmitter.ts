@@ -73,7 +73,7 @@ export class EventEmitter<EventTypes> {
     }
 
     this.callbacks[eventName] = this.callbacks[eventName].filter(
-      value => value != listener,
+      (value) => value != listener,
     );
 
     return this;
@@ -88,7 +88,7 @@ export class EventEmitter<EventTypes> {
     this.init(eventName);
 
     if (this.callbacks[eventName].length > 0) {
-      this.callbacks[eventName].forEach(value => value(...args));
+      this.callbacks[eventName].forEach((value) => value(...args));
       return true;
     }
 

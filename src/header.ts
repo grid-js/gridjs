@@ -3,7 +3,9 @@ import Base from './base';
 import { isArrayOfType } from './util/type';
 import { UserConfig } from './config';
 import Tabular from './tabular';
-import { calculateWidth, getWidth, px } from './util/width';
+import { width, px, getWidth } from './util/width';
+import { ShadowTable } from './view/table/shadow';
+import { createRef, h, render } from 'preact';
 
 class Header extends Base {
   private _columns: OneDArray<TColumn>;
@@ -45,26 +47,38 @@ class Header extends Base {
     // pixels
     const containerWidth = container.clientWidth;
 
+    // let's create a shadow table with the first 10 rows of the data
+    // and let the browser to render the table with table-layout: auto
+    // no padding, margin or border to get the minimum space required
+    // to render columns. One the table is rendered and widths are known,
+    // we unmount the shadow table from the DOM and set the correct width
+    const shadowTable = createRef();
+    if (data && data.length && autoWidth) {
+      // render a ShadowTable with the first 10 rows
+      const el = h(ShadowTable, {
+        data: Tabular.fromRows(data.rows.slice(0, 10)),
+        header: this,
+      });
+      el.ref = shadowTable;
+
+      // TODO: we should NOT query the container here. use Refs instead
+      render(el, container.querySelector('#gridjs-temp'));
+    }
+
     for (const column of this.columns) {
       if (!column.width && autoWidth) {
         const i = this.columns.indexOf(column);
-        let elements = [column.name];
-
-        // adding the first and last item of the data
-        if (data.length) {
-          elements = elements.concat(
-            data.rows
-              .slice(0, 10)
-              .filter(x => x)
-              .map(row => String(row.cells[i].data)),
-          );
-        }
-
-        // calculates the width for header cell, first row cell content and last row cell content
-        column.width = px(calculateWidth(elements));
+        // tries to find the corresponding cell from the ShadowTable and
+        // set the correct width
+        column.width = px(getWidth(shadowTable.current.base, i));
       } else {
-        column.width = px(getWidth(column.width, containerWidth));
+        column.width = px(width(column.width, containerWidth));
       }
+    }
+
+    if (data && data.length && autoWidth) {
+      // unmount the shadow table from temp
+      render(null, container.querySelector('#gridjs-temp'));
     }
 
     return this;

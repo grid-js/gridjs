@@ -43,7 +43,7 @@ describe('MemoryStorage class', () => {
     const memoryStorage = new MemoryStorage(data);
 
     await memoryStorage.set(async () => {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         setTimeout(() => resolve([['a', 'b', 'c']]), 500);
       });
     });
