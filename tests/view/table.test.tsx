@@ -55,7 +55,7 @@ describe('Table component', () => {
       <Table
         pipeline={config.pipeline}
         data={await config.pipeline.process()}
-        header={Header.fromArrayOfString(['h1', 'h2', 'h3'])}
+        header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
         status={Status.Loaded}
       />,
     );
@@ -69,7 +69,7 @@ describe('Table component', () => {
         pipeline={config.pipeline}
         data={await config.pipeline.process()}
         width="300px"
-        header={Header.fromArrayOfString(['h1', 'h2', 'h3'])}
+        header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
         status={Status.Loaded}
       />,
     );
@@ -78,7 +78,7 @@ describe('Table component', () => {
   });
 
   it('should render a table with column width', async () => {
-    const header = Header.fromArrayOfString(['h1', 'h2', 'h3']);
+    const header = Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] });
     header.columns[0].width = '10%';
     header.columns[2].width = '300px';
 
@@ -95,7 +95,7 @@ describe('Table component', () => {
   });
 
   it('should render a table with column sort', async () => {
-    const header = Header.fromArrayOfString(['h1', 'h2', 'h3']);
+    const header = Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] });
     header.columns[0].sort = true;
     header.columns[2].sort = true;
 
