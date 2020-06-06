@@ -57,7 +57,7 @@ export class Pagination extends BaseComponent<
         page: this.state.page,
       });
 
-      processor.beforeProcess(tabular => {
+      processor.beforeProcess((tabular) => {
         const totalRows = tabular.rows.length;
 
         this.setState({
@@ -73,7 +73,7 @@ export class Pagination extends BaseComponent<
   }
 
   componentDidMount(): void {
-    this.props.pipeline.updated(processor => {
+    this.props.pipeline.updated((processor) => {
       // this is to ensure that the current page is set to 0
       // when a processor is updated for some reason
       if (processor !== this.processor) {
@@ -153,8 +153,8 @@ export class Pagination extends BaseComponent<
           )}
 
           {Array.from(Array(maxCount).keys())
-            .map(i => this.state.page + (i - pagePivot))
-            .map(i => (
+            .map((i) => this.state.page + (i - pagePivot))
+            .map((i) => (
               <button
                 onClick={this.setPage.bind(this, i)}
                 className={this.currentPageClass(i)}

@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import { h, Fragment } from 'preact';
 
 import Tabular from '../tabular';
 import { BaseComponent, BaseProps } from './base';
@@ -79,33 +79,39 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
   render() {
     return (
-      <div
-        className={`${className('container')}${
-          this.state.status === Status.Loading ? ' ' + className('loading') : ''
-        }`}
-        style={{ width: this.props.width }}
-      >
-        {this.state.status === Status.Loading && (
-          <div className={className('loading-bar')} />
-        )}
-
-        <HeaderContainer config={this.props.config} />
-
+      <Fragment>
         <div
-          className={className('wrapper')}
+          className={`${className('container')}${
+            this.state.status === Status.Loading
+              ? ' ' + className('loading')
+              : ''
+          }`}
           style={{ width: this.props.width }}
         >
-          <Table
-            pipeline={this.props.pipeline}
-            data={this.state.data}
-            header={this.state.header}
-            width={this.props.width}
-            status={this.state.status}
-          />
+          {this.state.status === Status.Loading && (
+            <div className={className('loading-bar')} />
+          )}
+
+          <HeaderContainer config={this.props.config} />
+
+          <div
+            className={className('wrapper')}
+            style={{ width: this.props.width }}
+          >
+            <Table
+              pipeline={this.props.pipeline}
+              data={this.state.data}
+              header={this.state.header}
+              width={this.props.width}
+              status={this.state.status}
+            />
+          </div>
+
+          <FooterContainer config={this.props.config} />
         </div>
 
-        <FooterContainer config={this.props.config} />
-      </div>
+        <div id="gridjs-temp" className={className('temp')} />
+      </Fragment>
     );
   }
 }

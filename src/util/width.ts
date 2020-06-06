@@ -1,7 +1,4 @@
-export function getWidth(
-  width: string | number,
-  containerWidth?: number,
-): number {
+export function width(width: string | number, containerWidth?: number): number {
   if (typeof width == 'string') {
     if (width.indexOf('%') > -1) {
       return (containerWidth / 100) * parseInt(width, 10);
@@ -19,22 +16,22 @@ export function px(width: number): string {
 }
 
 /**
- * Tries to guess the column with based on the content of elements array
+ * Accepts a ShadowTable and tries to find the clientWidth
+ * that is already rendered on the web browser
  *
- * @param elements
+ * @param shadowTable
+ * @param columnIndex
  */
-export function calculateWidth(elements: string[]): number {
-  // in pixels
-  const unit = 10;
-
-  let width = 0;
-
-  for (const element of elements) {
-    width = Math.max(
-      width,
-      (element.length * unit),
-    );
+export function getWidth(shadowTable: Element, columnIndex): number {
+  if (!shadowTable) {
+    return null;
   }
 
-  return width;
+  const tds = shadowTable.querySelectorAll('tr:first-child > td');
+
+  if (tds && tds[columnIndex]) {
+    return tds[columnIndex].clientWidth;
+  }
+
+  return null;
 }

@@ -19,7 +19,7 @@ class Pipeline<T, P = {}> {
 
   constructor(steps?: PipelineProcessor<any, any>[]) {
     if (steps) {
-      steps.forEach(step => this.register(step));
+      steps.forEach((step) => this.register(step));
     }
   }
 
@@ -90,7 +90,7 @@ class Pipeline<T, P = {}> {
     }
 
     // to remove any undefined elements
-    return steps.filter(s => s);
+    return steps.filter((s) => s);
   }
 
   /**
@@ -100,7 +100,7 @@ class Pipeline<T, P = {}> {
    * @param type
    */
   getStepsByType(type: ProcessorType): PipelineProcessor<T, P>[] {
-    return this.steps.filter(process => process.type === type);
+    return this.steps.filter((process) => process.type === type);
   }
 
   /**
@@ -108,8 +108,8 @@ class Pipeline<T, P = {}> {
    */
   private getSortedProcessorTypes(): ProcessorType[] {
     return Object.keys(ProcessorType)
-      .filter(key => !isNaN(Number(key)))
-      .map(key => Number(key));
+      .filter((key) => !isNaN(Number(key)))
+      .map((key) => Number(key));
   }
 
   /**
@@ -151,7 +151,7 @@ class Pipeline<T, P = {}> {
    * @param processorID
    */
   private findProcessorIndexByID(processorID: ID): number {
-    return this.steps.findIndex(p => p.id == processorID);
+    return this.steps.findIndex((p) => p.id == processorID);
   }
 
   /**
@@ -169,7 +169,7 @@ class Pipeline<T, P = {}> {
 
   private trigger(fns: Set<(...args) => void>, ...args): void {
     if (fns) {
-      fns.forEach(fn => fn(...args));
+      fns.forEach((fn) => fn(...args));
     }
   }
 

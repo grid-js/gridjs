@@ -39,7 +39,7 @@ class Tabular<T> extends Base {
    * @returns Tabular
    */
   static fromRows<T>(rows: Row<T>[]): Tabular<T> {
-    return new Tabular(rows.map(row => Row.fromCells(row.cells)));
+    return new Tabular(rows.map((row) => Row.fromCells(row.cells)));
   }
 
   /**
@@ -53,7 +53,7 @@ class Tabular<T> extends Base {
     data = oneDtoTwoD(data);
 
     return new Tabular(
-      data.map(row => new Row(row.map(cell => new Cell(cell)))),
+      data.map((row) => new Row(row.map((cell) => new Cell(cell)))),
     );
   }
 }

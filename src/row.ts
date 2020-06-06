@@ -26,7 +26,7 @@ class Row<T> extends Base {
    * @returns Row
    */
   static fromCells<T>(cells: Cell<T>[]): Row<T> {
-    return new Row(cells.map(cell => new Cell(cell.data)));
+    return new Row(cells.map((cell) => new Cell(cell.data)));
   }
 
   get length(): number {

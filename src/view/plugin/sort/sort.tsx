@@ -41,7 +41,7 @@ export class Sort extends BaseComponent<SortProps, SortState> {
       columns: sortedColumns,
     });
 
-    const currentColumn = store.state.find(x => x.index === this.props.index);
+    const currentColumn = store.state.find((x) => x.index === this.props.index);
 
     if (!currentColumn) {
       this.setState({

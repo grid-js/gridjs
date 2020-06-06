@@ -54,7 +54,7 @@ export abstract class PipelineProcessor<
 
   private trigger(fns: Set<(...args) => void>, ...args): void {
     if (fns) {
-      fns.forEach(fn => fn(...args));
+      fns.forEach((fn) => fn(...args));
     }
   }
 

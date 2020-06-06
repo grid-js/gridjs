@@ -20,7 +20,7 @@ class SortStore extends BaseStore<SortStoreState, SortActionsType> {
 
   private sortToggle(index: number, multi: boolean): void {
     const columns = [...this.state];
-    const column = columns.find(x => x.index === index);
+    const column = columns.find((x) => x.index === index);
 
     if (!column) {
       this.sortColumn(index, 1, multi);
@@ -32,7 +32,7 @@ class SortStore extends BaseStore<SortStoreState, SortActionsType> {
   private sortColumn(index: number, direction: 1 | -1, multi: boolean): void {
     let columns = [...this.state];
     const count = columns.length;
-    const column = columns.find(x => x.index === index);
+    const column = columns.find((x) => x.index === index);
     const exists = column !== undefined;
 
     let add = false;

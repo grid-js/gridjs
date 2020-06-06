@@ -14,13 +14,13 @@ class ServerStorage extends Storage {
     super();
 
     this.url = url;
-    this.then = then || (value => value);
+    this.then = then || ((value) => value);
     this.opts = opts || [];
   }
 
   public get(): Promise<any[][]> {
     return fetch(this.url, ...this.opts)
-      .then(res => {
+      .then((res) => {
         if (res.ok) {
           return res.json();
         } else {
@@ -33,7 +33,7 @@ class ServerStorage extends Storage {
   }
 
   public get length(): Promise<number> {
-    return this.get().then(v => v.length);
+    return this.get().then((v) => v.length);
   }
 }
 
