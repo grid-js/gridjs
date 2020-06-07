@@ -4,7 +4,7 @@ import Row from '../../row';
 import { TR } from './tr';
 import Tabular from '../../tabular';
 import { BaseComponent, BaseProps } from '../base';
-import className from '../../util/className';
+import { className } from '../../util/className';
 import { Status, TCell } from '../../types';
 import Header from '../../header';
 import { MessageRow } from './messageRow';
@@ -28,7 +28,7 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
       <tbody className={className('tbody')}>
         {this.props.data &&
           this.props.data.rows.map((row: Row<TCell>) => {
-            return <TR key={row.id} row={row} />;
+            return <TR key={row.id} row={row} header={this.props.header} />;
           })}
 
         {this.props.status === Status.Loading && (

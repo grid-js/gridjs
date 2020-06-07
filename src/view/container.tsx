@@ -2,7 +2,7 @@ import { h, Fragment } from 'preact';
 
 import Tabular from '../tabular';
 import { BaseComponent, BaseProps } from './base';
-import className from '../util/className';
+import { classJoin, className } from '../util/className';
 import { Status, TCell } from '../types';
 import { Table } from './table/table';
 import { HeaderContainer } from './headerContainer';
@@ -81,11 +81,11 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     return (
       <Fragment>
         <div
-          className={`${className('container')}${
-            this.state.status === Status.Loading
-              ? ' ' + className('loading')
-              : ''
-          }`}
+          className={classJoin(
+            'gridjs',
+            className('container'),
+            this.state.status === Status.Loading ? className('loading') : null,
+          )}
           style={{ width: this.props.width }}
         >
           {this.state.status === Status.Loading && (

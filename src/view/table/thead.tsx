@@ -3,7 +3,7 @@ import { h } from 'preact';
 import { TR } from './tr';
 import { BaseComponent, BaseProps } from '../base';
 import { TH } from './th';
-import className from '../../util/className';
+import { className } from '../../util/className';
 import Header from '../../header';
 import Pipeline from '../../pipeline/pipeline';
 

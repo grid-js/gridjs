@@ -1,7 +1,7 @@
 import { h } from 'preact';
 
 import { BaseComponent, BaseProps } from './base';
-import className from '../util/className';
+import { className } from '../util/className';
 import { Search } from './plugin/search/search';
 import { Config } from '../config';
 import { useRef } from 'preact/hooks';

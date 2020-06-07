@@ -1,7 +1,7 @@
 import { h, JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../../base';
-import className from '../../../util/className';
+import { className } from '../../../util/className';
 import { TColumn } from '../../../types';
 import { ProcessorType } from '../../../pipeline/processor';
 import NativeSort from '../../../pipeline/sort/native';

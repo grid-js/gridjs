@@ -1,6 +1,5 @@
 import { OneDArray, TCell, TColumn } from './types';
 import Base from './base';
-import { isArrayOfType } from './util/type';
 import { UserConfig } from './config';
 import Tabular from './tabular';
 import { width, px, getWidth } from './util/width';
@@ -100,31 +99,23 @@ class Header extends Base {
 
     const header = new Header();
 
-    // if an array of strings is provided
-    if (isArrayOfType<string>(userConfig.columns, 'toLowerCase')) {
-      // array of strings is provided, let's cast it to Header
-      header.columns = Header.fromArrayOfString(
-        userConfig.columns as OneDArray<string>,
-      ).columns;
-    } else if (userConfig.from) {
+    if (userConfig.from) {
       header.columns = Header.fromHTMLTable(userConfig.from).columns;
     } else {
-      header.columns = userConfig.columns as OneDArray<TColumn>;
+      header.columns = [];
+
+      for (const column of userConfig.columns) {
+        if (typeof column === 'string') {
+          header.columns.push({
+            name: column,
+          });
+        } else if (typeof column === 'object') {
+          header.columns.push(column as TColumn);
+        }
+      }
     }
 
     header.setSort(userConfig.sort);
-
-    return header;
-  }
-
-  static fromArrayOfString(data: OneDArray<string>): Header {
-    const header = new Header();
-
-    for (const name of data) {
-      header.columns.push({
-        name: name,
-      });
-    }
 
     return header;
   }

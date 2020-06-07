@@ -1,7 +1,7 @@
 import { h } from 'preact';
 
 import { BaseComponent, BaseProps } from './base';
-import className from '../util/className';
+import { className } from '../util/className';
 import { Pagination } from './plugin/pagination';
 import { Config } from '../config';
 import { useRef } from 'preact/hooks';

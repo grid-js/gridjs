@@ -1,7 +1,7 @@
 import { h, JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../base';
-import className from '../../util/className';
+import { classJoin, className } from '../../util/className';
 import { TColumn } from '../../types';
 import { Sort } from '../plugin/sort/sort';
 import sortActions from '../plugin/sort/actions';
@@ -27,9 +27,10 @@ export class TH extends BaseComponent<THProps, {}> {
   }
 
   render() {
-    const cls = `${className('th')} ${
-      this.isSortable() ? className('th', 'sort') : ''
-    }`.trim();
+    const cls = classJoin(
+      className('th'),
+      this.isSortable() ? className('th', 'sort') : null,
+    );
 
     return (
       <th

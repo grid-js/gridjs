@@ -1,4 +1,7 @@
 // borrowed from https://github.com/Microsoft/TypeScript/issues/20920
+import { ComponentChild } from 'preact';
+import Row from "./row";
+
 export type ProtoExtends<T, U> = U & Omit<T, keyof U>;
 
 export type OneDArray<T> = T[];
@@ -13,6 +16,7 @@ export interface TColumn {
   width?: string;
   sort?: boolean;
   children?: OneDArray<TColumn>;
+  formatter?: (cell: TCell, row: Row<TCell>, column: TColumn) => ComponentChild;
 }
 
 // container status

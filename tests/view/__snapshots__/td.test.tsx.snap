@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TD component should match the snapshot 1`] = `"<td class=\\"gridjs gridjs-td\\">boo</td>"`;
+exports[`TD component should match the snapshot 1`] = `"<td class=\\"gridjs-td\\">boo</td>"`;
