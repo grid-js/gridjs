@@ -2,7 +2,7 @@ import { h } from 'preact';
 
 import { BaseComponent, BaseProps } from './base';
 
-interface HTMLContentProps extends BaseProps {
+export interface HTMLContentProps extends BaseProps {
   content: string;
   parentElement?: string;
 }

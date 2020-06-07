@@ -1,6 +1,6 @@
 // borrowed from https://github.com/Microsoft/TypeScript/issues/20920
-import { ComponentChild } from 'preact';
-import Row from "./row";
+import { ComponentChild, VNode } from 'preact';
+import Row from './row';
 
 export type ProtoExtends<T, U> = U & Omit<T, keyof U>;
 
@@ -8,7 +8,7 @@ export type OneDArray<T> = T[];
 export type TwoDArray<T> = T[][];
 
 // Table cell type
-export type TCell = number | string | boolean;
+export type TCell = number | string | boolean | VNode<any>;
 
 // Table header cell type
 export interface TColumn {
