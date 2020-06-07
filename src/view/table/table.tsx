@@ -5,7 +5,7 @@ import { TBody } from './tbody';
 import { THead } from './thead';
 import { BaseComponent, BaseProps } from '../base';
 import Header from '../../header';
-import className from '../../util/className';
+import { className } from '../../util/className';
 import { Status, TCell } from '../../types';
 import Pipeline from '../../pipeline/pipeline';
 

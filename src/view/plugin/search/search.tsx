@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { BaseComponent, BaseProps } from '../../base';
 import GlobalSearchFilter from '../../../pipeline/filter/globalSearch';
-import className from '../../../util/className';
+import { className } from '../../../util/className';
 import store, { SearchStoreState } from './store';
 import actions from './actions';
 import Pipeline from '../../../pipeline/pipeline';

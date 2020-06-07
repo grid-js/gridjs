@@ -4,7 +4,7 @@ import Row from '../../row';
 import { TR } from './tr';
 import Tabular from '../../tabular';
 import { BaseComponent, BaseProps } from '../base';
-import className from '../../util/className';
+import { className } from '../../util/className';
 import { Status, TCell } from '../../types';
 import Header from '../../header';
 import { MessageRow } from './messageRow';

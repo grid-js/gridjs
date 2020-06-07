@@ -1,8 +1,15 @@
-export default function (...args: string[]): string {
+export function className(...args: string[]): string {
   const prefix = 'gridjs';
 
-  return `${prefix} ${prefix}${args.reduce(
+  return `${prefix}${args.reduce(
     (prev: string, cur: string) => `${prev}-${cur}`,
     '',
   )}`;
+}
+
+export function classJoin(...classNames: string[]): string {
+  return classNames
+    .filter((x) => x)
+    .reduce((className, prev) => `${className || ''} ${prev}`, '')
+    .trim();
 }

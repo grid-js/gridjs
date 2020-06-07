@@ -3,7 +3,6 @@ import { h } from 'preact';
 import Tabular from '../../tabular';
 import { BaseComponent, BaseProps } from '../base';
 import Header from '../../header';
-import className from '../../util/className';
 import { TCell } from '../../types';
 import Row from '../../row';
 import Cell from '../../cell';
@@ -58,7 +57,6 @@ export class ShadowTable extends BaseComponent<ShadowTableProps, {}> {
   render() {
     return (
       <table
-        className={className('shadow-table')}
         style={{
           position: 'absolute',
           zIndex: '-2147483640',

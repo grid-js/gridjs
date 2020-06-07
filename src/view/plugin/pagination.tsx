@@ -1,7 +1,7 @@
 import { h, Fragment } from 'preact';
 import { BaseComponent, BaseProps } from '../base';
 import PaginationLimit from '../../pipeline/limit/pagination';
-import className from '../../util/className';
+import { className } from '../../util/className';
 import Pipeline from '../../pipeline/pipeline';
 
 interface PaginationState {

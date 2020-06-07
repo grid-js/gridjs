@@ -3,13 +3,13 @@ import { h } from 'preact';
 import Row from '../../row';
 import Cell from '../../cell';
 import { BaseComponent, BaseProps } from '../base';
-import className from '../../util/className';
+import { className } from '../../util/className';
 import { TCell, TColumn } from '../../types';
 import { TD } from './td';
 import Header from '../../header';
 
 export interface TRProps extends BaseProps {
-  row?: Row<TCell | TColumn>;
+  row?: Row<TCell>;
   header?: Header;
 }
 
@@ -29,7 +29,14 @@ export class TR extends BaseComponent<TRProps, {}> {
       return (
         <tr className={className('tr')}>
           {this.props.row.cells.map((cell: Cell<TCell>, i) => {
-            return <TD cell={cell} key={cell.id} column={this.getColumn(i)} />;
+            return (
+              <TD
+                key={cell.id}
+                cell={cell}
+                row={this.props.row}
+                column={this.getColumn(i)}
+              />
+            );
           })}
         </tr>
       );
