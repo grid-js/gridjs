@@ -1,26 +1,29 @@
 import Storage from './storage';
 import log from "../util/log";
 
+export interface ServerStorageOptions {
+  url?: string,
+  method?: string,
+  headers?: HeadersInit,
+  body?: BodyInit,
+  then?: (data: any) => any[][] | PromiseLike<any[][]>;
+}
+
 class ServerStorage extends Storage {
-  private url: string;
-  // fetch() opts
-  private opts: any[];
-  private readonly then: ((data: any) => any[][] | PromiseLike<any[][]>) | null;
+  private readonly options: ServerStorageOptions;
 
-  constructor(
-    url: string,
-    then?: (data: any) => any[][] | PromiseLike<any[][]>,
-    ...opts
-  ) {
+  constructor(options: ServerStorageOptions) {
     super();
-
-    this.url = url;
-    this.then = then || ((value) => value);
-    this.opts = opts || [];
+    this.options = options;
   }
 
-  public get(): Promise<any[][]> {
-    return fetch(this.url, ...this.opts)
+  public get(options?: ServerStorageOptions): Promise<any[][]> {
+    const opts = {
+      ...this.options,
+      ...options
+    }
+
+    return fetch(opts.url, opts)
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -29,7 +32,7 @@ class ServerStorage extends Storage {
           return null;
         }
       })
-      .then(this.then);
+      .then(opts.then);
   }
 
   public get length(): Promise<number> {

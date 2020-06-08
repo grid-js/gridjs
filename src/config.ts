@@ -5,12 +5,14 @@ import Tabular from './tabular';
 import { SearchConfig } from './view/plugin/search/search';
 import { PaginationConfig } from './view/plugin/pagination';
 import Header from './header';
+import {ServerStorageOptions} from "./storage/server";
 
 // Config type used internally
 export interface Config {
   /** container element that is used to mount the Grid.js to */
   container?: Element;
   data?: TwoDArray<TCell> | Function;
+  server?: ServerStorageOptions;
   header?: Header;
   /** to parse a HTML table and load the data */
   from: HTMLElement;
@@ -26,12 +28,6 @@ export interface Config {
 
 // Config type used by the consumers
 interface UserConfigExtend {
-  server?: {
-    url: string;
-    then?: (data: any) => any[][];
-    // fetch() opts
-    opts?: any[];
-  };
   columns?: OneDArray<TColumn> | OneDArray<string>;
   search: SearchConfig | boolean;
   pagination: PaginationConfig | boolean;

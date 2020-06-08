@@ -3,6 +3,10 @@
 import { generateID, ID } from '../util/id';
 
 export enum ProcessorType {
+  Initiator,
+  LazyFilter,
+  LazySort,
+  LazyLimit,
   Extractor,
   Transformer,
   Filter,
@@ -48,7 +52,6 @@ export abstract class PipelineProcessor<
     this.trigger(this.beforeProcessCallback, ...args);
     const result = this._process(...args);
     this.trigger(this.afterProcessCallback, ...args);
-
     return result;
   }
 

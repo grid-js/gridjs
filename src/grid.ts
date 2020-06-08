@@ -2,10 +2,8 @@ import { Config, UserConfig } from './config';
 import { h, render, VNode } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import { Container } from './view/container';
-import Pipeline from './pipeline/pipeline';
-import StorageExtractor from './pipeline/extractor/storage';
-import ArrayToTabularTransformer from './pipeline/transformer/arrayToTabular';
 import log from './util/log';
+import PipelineUtils from "./pipeline/pipelineUtils";
 
 class Grid {
   private _config: Config;
@@ -38,11 +36,7 @@ class Grid {
   }
 
   private setPipeline(config: Config): void {
-    // initial state of the pipeline
-    this.config.pipeline = new Pipeline([
-      new StorageExtractor({ storage: config.storage }),
-      new ArrayToTabularTransformer(),
-    ]);
+    this.config.pipeline = PipelineUtils.createFromConfig(config);
   }
 
   createElement(): VNode {
@@ -54,7 +48,7 @@ class Grid {
     });
   }
 
-  render(container: Element) {
+  render(container: Element): void {
     if (!container) {
       log.error('Container element cannot be null', true);
     }

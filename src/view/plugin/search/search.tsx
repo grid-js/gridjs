@@ -1,10 +1,11 @@
 import { h } from 'preact';
 import { BaseComponent, BaseProps } from '../../base';
 import GlobalSearchFilter from '../../../pipeline/filter/globalSearch';
-import { className } from '../../../util/className';
+import {classJoin, className} from '../../../util/className';
 import store, { SearchStoreState } from './store';
 import actions from './actions';
 import Pipeline from '../../../pipeline/pipeline';
+import ServerGlobalSearchFilter from "../../../pipeline/filter/serverGlobalSearch";
 
 export interface SearchProps extends BaseProps {
   pipeline: Pipeline<any>;
@@ -14,16 +15,20 @@ export interface SearchConfig {
   keyword?: string;
   enabled?: boolean;
   placeholder?: string;
+  server?: {
+    url?: (keyword: string) => string;
+    body?: (keyword: string) => BodyInit;
+  };
 }
 
 export class Search extends BaseComponent<SearchProps & SearchConfig, {}> {
-  private searchProcessor: GlobalSearchFilter;
+  private searchProcessor: GlobalSearchFilter | ServerGlobalSearchFilter;
 
   static defaultProps = {
     placeholder: 'Type a keyword...',
   };
 
-  constructor(props) {
+  constructor(props: SearchProps & SearchConfig) {
     super();
 
     const { enabled, keyword } = props;
@@ -34,9 +39,19 @@ export class Search extends BaseComponent<SearchProps & SearchConfig, {}> {
 
       store.on('updated', this.storeUpdated.bind(this));
 
-      const searchProcessor = new GlobalSearchFilter({
-        keyword: props.keyword,
-      });
+      let searchProcessor;
+      if (props.server) {
+        searchProcessor = new ServerGlobalSearchFilter({
+          keyword: props.keyword,
+          url: props.server.url,
+          body: props.server.body,
+        });
+      } else {
+        searchProcessor = new GlobalSearchFilter({
+          keyword: props.keyword,
+        });
+      }
+
       this.searchProcessor = searchProcessor;
 
       // adds a new processor to the pipeline
@@ -65,7 +80,10 @@ export class Search extends BaseComponent<SearchProps & SearchConfig, {}> {
           type="search"
           placeholder={this.props.placeholder}
           onInput={this.onChange.bind(this)}
-          className={`${className('input')} ${className('search', 'input')}`}
+          className={classJoin(
+            className('input'),
+            className('search', 'input')
+          )}
           value={store.state.keyword}
         />
       </div>

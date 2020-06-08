@@ -29,7 +29,7 @@ class Pipeline<T, P = {}> {
    * @param processor
    * @param priority
    */
-  register(processor: PipelineProcessor<T, P>, priority: number = null): void {
+  register(processor: PipelineProcessor<any, any>, priority: number = null): void {
     if (processor.type === null) {
       throw Error('Processor type is not defined');
     }
