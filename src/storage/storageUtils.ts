@@ -1,8 +1,8 @@
 import { UserConfig } from '../config';
 import MemoryStorage from './memory';
 import Storage from './storage';
-import StorageError from '../error/storage';
 import ServerStorage from './server';
+import log from '../util/log';
 
 class StorageUtils {
   /**
@@ -32,7 +32,7 @@ class StorageUtils {
     }
 
     if (!storage) {
-      throw new StorageError('Could not determine the storage type');
+      log.error('Could not determine the storage type', true);
     }
 
     return storage;

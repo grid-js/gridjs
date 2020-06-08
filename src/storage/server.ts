@@ -1,4 +1,5 @@
 import Storage from './storage';
+import log from "../util/log";
 
 class ServerStorage extends Storage {
   private url: string;
@@ -24,9 +25,8 @@ class ServerStorage extends Storage {
         if (res.ok) {
           return res.json();
         } else {
-          throw Error(
-            `Could not fetch data: ${res.status} - ${res.statusText}`,
-          );
+          log.error(`Could not fetch data: ${res.status} - ${res.statusText}`, true);
+          return null;
         }
       })
       .then(this.then);
