@@ -86,16 +86,23 @@ class Header extends Base {
   private setSort(userConfig: UserConfig): void {
     for (const column of this.columns) {
       // implicit userConfig.sort flag
-      if (!column.sort && userConfig.sort) {
+      if (column.sort === undefined && userConfig.sort) {
         column.sort = {
-          enabled: true
+          enabled: true,
         };
       }
 
-      column.sort = {
-        enabled: true,
-        ...column.sort
-      };
+      // false, null, etc.
+      if (!column.sort) {
+        column.sort = {
+          enabled: false,
+        };
+      } else if (typeof column.sort === 'object') {
+        column.sort = {
+          enabled: true,
+          ...column.sort,
+        };
+      }
     }
   }
 

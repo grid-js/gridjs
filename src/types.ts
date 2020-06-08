@@ -1,7 +1,7 @@
 // borrowed from https://github.com/Microsoft/TypeScript/issues/20920
 import { ComponentChild, VNode } from 'preact';
 import Row from './row';
-import {SortConfig} from "./view/plugin/sort/sort";
+import { SortConfig } from './view/plugin/sort/sort';
 
 export type ProtoExtends<T, U> = U & Omit<T, keyof U>;
 
@@ -19,6 +19,8 @@ export interface TColumn {
   children?: OneDArray<TColumn>;
   formatter?: (cell: TCell, row: Row<TCell>, column: TColumn) => ComponentChild;
 }
+
+export type Comparator<T> = (a: T, b: T) => number;
 
 // container status
 export enum Status {

@@ -1,4 +1,4 @@
-import { TCell } from '../../types';
+import { Comparator, TCell } from '../../types';
 import Tabular from '../../tabular';
 import {
   PipelineProcessor,
@@ -6,13 +6,14 @@ import {
   ProcessorType,
 } from '../processor';
 import Row from '../../row';
+import log from '../../util/log';
 
 interface NativeSortProps extends PipelineProcessorProps {
   columns: {
     index: number;
     // 1 ascending, -1 descending
     direction?: 1 | -1;
-    compare?: (a: TCell, b: TCell) => number;
+    compare?: Comparator<TCell>;
   }[];
 }
 
@@ -24,7 +25,7 @@ class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
       }
 
       if (condition.direction !== 1 && condition.direction !== -1) {
-        throw Error(`Invalid sort direction ${condition.direction}`);
+        log.error(`Invalid sort direction ${condition.direction}`);
       }
     }
   }
@@ -33,10 +34,7 @@ class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
     return ProcessorType.Sort;
   }
 
-  private compare(
-    cellA: TCell,
-    cellB: TCell,
-  ): number {
+  private compare(cellA: TCell, cellB: TCell): number {
     if (cellA > cellB) {
       return 1;
     } else if (cellA < cellB) {
@@ -48,6 +46,7 @@ class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
 
   private compareWrapper(a: Row<any>, b: Row<any>): number {
     let cmp = 0;
+
     for (const column of this.props.columns) {
       if (cmp === 0) {
         const cellA = a.cells[column.index].data;

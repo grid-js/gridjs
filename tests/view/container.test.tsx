@@ -66,14 +66,21 @@ describe('Container component', () => {
     config.header.columns = [
       {
         name: 'c1',
+        sort: {
+          enabled: false,
+        },
       },
       {
         name: 'c2',
-        sort: true,
+        sort: {
+          enabled: true,
+        },
       },
       {
         name: 'c3',
-        sort: true,
+        sort: {
+          enabled: true,
+        },
       },
     ];
 

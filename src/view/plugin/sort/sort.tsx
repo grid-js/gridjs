@@ -1,18 +1,18 @@
 import { h, JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../../base';
-import { className } from '../../../util/className';
+import { classJoin, className } from '../../../util/className';
 import { ProcessorType } from '../../../pipeline/processor';
 import NativeSort from '../../../pipeline/sort/native';
 import store, { SortStoreState } from './store';
 import actions from './actions';
 import Pipeline from '../../../pipeline/pipeline';
 import log from '../../../util/log';
-import {TCell} from "../../../types";
+import { Comparator, TCell } from '../../../types';
 
 export interface SortConfig {
   enabled?: boolean;
-  compare?: (a: TCell, b: TCell) => number;
+  compare?: Comparator<TCell>;
 }
 
 export interface SortProps extends BaseProps {
@@ -32,7 +32,7 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
 
     if (props.enabled) {
       this.sortProcessor = this.getOrCreateSortProcessor();
-      this.state = {direction: 0};
+      this.state = { direction: 0 };
       store.on('updated', this.storeUpdated.bind(this));
     }
   }
@@ -85,12 +85,16 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
     return processor;
   }
 
-  public changeDirection(e: JSX.TargetedMouseEvent<HTMLInputElement>): void {
+  changeDirection(e: JSX.TargetedMouseEvent<HTMLButtonElement>): void {
     e.preventDefault();
     e.stopPropagation();
 
     // to sort two or more columns at the same time
-    actions.sortToggle(this.props.index, e.shiftKey === true);
+    actions.sortToggle(
+      this.props.index,
+      e.shiftKey === true,
+      this.props.compare,
+    );
   }
 
   render() {
@@ -110,7 +114,10 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
     return (
       <button
         title={`Sort column ${direction === 1 ? 'descending' : 'ascending'}`}
-        className={`${className('sort')} ${className('sort', sortClassName)}`}
+        className={classJoin(
+          className('sort'),
+          className('sort', sortClassName),
+        )}
         onClick={this.changeDirection.bind(this)}
       />
     );
