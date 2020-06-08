@@ -1,4 +1,4 @@
-import { TCell } from '../../types';
+import { Comparator, TCell } from '../../types';
 import Tabular from '../../tabular';
 import {
   PipelineProcessor,
@@ -6,12 +6,14 @@ import {
   ProcessorType,
 } from '../processor';
 import Row from '../../row';
+import log from '../../util/log';
 
 interface NativeSortProps extends PipelineProcessorProps {
   columns: {
     index: number;
     // 1 ascending, -1 descending
     direction?: 1 | -1;
+    compare?: Comparator<TCell>;
   }[];
 }
 
@@ -23,7 +25,7 @@ class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
       }
 
       if (condition.direction !== 1 && condition.direction !== -1) {
-        throw Error(`Invalid sort direction ${condition.direction}`);
+        log.error(`Invalid sort direction ${condition.direction}`);
       }
     }
   }
@@ -32,19 +34,11 @@ class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
     return ProcessorType.Sort;
   }
 
-  private compare(
-    a: Row<any>,
-    b: Row<any>,
-    index: number,
-    order: 1 | -1,
-  ): number {
-    const cellA = a.cells[index];
-    const cellB = b.cells[index];
-
-    if (cellA.data > cellB.data) {
-      return 1 * order;
-    } else if (cellA.data < cellB.data) {
-      return -1 * order;
+  private compare(cellA: TCell, cellB: TCell): number {
+    if (cellA > cellB) {
+      return 1;
+    } else if (cellA < cellB) {
+      return -1;
     }
 
     return 0;
@@ -52,9 +46,17 @@ class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
 
   private compareWrapper(a: Row<any>, b: Row<any>): number {
     let cmp = 0;
-    for (const condition of this.props.columns) {
+
+    for (const column of this.props.columns) {
       if (cmp === 0) {
-        cmp |= this.compare(a, b, condition.index, condition.direction);
+        const cellA = a.cells[column.index].data;
+        const cellB = b.cells[column.index].data;
+
+        if (typeof column.compare === 'function') {
+          cmp |= column.compare(cellA, cellB) * column.direction;
+        } else {
+          cmp |= this.compare(cellA, cellB) * column.direction;
+        }
       } else {
         break;
       }

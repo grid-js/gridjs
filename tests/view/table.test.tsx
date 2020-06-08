@@ -96,8 +96,12 @@ describe('Table component', () => {
 
   it('should render a table with column sort', async () => {
     const header = Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] });
-    header.columns[0].sort = true;
-    header.columns[2].sort = true;
+    header.columns[0].sort = {
+      enabled: true,
+    };
+    header.columns[2].sort = {
+      enabled: true,
+    };
 
     const table = mount(
       <Table

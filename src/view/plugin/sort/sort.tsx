@@ -1,34 +1,40 @@
 import { h, JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../../base';
-import { className } from '../../../util/className';
-import { TColumn } from '../../../types';
+import { classJoin, className } from '../../../util/className';
 import { ProcessorType } from '../../../pipeline/processor';
 import NativeSort from '../../../pipeline/sort/native';
 import store, { SortStoreState } from './store';
 import actions from './actions';
 import Pipeline from '../../../pipeline/pipeline';
 import log from '../../../util/log';
+import { Comparator, TCell } from '../../../types';
+
+export interface SortConfig {
+  enabled?: boolean;
+  compare?: Comparator<TCell>;
+}
 
 export interface SortProps extends BaseProps {
   pipeline: Pipeline<any>;
   index: number;
-  column: TColumn;
 }
 
 interface SortState {
   direction: 1 | -1 | 0;
 }
 
-export class Sort extends BaseComponent<SortProps, SortState> {
+export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
   private sortProcessor: NativeSort;
 
-  constructor(props: SortProps) {
+  constructor(props: SortProps & SortConfig) {
     super(props);
 
-    this.sortProcessor = this.getOrCreateSortProcessor();
-    this.state = { direction: 0 };
-    store.on('updated', this.storeUpdated.bind(this));
+    if (props.enabled) {
+      this.sortProcessor = this.getOrCreateSortProcessor();
+      this.state = { direction: 0 };
+      store.on('updated', this.storeUpdated.bind(this));
+    }
   }
 
   componentWillUnmount(): void {
@@ -79,15 +85,23 @@ export class Sort extends BaseComponent<SortProps, SortState> {
     return processor;
   }
 
-  public changeDirection(e: JSX.TargetedMouseEvent<HTMLInputElement>): void {
+  changeDirection(e: JSX.TargetedMouseEvent<HTMLButtonElement>): void {
     e.preventDefault();
     e.stopPropagation();
 
     // to sort two or more columns at the same time
-    actions.sortToggle(this.props.index, e.shiftKey === true);
+    actions.sortToggle(
+      this.props.index,
+      e.shiftKey === true,
+      this.props.compare,
+    );
   }
 
   render() {
+    if (!this.props.enabled) {
+      return null;
+    }
+
     const direction = this.state.direction;
     let sortClassName = 'neutral';
 
@@ -100,7 +114,10 @@ export class Sort extends BaseComponent<SortProps, SortState> {
     return (
       <button
         title={`Sort column ${direction === 1 ? 'descending' : 'ascending'}`}
-        className={`${className('sort')} ${className('sort', sortClassName)}`}
+        className={classJoin(
+          className('sort'),
+          className('sort', sortClassName),
+        )}
         onClick={this.changeDirection.bind(this)}
       />
     );

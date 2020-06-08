@@ -83,11 +83,26 @@ class Header extends Base {
     return this;
   }
 
-  private setSort(sort = false): void {
-    if (!sort) return;
-
+  private setSort(userConfig: UserConfig): void {
     for (const column of this.columns) {
-      column.sort = true;
+      // implicit userConfig.sort flag
+      if (column.sort === undefined && userConfig.sort) {
+        column.sort = {
+          enabled: true,
+        };
+      }
+
+      // false, null, etc.
+      if (!column.sort) {
+        column.sort = {
+          enabled: false,
+        };
+      } else if (typeof column.sort === 'object') {
+        column.sort = {
+          enabled: true,
+          ...column.sort,
+        };
+      }
     }
   }
 
@@ -115,7 +130,7 @@ class Header extends Base {
       }
     }
 
-    header.setSort(userConfig.sort);
+    header.setSort(userConfig);
 
     return header;
   }

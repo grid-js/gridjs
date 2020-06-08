@@ -1,10 +1,9 @@
-import { h, JSX } from 'preact';
+import { createRef, h, JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';
 import { TColumn } from '../../types';
 import { Sort } from '../plugin/sort/sort';
-import sortActions from '../plugin/sort/actions';
 import Pipeline from '../../pipeline/pipeline';
 
 export interface THProps extends BaseProps {
@@ -14,15 +13,17 @@ export interface THProps extends BaseProps {
 }
 
 export class TH extends BaseComponent<THProps, {}> {
+  private sortRef = createRef();
+
   private isSortable(): boolean {
-    return this.props.column.sort;
+    return this.props.column.sort.enabled;
   }
 
   private onClick(e: JSX.TargetedMouseEvent<HTMLInputElement>): void {
     e.stopPropagation();
 
     if (this.isSortable()) {
-      sortActions.sortToggle(this.props.index, e.shiftKey === true);
+      this.sortRef.current.changeDirection(e);
     }
   }
 
@@ -41,9 +42,10 @@ export class TH extends BaseComponent<THProps, {}> {
         {this.props.column.name}
         {this.isSortable() && (
           <Sort
+            ref={this.sortRef}
             pipeline={this.props.pipeline}
             index={this.props.index}
-            column={this.props.column}
+            {...this.props.column.sort}
           />
         )}
       </th>

@@ -1,7 +1,12 @@
 import BaseStore from '../../base/store';
 import { SortActionsType } from './actions';
+import { Comparator, TCell } from '../../../types';
 
-export type SortStoreState = { index: number; direction: 1 | -1 }[];
+export type SortStoreState = {
+  index: number;
+  direction: 1 | -1;
+  compare?: Comparator<TCell>;
+}[];
 
 class SortStore extends BaseStore<SortStoreState, SortActionsType> {
   getInitialState(): SortStoreState {
@@ -10,26 +15,35 @@ class SortStore extends BaseStore<SortStoreState, SortActionsType> {
 
   handle(type, payload): void {
     if (type === 'SORT_COLUMN') {
-      const { index, direction, multi } = payload;
-      this.sortColumn(index, direction, multi);
+      const { index, direction, multi, compare } = payload;
+      this.sortColumn(index, direction, multi, compare);
     } else if (type === 'SORT_COLUMN_TOGGLE') {
-      const { index, multi } = payload;
-      this.sortToggle(index, multi);
+      const { index, multi, compare } = payload;
+      this.sortToggle(index, multi, compare);
     }
   }
 
-  private sortToggle(index: number, multi: boolean): void {
+  private sortToggle(
+    index: number,
+    multi: boolean,
+    compare: Comparator<TCell>,
+  ): void {
     const columns = [...this.state];
     const column = columns.find((x) => x.index === index);
 
     if (!column) {
-      this.sortColumn(index, 1, multi);
+      this.sortColumn(index, 1, multi, compare);
     } else {
-      this.sortColumn(index, column.direction === 1 ? -1 : 1, multi);
+      this.sortColumn(index, column.direction === 1 ? -1 : 1, multi, compare);
     }
   }
 
-  private sortColumn(index: number, direction: 1 | -1, multi: boolean): void {
+  private sortColumn(
+    index: number,
+    direction: 1 | -1,
+    multi: boolean,
+    compare: Comparator<TCell>,
+  ): void {
     let columns = [...this.state];
     const count = columns.length;
     const column = columns.find((x) => x.index === index);
@@ -88,6 +102,7 @@ class SortStore extends BaseStore<SortStoreState, SortActionsType> {
       columns.push({
         index: index,
         direction: direction,
+        compare: compare,
       });
     } else if (update) {
       const index = columns.indexOf(column);
