@@ -12,6 +12,7 @@ interface NativeSortProps extends PipelineProcessorProps {
     index: number;
     // 1 ascending, -1 descending
     direction?: 1 | -1;
+    compare?: (a: TCell, b: TCell) => number;
   }[];
 }
 
@@ -33,18 +34,13 @@ class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
   }
 
   private compare(
-    a: Row<any>,
-    b: Row<any>,
-    index: number,
-    order: 1 | -1,
+    cellA: TCell,
+    cellB: TCell,
   ): number {
-    const cellA = a.cells[index];
-    const cellB = b.cells[index];
-
-    if (cellA.data > cellB.data) {
-      return 1 * order;
-    } else if (cellA.data < cellB.data) {
-      return -1 * order;
+    if (cellA > cellB) {
+      return 1;
+    } else if (cellA < cellB) {
+      return -1;
     }
 
     return 0;
@@ -52,9 +48,16 @@ class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
 
   private compareWrapper(a: Row<any>, b: Row<any>): number {
     let cmp = 0;
-    for (const condition of this.props.columns) {
+    for (const column of this.props.columns) {
       if (cmp === 0) {
-        cmp |= this.compare(a, b, condition.index, condition.direction);
+        const cellA = a.cells[column.index].data;
+        const cellB = b.cells[column.index].data;
+
+        if (typeof column.compare === 'function') {
+          cmp |= column.compare(cellA, cellB) * column.direction;
+        } else {
+          cmp |= this.compare(cellA, cellB) * column.direction;
+        }
       } else {
         break;
       }

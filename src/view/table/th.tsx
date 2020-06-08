@@ -15,7 +15,7 @@ export interface THProps extends BaseProps {
 
 export class TH extends BaseComponent<THProps, {}> {
   private isSortable(): boolean {
-    return this.props.column.sort;
+    return this.props.column.sort.enabled;
   }
 
   private onClick(e: JSX.TargetedMouseEvent<HTMLInputElement>): void {
@@ -43,7 +43,7 @@ export class TH extends BaseComponent<THProps, {}> {
           <Sort
             pipeline={this.props.pipeline}
             index={this.props.index}
-            column={this.props.column}
+            {...this.props.column.sort}
           />
         )}
       </th>
