@@ -8,17 +8,20 @@ interface PaginationState {
   page: number;
   limit?: number;
   total: number;
-  pages: number;
 }
 
 export interface PaginationConfig {
+  enabled: boolean;
   limit?: number;
   page?: number;
-  enabled: boolean;
   summary?: boolean;
   nextButton?: boolean;
   prevButton?: boolean;
   buttonsCount?: number;
+  server?: {
+    url?: (prevUrl: string, page: number, limit: number) => string;
+    body?: (prevBody: BodyInit, page: number, limit: number) => BodyInit;
+  };
 }
 
 interface PaginationProps extends BaseProps {
@@ -46,7 +49,6 @@ export class Pagination extends BaseComponent<
       limit: props.limit,
       page: props.page || 0,
       total: 0,
-      pages: 0,
     };
   }
 
@@ -60,9 +62,10 @@ export class Pagination extends BaseComponent<
       processor.beforeProcess((tabular) => {
         const totalRows = tabular.rows.length;
 
+        // to set the correct total number of rows
+        // when running in-memory operations
         this.setState({
           total: totalRows,
-          pages: Math.ceil(totalRows / this.state.limit),
         });
       });
 
@@ -82,8 +85,12 @@ export class Pagination extends BaseComponent<
     });
   }
 
+  private get pages(): number {
+    return Math.ceil(this.state.total / this.state.limit);
+  }
+
   private setPage(page: number): void {
-    if (page >= this.state.pages || page < 0 || page === this.state.page) {
+    if (page >= this.pages || page < 0 || page === this.state.page) {
       return null;
     }
 
@@ -96,26 +103,18 @@ export class Pagination extends BaseComponent<
     });
   }
 
-  private currentPageClass(page: number): string | null {
-    if (this.state.page === page) {
-      return className('currentPage');
-    }
-
-    return null;
-  }
-
   render() {
     if (!this.props.enabled) return null;
 
     // how many pagination buttons to render?
     const maxCount: number = Math.min(
-      this.state.pages,
+      this.pages,
       this.props.buttonsCount,
     );
 
     let pagePivot = Math.min(this.state.page, Math.floor(maxCount / 2));
-    if (this.state.page + Math.floor(maxCount / 2) >= this.state.pages) {
-      pagePivot = maxCount - (this.state.pages - this.state.page);
+    if (this.state.page + Math.floor(maxCount / 2) >= this.pages) {
+      pagePivot = maxCount - (this.pages - this.state.page);
     }
 
     return (
@@ -123,7 +122,7 @@ export class Pagination extends BaseComponent<
         {this.props.summary && this.state.total > 0 && (
           <div
             className={className('summary')}
-            title={`Page ${this.state.page + 1} of ${this.state.pages}`}
+            title={`Page ${this.state.page + 1} of ${this.pages}`}
           >
             Showing <span>{this.state.page * this.state.limit + 1}</span> to{' '}
             <span>
@@ -143,7 +142,7 @@ export class Pagination extends BaseComponent<
             </button>
           )}
 
-          {this.state.pages > maxCount && this.state.page - pagePivot > 0 && (
+          {this.pages > maxCount && this.state.page - pagePivot > 0 && (
             <Fragment>
               <button onClick={this.setPage.bind(this, 0)} title={`Page 1`}>
                 1
@@ -157,21 +156,22 @@ export class Pagination extends BaseComponent<
             .map((i) => (
               <button
                 onClick={this.setPage.bind(this, i)}
-                className={this.currentPageClass(i)}
+                className={(this.state.page === i) ? className('currentPage') : null}
+                title={`Page ${i + 1}`}
               >
                 {i + 1}
               </button>
             ))}
 
-          {this.state.pages > maxCount &&
-            this.state.pages > this.state.page + pagePivot + 1 && (
+          {this.pages > maxCount &&
+            this.pages > this.state.page + pagePivot + 1 && (
               <Fragment>
                 <button className={className('spread')}>...</button>
                 <button
-                  onClick={this.setPage.bind(this, this.state.pages - 1)}
-                  title={`Page ${this.state.pages}`}
+                  onClick={this.setPage.bind(this, this.pages - 1)}
+                  title={`Page ${this.pages}`}
                 >
-                  {this.state.pages}
+                  {this.pages}
                 </button>
               </Fragment>
             )}

@@ -7,8 +7,8 @@ import { ServerStorageOptions } from '../../storage/server';
 
 interface ServerGlobalSearchFilterProps extends PipelineProcessorProps {
   keyword?: string;
-  url?: (keyword: string, prevUrl: string) => string;
-  body?: (keyword: string, prevBody: BodyInit) => BodyInit;
+  url?: (prevUrl: string, keyword: string) => string;
+  body?: (prevBody: BodyInit, keyword: string) => BodyInit;
 }
 
 class ServerGlobalSearchFilter extends PipelineProcessor<
@@ -27,11 +27,11 @@ class ServerGlobalSearchFilter extends PipelineProcessor<
     const updates = {};
 
     if (this.props.url) {
-      updates['url'] = this.props.url(this.props.keyword, options.url);
+      updates['url'] = this.props.url(options.url, this.props.keyword);
     }
 
     if (this.props.body) {
-      updates['body'] = this.props.body(this.props.keyword, options.body);
+      updates['body'] = this.props.body(options.body, this.props.keyword);
     }
 
     return {

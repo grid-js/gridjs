@@ -20,8 +20,8 @@ export interface SearchConfig {
   placeholder?: string;
   debounceTimeout?: number;
   server?: {
-    url?: (keyword: string) => string;
-    body?: (keyword: string) => BodyInit;
+    url?: (prevUrl: string, keyword: string) => string;
+    body?: (prevBody: BodyInit, keyword: string) => BodyInit;
   };
 }
 
