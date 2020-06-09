@@ -16,7 +16,7 @@ export interface SortActionsType {
   };
 }
 
-class SortActions extends BaseActions<SortActionsType> {
+export class SortActions extends BaseActions<SortActionsType> {
   sortColumn(
     index: number,
     direction: 1 | -1,
@@ -43,5 +43,3 @@ class SortActions extends BaseActions<SortActionsType> {
     });
   }
 }
-
-export default new SortActions();

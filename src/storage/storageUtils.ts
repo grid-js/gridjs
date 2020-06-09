@@ -26,7 +26,7 @@ class StorageUtils {
     if (userConfig.server) {
       storage = new ServerStorage({
         url: userConfig.server.url,
-        then: userConfig.server.then
+        then: userConfig.server.then,
       });
     }
 

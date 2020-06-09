@@ -6,8 +6,10 @@ import { TH } from './th';
 import { className } from '../../util/className';
 import Header from '../../header';
 import Pipeline from '../../pipeline/pipeline';
+import Dispatcher from '../../util/dispatcher';
 
 interface THeadProps extends BaseProps {
+  dispatcher: Dispatcher<any>;
   pipeline: Pipeline<any>;
   header: Header;
 }
@@ -20,7 +22,12 @@ export class THead extends BaseComponent<THeadProps, {}> {
           <TR>
             {this.props.header.columns.map((col, i) => {
               return (
-                <TH pipeline={this.props.pipeline} column={col} index={i} />
+                <TH
+                  dispatcher={this.props.dispatcher}
+                  pipeline={this.props.pipeline}
+                  column={col}
+                  index={i}
+                />
               );
             })}
           </TR>

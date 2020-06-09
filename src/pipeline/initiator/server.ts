@@ -3,7 +3,7 @@ import {
   PipelineProcessorProps,
   ProcessorType,
 } from '../processor';
-import {ServerStorageOptions} from "../../storage/server";
+import { ServerStorageOptions } from '../../storage/server';
 
 interface ServerInitiatorProps extends PipelineProcessorProps {
   serverStorageOptions: ServerStorageOptions;
@@ -20,7 +20,7 @@ class ServerInitiator extends PipelineProcessor<
   _process(): ServerStorageOptions {
     return {
       url: this.props.serverStorageOptions.url,
-      method: this.props.serverStorageOptions.method
+      method: this.props.serverStorageOptions.method,
     };
   }
 }

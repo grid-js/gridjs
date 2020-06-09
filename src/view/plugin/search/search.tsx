@@ -1,13 +1,16 @@
 import { h } from 'preact';
 import { BaseComponent, BaseProps } from '../../base';
 import GlobalSearchFilter from '../../../pipeline/filter/globalSearch';
-import {classJoin, className} from '../../../util/className';
-import store, { SearchStoreState } from './store';
-import actions from './actions';
+import { classJoin, className } from '../../../util/className';
+import { SearchStore, SearchStoreState } from './store';
+import { SearchActions } from './actions';
 import Pipeline from '../../../pipeline/pipeline';
-import ServerGlobalSearchFilter from "../../../pipeline/filter/serverGlobalSearch";
+import ServerGlobalSearchFilter from '../../../pipeline/filter/serverGlobalSearch';
+import Dispatcher from '../../../util/dispatcher';
+import { debounce } from '../../../util/debounce';
 
 export interface SearchProps extends BaseProps {
+  dispatcher: Dispatcher<any>;
   pipeline: Pipeline<any>;
 }
 
@@ -15,6 +18,7 @@ export interface SearchConfig {
   keyword?: string;
   enabled?: boolean;
   placeholder?: string;
+  debounceTimeout?: number;
   server?: {
     url?: (keyword: string) => string;
     body?: (keyword: string) => BodyInit;
@@ -22,22 +26,29 @@ export interface SearchConfig {
 }
 
 export class Search extends BaseComponent<SearchProps & SearchConfig, {}> {
-  private searchProcessor: GlobalSearchFilter | ServerGlobalSearchFilter;
+  private readonly searchProcessor:
+    | GlobalSearchFilter
+    | ServerGlobalSearchFilter;
+  private readonly actions: SearchActions;
+  private readonly store: SearchStore;
 
   static defaultProps = {
     placeholder: 'Type a keyword...',
+    debounceTimeout: 250,
   };
 
   constructor(props: SearchProps & SearchConfig) {
     super();
 
+    this.actions = new SearchActions(props.dispatcher);
+    this.store = new SearchStore(props.dispatcher);
     const { enabled, keyword } = props;
 
     if (enabled) {
       // initial search
-      actions.search(keyword);
+      this.actions.search(keyword);
 
-      store.on('updated', this.storeUpdated.bind(this));
+      this.store.on('updated', this.storeUpdated.bind(this));
 
       let searchProcessor;
       if (props.server) {
@@ -68,23 +79,30 @@ export class Search extends BaseComponent<SearchProps & SearchConfig, {}> {
 
   private onChange(event): void {
     const keyword = event.target.value;
-    actions.search(keyword);
+    this.actions.search(keyword);
   }
 
   render() {
     if (!this.props.enabled) return null;
+
+    let onInput = this.onChange.bind(this);
+
+    // add debounce to input only if it's a server-side search
+    if (this.searchProcessor instanceof ServerGlobalSearchFilter) {
+      onInput = debounce(onInput, this.props.debounceTimeout);
+    }
 
     return (
       <div className={className('search')}>
         <input
           type="search"
           placeholder={this.props.placeholder}
-          onInput={this.onChange.bind(this)}
+          onInput={onInput}
           className={classJoin(
             className('input'),
-            className('search', 'input')
+            className('search', 'input'),
           )}
-          value={store.state.keyword}
+          value={this.store.state.keyword}
         />
       </div>
     );

@@ -4,9 +4,7 @@ import { generateID, ID } from '../util/id';
 
 export enum ProcessorType {
   Initiator,
-  LazyFilter,
-  LazySort,
-  LazyLimit,
+  Server,
   Extractor,
   Transformer,
   Filter,

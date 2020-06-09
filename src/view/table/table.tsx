@@ -8,8 +8,10 @@ import Header from '../../header';
 import { className } from '../../util/className';
 import { Status, TCell } from '../../types';
 import Pipeline from '../../pipeline/pipeline';
+import Dispatcher from '../../util/dispatcher';
 
 interface TableProps extends BaseProps {
+  dispatcher: Dispatcher<any>;
   pipeline: Pipeline<any>;
   data: Tabular<TCell>;
   header?: Header;
@@ -31,7 +33,11 @@ export class Table extends BaseComponent<TableProps, {}> {
   render() {
     return (
       <table className={className('table')} style={this.getStyle()}>
-        <THead pipeline={this.props.pipeline} header={this.props.header} />
+        <THead
+          pipeline={this.props.pipeline}
+          header={this.props.header}
+          dispatcher={this.props.dispatcher}
+        />
         <TBody
           data={this.props.data}
           status={this.props.status}

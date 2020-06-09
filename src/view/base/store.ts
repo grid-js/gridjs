@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../util/eventEmitter';
-import dispatcher from '../../util/dispatcher';
+import Dispatcher from '../../util/dispatcher';
 
 interface BaseStoreEvents<STATE> {
   updated: (newState: STATE, prevState?: STATE) => void;
@@ -9,9 +9,11 @@ export default abstract class BaseStore<STATE, ACTIONS> extends EventEmitter<
   BaseStoreEvents<STATE>
 > {
   private _state: STATE;
+  protected readonly dispatcher: Dispatcher<any>;
 
-  constructor() {
+  constructor(dispatcher: Dispatcher<any>) {
     super();
+    this.dispatcher = dispatcher;
     this._state = this.getInitialState();
     dispatcher.register(this._handle.bind(this));
   }

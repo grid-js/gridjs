@@ -3,7 +3,7 @@ import {
   PipelineProcessorProps,
   ProcessorType,
 } from '../processor';
-import {ServerStorageOptions} from "../../storage/server";
+import { ServerStorageOptions } from '../../storage/server';
 
 interface ServerGlobalSearchFilterProps extends PipelineProcessorProps {
   keyword?: string;
@@ -16,12 +16,11 @@ class ServerGlobalSearchFilter extends PipelineProcessor<
   ServerGlobalSearchFilterProps
 > {
   get type(): ProcessorType {
-    return ProcessorType.LazyFilter;
+    return ProcessorType.Server;
   }
 
   _process(options?: ServerStorageOptions): ServerStorageOptions {
-    if (!this.props.keyword)
-      return options;
+    if (!this.props.keyword) return options;
 
     options = options || {};
 

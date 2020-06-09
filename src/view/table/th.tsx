@@ -5,8 +5,10 @@ import { classJoin, className } from '../../util/className';
 import { TColumn } from '../../types';
 import { Sort } from '../plugin/sort/sort';
 import Pipeline from '../../pipeline/pipeline';
+import Dispatcher from '../../util/dispatcher';
 
 export interface THProps extends BaseProps {
+  dispatcher: Dispatcher<any>;
   pipeline: Pipeline<any>;
   index: number;
   column: TColumn;
@@ -43,6 +45,7 @@ export class TH extends BaseComponent<THProps, {}> {
         {this.isSortable() && (
           <Sort
             ref={this.sortRef}
+            dispatcher={this.props.dispatcher}
             pipeline={this.props.pipeline}
             index={this.props.index}
             {...this.props.column.sort}

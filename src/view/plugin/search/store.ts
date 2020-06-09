@@ -3,7 +3,10 @@ import { SearchActionsType } from './actions';
 
 export type SearchStoreState = { keyword: string | null };
 
-class SearchStore extends BaseStore<SearchStoreState, SearchActionsType> {
+export class SearchStore extends BaseStore<
+  SearchStoreState,
+  SearchActionsType
+> {
   getInitialState(): SearchStoreState {
     return { keyword: null };
   }
@@ -19,5 +22,3 @@ class SearchStore extends BaseStore<SearchStoreState, SearchActionsType> {
     this.setState({ keyword: keyword });
   }
 }
-
-export default new SearchStore();
