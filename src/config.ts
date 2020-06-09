@@ -5,10 +5,12 @@ import Tabular from './tabular';
 import { SearchConfig } from './view/plugin/search/search';
 import { PaginationConfig } from './view/plugin/pagination';
 import Header from './header';
-import {ServerStorageOptions} from "./storage/server";
+import { ServerStorageOptions } from './storage/server';
+import Dispatcher from './util/dispatcher';
 
 // Config type used internally
 export interface Config {
+  dispatcher?: Dispatcher<any>;
   /** container element that is used to mount the Grid.js to */
   container?: Element;
   data?: TwoDArray<TCell> | Function;

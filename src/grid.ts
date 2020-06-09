@@ -3,7 +3,8 @@ import { h, render, VNode } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import { Container } from './view/container';
 import log from './util/log';
-import PipelineUtils from "./pipeline/pipelineUtils";
+import PipelineUtils from './pipeline/pipelineUtils';
+import Dispatcher from './util/dispatcher';
 
 class Grid {
   private _config: Config;
@@ -14,6 +15,7 @@ class Grid {
 
   bootstrap(userConfig?: UserConfig): void {
     this.setConfig(userConfig);
+    this.setDispatcher(userConfig);
     this.setStorage(userConfig);
     this.setPipeline(this.config);
   }
@@ -24,6 +26,10 @@ class Grid {
 
   set config(config: Config) {
     this._config = config;
+  }
+
+  private setDispatcher(userConfig?: UserConfig): void {
+    this.config.dispatcher = userConfig.dispatcher || new Dispatcher<any>();
   }
 
   private setConfig(userConfig?: UserConfig): void {
