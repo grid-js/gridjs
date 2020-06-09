@@ -4,7 +4,7 @@ const _prefix = 'ID_';
  * This class is mostly based on Flux's Dispatcher by Facebook
  * https://github.com/facebook/flux/blob/master/src/Dispatcher.js
  */
-export class Dispatcher<TPayload> {
+export default class Dispatcher<TPayload> {
   _callbacks: { [key: string]: (payload: TPayload) => void };
   _isDispatching: boolean;
   _isHandled: { [key: string]: boolean };
@@ -132,5 +132,3 @@ export class Dispatcher<TPayload> {
     this._isDispatching = false;
   }
 }
-
-export default new Dispatcher();
