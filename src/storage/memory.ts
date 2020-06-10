@@ -1,31 +1,33 @@
-import Storage from './storage';
+import Storage, { StorageResponse } from './storage';
+import { TCell, TwoDArray } from '../types';
 
-class MemoryStorage extends Storage<any[][] | Function, any[][]> {
-  private data: Function;
+class MemoryStorage extends Storage<
+  TwoDArray<TCell> | (() => TwoDArray<TCell>)
+> {
+  private data: () => TwoDArray<TCell>;
 
-  constructor(data: any[][] | Function) {
+  constructor(data: TwoDArray<TCell> | (() => TwoDArray<TCell>)) {
     super();
     this.set(data);
   }
 
-  public async get(): Promise<any[][]> {
-    return await this.data();
+  public async get(): Promise<StorageResponse> {
+    const data = await this.data();
+
+    return {
+      data: data,
+      total: data.length,
+    };
   }
 
-  public set(data: any[][] | Function): this {
+  public set(data: TwoDArray<TCell> | (() => TwoDArray<TCell>)): this {
     if (data instanceof Array) {
-      this.data = (): any[][] => data;
+      this.data = (): TwoDArray<TCell> => data;
     } else if (data instanceof Function) {
       this.data = data;
     }
 
     return this;
-  }
-
-  total(rows: any[][]): Promise<number> {
-    return new Promise<number>((resolve) =>
-      resolve(rows.length),
-    );
   }
 }
 

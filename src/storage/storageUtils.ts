@@ -10,7 +10,7 @@ class StorageUtils {
    *
    * @param userConfig
    */
-  public static createFromUserConfig(userConfig: UserConfig): Storage<any, any> {
+  public static createFromUserConfig(userConfig: UserConfig): Storage<any> {
     let storage = null;
     // `data` array is provided
     if (userConfig.data) {
@@ -24,10 +24,7 @@ class StorageUtils {
     }
 
     if (userConfig.server) {
-      storage = new ServerStorage({
-        url: userConfig.server.url,
-        then: userConfig.server.then,
-      });
+      storage = new ServerStorage(userConfig.server);
     }
 
     if (!storage) {

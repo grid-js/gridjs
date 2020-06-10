@@ -3,7 +3,7 @@ import {
   PipelineProcessorProps,
   ProcessorType,
 } from '../processor';
-import {ServerStorageOptions} from "../../storage/server";
+import { ServerStorageOptions } from '../../storage/server';
 
 interface ServerPaginationLimitProps extends PipelineProcessorProps {
   page: number;
@@ -15,7 +15,7 @@ interface ServerPaginationLimitProps extends PipelineProcessorProps {
 class ServerPaginationLimit extends PipelineProcessor<
   ServerStorageOptions,
   ServerPaginationLimitProps
-  > {
+> {
   get type(): ProcessorType {
     return ProcessorType.Server;
   }
@@ -24,11 +24,19 @@ class ServerPaginationLimit extends PipelineProcessor<
     const updates = {};
 
     if (this.props.url) {
-      updates['url'] = this.props.url(options.url, this.props.page, this.props.limit);
+      updates['url'] = this.props.url(
+        options.url,
+        this.props.page,
+        this.props.limit,
+      );
     }
 
     if (this.props.body) {
-      updates['body'] = this.props.body(options.body, this.props.page, this.props.limit);
+      updates['body'] = this.props.body(
+        options.body,
+        this.props.page,
+        this.props.limit,
+      );
     }
 
     return {

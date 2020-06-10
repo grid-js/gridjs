@@ -4,7 +4,9 @@ import PaginationLimit from '../../pipeline/limit/pagination';
 import { className } from '../../util/className';
 import Pipeline from '../../pipeline/pipeline';
 import Storage from '../../storage/storage';
-import ServerPaginationLimit from "../../pipeline/limit/serverPagination";
+import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
+import { TCell } from '../../types';
+import Tabular from '../../tabular';
 
 interface PaginationState {
   page: number;
@@ -27,7 +29,7 @@ export interface PaginationConfig {
 }
 
 interface PaginationProps extends BaseProps {
-  storage: Storage<any, any[][]>;
+  storage: Storage<any>;
   pipeline: Pipeline<any>;
 }
 
@@ -67,22 +69,20 @@ export class Pagination extends BaseComponent<
           body: this.props.server.body,
         });
 
-        this.props.pipeline
-
+        this.props.pipeline.afterProcess((result: Tabular<TCell>) => {
+          this.setTotal(result.length);
+        });
       } else {
         processor = new PaginationLimit({
           limit: this.state.limit,
           page: this.state.page,
         });
 
-        processor.beforeProcess(async (tabular) => {
-          const totalRows = await this.props.storage.total(tabular.rows);
-
-          // to set the correct total number of rows
-          // when running in-memory operations
-          this.setState({
-            total: totalRows,
-          });
+        // Pagination (all Limit processors) is the last step in the pipeline
+        // and we assume that at this stage, we have the rows that we care about.
+        // Let's grab the rows before processing Pagination and set total number of rows
+        processor.beforeProcess(async (tabular: Tabular<TCell>) => {
+          this.setTotal(tabular.length);
         });
       }
 
@@ -119,14 +119,19 @@ export class Pagination extends BaseComponent<
     });
   }
 
+  private setTotal(totalRows: number): void {
+    // to set the correct total number of rows
+    // when running in-memory operations
+    this.setState({
+      total: totalRows,
+    });
+  }
+
   render() {
     if (!this.props.enabled) return null;
 
     // how many pagination buttons to render?
-    const maxCount: number = Math.min(
-      this.pages,
-      this.props.buttonsCount,
-    );
+    const maxCount: number = Math.min(this.pages, this.props.buttonsCount);
 
     let pagePivot = Math.min(this.state.page, Math.floor(maxCount / 2));
     if (this.state.page + Math.floor(maxCount / 2) >= this.pages) {
@@ -172,7 +177,9 @@ export class Pagination extends BaseComponent<
             .map((i) => (
               <button
                 onClick={this.setPage.bind(this, i)}
-                className={(this.state.page === i) ? className('currentPage') : null}
+                className={
+                  this.state.page === i ? className('currentPage') : null
+                }
                 title={`Page ${i + 1}`}
               >
                 {i + 1}

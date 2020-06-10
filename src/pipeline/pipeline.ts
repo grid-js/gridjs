@@ -16,6 +16,7 @@ class Pipeline<T, P = {}> {
   private propsUpdatedCallback: Set<(...args) => void> = new Set();
   private afterRegisterCallback: Set<(...args) => void> = new Set();
   private updatedCallback: Set<(...args) => void> = new Set();
+  private afterProcessCallback: Set<(...args) => void> = new Set();
 
   constructor(steps?: PipelineProcessor<any, any>[]) {
     if (steps) {
@@ -145,6 +146,9 @@ class Pipeline<T, P = {}> {
     // means the pipeline is up to date
     this.lastProcessorIndexUpdated = steps.length;
 
+    // triggers the afterProcess callbacks with the results
+    this.trigger(this.afterProcessCallback, prev);
+
     return prev;
   }
 
@@ -219,6 +223,17 @@ class Pipeline<T, P = {}> {
    */
   updated(fn: (...args) => void): this {
     this.updatedCallback.add(fn);
+    return this;
+  }
+
+  /**
+   * Triggers the callback function when the pipeline
+   * is fully processed, before returning the results
+   *
+   * @param fn
+   */
+  afterProcess(fn: (...args) => void): this {
+    this.afterProcessCallback.add(fn);
     return this;
   }
 }

@@ -1,4 +1,4 @@
-import Storage from './storage';
+import Storage, { StorageResponse } from './storage';
 import log from '../util/log';
 
 export interface ServerStorageOptions {
@@ -6,11 +6,11 @@ export interface ServerStorageOptions {
   method?: string;
   headers?: HeadersInit;
   body?: BodyInit;
-  then?: (data: any) => any[][] | PromiseLike<any[][]>;
-  total?: (data: any) => Promise<number>;
+  then?: (data: any) => any[][];
+  total?: (data: any) => number;
 }
 
-class ServerStorage extends Storage<ServerStorageOptions, any[][]> {
+class ServerStorage extends Storage<ServerStorageOptions> {
   private readonly options: ServerStorageOptions;
 
   constructor(options: ServerStorageOptions) {
@@ -18,7 +18,7 @@ class ServerStorage extends Storage<ServerStorageOptions, any[][]> {
     this.options = options;
   }
 
-  public get(options?: ServerStorageOptions): Promise<any[][]> {
+  public get(options?: ServerStorageOptions): Promise<StorageResponse> {
     // this.options is the initial config object
     // options is the runtime config passed by the pipeline (e.g. search component)
     const opts = {
@@ -38,16 +38,12 @@ class ServerStorage extends Storage<ServerStorageOptions, any[][]> {
           return null;
         }
       })
-      .then(opts.then);
-  }
-
-  public total(data: any): Promise<number> {
-    if (typeof this.options.total === 'function') {
-      return this.options.total(data);
-    }
-
-    log.error(`total method is not implemented for ${this}`);
-    return null;
+      .then((res) => {
+        return {
+          data: opts.then(res),
+          total: typeof opts.total === 'function' ? opts.total(res) : undefined,
+        };
+      });
   }
 }
 

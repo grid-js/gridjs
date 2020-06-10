@@ -1,12 +1,12 @@
 /**
  * Base Storage class. All storage implementation must inherit this class
  */
-abstract class Storage<I, O> {
+abstract class Storage<I> {
   /**
    * Returns all rows based on ...args
    * @param args
    */
-  abstract async get(...args): Promise<O>;
+  abstract async get(...args): Promise<StorageResponse>;
 
   /**
    * To set all rows
@@ -14,13 +14,11 @@ abstract class Storage<I, O> {
    * @param data
    */
   set?(data: I | Function): this;
+}
 
-  /**
-   * Returns the total number of rows based on ...args
-   *
-   * @param args
-   */
-  total?(...args): Promise<number>;
+export interface StorageResponse {
+  data: any[][];
+  total: number;
 }
 
 export default Storage;

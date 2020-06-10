@@ -13,12 +13,12 @@ export interface Config {
   dispatcher?: Dispatcher<any>;
   /** container element that is used to mount the Grid.js to */
   container?: Element;
-  data?: TwoDArray<TCell> | Function;
+  data?: TwoDArray<TCell> | (() => TwoDArray<TCell>);
   server?: ServerStorageOptions;
   header?: Header;
   /** to parse a HTML table and load the data */
   from: HTMLElement;
-  storage: Storage<any, any>;
+  storage: Storage<any>;
   pipeline: Pipeline<Tabular<TCell>>;
   /** to automatically calculate the columns width */
   autoWidth: boolean;
