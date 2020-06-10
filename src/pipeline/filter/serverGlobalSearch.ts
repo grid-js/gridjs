@@ -22,8 +22,6 @@ class ServerGlobalSearchFilter extends PipelineProcessor<
   _process(options?: ServerStorageOptions): ServerStorageOptions {
     if (!this.props.keyword) return options;
 
-    options = options || {};
-
     const updates = {};
 
     if (this.props.url) {

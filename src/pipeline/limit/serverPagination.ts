@@ -21,8 +21,6 @@ class ServerPaginationLimit extends PipelineProcessor<
   }
 
   _process(options?: ServerStorageOptions): ServerStorageOptions {
-    options = options || {};
-
     const updates = {};
 
     if (this.props.url) {

@@ -2,14 +2,15 @@ import Storage from './storage';
 import log from '../util/log';
 
 export interface ServerStorageOptions {
-  url?: string;
+  url: string;
   method?: string;
   headers?: HeadersInit;
   body?: BodyInit;
   then?: (data: any) => any[][] | PromiseLike<any[][]>;
+  total?: (data: any) => Promise<number>;
 }
 
-class ServerStorage extends Storage {
+class ServerStorage extends Storage<ServerStorageOptions, any[][]> {
   private readonly options: ServerStorageOptions;
 
   constructor(options: ServerStorageOptions) {
@@ -40,8 +41,13 @@ class ServerStorage extends Storage {
       .then(opts.then);
   }
 
-  public get length(): Promise<number> {
-    return this.get().then((v) => v.length);
+  public total(data: any): Promise<number> {
+    if (typeof this.options.total === 'function') {
+      return this.options.total(data);
+    }
+
+    log.error(`total method is not implemented for ${this}`);
+    return null;
   }
 }
 

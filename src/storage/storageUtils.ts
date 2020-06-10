@@ -10,7 +10,7 @@ class StorageUtils {
    *
    * @param userConfig
    */
-  public static createFromUserConfig(userConfig: UserConfig): Storage | null {
+  public static createFromUserConfig(userConfig: UserConfig): Storage<any, any> {
     let storage = null;
     // `data` array is provided
     if (userConfig.data) {

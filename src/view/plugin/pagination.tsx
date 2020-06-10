@@ -3,6 +3,8 @@ import { BaseComponent, BaseProps } from '../base';
 import PaginationLimit from '../../pipeline/limit/pagination';
 import { className } from '../../util/className';
 import Pipeline from '../../pipeline/pipeline';
+import Storage from '../../storage/storage';
+import ServerPaginationLimit from "../../pipeline/limit/serverPagination";
 
 interface PaginationState {
   page: number;
@@ -25,6 +27,7 @@ export interface PaginationConfig {
 }
 
 interface PaginationProps extends BaseProps {
+  storage: Storage<any, any[][]>;
   pipeline: Pipeline<any>;
 }
 
@@ -54,23 +57,36 @@ export class Pagination extends BaseComponent<
 
   componentWillMount(): void {
     if (this.props.enabled) {
-      const processor = new PaginationLimit({
-        limit: this.state.limit,
-        page: this.state.page,
-      });
+      let processor;
 
-      processor.beforeProcess((tabular) => {
-        const totalRows = tabular.rows.length;
-
-        // to set the correct total number of rows
-        // when running in-memory operations
-        this.setState({
-          total: totalRows,
+      if (this.props.server) {
+        processor = new ServerPaginationLimit({
+          limit: this.state.limit,
+          page: this.state.page,
+          url: this.props.server.url,
+          body: this.props.server.body,
         });
-      });
+
+        this.props.pipeline
+
+      } else {
+        processor = new PaginationLimit({
+          limit: this.state.limit,
+          page: this.state.page,
+        });
+
+        processor.beforeProcess(async (tabular) => {
+          const totalRows = await this.props.storage.total(tabular.rows);
+
+          // to set the correct total number of rows
+          // when running in-memory operations
+          this.setState({
+            total: totalRows,
+          });
+        });
+      }
 
       this.processor = processor;
-
       this.props.pipeline.register(processor);
     }
   }

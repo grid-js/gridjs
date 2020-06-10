@@ -18,7 +18,7 @@ export interface Config {
   header?: Header;
   /** to parse a HTML table and load the data */
   from: HTMLElement;
-  storage: Storage;
+  storage: Storage<any, any>;
   pipeline: Pipeline<Tabular<TCell>>;
   /** to automatically calculate the columns width */
   autoWidth: boolean;

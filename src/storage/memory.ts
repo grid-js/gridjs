@@ -1,6 +1,6 @@
 import Storage from './storage';
 
-class MemoryStorage extends Storage {
+class MemoryStorage extends Storage<any[][] | Function, any[][]> {
   private data: Function;
 
   constructor(data: any[][] | Function) {
@@ -12,7 +12,7 @@ class MemoryStorage extends Storage {
     return await this.data();
   }
 
-  public set(data: any[][] | Function): MemoryStorage {
+  public set(data: any[][] | Function): this {
     if (data instanceof Array) {
       this.data = (): any[][] => data;
     } else if (data instanceof Function) {
@@ -22,9 +22,9 @@ class MemoryStorage extends Storage {
     return this;
   }
 
-  public get length(): Promise<number> {
+  total(rows: any[][]): Promise<number> {
     return new Promise<number>((resolve) =>
-      resolve(Array.from(this.data()).length),
+      resolve(rows.length),
     );
   }
 }

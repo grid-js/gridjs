@@ -6,7 +6,7 @@ import {
 } from '../processor';
 
 interface StorageExtractorProps extends PipelineProcessorProps {
-  storage: Storage;
+  storage: Storage<any, any[][]>;
 }
 
 class StorageExtractor extends PipelineProcessor<
