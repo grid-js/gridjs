@@ -2,11 +2,18 @@ import Storage, { StorageResponse } from './storage';
 import { TCell, TwoDArray } from '../types';
 
 class MemoryStorage extends Storage<
-  TwoDArray<TCell> | (() => TwoDArray<TCell>)
+  | TwoDArray<TCell>
+  | (() => TwoDArray<TCell>)
+  | (() => Promise<TwoDArray<TCell>>)
 > {
-  private data: () => TwoDArray<TCell>;
+  private data: (() => TwoDArray<TCell>) | (() => Promise<TwoDArray<TCell>>);
 
-  constructor(data: TwoDArray<TCell> | (() => TwoDArray<TCell>)) {
+  constructor(
+    data:
+      | TwoDArray<TCell>
+      | (() => TwoDArray<TCell>)
+      | (() => Promise<TwoDArray<TCell>>),
+  ) {
     super();
     this.set(data);
   }
@@ -20,7 +27,12 @@ class MemoryStorage extends Storage<
     };
   }
 
-  public set(data: TwoDArray<TCell> | (() => TwoDArray<TCell>)): this {
+  public set(
+    data:
+      | TwoDArray<TCell>
+      | (() => TwoDArray<TCell>)
+      | (() => Promise<TwoDArray<TCell>>),
+  ): this {
     if (data instanceof Array) {
       this.data = (): TwoDArray<TCell> => data;
     } else if (data instanceof Function) {

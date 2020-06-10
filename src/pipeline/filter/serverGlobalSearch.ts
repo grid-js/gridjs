@@ -16,7 +16,7 @@ class ServerGlobalSearchFilter extends PipelineProcessor<
   ServerGlobalSearchFilterProps
 > {
   get type(): ProcessorType {
-    return ProcessorType.Server;
+    return ProcessorType.ServerFilter;
   }
 
   _process(options?: ServerStorageOptions): ServerStorageOptions {

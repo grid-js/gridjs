@@ -105,6 +105,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
               header={this.state.header}
               width={this.props.width}
               status={this.state.status}
+              sort={this.props.config.sort}
             />
           </div>
 

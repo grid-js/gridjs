@@ -37,7 +37,7 @@ export class Pagination extends BaseComponent<
   PaginationProps & PaginationConfig,
   PaginationState
 > {
-  private processor: PaginationLimit;
+  private processor: PaginationLimit | ServerPaginationLimit;
 
   static defaultProps = {
     summary: true,

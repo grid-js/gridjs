@@ -4,7 +4,9 @@ import { generateID, ID } from '../util/id';
 
 export enum ProcessorType {
   Initiator,
-  Server,
+  ServerFilter,
+  ServerSort,
+  ServerLimit,
   Extractor,
   Transformer,
   Filter,

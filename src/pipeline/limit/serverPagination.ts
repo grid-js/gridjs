@@ -17,7 +17,7 @@ class ServerPaginationLimit extends PipelineProcessor<
   ServerPaginationLimitProps
 > {
   get type(): ProcessorType {
-    return ProcessorType.Server;
+    return ProcessorType.ServerLimit;
   }
 
   _process(options?: ServerStorageOptions): ServerStorageOptions {
