@@ -3,10 +3,12 @@ import Tabular from '../../../src/tabular';
 
 describe('ArrayToTabularTransformer', () => {
   it('should convert raw data to Tabular', async () => {
-    const raw = [
-      [1, 2, 3],
-      ['a', 'b', 'c'],
-    ];
+    const raw = {
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c']
+      ]
+    };
 
     const transformer = new ArrayToTabularTransformer();
     const data = await transformer.process(raw);

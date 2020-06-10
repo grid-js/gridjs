@@ -7,6 +7,7 @@ import StorageExtractor from '../../src/pipeline/extractor/storage';
 import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
 import StorageUtils from '../../src/storage/storageUtils';
 import Header from '../../src/header';
+import Dispatcher from "../../src/util/dispatcher";
 
 describe('Container component', () => {
   let config: Config;
@@ -19,6 +20,7 @@ describe('Container component', () => {
     ];
 
     config.storage = StorageUtils.createFromUserConfig(config);
+    config.dispatcher = new Dispatcher();
     config.pipeline = new Pipeline([
       new StorageExtractor({ storage: config.storage }),
       new ArrayToTabularTransformer(),
