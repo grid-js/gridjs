@@ -1,4 +1,4 @@
-import Storage from '../../storage/storage';
+import Storage, { StorageResponse } from '../../storage/storage';
 import {
   PipelineProcessor,
   PipelineProcessorProps,
@@ -6,19 +6,19 @@ import {
 } from '../processor';
 
 interface StorageExtractorProps extends PipelineProcessorProps {
-  storage: Storage;
+  storage: Storage<any>;
 }
 
 class StorageExtractor extends PipelineProcessor<
-  Promise<any[][]>,
+  Promise<StorageResponse>,
   StorageExtractorProps
 > {
   get type(): ProcessorType {
     return ProcessorType.Extractor;
   }
 
-  async _process(): Promise<any[][]> {
-    return await this.props.storage.get();
+  async _process(opts: any): Promise<StorageResponse> {
+    return await this.props.storage.get(opts);
   }
 }
 

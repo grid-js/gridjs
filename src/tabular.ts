@@ -3,9 +3,11 @@ import Row from './row';
 import Cell from './cell';
 import { OneDArray, TwoDArray } from './types';
 import { oneDtoTwoD } from './util/cast';
+import { StorageResponse } from './storage/storage';
 
 class Tabular<T> extends Base {
   private _rows: Row<T>[];
+  private _length: number;
 
   constructor(rows?: Row<T>[] | Row<T>) {
     super();
@@ -28,7 +30,12 @@ class Tabular<T> extends Base {
   }
 
   get length(): number {
-    return this.rows.length;
+    return this._length || this.rows.length;
+  }
+
+  // we want to sent the length when storage is ServerStorage
+  set length(len: number) {
+    this._length = len;
   }
 
   /**
@@ -55,6 +62,15 @@ class Tabular<T> extends Base {
     return new Tabular(
       data.map((row) => new Row(row.map((cell) => new Cell(cell)))),
     );
+  }
+
+  static fromStorageResponse<T>(storageResponse: StorageResponse): Tabular<T> {
+    const tabular = Tabular.fromArray(storageResponse.data);
+
+    // for server-side storage
+    tabular.length = storageResponse.total;
+
+    return tabular;
   }
 }
 

@@ -3,11 +3,15 @@ import MemoryStorage from '../../../src/storage/memory';
 
 describe('StorageExtractor', () => {
   it('should pull data from a Storage', async () => {
-    const data = [
-      [1, 2, 3],
-      ['a', 'b', 'c'],
-    ];
-    const storage = new MemoryStorage(data);
+    const data = {
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c']
+      ],
+      total: 2
+    };
+
+    const storage = new MemoryStorage(data.data);
     const processor = new StorageExtractor({ storage: storage });
     expect(await processor.process()).toStrictEqual(data);
   });

@@ -20,7 +20,14 @@ export interface TColumn {
   formatter?: (cell: TCell, row: Row<TCell>, column: TColumn) => ComponentChild;
 }
 
+// Comparator function for the sorting plugin
 export type Comparator<T> = (a: T, b: T) => number;
+
+export interface TColumnSort {
+  index: number;
+  // 1 ascending, -1 descending
+  direction?: 1 | -1;
+}
 
 // container status
 export enum Status {

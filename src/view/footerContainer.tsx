@@ -41,6 +41,7 @@ export class FooterContainer extends BaseComponent<
       return (
         <div ref={this.footerRef} className={className('footer')}>
           <Pagination
+            storage={this.props.config.storage}
             pipeline={this.props.config.pipeline}
             {...this.props.config.pagination}
           />

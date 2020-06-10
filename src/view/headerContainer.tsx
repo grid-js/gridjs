@@ -41,6 +41,7 @@ export class HeaderContainer extends BaseComponent<
       return (
         <div ref={this.headerRef} className={className('head')}>
           <Search
+            dispatcher={this.props.config.dispatcher}
             pipeline={this.props.config.pipeline}
             {...this.props.config.search}
           />

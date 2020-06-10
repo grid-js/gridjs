@@ -5,16 +5,24 @@ import Tabular from './tabular';
 import { SearchConfig } from './view/plugin/search/search';
 import { PaginationConfig } from './view/plugin/pagination';
 import Header from './header';
+import { ServerStorageOptions } from './storage/server';
+import Dispatcher from './util/dispatcher';
+import { GenericSortConfig } from './view/plugin/sort/sort';
 
 // Config type used internally
 export interface Config {
+  dispatcher?: Dispatcher<any>;
   /** container element that is used to mount the Grid.js to */
   container?: Element;
-  data?: TwoDArray<TCell> | Function;
+  data?:
+    | TwoDArray<TCell>
+    | (() => TwoDArray<TCell>)
+    | (() => Promise<TwoDArray<TCell>>);
+  server?: ServerStorageOptions;
   header?: Header;
   /** to parse a HTML table and load the data */
   from: HTMLElement;
-  storage: Storage;
+  storage: Storage<any>;
   pipeline: Pipeline<Tabular<TCell>>;
   /** to automatically calculate the columns width */
   autoWidth: boolean;
@@ -22,21 +30,16 @@ export interface Config {
   width: string;
   search: SearchConfig;
   pagination: PaginationConfig;
+  sort: GenericSortConfig;
 }
 
 // Config type used by the consumers
 interface UserConfigExtend {
-  server?: {
-    url: string;
-    then?: (data: any) => any[][];
-    // fetch() opts
-    opts?: any[];
-  };
   columns?: OneDArray<TColumn> | OneDArray<string>;
   search: SearchConfig | boolean;
   pagination: PaginationConfig | boolean;
   // implicit option to enable the sort plugin globally
-  sort: boolean;
+  sort: GenericSortConfig | boolean;
 }
 
 export type UserConfig = ProtoExtends<
@@ -67,9 +70,14 @@ export class Config {
 
     if (!userConfig) return config;
 
+    if (typeof config.sort === 'boolean' && config.sort) {
+      config.sort = {
+        multiColumn: true,
+      };
+    }
+
     config.header = Header.fromUserConfig(config);
 
-    // TODO: can we refactor this?
     config.pagination = {
       enabled:
         userConfig.pagination === true ||

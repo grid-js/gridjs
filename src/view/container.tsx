@@ -99,11 +99,13 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
             style={{ width: this.props.width }}
           >
             <Table
+              dispatcher={this.props.config.dispatcher}
               pipeline={this.props.pipeline}
               data={this.state.data}
               header={this.state.header}
               width={this.props.width}
               status={this.state.status}
+              sort={this.props.config.sort}
             />
           </div>
 

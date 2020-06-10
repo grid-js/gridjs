@@ -11,7 +11,7 @@ describe('cast module', () => {
     });
 
     it('should work with empty arrays', () => {
-      expect(oneDtoTwoD([])).toStrictEqual([[]]);
+      expect(oneDtoTwoD([])).toStrictEqual([]);
     });
   });
 });

@@ -8,7 +8,7 @@ export type SortStoreState = {
   compare?: Comparator<TCell>;
 }[];
 
-class SortStore extends BaseStore<SortStoreState, SortActionsType> {
+export class SortStore extends BaseStore<SortStoreState, SortActionsType> {
   getInitialState(): SortStoreState {
     return [];
   }
@@ -115,5 +115,3 @@ class SortStore extends BaseStore<SortStoreState, SortActionsType> {
     this.setState(columns);
   }
 }
-
-export default new SortStore();

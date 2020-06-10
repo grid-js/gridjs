@@ -12,7 +12,7 @@ describe('MemoryStorage class', () => {
 
   it('should load from the config', async () => {
     const memoryStorage = new MemoryStorage(data);
-    expect(await memoryStorage.length).toBe(2);
+    expect((await memoryStorage.get()).total).toBe(2);
   });
 
   it('should return the correct length', async () => {
@@ -20,7 +20,7 @@ describe('MemoryStorage class', () => {
 
     await memoryStorage.set([[1, 2, 3]]);
 
-    expect(await memoryStorage.length).toBe(1);
+    expect((await memoryStorage.get()).total).toBe(1);
   });
 
   it('should set and get rows', async () => {
@@ -28,7 +28,7 @@ describe('MemoryStorage class', () => {
 
     await memoryStorage.set([['a', 'b', 'c']]);
 
-    expect(await memoryStorage.get()).toStrictEqual([['a', 'b', 'c']]);
+    expect((await memoryStorage.get()).data).toStrictEqual([['a', 'b', 'c']]);
   });
 
   it('should set rows from a function', async () => {
@@ -36,7 +36,7 @@ describe('MemoryStorage class', () => {
 
     await memoryStorage.set(() => [['a', 'b', 'c']]);
 
-    expect(await memoryStorage.get()).toStrictEqual([['a', 'b', 'c']]);
+    expect((await memoryStorage.get()).data).toStrictEqual([['a', 'b', 'c']]);
   });
 
   it('should set rows from an async function', async () => {
@@ -48,6 +48,6 @@ describe('MemoryStorage class', () => {
       });
     });
 
-    expect(await memoryStorage.get()).toStrictEqual([['a', 'b', 'c']]);
+    expect((await memoryStorage.get()).data).toStrictEqual([['a', 'b', 'c']]);
   });
 });

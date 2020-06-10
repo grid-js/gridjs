@@ -6,12 +6,10 @@ export interface SearchActionsType {
   };
 }
 
-class SearchActions extends BaseActions<SearchActionsType> {
+export class SearchActions extends BaseActions<SearchActionsType> {
   search(keyword: string): void {
     this.dispatch('SEARCH_KEYWORD', {
       keyword: keyword,
     });
   }
 }
-
-export default new SearchActions();

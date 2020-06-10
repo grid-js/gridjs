@@ -8,13 +8,17 @@ import Header from '../../header';
 import { className } from '../../util/className';
 import { Status, TCell } from '../../types';
 import Pipeline from '../../pipeline/pipeline';
+import Dispatcher from '../../util/dispatcher';
+import { GenericSortConfig } from '../plugin/sort/sort';
 
 interface TableProps extends BaseProps {
+  dispatcher: Dispatcher<any>;
   pipeline: Pipeline<any>;
   data: Tabular<TCell>;
+  status: Status;
   header?: Header;
   width?: string;
-  status: Status;
+  sort?: GenericSortConfig;
 }
 
 export class Table extends BaseComponent<TableProps, {}> {
@@ -31,7 +35,12 @@ export class Table extends BaseComponent<TableProps, {}> {
   render() {
     return (
       <table className={className('table')} style={this.getStyle()}>
-        <THead pipeline={this.props.pipeline} header={this.props.header} />
+        <THead
+          pipeline={this.props.pipeline}
+          header={this.props.header}
+          dispatcher={this.props.dispatcher}
+          sort={this.props.sort}
+        />
         <TBody
           data={this.props.data}
           status={this.props.status}

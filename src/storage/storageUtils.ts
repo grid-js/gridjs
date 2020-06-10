@@ -1,38 +1,34 @@
 import { UserConfig } from '../config';
 import MemoryStorage from './memory';
 import Storage from './storage';
-import StorageError from '../error/storage';
 import ServerStorage from './server';
+import log from '../util/log';
 
 class StorageUtils {
   /**
-   * Accepts the config dict and tries to guess and return a Storage type
+   * Accepts the userConfig dict and tries to guess and return a Storage type
    *
-   * @param config
+   * @param userConfig
    */
-  public static createFromUserConfig(config: UserConfig): Storage | null {
+  public static createFromUserConfig(userConfig: UserConfig): Storage<any> {
     let storage = null;
     // `data` array is provided
-    if (config.data) {
-      storage = new MemoryStorage(config.data);
+    if (userConfig.data) {
+      storage = new MemoryStorage(userConfig.data);
     }
 
-    if (config.from) {
-      storage = new MemoryStorage(this.tableElementToArray(config.from));
+    if (userConfig.from) {
+      storage = new MemoryStorage(this.tableElementToArray(userConfig.from));
       // remove the source table element from the DOM
-      config.from.style.display = 'none';
+      userConfig.from.style.display = 'none';
     }
 
-    if (config.server) {
-      storage = new ServerStorage(
-        config.server.url,
-        config.server.then,
-        config.server.opts,
-      );
+    if (userConfig.server) {
+      storage = new ServerStorage(userConfig.server);
     }
 
     if (!storage) {
-      throw new StorageError('Could not determine the storage type');
+      log.error('Could not determine the storage type', true);
     }
 
     return storage;

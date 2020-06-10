@@ -8,6 +8,7 @@ import Pipeline from '../../src/pipeline/pipeline';
 import StorageExtractor from '../../src/pipeline/extractor/storage';
 import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
 import { Status } from '../../src/types';
+import Dispatcher from "../../src/util/dispatcher";
 
 describe('Table component', () => {
   let config: Config;
@@ -20,6 +21,7 @@ describe('Table component', () => {
     ];
 
     config.storage = StorageUtils.createFromUserConfig(config);
+    config.dispatcher = new Dispatcher();
     config.pipeline = new Pipeline([
       new StorageExtractor({ storage: config.storage }),
       new ArrayToTabularTransformer(),
@@ -30,6 +32,7 @@ describe('Table component', () => {
     const table = mount(
       <Table
         pipeline={config.pipeline}
+        dispatcher={config.dispatcher}
         data={await config.pipeline.process()}
         status={Status.Loaded}
       />,
@@ -42,6 +45,7 @@ describe('Table component', () => {
     const table = mount(
       <Table
         pipeline={config.pipeline}
+        dispatcher={config.dispatcher}
         data={await config.pipeline.process()}
         status={Status.Loading}
       />,
@@ -54,6 +58,7 @@ describe('Table component', () => {
     const table = mount(
       <Table
         pipeline={config.pipeline}
+        dispatcher={config.dispatcher}
         data={await config.pipeline.process()}
         header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
         status={Status.Loaded}
@@ -67,6 +72,7 @@ describe('Table component', () => {
     const table = mount(
       <Table
         pipeline={config.pipeline}
+        dispatcher={config.dispatcher}
         data={await config.pipeline.process()}
         width="300px"
         header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
@@ -85,6 +91,7 @@ describe('Table component', () => {
     const table = mount(
       <Table
         pipeline={config.pipeline}
+        dispatcher={config.dispatcher}
         data={await config.pipeline.process()}
         header={header}
         status={Status.Loaded}
@@ -106,6 +113,7 @@ describe('Table component', () => {
     const table = mount(
       <Table
         pipeline={config.pipeline}
+        dispatcher={config.dispatcher}
         data={await config.pipeline.process()}
         header={header}
         status={Status.Loaded}

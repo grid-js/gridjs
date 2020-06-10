@@ -31,13 +31,14 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
             return <TR key={row.id} row={row} header={this.props.header} />;
           })}
 
-        {this.props.status === Status.Loading && (
-          <MessageRow
-            message="Loading..."
-            colSpan={this.headerLength()}
-            className={className('loading')}
-          />
-        )}
+        {this.props.status === Status.Loading &&
+          (!this.props.data || this.props.data.length === 0) && (
+            <MessageRow
+              message="Loading..."
+              colSpan={this.headerLength()}
+              className={className('loading')}
+            />
+          )}
 
         {this.props.status === Status.Loaded &&
           this.props.data &&
