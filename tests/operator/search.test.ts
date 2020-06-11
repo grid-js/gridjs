@@ -8,7 +8,8 @@ describe('search', () => {
   const row1 = new Row([new Cell('hello'), new Cell('world'), new Cell('!')]);
   const row2 = new Row([new Cell('foo'), new Cell('boo'), new Cell('bar')]);
   const row3 = new Row([new Cell('hello'), new Cell('test'), new Cell('!!!')]);
-  const tabular: Tabular<TCell> = new Tabular([row1, row2, row3]);
+  const row4 = new Row([new Cell(null), new Cell('xkcd'), new Cell('???')]);
+  const tabular: Tabular<TCell> = new Tabular([row1, row2, row3, row4]);
 
   it('should work with exact match', () => {
     expect(search('hello', tabular).rows).toStrictEqual(

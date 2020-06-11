@@ -13,6 +13,10 @@ export default function (
   return new Tabular(
     tabular.rows.filter((row) =>
       row.cells.some((cell) => {
+        if (!cell || !cell.data) {
+          return false;
+        }
+
         let data = '';
 
         if (typeof cell.data === 'object') {
