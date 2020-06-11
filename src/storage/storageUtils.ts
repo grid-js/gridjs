@@ -3,6 +3,7 @@ import MemoryStorage from './memory';
 import Storage from './storage';
 import ServerStorage from './server';
 import log from '../util/log';
+import { html } from '../util/html';
 
 class StorageUtils {
   /**
@@ -47,11 +48,19 @@ class StorageUtils {
     const rows = tbody.querySelectorAll('tr');
 
     for (const row of rows as any) {
-      const cells = row.querySelectorAll('td');
+      const cells: HTMLElement[] = row.querySelectorAll('td');
       const parsedRow = [];
 
       for (const cell of cells) {
-        parsedRow.push(cell.innerHTML);
+        // try to capture a TD with single text element first
+        if (
+          cell.childNodes.length === 1 &&
+          cell.childNodes[0].nodeType === Node.TEXT_NODE
+        ) {
+          parsedRow.push(cell.innerText);
+        } else {
+          parsedRow.push(html(cell.innerHTML));
+        }
       }
 
       arr.push(parsedRow);
