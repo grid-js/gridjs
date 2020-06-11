@@ -25,6 +25,13 @@ class Pipeline<T, P = {}> {
   }
 
   /**
+   * Clears the `cache` array
+   */
+  clearCache(): void {
+    this.cache = new Map<string, any>();
+  }
+
+  /**
    * Registers a new processor
    *
    * @param processor

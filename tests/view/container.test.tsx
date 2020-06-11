@@ -7,7 +7,7 @@ import StorageExtractor from '../../src/pipeline/extractor/storage';
 import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
 import StorageUtils from '../../src/storage/storageUtils';
 import Header from '../../src/header';
-import Dispatcher from "../../src/util/dispatcher";
+import Dispatcher from '../../src/util/dispatcher';
 
 describe('Container component', () => {
   let config: Config;

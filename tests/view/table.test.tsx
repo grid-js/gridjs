@@ -8,7 +8,7 @@ import Pipeline from '../../src/pipeline/pipeline';
 import StorageExtractor from '../../src/pipeline/extractor/storage';
 import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
 import { Status } from '../../src/types';
-import Dispatcher from "../../src/util/dispatcher";
+import Dispatcher from '../../src/util/dispatcher';
 
 describe('Table component', () => {
   let config: Config;
