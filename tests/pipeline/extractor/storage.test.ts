@@ -6,9 +6,9 @@ describe('StorageExtractor', () => {
     const data = {
       data: [
         [1, 2, 3],
-        ['a', 'b', 'c']
+        ['a', 'b', 'c'],
       ],
-      total: 2
+      total: 2,
     };
 
     const storage = new MemoryStorage(data.data);

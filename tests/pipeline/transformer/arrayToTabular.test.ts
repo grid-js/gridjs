@@ -6,8 +6,8 @@ describe('ArrayToTabularTransformer', () => {
     const raw = {
       data: [
         [1, 2, 3],
-        ['a', 'b', 'c']
-      ]
+        ['a', 'b', 'c'],
+      ],
     };
 
     const transformer = new ArrayToTabularTransformer();
