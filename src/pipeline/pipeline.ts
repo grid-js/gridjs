@@ -1,5 +1,6 @@
 import { PipelineProcessor, ProcessorType } from './processor';
 import { ID } from '../util/id';
+import { trigger } from '../util/trigger';
 
 class Pipeline<T, P = {}> {
   // available steps for this pipeline
@@ -154,7 +155,7 @@ class Pipeline<T, P = {}> {
     this.lastProcessorIndexUpdated = steps.length;
 
     // triggers the afterProcess callbacks with the results
-    this.trigger(this.afterProcessCallback, prev);
+    trigger(this.afterProcessCallback, prev);
 
     return prev;
   }
@@ -181,22 +182,16 @@ class Pipeline<T, P = {}> {
     }
   }
 
-  private trigger(fns: Set<(...args) => void>, ...args): void {
-    if (fns) {
-      fns.forEach((fn) => fn(...args));
-    }
-  }
-
   private processorPropsUpdated(processor): void {
     this.setLastProcessorIndex(processor);
-    this.trigger(this.propsUpdatedCallback);
-    this.trigger(this.updatedCallback, processor);
+    trigger(this.propsUpdatedCallback);
+    trigger(this.updatedCallback, processor);
   }
 
   private afterRegistered(processor): void {
     this.setLastProcessorIndex(processor);
-    this.trigger(this.afterRegisterCallback);
-    this.trigger(this.updatedCallback, processor);
+    trigger(this.afterRegisterCallback);
+    trigger(this.updatedCallback, processor);
   }
 
   /**

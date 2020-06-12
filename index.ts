@@ -4,5 +4,6 @@ import Grid from './src/grid';
 import './src/theme/mermaid';
 import { html } from './src/util/html';
 import { h } from 'preact';
+import { UserConfig, Config } from './src/config';
 
-export { Grid, html, h };
+export { Grid, html, h, UserConfig, Config };

@@ -1,6 +1,7 @@
 // The order of enum items define the processing order of the processor type
 // e.g. Extractor = 0 will be processed before Transformer = 1
 import { generateID, ID } from '../util/id';
+import { trigger } from '../util/trigger';
 
 export enum ProcessorType {
   Initiator,
@@ -49,21 +50,15 @@ export abstract class PipelineProcessor<
       this.validateProps(...args);
     }
 
-    this.trigger(this.beforeProcessCallback, ...args);
+    trigger(this.beforeProcessCallback, ...args);
     const result = this._process(...args);
-    this.trigger(this.afterProcessCallback, ...args);
+    trigger(this.afterProcessCallback, ...args);
     return result;
-  }
-
-  private trigger(fns: Set<(...args) => void>, ...args): void {
-    if (fns) {
-      fns.forEach((fn) => fn(...args));
-    }
   }
 
   setProps(props: Partial<P>): this {
     Object.assign(this._props, props);
-    this.trigger(this.propsUpdatedCallback, this);
+    trigger(this.propsUpdatedCallback, this);
     return this;
   }
 
