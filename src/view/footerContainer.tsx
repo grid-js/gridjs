@@ -1,23 +1,16 @@
 import { h } from 'preact';
 
-import { BaseComponent, BaseProps } from './base';
+import { BaseComponent } from './base';
 import { className } from '../util/className';
 import { Pagination } from './plugin/pagination';
-import { Config } from '../config';
 import { useRef } from 'preact/hooks';
-
-interface FooterContainerProps extends BaseProps {
-  config: Config;
-}
+import getConfig from '../util/getConfig';
 
 interface FooterContainerState {
   isActive: boolean;
 }
 
-export class FooterContainer extends BaseComponent<
-  FooterContainerProps,
-  FooterContainerState
-> {
+export class FooterContainer extends BaseComponent<{}, FooterContainerState> {
   private footerRef = useRef(null);
 
   constructor() {
@@ -37,14 +30,12 @@ export class FooterContainer extends BaseComponent<
   }
 
   render() {
+    const config = getConfig(this.context);
+
     if (this.state.isActive) {
       return (
         <div ref={this.footerRef} className={className('footer')}>
-          <Pagination
-            storage={this.props.config.storage}
-            pipeline={this.props.config.pipeline}
-            {...this.props.config.pagination}
-          />
+          <Pagination {...config.pagination} />
         </div>
       );
     }

@@ -1,5 +1,5 @@
 import { mount } from 'enzyme';
-import { h } from 'preact';
+import {createContext, h} from 'preact';
 import { Table } from '../../src/view/table/table';
 import Header from '../../src/header';
 import { Config } from '../../src/config';
@@ -12,6 +12,7 @@ import Dispatcher from '../../src/util/dispatcher';
 
 describe('Table component', () => {
   let config: Config;
+  const configContext = createContext(null);
 
   beforeAll(() => {
     config = new Config();
@@ -28,14 +29,16 @@ describe('Table component', () => {
     ]);
   });
 
+
+
   it('should render a table', async () => {
     const table = mount(
-      <Table
-        pipeline={config.pipeline}
-        dispatcher={config.dispatcher}
-        data={await config.pipeline.process()}
-        status={Status.Loaded}
-      />,
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          status={Status.Loaded}
+        />
+      </configContext.Provider>
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -43,12 +46,12 @@ describe('Table component', () => {
 
   it('should render a table with loading', async () => {
     const table = mount(
-      <Table
-        pipeline={config.pipeline}
-        dispatcher={config.dispatcher}
-        data={await config.pipeline.process()}
-        status={Status.Loading}
-      />,
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          status={Status.Loading}
+        />
+      </configContext.Provider>
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -56,13 +59,13 @@ describe('Table component', () => {
 
   it('should render a table with header', async () => {
     const table = mount(
-      <Table
-        pipeline={config.pipeline}
-        dispatcher={config.dispatcher}
-        data={await config.pipeline.process()}
-        header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
-        status={Status.Loaded}
-      />,
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
+          status={Status.Loaded}
+        />
+      </configContext.Provider>
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -70,14 +73,14 @@ describe('Table component', () => {
 
   it('should render a table with width', async () => {
     const table = mount(
-      <Table
-        pipeline={config.pipeline}
-        dispatcher={config.dispatcher}
-        data={await config.pipeline.process()}
-        width="300px"
-        header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
-        status={Status.Loaded}
-      />,
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          width="300px"
+          header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
+          status={Status.Loaded}
+        />
+      </configContext.Provider>
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -89,13 +92,13 @@ describe('Table component', () => {
     header.columns[2].width = '300px';
 
     const table = mount(
-      <Table
-        pipeline={config.pipeline}
-        dispatcher={config.dispatcher}
-        data={await config.pipeline.process()}
-        header={header}
-        status={Status.Loaded}
-      />,
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={header}
+          status={Status.Loaded}
+        />
+      </configContext.Provider>
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -111,13 +114,13 @@ describe('Table component', () => {
     };
 
     const table = mount(
-      <Table
-        pipeline={config.pipeline}
-        dispatcher={config.dispatcher}
-        data={await config.pipeline.process()}
-        header={header}
-        status={Status.Loaded}
-      />,
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={header}
+          status={Status.Loaded}
+        />
+      </configContext.Provider>
     );
 
     expect(table.html()).toMatchSnapshot();

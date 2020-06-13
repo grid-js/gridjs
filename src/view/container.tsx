@@ -1,4 +1,4 @@
-import { h, Fragment } from 'preact';
+import { h, createContext, Context } from 'preact';
 
 import Tabular from '../tabular';
 import { BaseComponent, BaseProps } from './base';
@@ -26,8 +26,13 @@ interface ContainerState {
 }
 
 export class Container extends BaseComponent<ContainerProps, ContainerState> {
+  private readonly configContext: Context<Config>;
+
   constructor(props) {
     super(props);
+
+    // global Config context which is passed to all components
+    this.configContext = createContext(null);
 
     this.state = {
       status: Status.Loading,
@@ -78,8 +83,10 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
   }
 
   render() {
+    const configContext = this.configContext;
+
     return (
-      <Fragment>
+      <configContext.Provider value={this.props.config}>
         <div
           className={classJoin(
             'gridjs',
@@ -92,28 +99,25 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
             <div className={className('loading-bar')} />
           )}
 
-          <HeaderContainer config={this.props.config} />
+          <HeaderContainer />
 
           <div
             className={className('wrapper')}
             style={{ width: this.props.width }}
           >
             <Table
-              dispatcher={this.props.config.dispatcher}
-              pipeline={this.props.pipeline}
               data={this.state.data}
               header={this.state.header}
               width={this.props.width}
               status={this.state.status}
-              sort={this.props.config.sort}
             />
           </div>
 
-          <FooterContainer config={this.props.config} />
+          <FooterContainer />
         </div>
 
         <div id="gridjs-temp" className={className('temp')} />
-      </Fragment>
+      </configContext.Provider>
     );
   }
 }

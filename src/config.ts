@@ -8,6 +8,7 @@ import Header from './header';
 import { ServerStorageOptions } from './storage/server';
 import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
+import { Languages } from './i18n/language';
 
 // Config type used internally
 export interface Config {
@@ -40,6 +41,7 @@ interface UserConfigExtend {
   pagination: PaginationConfig | boolean;
   // implicit option to enable the sort plugin globally
   sort: GenericSortConfig | boolean;
+  languages: Languages;
 }
 
 export type UserConfig = ProtoExtends<

@@ -2,11 +2,10 @@ import { h, Fragment } from 'preact';
 import { BaseComponent, BaseProps } from '../base';
 import PaginationLimit from '../../pipeline/limit/pagination';
 import { className } from '../../util/className';
-import Pipeline from '../../pipeline/pipeline';
-import Storage from '../../storage/storage';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
 import { TCell } from '../../types';
 import Tabular from '../../tabular';
+import getConfig from '../../util/getConfig';
 
 interface PaginationState {
   page: number;
@@ -28,13 +27,8 @@ export interface PaginationConfig {
   };
 }
 
-interface PaginationProps extends BaseProps {
-  storage: Storage<any>;
-  pipeline: Pipeline<any>;
-}
-
 export class Pagination extends BaseComponent<
-  PaginationProps & PaginationConfig,
+  BaseProps & PaginationConfig,
   PaginationState
 > {
   private processor: PaginationLimit | ServerPaginationLimit;
@@ -61,6 +55,8 @@ export class Pagination extends BaseComponent<
     if (this.props.enabled) {
       let processor;
 
+      const config = getConfig(this.context);
+
       if (this.props.server) {
         processor = new ServerPaginationLimit({
           limit: this.state.limit,
@@ -69,7 +65,7 @@ export class Pagination extends BaseComponent<
           body: this.props.server.body,
         });
 
-        this.props.pipeline.afterProcess((result: Tabular<TCell>) => {
+        config.pipeline.afterProcess((result: Tabular<TCell>) => {
           this.setTotal(result.length);
         });
       } else {
@@ -87,12 +83,14 @@ export class Pagination extends BaseComponent<
       }
 
       this.processor = processor;
-      this.props.pipeline.register(processor);
+      config.pipeline.register(processor);
     }
   }
 
   componentDidMount(): void {
-    this.props.pipeline.updated((processor) => {
+    const config = getConfig(this.context);
+
+    config.pipeline.updated((processor) => {
       // this is to ensure that the current page is set to 0
       // when a processor is updated for some reason
       if (processor !== this.processor) {
