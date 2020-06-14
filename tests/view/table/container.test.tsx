@@ -1,14 +1,14 @@
 import { mount } from 'enzyme';
 import { h } from 'preact';
-import { Config } from '../../src/config';
-import { Container } from '../../src/view/container';
-import Pipeline from '../../src/pipeline/pipeline';
-import StorageExtractor from '../../src/pipeline/extractor/storage';
-import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
-import StorageUtils from '../../src/storage/storageUtils';
-import Header from '../../src/header';
-import Dispatcher from '../../src/util/dispatcher';
-import { Translator } from '../../src/i18n/language';
+import { Config } from '../../../src/config';
+import { Container } from '../../../src/view/container';
+import Pipeline from '../../../src/pipeline/pipeline';
+import StorageExtractor from '../../../src/pipeline/extractor/storage';
+import ArrayToTabularTransformer from '../../../src/pipeline/transformer/arrayToTabular';
+import StorageUtils from '../../../src/storage/storageUtils';
+import Header from '../../../src/header';
+import Dispatcher from '../../../src/util/dispatcher';
+import { Translator } from '../../../src/i18n/language';
 
 describe('Container component', () => {
   let config: Config;

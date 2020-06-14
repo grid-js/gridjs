@@ -1,15 +1,16 @@
 import { mount } from 'enzyme';
 import { createContext, h } from 'preact';
-import { Table } from '../../src/view/table/table';
-import Header from '../../src/header';
-import { Config } from '../../src/config';
-import StorageUtils from '../../src/storage/storageUtils';
-import Pipeline from '../../src/pipeline/pipeline';
-import StorageExtractor from '../../src/pipeline/extractor/storage';
-import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
-import { Status } from '../../src/types';
-import Dispatcher from '../../src/util/dispatcher';
-import { Translator } from '../../src/i18n/language';
+import { Table } from '../../../src/view/table/table';
+import Header from '../../../src/header';
+import { Config } from '../../../src/config';
+import StorageUtils from '../../../src/storage/storageUtils';
+import Pipeline from '../../../src/pipeline/pipeline';
+import StorageExtractor from '../../../src/pipeline/extractor/storage';
+import ArrayToTabularTransformer from '../../../src/pipeline/transformer/arrayToTabular';
+import { Status, TCell } from '../../../src/types';
+import Dispatcher from '../../../src/util/dispatcher';
+import { Translator } from '../../../src/i18n/language';
+import Tabular from '../../../src/tabular';
 
 describe('Table component', () => {
   let config: Config;
@@ -111,6 +112,43 @@ describe('Table component', () => {
       <configContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
+          header={header}
+          status={Status.Loaded}
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
+
+  it('should render a table without autoFix', async () => {
+    const header = Header.fromUserConfig({
+      columns: ['h1', 'h2', 'h3'],
+      autoWidth: false,
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={header}
+          status={Status.Loaded}
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
+
+  it('should render a table without data', async () => {
+    const header = Header.fromUserConfig({
+      columns: ['h1', 'h2', 'h3'],
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={Tabular.fromArray<TCell>([])}
           header={header}
           status={Status.Loaded}
         />

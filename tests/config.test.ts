@@ -1,7 +1,7 @@
 import { Config } from '../src/config';
 import MemoryStorage from '../src/storage/memory';
 import Storage from '../src/storage/storage';
-import {Translator} from "../src/i18n/language";
+import { Translator } from '../src/i18n/language';
 
 describe('Config', () => {
   let config: Config = null;
@@ -24,7 +24,7 @@ describe('Config', () => {
     const data = [[1, 2, 3]];
     const conf = Config.fromUserConfig({
       data: data,
-      width: '400px'
+      width: '400px',
     });
 
     expect(conf.data).toStrictEqual(data);
@@ -39,7 +39,7 @@ describe('Config', () => {
     const data = [[1, 2, 3]];
     const conf = Config.fromUserConfig({
       data: data,
-      search: true
+      search: true,
     });
 
     expect(conf.search).toStrictEqual({ enabled: true });
@@ -49,7 +49,7 @@ describe('Config', () => {
     const data = [[1, 2, 3]];
     const conf = Config.fromUserConfig({
       data: data,
-      pagination: true
+      pagination: true,
     });
 
     expect(conf.pagination).toStrictEqual({ enabled: true });
@@ -60,11 +60,15 @@ describe('Config', () => {
     const cols = ['a', 'b', 'c'];
     const conf = Config.fromUserConfig({
       data: data,
-      columns: cols
+      columns: cols,
     });
 
-    expect(conf.header.columns.map(x => x.name)).toStrictEqual(cols);
-    expect(conf.header.columns.map(x => x.sort.enabled)).toStrictEqual([false, false, false]);
+    expect(conf.header.columns.map((x) => x.name)).toStrictEqual(cols);
+    expect(conf.header.columns.map((x) => x.sort.enabled)).toStrictEqual([
+      false,
+      false,
+      false,
+    ]);
   });
 
   it('should create a userConfig with header and sort', () => {
@@ -73,11 +77,15 @@ describe('Config', () => {
     const conf = Config.fromUserConfig({
       data: data,
       columns: cols,
-      sort: true
+      sort: true,
     });
 
-    expect(conf.header.columns.map(x => x.name)).toStrictEqual(cols);
-    expect(conf.header.columns.map(x => x.sort.enabled)).toStrictEqual([true, true, true]);
+    expect(conf.header.columns.map((x) => x.name)).toStrictEqual(cols);
+    expect(conf.header.columns.map((x) => x.sort.enabled)).toStrictEqual([
+      true,
+      true,
+      true,
+    ]);
   });
 
   it('should create a userConfig with header and custom sort', () => {
@@ -87,20 +95,24 @@ describe('Config', () => {
       {
         name: 'b',
         sort: {
-          enabled: false
-        }
+          enabled: false,
+        },
       },
       {
         name: 'c',
-        sort: null
-      }
+        sort: null,
+      },
     ];
     const conf = Config.fromUserConfig({
       data: data,
       columns: cols,
-      sort: true
+      sort: true,
     });
 
-    expect(conf.header.columns.map(x => x.sort.enabled)).toStrictEqual([true, false, false]);
+    expect(conf.header.columns.map((x) => x.sort.enabled)).toStrictEqual([
+      true,
+      false,
+      false,
+    ]);
   });
 });

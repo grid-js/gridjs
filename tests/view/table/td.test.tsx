@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import { h } from 'preact';
-import { TD } from '../../src/view/table/td';
-import Cell from '../../src/cell';
+import { TD } from '../../../src/view/table/td';
+import Cell from '../../../src/cell';
 
 describe('TD component', () => {
   it('should match the snapshot', () => {
