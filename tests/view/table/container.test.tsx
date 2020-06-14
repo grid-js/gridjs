@@ -9,6 +9,10 @@ import StorageUtils from '../../../src/storage/storageUtils';
 import Header from '../../../src/header';
 import Dispatcher from '../../../src/util/dispatcher';
 import { Translator } from '../../../src/i18n/language';
+import {
+  PipelineProcessor,
+  ProcessorType,
+} from '../../../src/pipeline/processor';
 
 describe('Container component', () => {
   let config: Config;
@@ -93,6 +97,28 @@ describe('Container component', () => {
         header={config.header}
       />,
     );
+    await container.instance().componentDidMount();
+    expect(container.html()).toMatchSnapshot();
+  });
+
+  it('should render a container with error', async () => {
+    console.error = jest.fn();
+
+    class ErrorProcessor extends PipelineProcessor<string, {}> {
+      get type(): ProcessorType {
+        return ProcessorType.Limit;
+      }
+      _process(): string {
+        throw Error('something happened');
+      }
+    }
+
+    config.pipeline.register(new ErrorProcessor());
+
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} />,
+    );
+
     await container.instance().componentDidMount();
     expect(container.html()).toMatchSnapshot();
   });
