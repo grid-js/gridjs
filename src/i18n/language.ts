@@ -1,5 +1,7 @@
 import enUS from './en_US';
-export type Language = { [key: string]: string | Language };
+type MessageFormat = (...args) => string;
+type Message = string | MessageFormat;
+export type Language = { [key: string]: Message | Language };
 
 export class Translator {
   private readonly _language: Language;
@@ -17,7 +19,7 @@ export class Translator {
    * @param message
    * @param lang
    */
-  getString(message: string, lang: Language): string {
+  getString(message: string, lang: Language): MessageFormat {
     if (!lang || !message) return null;
 
     const splitted = message.split('.');
@@ -27,6 +29,8 @@ export class Translator {
       const val = lang[key];
 
       if (typeof val === 'string') {
+        return (): string => val;
+      } else if (typeof val === 'function') {
         return val;
       } else {
         return this.getString(splitted.slice(1).join('.'), val);
@@ -36,19 +40,26 @@ export class Translator {
     return null;
   }
 
-  translate(message: string): string {
+  translate(message: string, ...args): string {
     const translated = this.getString(message, this._language);
+    let messageFormat;
 
     if (translated) {
-      return String(translated);
+      messageFormat = translated;
+    } else {
+      messageFormat = this.getString(message, this._defaultLanguage);
     }
 
-    return this.getString(message, this._defaultLanguage);
+    if (messageFormat) {
+      return messageFormat(...args);
+    }
+
+    return message;
   }
 }
 
 export function useTranslator(translator: Translator) {
-  return function (message: string): string {
-    return translator.translate(message);
+  return function (message: string, ...args): string {
+    return translator.translate(message, ...args);
   };
 }

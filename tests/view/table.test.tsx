@@ -9,7 +9,7 @@ import StorageExtractor from '../../src/pipeline/extractor/storage';
 import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
 import { Status } from '../../src/types';
 import Dispatcher from '../../src/util/dispatcher';
-import {Translator} from "../../src/i18n/language";
+import { Translator } from '../../src/i18n/language';
 
 describe('Table component', () => {
   let config: Config;

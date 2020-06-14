@@ -139,30 +139,42 @@ export class Pagination extends BaseComponent<
         {this.props.summary && this.state.total > 0 && (
           <div
             className={className('summary')}
-            title={`Page ${this.state.page + 1} of ${this.pages}`}
+            title={this._(
+              'pagination.navigate',
+              this.state.page + 1,
+              this.pages,
+            )}
           >
-            Showing <span>{this.state.page * this.state.limit + 1}</span> to{' '}
-            <span>
-              {Math.min(
-                (this.state.page + 1) * this.state.limit,
-                this.state.total,
+            {this._('pagination.showing')}{' '}
+            <b>{this._(`${this.state.page * this.state.limit + 1}`)}</b>{' '}
+            {this._('pagination.to')}{' '}
+            <b>
+              {this._(
+                `${Math.min(
+                  (this.state.page + 1) * this.state.limit,
+                  this.state.total,
+                )}`,
               )}
-            </span>{' '}
-            of <span>{this.state.total}</span> results
+            </b>{' '}
+            {this._('pagination.of')} <b>{this._(`${this.state.total}`)}</b>{' '}
+            {this._('pagination.results')}
           </div>
         )}
 
         <div className={className('pages')}>
           {this.props.prevButton && (
             <button onClick={this.setPage.bind(this, this.state.page - 1)}>
-              Previous
+              {this._('pagination.previous')}
             </button>
           )}
 
           {this.pages > maxCount && this.state.page - pagePivot > 0 && (
             <Fragment>
-              <button onClick={this.setPage.bind(this, 0)} title={`Page 1`}>
-                1
+              <button
+                onClick={this.setPage.bind(this, 0)}
+                title={this._('pagination.firstPage')}
+              >
+                {this._('1')}
               </button>
               <button className={className('spread')}>...</button>
             </Fragment>
@@ -176,9 +188,9 @@ export class Pagination extends BaseComponent<
                 className={
                   this.state.page === i ? className('currentPage') : null
                 }
-                title={`Page ${i + 1}`}
+                title={this._('pagination.page', i + 1)}
               >
-                {i + 1}
+                {this._(`${i + 1}`)}
               </button>
             ))}
 
@@ -188,16 +200,16 @@ export class Pagination extends BaseComponent<
                 <button className={className('spread')}>...</button>
                 <button
                   onClick={this.setPage.bind(this, this.pages - 1)}
-                  title={`Page ${this.pages}`}
+                  title={this._('pagination.page', this.pages)}
                 >
-                  {this.pages}
+                  {this._(`${this.pages}`)}
                 </button>
               </Fragment>
             )}
 
           {this.props.nextButton && (
             <button onClick={this.setPage.bind(this, this.state.page + 1)}>
-              Next
+              {this._('pagination.next')}
             </button>
           )}
         </div>

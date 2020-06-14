@@ -12,7 +12,7 @@ export abstract class BaseComponent<P extends BaseProps, S> extends Component<
   S
 > {
   protected config: Config;
-  protected _: (message: string) => string;
+  protected _: (message: string, ...args) => string;
 
   constructor(props: P, context: any) {
     super(props, context);
