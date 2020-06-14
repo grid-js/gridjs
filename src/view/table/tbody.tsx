@@ -34,7 +34,7 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
         {this.props.status === Status.Loading &&
           (!this.props.data || this.props.data.length === 0) && (
             <MessageRow
-              message="Loading..."
+              message={this._('loading')}
               colSpan={this.headerLength()}
               className={className('loading')}
             />
@@ -44,7 +44,7 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
           this.props.data &&
           this.props.data.length === 0 && (
             <MessageRow
-              message="No matching records found"
+              message={this._('noRecordsFound')}
               colSpan={this.headerLength()}
               className={className('notfound')}
             />
@@ -52,7 +52,7 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
 
         {this.props.status === Status.Error && (
           <MessageRow
-            message="An error happened while fetching the data."
+            message={this._('error')}
             colSpan={this.headerLength()}
             className={className('error')}
           />

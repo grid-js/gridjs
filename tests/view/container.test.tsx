@@ -8,6 +8,7 @@ import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTab
 import StorageUtils from '../../src/storage/storageUtils';
 import Header from '../../src/header';
 import Dispatcher from '../../src/util/dispatcher';
+import { Translator } from '../../src/i18n/language';
 
 describe('Container component', () => {
   let config: Config;
@@ -21,6 +22,7 @@ describe('Container component', () => {
 
     config.storage = StorageUtils.createFromUserConfig(config);
     config.dispatcher = new Dispatcher();
+    config.translator = new Translator();
     config.pipeline = new Pipeline([
       new StorageExtractor({ storage: config.storage }),
       new ArrayToTabularTransformer(),
@@ -43,7 +45,6 @@ describe('Container component', () => {
   it('should render a container with searchable table', async () => {
     config.search = {
       enabled: true,
-      placeholder: 'type something',
     };
 
     const container = mount(
@@ -56,7 +57,6 @@ describe('Container component', () => {
   it('should render a container with sortable and paginated table', async () => {
     config.search = {
       enabled: true,
-      placeholder: 'type something',
     };
 
     config.pagination = {

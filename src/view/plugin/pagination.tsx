@@ -2,11 +2,10 @@ import { h, Fragment } from 'preact';
 import { BaseComponent, BaseProps } from '../base';
 import PaginationLimit from '../../pipeline/limit/pagination';
 import { className } from '../../util/className';
-import Pipeline from '../../pipeline/pipeline';
-import Storage from '../../storage/storage';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
 import { TCell } from '../../types';
 import Tabular from '../../tabular';
+import getConfig from '../../util/getConfig';
 
 interface PaginationState {
   page: number;
@@ -28,13 +27,8 @@ export interface PaginationConfig {
   };
 }
 
-interface PaginationProps extends BaseProps {
-  storage: Storage<any>;
-  pipeline: Pipeline<any>;
-}
-
 export class Pagination extends BaseComponent<
-  PaginationProps & PaginationConfig,
+  BaseProps & PaginationConfig,
   PaginationState
 > {
   private processor: PaginationLimit | ServerPaginationLimit;
@@ -47,8 +41,8 @@ export class Pagination extends BaseComponent<
     limit: 10,
   };
 
-  constructor(props) {
-    super();
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
       limit: props.limit,
@@ -69,7 +63,7 @@ export class Pagination extends BaseComponent<
           body: this.props.server.body,
         });
 
-        this.props.pipeline.afterProcess((result: Tabular<TCell>) => {
+        this.config.pipeline.afterProcess((result: Tabular<TCell>) => {
           this.setTotal(result.length);
         });
       } else {
@@ -87,12 +81,14 @@ export class Pagination extends BaseComponent<
       }
 
       this.processor = processor;
-      this.props.pipeline.register(processor);
+      this.config.pipeline.register(processor);
     }
   }
 
   componentDidMount(): void {
-    this.props.pipeline.updated((processor) => {
+    const config = getConfig(this.context);
+
+    config.pipeline.updated((processor) => {
       // this is to ensure that the current page is set to 0
       // when a processor is updated for some reason
       if (processor !== this.processor) {
@@ -143,30 +139,42 @@ export class Pagination extends BaseComponent<
         {this.props.summary && this.state.total > 0 && (
           <div
             className={className('summary')}
-            title={`Page ${this.state.page + 1} of ${this.pages}`}
+            title={this._(
+              'pagination.navigate',
+              this.state.page + 1,
+              this.pages,
+            )}
           >
-            Showing <span>{this.state.page * this.state.limit + 1}</span> to{' '}
-            <span>
-              {Math.min(
-                (this.state.page + 1) * this.state.limit,
-                this.state.total,
+            {this._('pagination.showing')}{' '}
+            <b>{this._(`${this.state.page * this.state.limit + 1}`)}</b>{' '}
+            {this._('pagination.to')}{' '}
+            <b>
+              {this._(
+                `${Math.min(
+                  (this.state.page + 1) * this.state.limit,
+                  this.state.total,
+                )}`,
               )}
-            </span>{' '}
-            of <span>{this.state.total}</span> results
+            </b>{' '}
+            {this._('pagination.of')} <b>{this._(`${this.state.total}`)}</b>{' '}
+            {this._('pagination.results')}
           </div>
         )}
 
         <div className={className('pages')}>
           {this.props.prevButton && (
             <button onClick={this.setPage.bind(this, this.state.page - 1)}>
-              Previous
+              {this._('pagination.previous')}
             </button>
           )}
 
           {this.pages > maxCount && this.state.page - pagePivot > 0 && (
             <Fragment>
-              <button onClick={this.setPage.bind(this, 0)} title={`Page 1`}>
-                1
+              <button
+                onClick={this.setPage.bind(this, 0)}
+                title={this._('pagination.firstPage')}
+              >
+                {this._('1')}
               </button>
               <button className={className('spread')}>...</button>
             </Fragment>
@@ -180,9 +188,9 @@ export class Pagination extends BaseComponent<
                 className={
                   this.state.page === i ? className('currentPage') : null
                 }
-                title={`Page ${i + 1}`}
+                title={this._('pagination.page', i + 1)}
               >
-                {i + 1}
+                {this._(`${i + 1}`)}
               </button>
             ))}
 
@@ -192,16 +200,16 @@ export class Pagination extends BaseComponent<
                 <button className={className('spread')}>...</button>
                 <button
                   onClick={this.setPage.bind(this, this.pages - 1)}
-                  title={`Page ${this.pages}`}
+                  title={this._('pagination.page', this.pages)}
                 >
-                  {this.pages}
+                  {this._(`${this.pages}`)}
                 </button>
               </Fragment>
             )}
 
           {this.props.nextButton && (
             <button onClick={this.setPage.bind(this, this.state.page + 1)}>
-              Next
+              {this._('pagination.next')}
             </button>
           )}
         </div>

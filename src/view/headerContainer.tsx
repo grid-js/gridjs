@@ -1,27 +1,20 @@
 import { h } from 'preact';
 
-import { BaseComponent, BaseProps } from './base';
+import { BaseComponent } from './base';
 import { className } from '../util/className';
 import { Search } from './plugin/search/search';
-import { Config } from '../config';
 import { useRef } from 'preact/hooks';
-
-interface HeaderContainerProps extends BaseProps {
-  config: Config;
-}
+import getConfig from '../util/getConfig';
 
 interface HeaderContainerState {
   isActive: boolean;
 }
 
-export class HeaderContainer extends BaseComponent<
-  HeaderContainerProps,
-  HeaderContainerState
-> {
+export class HeaderContainer extends BaseComponent<{}, HeaderContainerState> {
   private headerRef = useRef(null);
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
       isActive: true,
@@ -37,14 +30,12 @@ export class HeaderContainer extends BaseComponent<
   }
 
   render() {
+    const config = getConfig(this.context);
+
     if (this.state.isActive) {
       return (
         <div ref={this.headerRef} className={className('head')}>
-          <Search
-            dispatcher={this.props.config.dispatcher}
-            pipeline={this.props.config.pipeline}
-            {...this.props.config.search}
-          />
+          <Search {...config.search} />
         </div>
       );
     }

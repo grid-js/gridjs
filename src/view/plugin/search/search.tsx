@@ -4,20 +4,12 @@ import GlobalSearchFilter from '../../../pipeline/filter/globalSearch';
 import { classJoin, className } from '../../../util/className';
 import { SearchStore, SearchStoreState } from './store';
 import { SearchActions } from './actions';
-import Pipeline from '../../../pipeline/pipeline';
 import ServerGlobalSearchFilter from '../../../pipeline/filter/serverGlobalSearch';
-import Dispatcher from '../../../util/dispatcher';
 import { debounce } from '../../../util/debounce';
-
-export interface SearchProps extends BaseProps {
-  dispatcher: Dispatcher<any>;
-  pipeline: Pipeline<any>;
-}
 
 export interface SearchConfig {
   keyword?: string;
   enabled?: boolean;
-  placeholder?: string;
   debounceTimeout?: number;
   server?: {
     url?: (prevUrl: string, keyword: string) => string;
@@ -25,7 +17,7 @@ export interface SearchConfig {
   };
 }
 
-export class Search extends BaseComponent<SearchProps & SearchConfig, {}> {
+export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
   private readonly searchProcessor:
     | GlobalSearchFilter
     | ServerGlobalSearchFilter;
@@ -33,15 +25,14 @@ export class Search extends BaseComponent<SearchProps & SearchConfig, {}> {
   private readonly store: SearchStore;
 
   static defaultProps = {
-    placeholder: 'Type a keyword...',
     debounceTimeout: 250,
   };
 
-  constructor(props: SearchProps & SearchConfig) {
-    super();
+  constructor(props: SearchConfig, context) {
+    super(props, context);
 
-    this.actions = new SearchActions(props.dispatcher);
-    this.store = new SearchStore(props.dispatcher);
+    this.actions = new SearchActions(this.config.dispatcher);
+    this.store = new SearchStore(this.config.dispatcher);
     const { enabled, keyword } = props;
 
     if (enabled) {
@@ -66,7 +57,7 @@ export class Search extends BaseComponent<SearchProps & SearchConfig, {}> {
       this.searchProcessor = searchProcessor;
 
       // adds a new processor to the pipeline
-      props.pipeline.register(searchProcessor);
+      this.config.pipeline.register(searchProcessor);
     }
   }
 
@@ -96,7 +87,7 @@ export class Search extends BaseComponent<SearchProps & SearchConfig, {}> {
       <div className={className('search')}>
         <input
           type="search"
-          placeholder={this.props.placeholder}
+          placeholder={this._('search.placeholder')}
           onInput={onInput}
           className={classJoin(
             className('input'),

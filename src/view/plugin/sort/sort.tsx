@@ -5,10 +5,8 @@ import { classJoin, className } from '../../../util/className';
 import { ProcessorType } from '../../../pipeline/processor';
 import NativeSort from '../../../pipeline/sort/native';
 import { SortStore, SortStoreState } from './store';
-import Pipeline from '../../../pipeline/pipeline';
 import log from '../../../util/log';
 import { Comparator, TCell, TColumnSort } from '../../../types';
-import Dispatcher from '../../../util/dispatcher';
 import { SortActions } from './actions';
 import ServerSort from '../../../pipeline/sort/server';
 
@@ -33,11 +31,8 @@ export interface GenericSortConfig {
 }
 
 export interface SortProps extends BaseProps {
-  dispatcher: Dispatcher<any>;
-  pipeline: Pipeline<any>;
   // column index
   index: number;
-  sort?: GenericSortConfig;
 }
 
 interface SortState {
@@ -49,11 +44,11 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
   private readonly actions: SortActions;
   private readonly store: SortStore;
 
-  constructor(props: SortProps & SortConfig) {
-    super(props);
+  constructor(props: SortProps & SortConfig, context) {
+    super(props, context);
 
-    this.actions = new SortActions(props.dispatcher);
-    this.store = new SortStore(props.dispatcher);
+    this.actions = new SortActions(this.config.dispatcher);
+    this.store = new SortStore(this.config.dispatcher);
 
     if (props.enabled) {
       this.sortProcessor = this.getOrCreateSortProcessor();
@@ -85,11 +80,11 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
   private getOrCreateSortProcessor(): NativeSort {
     let processorType = ProcessorType.Sort;
 
-    if (this.props.sort && typeof this.props.sort.server === 'object') {
+    if (this.config.sort && typeof this.config.sort.server === 'object') {
       processorType = ProcessorType.ServerSort;
     }
 
-    const processors = this.props.pipeline.getStepsByType(processorType);
+    const processors = this.config.pipeline.getStepsByType(processorType);
 
     // my assumption is that we only have ONE sorting processor in the
     // entire pipeline and that's why I'm displaying a warning here
@@ -118,7 +113,7 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
       if (processorType === ProcessorType.ServerSort) {
         processor = new ServerSort({
           columns: this.store.state,
-          ...this.props.sort.server,
+          ...this.config.sort.server,
         });
       } else {
         processor = new NativeSort({
@@ -126,7 +121,7 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
         });
       }
 
-      this.props.pipeline.register(processor);
+      this.config.pipeline.register(processor);
     }
 
     return processor;
@@ -139,7 +134,7 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
     // to sort two or more columns at the same time
     this.actions.sortToggle(
       this.props.index,
-      e.shiftKey === true && this.props.sort.multiColumn,
+      e.shiftKey === true && this.config.sort.multiColumn,
       this.props.compare,
     );
   }
@@ -160,7 +155,7 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
 
     return (
       <button
-        title={`Sort column ${direction === 1 ? 'descending' : 'ascending'}`}
+        title={this._(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
         className={classJoin(
           className('sort'),
           className('sort', sortClassName),

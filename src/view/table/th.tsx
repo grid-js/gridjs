@@ -3,16 +3,11 @@ import { createRef, h, JSX } from 'preact';
 import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';
 import { TColumn } from '../../types';
-import { GenericSortConfig, Sort } from '../plugin/sort/sort';
-import Pipeline from '../../pipeline/pipeline';
-import Dispatcher from '../../util/dispatcher';
+import { Sort } from '../plugin/sort/sort';
 
 export interface THProps extends BaseProps {
-  dispatcher: Dispatcher<any>;
-  pipeline: Pipeline<any>;
   index: number;
   column: TColumn;
-  sort?: GenericSortConfig;
 }
 
 export class TH extends BaseComponent<THProps, {}> {
@@ -46,10 +41,7 @@ export class TH extends BaseComponent<THProps, {}> {
         {this.isSortable() && (
           <Sort
             ref={this.sortRef}
-            dispatcher={this.props.dispatcher}
-            pipeline={this.props.pipeline}
             index={this.props.index}
-            sort={this.props.sort}
             {...this.props.column.sort}
           />
         )}
