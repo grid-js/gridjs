@@ -8,7 +8,7 @@ import Header from './header';
 import { ServerStorageOptions } from './storage/server';
 import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
-import { Languages } from './i18n/language';
+import { Language, Translator } from './i18n/language';
 
 // Config type used internally
 export interface Config {
@@ -32,6 +32,7 @@ export interface Config {
   search: SearchConfig;
   pagination: PaginationConfig;
   sort: GenericSortConfig;
+  translator: Translator;
 }
 
 // Config type used by the consumers
@@ -41,7 +42,7 @@ interface UserConfigExtend {
   pagination: PaginationConfig | boolean;
   // implicit option to enable the sort plugin globally
   sort: GenericSortConfig | boolean;
-  languages: Languages;
+  language: Language;
 }
 
 export type UserConfig = ProtoExtends<
@@ -92,6 +93,8 @@ export class Config {
         userConfig.search === true || userConfig.search instanceof Object,
       ...(userConfig.search as SearchConfig),
     };
+
+    config.translator = new Translator(userConfig.language);
 
     return config;
   }

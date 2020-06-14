@@ -1,5 +1,9 @@
 export default {
   search: {
-    notFound: '',
+    placeholder: 'Type a keyword...',
+  },
+  sort: {
+    sortAsc: 'Sort column ascending',
+    sortDesc: 'Sort column descending',
   },
 };

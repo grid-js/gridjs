@@ -1,5 +1,5 @@
 import { mount } from 'enzyme';
-import {createContext, h} from 'preact';
+import { createContext, h } from 'preact';
 import { Table } from '../../src/view/table/table';
 import Header from '../../src/header';
 import { Config } from '../../src/config';
@@ -9,6 +9,7 @@ import StorageExtractor from '../../src/pipeline/extractor/storage';
 import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
 import { Status } from '../../src/types';
 import Dispatcher from '../../src/util/dispatcher';
+import {Translator} from "../../src/i18n/language";
 
 describe('Table component', () => {
   let config: Config;
@@ -23,22 +24,18 @@ describe('Table component', () => {
 
     config.storage = StorageUtils.createFromUserConfig(config);
     config.dispatcher = new Dispatcher();
+    config.translator = new Translator();
     config.pipeline = new Pipeline([
       new StorageExtractor({ storage: config.storage }),
       new ArrayToTabularTransformer(),
     ]);
   });
 
-
-
   it('should render a table', async () => {
     const table = mount(
       <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          status={Status.Loaded}
-        />
-      </configContext.Provider>
+        <Table data={await config.pipeline.process()} status={Status.Loaded} />
+      </configContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -47,11 +44,8 @@ describe('Table component', () => {
   it('should render a table with loading', async () => {
     const table = mount(
       <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          status={Status.Loading}
-        />
-      </configContext.Provider>
+        <Table data={await config.pipeline.process()} status={Status.Loading} />
+      </configContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -65,7 +59,7 @@ describe('Table component', () => {
           header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
           status={Status.Loaded}
         />
-      </configContext.Provider>
+      </configContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -80,7 +74,7 @@ describe('Table component', () => {
           header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
           status={Status.Loaded}
         />
-      </configContext.Provider>
+      </configContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -98,7 +92,7 @@ describe('Table component', () => {
           header={header}
           status={Status.Loaded}
         />
-      </configContext.Provider>
+      </configContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -120,7 +114,7 @@ describe('Table component', () => {
           header={header}
           status={Status.Loaded}
         />
-      </configContext.Provider>
+      </configContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();

@@ -9,8 +9,6 @@ import log from '../../../util/log';
 import { Comparator, TCell, TColumnSort } from '../../../types';
 import { SortActions } from './actions';
 import ServerSort from '../../../pipeline/sort/server';
-import getConfig from '../../../util/getConfig';
-import { Config } from '../../../config';
 
 // column specific config
 export interface SortConfig {
@@ -45,12 +43,9 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
   private readonly sortProcessor: NativeSort | ServerSort;
   private readonly actions: SortActions;
   private readonly store: SortStore;
-  private readonly config: Config;
 
   constructor(props: SortProps & SortConfig, context) {
-    super(props);
-
-    this.config = getConfig(context);
+    super(props, context);
 
     this.actions = new SortActions(this.config.dispatcher);
     this.store = new SortStore(this.config.dispatcher);
@@ -160,7 +155,7 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
 
     return (
       <button
-        title={`Sort column ${direction === 1 ? 'descending' : 'ascending'}`}
+        title={this._(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
         className={classJoin(
           className('sort'),
           className('sort', sortClassName),

@@ -13,8 +13,8 @@ interface HeaderContainerState {
 export class HeaderContainer extends BaseComponent<{}, HeaderContainerState> {
   private headerRef = useRef(null);
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
       isActive: true,

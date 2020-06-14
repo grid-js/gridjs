@@ -13,8 +13,8 @@ interface FooterContainerState {
 export class FooterContainer extends BaseComponent<{}, FooterContainerState> {
   private footerRef = useRef(null);
 
-  constructor() {
-    super();
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
       isActive: true,

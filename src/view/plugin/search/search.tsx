@@ -6,12 +6,10 @@ import { SearchStore, SearchStoreState } from './store';
 import { SearchActions } from './actions';
 import ServerGlobalSearchFilter from '../../../pipeline/filter/serverGlobalSearch';
 import { debounce } from '../../../util/debounce';
-import getConfig from '../../../util/getConfig';
 
 export interface SearchConfig {
   keyword?: string;
   enabled?: boolean;
-  placeholder?: string;
   debounceTimeout?: number;
   server?: {
     url?: (prevUrl: string, keyword: string) => string;
@@ -27,17 +25,14 @@ export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
   private readonly store: SearchStore;
 
   static defaultProps = {
-    placeholder: 'Type a keyword...',
     debounceTimeout: 250,
   };
 
   constructor(props: SearchConfig, context) {
-    super();
+    super(props, context);
 
-    const config = getConfig(context);
-
-    this.actions = new SearchActions(config.dispatcher);
-    this.store = new SearchStore(config.dispatcher);
+    this.actions = new SearchActions(this.config.dispatcher);
+    this.store = new SearchStore(this.config.dispatcher);
     const { enabled, keyword } = props;
 
     if (enabled) {
@@ -62,7 +57,7 @@ export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
       this.searchProcessor = searchProcessor;
 
       // adds a new processor to the pipeline
-      config.pipeline.register(searchProcessor);
+      this.config.pipeline.register(searchProcessor);
     }
   }
 
@@ -92,7 +87,7 @@ export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
       <div className={className('search')}>
         <input
           type="search"
-          placeholder={this.props.placeholder}
+          placeholder={this._('search.placeholder')}
           onInput={onInput}
           className={classJoin(
             className('input'),

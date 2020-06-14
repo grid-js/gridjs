@@ -41,8 +41,8 @@ export class Pagination extends BaseComponent<
     limit: 10,
   };
 
-  constructor(props) {
-    super();
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
       limit: props.limit,
@@ -55,8 +55,6 @@ export class Pagination extends BaseComponent<
     if (this.props.enabled) {
       let processor;
 
-      const config = getConfig(this.context);
-
       if (this.props.server) {
         processor = new ServerPaginationLimit({
           limit: this.state.limit,
@@ -65,7 +63,7 @@ export class Pagination extends BaseComponent<
           body: this.props.server.body,
         });
 
-        config.pipeline.afterProcess((result: Tabular<TCell>) => {
+        this.config.pipeline.afterProcess((result: Tabular<TCell>) => {
           this.setTotal(result.length);
         });
       } else {
@@ -83,7 +81,7 @@ export class Pagination extends BaseComponent<
       }
 
       this.processor = processor;
-      config.pipeline.register(processor);
+      this.config.pipeline.register(processor);
     }
   }
 

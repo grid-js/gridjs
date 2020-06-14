@@ -28,8 +28,8 @@ interface ContainerState {
 export class Container extends BaseComponent<ContainerProps, ContainerState> {
   private readonly configContext: Context<Config>;
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     // global Config context which is passed to all components
     this.configContext = createContext(null);
