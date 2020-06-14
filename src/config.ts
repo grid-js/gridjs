@@ -37,7 +37,7 @@ export interface Config {
 
 // Config type used by the consumers
 interface UserConfigExtend {
-  columns?: OneDArray<TColumn> | OneDArray<string>;
+  columns?: OneDArray<TColumn | string>;
   search: SearchConfig | boolean;
   pagination: PaginationConfig | boolean;
   // implicit option to enable the sort plugin globally
