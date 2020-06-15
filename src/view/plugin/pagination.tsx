@@ -164,7 +164,10 @@ export class Pagination extends BaseComponent<
 
         <div className={className('pages')}>
           {this.props.prevButton && (
-            <button tabIndex={0} onClick={this.setPage.bind(this, this.state.page - 1)}>
+            <button
+              tabIndex={0}
+              onClick={this.setPage.bind(this, this.state.page - 1)}
+            >
               {this._('pagination.previous')}
             </button>
           )}
@@ -212,7 +215,10 @@ export class Pagination extends BaseComponent<
             )}
 
           {this.props.nextButton && (
-            <button tabIndex={0} onClick={this.setPage.bind(this, this.state.page + 1)}>
+            <button
+              tabIndex={0}
+              onClick={this.setPage.bind(this, this.state.page + 1)}
+            >
               {this._('pagination.next')}
             </button>
           )}

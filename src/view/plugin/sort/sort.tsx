@@ -153,15 +153,10 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
       sortClassName = 'desc';
     }
 
-    let ariaSort = 'none';
-    if (direction === 1)
-      ariaSort = 'ascending';
-    else if (direction === -1)
-      ariaSort = 'descending';
-
     return (
       <button
-        aria-sort={ariaSort}
+        // because the corresponding <th> has tabIndex=0
+        tabIndex={-1}
         aria-label={this._(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
         title={this._(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
         className={classJoin(

@@ -25,17 +25,31 @@ export class TH extends BaseComponent<THProps, {}> {
     }
   }
 
+  private keyDown(e: JSX.TargetedMouseEvent<HTMLInputElement>): void {
+    if (this.isSortable() && e.which === 13) {
+      this.onClick(e);
+    }
+  }
+
   render() {
     const cls = classJoin(
       className('th'),
       this.isSortable() ? className('th', 'sort') : null,
     );
 
+    const props = {};
+
+    if (this.isSortable()) {
+      props['tabIndex'] = 0;
+    }
+
     return (
       <th
         className={cls}
         onClick={this.onClick.bind(this)}
         style={{ width: this.props.column.width }}
+        onKeyDown={this.keyDown.bind(this)}
+        {...props}
       >
         {this.props.column.name}
         {this.isSortable() && (
