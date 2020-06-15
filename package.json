@@ -48,7 +48,6 @@
     "lerna-changelog": "^1.0.1",
     "node-sass": "^4.14.1",
     "node-sass-chokidar": "^1.4.0",
-    "preact-render-to-string": "^5.1.9",
     "prettier": "~2.0.5",
     "rimraf": "~3.0.2",
     "rollup": "^2.11.2",
