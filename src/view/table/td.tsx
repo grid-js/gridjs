@@ -12,6 +12,7 @@ export interface TDProps extends BaseProps {
   column?: TColumn;
   colSpan?: number;
   className?: string;
+  role?: string;
 }
 
 export class TD extends BaseComponent<TDProps, {}> {
@@ -33,6 +34,7 @@ export class TD extends BaseComponent<TDProps, {}> {
   render() {
     return (
       <td
+        role={this.props.role}
         colSpan={this.props.colSpan}
         className={classJoin(className('td'), this.props.className)}
       >

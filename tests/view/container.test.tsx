@@ -10,15 +10,14 @@ import StorageUtils from '../../src/storage/storageUtils';
 import Header from '../../src/header';
 import Dispatcher from '../../src/util/dispatcher';
 import { Translator } from '../../src/i18n/language';
-import {
-  PipelineProcessor,
-  ProcessorType,
-} from '../../src/pipeline/processor';
+import { PipelineProcessor, ProcessorType } from '../../src/pipeline/processor';
+
+expect.extend(toHaveNoViolations);
 
 describe('Container component', () => {
   let config: Config;
 
-  beforeAll(() => {
+  beforeEach(() => {
     config = new Config();
     config.data = [
       [1, 2, 3],
@@ -124,14 +123,23 @@ describe('Container component', () => {
     expect(container.html()).toMatchSnapshot();
   });
 
-  expect.extend(toHaveNoViolations)
+  it('should not violate accessibility test', async () => {
+    config.pagination = {
+      enabled: true,
+      limit: 1,
+    };
 
-  it('should demonstrate this matcher`s usage', async () => {
-    const render = () => '<img src="#"/>'
+    config.search = {
+      enabled: true,
+    };
 
-    // pass anything that outputs html to axe
-    const html = render()
+    config.sort = {};
 
-    expect(await axe(html)).toHaveNoViolations()
-  })
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} />,
+    );
+
+    await container.instance().componentDidMount();
+    expect(await axe(container.html())).toHaveNoViolations();
+  });
 });

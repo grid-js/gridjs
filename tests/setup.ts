@@ -22,6 +22,10 @@ global.Node = dom.window.Node;
 
 // eslint-disable-next-line
 // @ts-ignore
+global.Element = dom.window.Element;
+
+// eslint-disable-next-line
+// @ts-ignore
 global.window = dom.window;
 
 // eslint-disable-next-line

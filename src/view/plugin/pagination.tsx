@@ -138,6 +138,7 @@ export class Pagination extends BaseComponent<
       <div className={className('pagination')}>
         {this.props.summary && this.state.total > 0 && (
           <div
+            role="status"
             className={className('summary')}
             title={this._(
               'pagination.navigate',
@@ -163,7 +164,7 @@ export class Pagination extends BaseComponent<
 
         <div className={className('pages')}>
           {this.props.prevButton && (
-            <button onClick={this.setPage.bind(this, this.state.page - 1)}>
+            <button tabIndex={0} onClick={this.setPage.bind(this, this.state.page - 1)}>
               {this._('pagination.previous')}
             </button>
           )}
@@ -171,6 +172,7 @@ export class Pagination extends BaseComponent<
           {this.pages > maxCount && this.state.page - pagePivot > 0 && (
             <Fragment>
               <button
+                tabIndex={0}
                 onClick={this.setPage.bind(this, 0)}
                 title={this._('pagination.firstPage')}
               >
@@ -184,6 +186,7 @@ export class Pagination extends BaseComponent<
             .map((i) => this.state.page + (i - pagePivot))
             .map((i) => (
               <button
+                tabIndex={0}
                 onClick={this.setPage.bind(this, i)}
                 className={
                   this.state.page === i ? className('currentPage') : null
@@ -199,6 +202,7 @@ export class Pagination extends BaseComponent<
               <Fragment>
                 <button className={className('spread')}>...</button>
                 <button
+                  tabIndex={0}
                   onClick={this.setPage.bind(this, this.pages - 1)}
                   title={this._('pagination.page', this.pages)}
                 >
@@ -208,7 +212,7 @@ export class Pagination extends BaseComponent<
             )}
 
           {this.props.nextButton && (
-            <button onClick={this.setPage.bind(this, this.state.page + 1)}>
+            <button tabIndex={0} onClick={this.setPage.bind(this, this.state.page + 1)}>
               {this._('pagination.next')}
             </button>
           )}
