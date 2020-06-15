@@ -19,7 +19,7 @@ module.exports = {
   setupFiles: [
     './tests/setup.ts'
   ],
-  "moduleNameMapper": {
+  moduleNameMapper: {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy"
   },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)x?$',

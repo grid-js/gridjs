@@ -1,18 +1,19 @@
 import { mount } from 'enzyme';
 import { h } from 'preact';
-import { Config } from '../../../src/config';
-import { Container } from '../../../src/view/container';
-import Pipeline from '../../../src/pipeline/pipeline';
-import StorageExtractor from '../../../src/pipeline/extractor/storage';
-import ArrayToTabularTransformer from '../../../src/pipeline/transformer/arrayToTabular';
-import StorageUtils from '../../../src/storage/storageUtils';
-import Header from '../../../src/header';
-import Dispatcher from '../../../src/util/dispatcher';
-import { Translator } from '../../../src/i18n/language';
+import { axe, toHaveNoViolations } from 'jest-axe';
+import { Config } from '../../src/config';
+import { Container } from '../../src/view/container';
+import Pipeline from '../../src/pipeline/pipeline';
+import StorageExtractor from '../../src/pipeline/extractor/storage';
+import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
+import StorageUtils from '../../src/storage/storageUtils';
+import Header from '../../src/header';
+import Dispatcher from '../../src/util/dispatcher';
+import { Translator } from '../../src/i18n/language';
 import {
   PipelineProcessor,
   ProcessorType,
-} from '../../../src/pipeline/processor';
+} from '../../src/pipeline/processor';
 
 describe('Container component', () => {
   let config: Config;
@@ -122,4 +123,15 @@ describe('Container component', () => {
     await container.instance().componentDidMount();
     expect(container.html()).toMatchSnapshot();
   });
+
+  expect.extend(toHaveNoViolations)
+
+  it('should demonstrate this matcher`s usage', async () => {
+    const render = () => '<img src="#"/>'
+
+    // pass anything that outputs html to axe
+    const html = render()
+
+    expect(await axe(html)).toHaveNoViolations()
+  })
 });
