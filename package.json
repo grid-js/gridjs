@@ -23,7 +23,7 @@
     "dist/*"
   ],
   "engines": {
-    "node": ">= 12.13 <13"
+    "node": ">= 11.7.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^8.0.0",
