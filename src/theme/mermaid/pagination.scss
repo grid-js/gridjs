@@ -36,6 +36,12 @@
       outline: none;
     }
 
+    button:disabled, button[disabled], button:hover:disabled {
+      cursor: default;
+      background-color: $white;
+      color: $gray5;
+    }
+
     button.gridjs-spread {
       cursor: default;
       box-shadow: none;

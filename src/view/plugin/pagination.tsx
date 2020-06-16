@@ -82,6 +82,15 @@ export class Pagination extends BaseComponent<
 
       this.processor = processor;
       this.config.pipeline.register(processor);
+
+      // we need to make sure that the state is set
+      // to the default props when an error happens
+      this.config.pipeline.onError(() => {
+        this.setState({
+          total: 0,
+          page: 0,
+        })
+      });
     }
   }
 
@@ -166,6 +175,7 @@ export class Pagination extends BaseComponent<
           {this.props.prevButton && (
             <button
               tabIndex={0}
+              disabled={this.state.page === 0}
               onClick={this.setPage.bind(this, this.state.page - 1)}
             >
               {this._('pagination.previous')}
@@ -203,7 +213,7 @@ export class Pagination extends BaseComponent<
           {this.pages > maxCount &&
             this.pages > this.state.page + pagePivot + 1 && (
               <Fragment>
-                <button className={className('spread')}>...</button>
+                <button tabIndex={-1} className={className('spread')}>...</button>
                 <button
                   tabIndex={0}
                   onClick={this.setPage.bind(this, this.pages - 1)}
@@ -217,6 +227,7 @@ export class Pagination extends BaseComponent<
           {this.props.nextButton && (
             <button
               tabIndex={0}
+              disabled={this.pages === this.state.page + 1 || this.pages === 0}
               onClick={this.setPage.bind(this, this.state.page + 1)}
             >
               {this._('pagination.next')}

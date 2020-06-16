@@ -56,6 +56,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
       this.setState({
         status: Status.Error,
+        data: null,
       });
     }
   }
