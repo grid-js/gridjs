@@ -155,6 +155,9 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
 
     return (
       <button
+        // because the corresponding <th> has tabIndex=0
+        tabIndex={-1}
+        aria-label={this._(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
         title={this._(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
         className={classJoin(
           className('sort'),

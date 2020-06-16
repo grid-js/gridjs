@@ -88,6 +88,7 @@ export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
         <input
           type="search"
           placeholder={this._('search.placeholder')}
+          aria-label={this._('search.placeholder')}
           onInput={onInput}
           className={classJoin(
             className('input'),

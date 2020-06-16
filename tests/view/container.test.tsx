@@ -1,23 +1,23 @@
 import { mount } from 'enzyme';
 import { h } from 'preact';
-import { Config } from '../../../src/config';
-import { Container } from '../../../src/view/container';
-import Pipeline from '../../../src/pipeline/pipeline';
-import StorageExtractor from '../../../src/pipeline/extractor/storage';
-import ArrayToTabularTransformer from '../../../src/pipeline/transformer/arrayToTabular';
-import StorageUtils from '../../../src/storage/storageUtils';
-import Header from '../../../src/header';
-import Dispatcher from '../../../src/util/dispatcher';
-import { Translator } from '../../../src/i18n/language';
-import {
-  PipelineProcessor,
-  ProcessorType,
-} from '../../../src/pipeline/processor';
+import { axe, toHaveNoViolations } from 'jest-axe';
+import { Config } from '../../src/config';
+import { Container } from '../../src/view/container';
+import Pipeline from '../../src/pipeline/pipeline';
+import StorageExtractor from '../../src/pipeline/extractor/storage';
+import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
+import StorageUtils from '../../src/storage/storageUtils';
+import Header from '../../src/header';
+import Dispatcher from '../../src/util/dispatcher';
+import { Translator } from '../../src/i18n/language';
+import { PipelineProcessor, ProcessorType } from '../../src/pipeline/processor';
+
+expect.extend(toHaveNoViolations);
 
 describe('Container component', () => {
   let config: Config;
 
-  beforeAll(() => {
+  beforeEach(() => {
     config = new Config();
     config.data = [
       [1, 2, 3],
@@ -121,5 +121,25 @@ describe('Container component', () => {
 
     await container.instance().componentDidMount();
     expect(container.html()).toMatchSnapshot();
+  });
+
+  it('should not violate accessibility test', async () => {
+    config.pagination = {
+      enabled: true,
+      limit: 1,
+    };
+
+    config.search = {
+      enabled: true,
+    };
+
+    config.sort = {};
+
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} />,
+    );
+
+    await container.instance().componentDidMount();
+    expect(await axe(container.html())).toHaveNoViolations();
   });
 });

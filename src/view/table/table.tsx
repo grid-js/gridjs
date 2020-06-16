@@ -28,7 +28,7 @@ export class Table extends BaseComponent<TableProps, {}> {
 
   render() {
     return (
-      <table className={className('table')} style={this.getStyle()}>
+      <table role="grid" className={className('table')} style={this.getStyle()}>
         <THead header={this.props.header} />
         <TBody
           data={this.props.data}

@@ -17,6 +17,7 @@ export class MessageRow extends BaseComponent<MessageRowProps, {}> {
     return (
       <TR>
         <TD
+          role="alert"
           colSpan={this.props.colSpan}
           cell={new Cell(this.props.message)}
           className={classJoin(

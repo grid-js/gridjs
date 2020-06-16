@@ -88,6 +88,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     return (
       <configContext.Provider value={this.props.config}>
         <div
+          role="complementary"
           className={classJoin(
             'gridjs',
             className('container'),
