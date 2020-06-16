@@ -8,7 +8,7 @@ export default function (
   tabular: Tabular<TCell>,
 ): Tabular<TCell> {
   // escape special regex chars
-  keyword = keyword.replace(/[-[\]{}()*+?.,\\^$|#\\s]/g, '\\$&');
+  keyword = keyword.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 
   return new Tabular(
     tabular.rows.filter((row) =>
