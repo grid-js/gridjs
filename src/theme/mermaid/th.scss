@@ -7,12 +7,17 @@ th.gridjs {
     user-select: none;
     box-sizing: content-box;
     white-space: nowrap;
+    outline: none;
 
     &-sort {
       cursor: pointer;
     }
 
     &-sort:hover {
+      background-color: $gray3;
+    }
+
+    &-sort:focus {
       background-color: $gray3;
     }
   }

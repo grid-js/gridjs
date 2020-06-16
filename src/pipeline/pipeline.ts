@@ -1,6 +1,7 @@
 import { PipelineProcessor, ProcessorType } from './processor';
 import { ID } from '../util/id';
 import { trigger } from '../util/trigger';
+import log from "../util/log";
 
 class Pipeline<T, P = {}> {
   // available steps for this pipeline
@@ -18,6 +19,7 @@ class Pipeline<T, P = {}> {
   private afterRegisterCallback: Set<(...args) => void> = new Set();
   private updatedCallback: Set<(...args) => void> = new Set();
   private afterProcessCallback: Set<(...args) => void> = new Set();
+  private onErrorCallback: Set<(...args) => void> = new Set();
 
   constructor(steps?: PipelineProcessor<any, any>[]) {
     if (steps) {
@@ -135,20 +137,30 @@ class Pipeline<T, P = {}> {
     const steps = this.steps;
 
     let prev = data;
-    for (const processor of steps) {
-      const processorIndex = this.findProcessorIndexByID(processor.id);
 
-      if (processorIndex >= lastProcessorIndexUpdated) {
-        // we should execute process() here since the last
-        // updated processor was before "processor".
-        // This is to ensure that we always have correct and up to date
-        // data from processors and also to skip them when necessary
-        prev = await processor.process(prev);
-        this.cache.set(processor.id, prev);
-      } else {
-        // cached results already exist
-        prev = this.cache.get(processor.id);
+    try {
+      for (const processor of steps) {
+        const processorIndex = this.findProcessorIndexByID(processor.id);
+
+        if (processorIndex >= lastProcessorIndexUpdated) {
+          // we should execute process() here since the last
+          // updated processor was before "processor".
+          // This is to ensure that we always have correct and up to date
+          // data from processors and also to skip them when necessary
+          prev = await processor.process(prev);
+          this.cache.set(processor.id, prev);
+        } else {
+          // cached results already exist
+          prev = this.cache.get(processor.id);
+        }
       }
+    } catch (e) {
+      log.error(e);
+      // trigger the onError callback
+      trigger(this.onErrorCallback, prev);
+
+      // rethrow
+      throw e;
     }
 
     // means the pipeline is up to date
@@ -232,10 +244,25 @@ class Pipeline<T, P = {}> {
    * Triggers the callback function when the pipeline
    * is fully processed, before returning the results
    *
+   * afterProcess() will not be called if there is an
+   * error in the pipeline (i.e a step throw an Error)
+   *
    * @param fn
    */
   afterProcess(fn: (...args) => void): this {
     this.afterProcessCallback.add(fn);
+    return this;
+  }
+
+  /**
+   * Triggers the callback function when the pipeline
+   * fails to process all steps or at least one step
+   * throws an Error
+   *
+   * @param fn
+   */
+  onError(fn: (...args) => void): this {
+    this.onErrorCallback.add(fn);
     return this;
   }
 }
