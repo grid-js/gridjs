@@ -22,9 +22,6 @@
   "files": [
     "dist/*"
   ],
-  "engines": {
-    "node": ">= 11.7.0"
-  },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^8.0.0",
     "@types/enzyme": "^3.10.5",
