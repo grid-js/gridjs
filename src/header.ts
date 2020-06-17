@@ -4,7 +4,7 @@ import { UserConfig } from './config';
 import Tabular from './tabular';
 import { width, px, getWidth } from './util/width';
 import { ShadowTable } from './view/table/shadow';
-import { createRef, h, render } from 'preact';
+import { createRef, h, RefObject, render } from 'preact';
 
 class Header extends Base {
   private _columns: OneDArray<TColumn>;
@@ -28,12 +28,15 @@ class Header extends Base {
    *    - Header cell content
    *    - Cell content of the first row
    *    - Cell content of the last row
-   * @param autoWidth
+   *
    * @param container
+   * @param tempRef
    * @param data
+   * @param autoWidth
    */
   adjustWidth(
     container: Element,
+    tempRef: RefObject<HTMLDivElement>,
     data: Tabular<TCell>,
     autoWidth = true,
   ): this {
@@ -61,15 +64,16 @@ class Header extends Base {
       el.ref = shadowTable;
 
       // TODO: we should NOT query the container here. use Refs instead
-      render(el, container.querySelector('#gridjs-temp'));
+      render(el, tempRef.current);
     }
 
     for (const column of this.columns) {
       if (!column.width && autoWidth) {
-        const i = this.columns.indexOf(column);
-        // tries to find the corresponding cell from the ShadowTable and
-        // set the correct width
-        column.width = px(getWidth(shadowTable.current.base, i));
+        // tries to find the corresponding cell
+        // from the ShadowTable and set the correct width
+        column.width = px(
+          getWidth(shadowTable.current.base, this.columns.indexOf(column)),
+        );
       } else {
         column.width = px(width(column.width, containerWidth));
       }
@@ -77,7 +81,7 @@ class Header extends Base {
 
     if (data && data.length && autoWidth) {
       // unmount the shadow table from temp
-      render(null, container.querySelector('#gridjs-temp'));
+      render(null, tempRef.current);
     }
 
     return this;

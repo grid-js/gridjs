@@ -1,7 +1,7 @@
 import { PipelineProcessor, ProcessorType } from './processor';
 import { ID } from '../util/id';
 import { trigger } from '../util/trigger';
-import log from "../util/log";
+import log from '../util/log';
 
 class Pipeline<T, P = {}> {
   // available steps for this pipeline

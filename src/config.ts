@@ -9,12 +9,15 @@ import { ServerStorageOptions } from './storage/server';
 import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
 import { Language, Translator } from './i18n/language';
+import { createRef, RefObject } from 'preact';
 
 // Config type used internally
 export interface Config {
   dispatcher?: Dispatcher<any>;
   /** container element that is used to mount the Grid.js to */
   container?: Element;
+  /** gridjs-temp div which is used internally */
+  tempRef?: RefObject<HTMLDivElement>;
   data?:
     | TwoDArray<TCell>
     | (() => TwoDArray<TCell>)
@@ -61,8 +64,14 @@ export class Config {
     Object.assign(this, updatedConfig);
   }
 
+  update(updatedConfig: Partial<Config>): Config {
+    Object.assign(this, updatedConfig || {});
+    return this;
+  }
+
   static defaultConfig(): Config {
     return {
+      tempRef: createRef(),
       width: '100%',
       autoWidth: true,
     } as Config;

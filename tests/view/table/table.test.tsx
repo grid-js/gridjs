@@ -16,13 +16,14 @@ describe('Table component', () => {
   let config: Config;
   const configContext = createContext(null);
 
-  beforeAll(() => {
+  beforeEach(() => {
     config = new Config();
     config.data = [
       [1, 2, 3],
       ['a', 'b', 'c'],
     ];
 
+    config.autoWidth = true;
     config.storage = StorageUtils.createFromUserConfig(config);
     config.dispatcher = new Dispatcher();
     config.translator = new Translator();
