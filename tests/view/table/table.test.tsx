@@ -16,13 +16,14 @@ describe('Table component', () => {
   let config: Config;
   const configContext = createContext(null);
 
-  beforeAll(() => {
+  beforeEach(() => {
     config = new Config();
     config.data = [
       [1, 2, 3],
       ['a', 'b', 'c'],
     ];
 
+    config.autoWidth = true;
     config.storage = StorageUtils.createFromUserConfig(config);
     config.dispatcher = new Dispatcher();
     config.translator = new Translator();
@@ -149,6 +150,24 @@ describe('Table component', () => {
       <configContext.Provider value={config}>
         <Table
           data={Tabular.fromArray<TCell>([])}
+          header={header}
+          status={Status.Loaded}
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
+
+  it('should render a table with null', async () => {
+    const header = Header.fromUserConfig({
+      columns: ['h1', 'h2', 'h3'],
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={null}
           header={header}
           status={Status.Loaded}
         />

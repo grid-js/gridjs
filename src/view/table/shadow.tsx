@@ -14,7 +14,7 @@ interface ShadowTableProps extends BaseProps {
 
 export class ShadowTable extends BaseComponent<ShadowTableProps, {}> {
   resetStyle(): { [key: string]: string | number } {
-    return { padding: 0, margin: 0, border: 'none' };
+    return { padding: 0, margin: 0, border: 'none', outline: 'none' };
   }
 
   head() {
@@ -22,7 +22,17 @@ export class ShadowTable extends BaseComponent<ShadowTableProps, {}> {
       <thead style={this.resetStyle()}>
         <tr>
           {this.props.header.columns.map((col) => {
-            return <th style={this.resetStyle()}>{col.name}</th>;
+            return (
+              <th
+                style={{
+                  ...this.resetStyle(),
+                  whiteSpace: 'nowrap',
+                  paddingRight: col.sort ? '16px' : '0',
+                }}
+              >
+                {col.name}
+              </th>
+            );
           })}
         </tr>
       </thead>

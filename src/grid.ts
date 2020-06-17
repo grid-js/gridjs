@@ -44,11 +44,12 @@ class Grid {
   }
 
   private setConfig(userConfig: UserConfig): this {
+    if (!this.config) {
+      this.config = new Config();
+    }
+
     // sets the current global config
-    this.config = {
-      ...(this.config || {}),
-      ...Config.fromUserConfig(userConfig),
-    };
+    this.config.update(Config.fromUserConfig(userConfig));
     return this;
   }
 

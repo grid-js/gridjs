@@ -89,7 +89,7 @@ export class Pagination extends BaseComponent<
         this.setState({
           total: 0,
           page: 0,
-        })
+        });
       });
     }
   }
@@ -213,7 +213,9 @@ export class Pagination extends BaseComponent<
           {this.pages > maxCount &&
             this.pages > this.state.page + pagePivot + 1 && (
               <Fragment>
-                <button tabIndex={-1} className={className('spread')}>...</button>
+                <button tabIndex={-1} className={className('spread')}>
+                  ...
+                </button>
                 <button
                   tabIndex={0}
                   onClick={this.setPage.bind(this, this.pages - 1)}
