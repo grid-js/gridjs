@@ -158,4 +158,22 @@ describe('Table component', () => {
 
     expect(table.html()).toMatchSnapshot();
   });
+
+  it('should render a table with null', async () => {
+    const header = Header.fromUserConfig({
+      columns: ['h1', 'h2', 'h3'],
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={null}
+          header={header}
+          status={Status.Loaded}
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
 });

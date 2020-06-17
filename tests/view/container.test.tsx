@@ -4,9 +4,6 @@ import { h } from 'preact';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Config } from '../../src/config';
 import { Container } from '../../src/view/container';
-import Pipeline from '../../src/pipeline/pipeline';
-import StorageExtractor from '../../src/pipeline/extractor/storage';
-import ArrayToTabularTransformer from '../../src/pipeline/transformer/arrayToTabular';
 import StorageUtils from '../../src/storage/storageUtils';
 import Header from '../../src/header';
 import Dispatcher from '../../src/util/dispatcher';
@@ -14,6 +11,7 @@ import { Translator } from '../../src/i18n/language';
 import { PipelineProcessor, ProcessorType } from '../../src/pipeline/processor';
 import * as width from '../../src/util/width';
 import { flushPromises } from '../testUtil';
+import PipelineUtils from "../../src/pipeline/pipelineUtils";
 
 expect.extend(toHaveNoViolations);
 
@@ -30,14 +28,7 @@ describe('Container component', () => {
     config.storage = StorageUtils.createFromUserConfig(config);
     config.dispatcher = new Dispatcher();
     config.translator = new Translator();
-    config.pipeline = new Pipeline([
-      new StorageExtractor({ storage: config.storage }),
-      new ArrayToTabularTransformer(),
-    ]);
-  });
-
-  afterAll(() => {
-    config = null;
+    config.pipeline = PipelineUtils.createFromConfig(config);
   });
 
   it('should render a container with table', async () => {
@@ -173,6 +164,34 @@ describe('Container component', () => {
         sort: {
           enabled: true,
         },
+      },
+    ];
+
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} />,
+    );
+
+    return flushPromises().then(async () => {
+      await container.instance().componentDidMount();
+      expect(container.html()).toMatchSnapshot();
+    });
+  });
+
+  it('should render a container with null array', async () => {
+    config.data = [];
+    config.storage = StorageUtils.createFromUserConfig(config);
+    config.pipeline = PipelineUtils.createFromConfig(config);
+
+    config.header = new Header();
+    config.header.columns = [
+      {
+        name: 'hello',
+      },
+      {
+        name: 'cool',
+      },
+      {
+        name: 'actions',
       },
     ];
 

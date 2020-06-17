@@ -66,7 +66,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
     await this.processPipeline();
 
-    if (config.header) {
+    if (config.header && this.state.data && this.state.data.length) {
       // now that we have the data, let's adjust columns width
       // NOTE: that we only calculate the columns width once
       this.setState({
