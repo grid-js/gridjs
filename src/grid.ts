@@ -79,8 +79,8 @@ class Grid {
    *
    */
   forceRender(): this {
-    if (!this.config.container) {
-      log.error('Container is empty', true);
+    if (!this.config || !this.config.container) {
+      log.error('Container is empty. Make sure you call render() before forceRender()', true);
     }
 
     // re-creates essential components
