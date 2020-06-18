@@ -1,15 +1,15 @@
 import Base from './base';
 import Row from './row';
 import Cell from './cell';
-import { OneDArray, TwoDArray } from './types';
+import { OneDArray, TCell, TwoDArray } from './types';
 import { oneDtoTwoD } from './util/cast';
 import { StorageResponse } from './storage/storage';
 
-class Tabular<T> extends Base {
-  private _rows: Row<T>[];
+class Tabular extends Base {
+  private _rows: Row[];
   private _length: number;
 
-  constructor(rows?: Row<T>[] | Row<T>) {
+  constructor(rows?: Row[] | Row) {
     super();
 
     if (rows instanceof Array) {
@@ -21,11 +21,11 @@ class Tabular<T> extends Base {
     }
   }
 
-  get rows(): Row<T>[] {
+  get rows(): Row[] {
     return this._rows;
   }
 
-  set rows(rows: Row<T>[]) {
+  set rows(rows: Row[]) {
     this._rows = rows;
   }
 
@@ -45,7 +45,7 @@ class Tabular<T> extends Base {
    * @param rows
    * @returns Tabular
    */
-  static fromRows<T>(rows: Row<T>[]): Tabular<T> {
+  static fromRows(rows: Row[]): Tabular {
     return new Tabular(rows.map((row) => Row.fromCells(row.cells)));
   }
 
@@ -56,7 +56,9 @@ class Tabular<T> extends Base {
    * @param data
    * @returns Tabular
    */
-  static fromArray<T>(data: OneDArray<T> | TwoDArray<T>): Tabular<T> {
+  static fromArray<T extends TCell>(
+    data: OneDArray<T> | TwoDArray<T>,
+  ): Tabular {
     data = oneDtoTwoD(data);
 
     return new Tabular(
@@ -64,7 +66,7 @@ class Tabular<T> extends Base {
     );
   }
 
-  static fromStorageResponse<T>(storageResponse: StorageResponse): Tabular<T> {
+  static fromStorageResponse(storageResponse: StorageResponse): Tabular {
     const tabular = Tabular.fromArray(storageResponse.data);
 
     // for server-side storage

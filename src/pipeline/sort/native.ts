@@ -17,7 +17,7 @@ interface NativeSortProps extends PipelineProcessorProps {
   }[];
 }
 
-class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
+class NativeSort extends PipelineProcessor<Tabular, NativeSortProps> {
   protected validateProps(): void {
     for (const condition of this.props.columns) {
       if (condition.direction === undefined) {
@@ -44,7 +44,7 @@ class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
     return 0;
   }
 
-  private compareWrapper(a: Row<any>, b: Row<any>): number {
+  private compareWrapper(a: Row, b: Row): number {
     let cmp = 0;
 
     for (const column of this.props.columns) {
@@ -65,7 +65,7 @@ class NativeSort extends PipelineProcessor<Tabular<TCell>, NativeSortProps> {
     return cmp;
   }
 
-  protected _process(data: Tabular<TCell>): Tabular<TCell> {
+  protected _process(data: Tabular): Tabular {
     const sorted = [...data.rows];
     sorted.sort(this.compareWrapper.bind(this));
     return new Tabular(sorted);

@@ -9,7 +9,8 @@ export type OneDArray<T> = T[];
 export type TwoDArray<T> = T[][];
 
 // Table cell type
-export type TCell = number | string | boolean | VNode<any>;
+export type TCellPrimitive = number | string | boolean | VNode<any>;
+export type TCell = TCellPrimitive | (() => TCellPrimitive);
 
 // Table header cell type
 export interface TColumn {
@@ -17,7 +18,7 @@ export interface TColumn {
   width?: string;
   sort?: SortConfig;
   children?: OneDArray<TColumn>;
-  formatter?: (cell: TCell, row: Row<TCell>, column: TColumn) => ComponentChild;
+  formatter?: (cell: TCell, row: Row, column: TColumn) => ComponentChild;
 }
 
 // Comparator function for the sorting plugin

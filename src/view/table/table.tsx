@@ -6,10 +6,10 @@ import { THead } from './thead';
 import { BaseComponent, BaseProps } from '../base';
 import Header from '../../header';
 import { className } from '../../util/className';
-import { Status, TCell } from '../../types';
+import { Status } from '../../types';
 
 interface TableProps extends BaseProps {
-  data: Tabular<TCell>;
+  data: Tabular;
   status: Status;
   header?: Header;
   width?: string;

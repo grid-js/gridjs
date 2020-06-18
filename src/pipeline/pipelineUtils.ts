@@ -1,15 +1,14 @@
 import { Config } from '../config';
 import Pipeline from './pipeline';
 import Tabular from '../tabular';
-import { TCell } from '../types';
 import StorageExtractor from './extractor/storage';
 import ArrayToTabularTransformer from './transformer/arrayToTabular';
 import ServerStorage from '../storage/server';
 import ServerInitiator from './initiator/server';
 
 class PipelineUtils {
-  static createFromConfig(config: Config): Pipeline<Tabular<TCell>> {
-    const pipeline = new Pipeline<Tabular<TCell>>();
+  static createFromConfig(config: Config): Pipeline<Tabular> {
+    const pipeline = new Pipeline<Tabular>();
 
     if (config.storage instanceof ServerStorage) {
       pipeline.register(

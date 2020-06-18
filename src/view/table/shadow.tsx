@@ -3,12 +3,11 @@ import { h } from 'preact';
 import Tabular from '../../tabular';
 import { BaseComponent, BaseProps } from '../base';
 import Header from '../../header';
-import { TCell } from '../../types';
 import Row from '../../row';
 import Cell from '../../cell';
 
 interface ShadowTableProps extends BaseProps {
-  data: Tabular<TCell>;
+  data: Tabular;
   header?: Header;
 }
 
@@ -39,14 +38,14 @@ export class ShadowTable extends BaseComponent<ShadowTableProps, {}> {
     );
   }
 
-  td(cell: Cell<TCell>) {
+  td(cell: Cell) {
     return <td style={this.resetStyle()}>{cell.data}</td>;
   }
 
-  tr(row: Row<TCell>) {
+  tr(row: Row) {
     return (
       <tr style={this.resetStyle()}>
-        {row.cells.map((cell: Cell<TCell>) => {
+        {row.cells.map((cell: Cell) => {
           return this.td(cell);
         })}
       </tr>
@@ -57,7 +56,7 @@ export class ShadowTable extends BaseComponent<ShadowTableProps, {}> {
     return (
       <tbody style={this.resetStyle()}>
         {this.props.data &&
-          this.props.data.rows.map((row: Row<TCell>) => {
+          this.props.data.rows.map((row: Row) => {
             return this.tr(row);
           })}
       </tbody>

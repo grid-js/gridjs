@@ -1,4 +1,3 @@
-import { TCell } from '../../types';
 import Tabular from '../../tabular';
 import {
   PipelineProcessor,
@@ -11,10 +10,7 @@ interface PaginationLimitProps extends PipelineProcessorProps {
   limit: number;
 }
 
-class PaginationLimit extends PipelineProcessor<
-  Tabular<TCell>,
-  PaginationLimitProps
-> {
+class PaginationLimit extends PipelineProcessor<Tabular, PaginationLimitProps> {
   protected validateProps(): void {
     if (isNaN(Number(this.props.limit)) || isNaN(Number(this.props.page))) {
       throw Error('Invalid parameters passed');
@@ -25,7 +21,7 @@ class PaginationLimit extends PipelineProcessor<
     return ProcessorType.Limit;
   }
 
-  protected _process(data: Tabular<TCell>): Tabular<TCell> {
+  protected _process(data: Tabular): Tabular {
     const page = this.props.page;
     const start = page * this.props.limit;
     const end = (page + 1) * this.props.limit;

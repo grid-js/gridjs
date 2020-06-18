@@ -1,14 +1,13 @@
 import { PipelineProcessor, ProcessorType } from '../processor';
 import Tabular from '../../tabular';
-import { TCell } from '../../types';
 import { StorageResponse } from '../../storage/storage';
 
-class ArrayToTabularTransformer extends PipelineProcessor<Tabular<TCell>, {}> {
+class ArrayToTabularTransformer extends PipelineProcessor<Tabular, {}> {
   get type(): ProcessorType {
     return ProcessorType.Transformer;
   }
 
-  _process(storageResponse: StorageResponse): Tabular<TCell> {
+  _process(storageResponse: StorageResponse): Tabular {
     return Tabular.fromStorageResponse(storageResponse);
   }
 }

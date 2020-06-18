@@ -166,11 +166,7 @@ describe('Table component', () => {
 
     const table = mount(
       <configContext.Provider value={config}>
-        <Table
-          data={null}
-          header={header}
-          status={Status.Loaded}
-        />
+        <Table data={null} header={header} status={Status.Loaded} />
       </configContext.Provider>,
     );
 

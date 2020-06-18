@@ -1,10 +1,9 @@
 import Tabular from '../../../src/tabular';
 import NativeSort from '../../../src/pipeline/sort/native';
 import Pipeline from '../../../src/pipeline/pipeline';
-import { TCell } from '../../../src/types';
 
 describe('NativeSort', () => {
-  let data: Tabular<string>;
+  let data: Tabular;
 
   beforeAll(() => {
     data = Tabular.fromArray([
@@ -123,7 +122,7 @@ describe('NativeSort', () => {
       ['d1', 2],
     ]);
 
-    const pipeline = new Pipeline<Tabular<TCell>>();
+    const pipeline = new Pipeline<Tabular>();
 
     const sort1 = new NativeSort().setProps({
       columns: [
@@ -154,7 +153,7 @@ describe('NativeSort', () => {
       ['d1', 2],
     ]);
 
-    const pipeline = new Pipeline<Tabular<TCell>>();
+    const pipeline = new Pipeline<Tabular>();
 
     const sort1 = new NativeSort().setProps({
       columns: [

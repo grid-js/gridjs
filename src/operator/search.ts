@@ -1,12 +1,8 @@
 import Tabular from '../tabular';
-import { TCell } from '../types';
 import { VNode } from 'preact';
 import { HTMLContentProps } from '../view/htmlElement';
 
-export default function (
-  keyword: string,
-  tabular: Tabular<TCell>,
-): Tabular<TCell> {
+export default function (keyword: string, tabular: Tabular): Tabular {
   // escape special regex chars
   keyword = keyword.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 
