@@ -10,10 +10,7 @@ interface PaginationLimitProps extends PipelineProcessorProps {
   limit: number;
 }
 
-class PaginationLimit extends PipelineProcessor<
-  Tabular,
-  PaginationLimitProps
-> {
+class PaginationLimit extends PipelineProcessor<Tabular, PaginationLimitProps> {
   protected validateProps(): void {
     if (isNaN(Number(this.props.limit)) || isNaN(Number(this.props.page))) {
       throw Error('Invalid parameters passed');

@@ -11,7 +11,7 @@ import { Translator } from '../../src/i18n/language';
 import { PipelineProcessor, ProcessorType } from '../../src/pipeline/processor';
 import * as width from '../../src/util/width';
 import { flushPromises } from '../testUtil';
-import PipelineUtils from "../../src/pipeline/pipelineUtils";
+import PipelineUtils from '../../src/pipeline/pipelineUtils';
 
 expect.extend(toHaveNoViolations);
 

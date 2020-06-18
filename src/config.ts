@@ -10,8 +10,8 @@ import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
 import { Language, Translator } from './i18n/language';
 import { createRef, RefObject } from 'preact';
-import StorageUtils from "./storage/storageUtils";
-import PipelineUtils from "./pipeline/pipelineUtils";
+import StorageUtils from './storage/storageUtils';
+import PipelineUtils from './pipeline/pipelineUtils';
 
 // Config type used internally
 export interface Config {
@@ -84,25 +84,25 @@ export class Config {
 
     config.update({
       dispatcher: new Dispatcher<any>(),
-      storage: StorageUtils.createFromUserConfig(userConfig)
+      storage: StorageUtils.createFromUserConfig(userConfig),
     });
 
     config.update({
-      pipeline: PipelineUtils.createFromConfig(config)
-    })
+      pipeline: PipelineUtils.createFromConfig(config),
+    });
 
     // Sort
     if (typeof userConfig.sort === 'boolean' && userConfig.sort) {
       config.update({
         sort: {
           multiColumn: true,
-        }
+        },
       });
     }
 
     // Header
     config.update({
-      header: Header.fromUserConfig(config)
+      header: Header.fromUserConfig(config),
     });
 
     // Pagination
@@ -112,7 +112,7 @@ export class Config {
           userConfig.pagination === true ||
           userConfig.pagination instanceof Object,
         ...(userConfig.pagination as PaginationConfig),
-      }
+      },
     });
 
     // Search
@@ -121,12 +121,12 @@ export class Config {
         enabled:
           userConfig.search === true || userConfig.search instanceof Object,
         ...(userConfig.search as SearchConfig),
-      }
+      },
     });
 
     // Translator
     config.update({
-      translator: new Translator(userConfig.language)
+      translator: new Translator(userConfig.language),
     });
 
     return config;

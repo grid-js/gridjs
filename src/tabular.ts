@@ -1,7 +1,7 @@
 import Base from './base';
 import Row from './row';
 import Cell from './cell';
-import {OneDArray, TCell, TwoDArray} from './types';
+import { OneDArray, TCell, TwoDArray } from './types';
 import { oneDtoTwoD } from './util/cast';
 import { StorageResponse } from './storage/storage';
 
@@ -56,7 +56,9 @@ class Tabular extends Base {
    * @param data
    * @returns Tabular
    */
-  static fromArray<T extends TCell>(data: OneDArray<T> | TwoDArray<T>): Tabular {
+  static fromArray<T extends TCell>(
+    data: OneDArray<T> | TwoDArray<T>,
+  ): Tabular {
     data = oneDtoTwoD(data);
 
     return new Tabular(
