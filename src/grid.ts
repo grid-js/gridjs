@@ -1,13 +1,10 @@
 import { Config, UserConfig } from './config';
 import { h, render, VNode } from 'preact';
-import StorageUtils from './storage/storageUtils';
 import { Container } from './view/container';
 import log from './util/log';
-import PipelineUtils from './pipeline/pipelineUtils';
-import Dispatcher from './util/dispatcher';
 
 class Grid {
-  private _config: Config;
+  public config: Config;
   private _userConfig: UserConfig;
 
   constructor(userConfig?: UserConfig) {
@@ -16,22 +13,6 @@ class Grid {
 
   bootstrap(): void {
     this.setConfig(this._userConfig);
-    this.setDispatcher(this._userConfig);
-    this.setStorage(this._userConfig);
-    this.setPipeline(this.config);
-  }
-
-  get config(): Config {
-    return this._config;
-  }
-
-  set config(config: Config) {
-    this._config = config;
-  }
-
-  private setDispatcher(userConfig?: UserConfig): this {
-    this.config.dispatcher = userConfig.dispatcher || new Dispatcher<any>();
-    return this;
   }
 
   public updateConfig(userConfig: UserConfig): this {
@@ -48,18 +29,7 @@ class Grid {
       this.config = new Config();
     }
 
-    // sets the current global config
     this.config.update(Config.fromUserConfig(userConfig));
-    return this;
-  }
-
-  private setStorage(userConfig: UserConfig): this {
-    this.config.storage = StorageUtils.createFromUserConfig(userConfig);
-    return this;
-  }
-
-  private setPipeline(config: Config): this {
-    this.config.pipeline = PipelineUtils.createFromConfig(config);
     return this;
   }
 
@@ -87,6 +57,7 @@ class Grid {
     this.bootstrap();
 
     // clear the pipeline cache
+    // FIXME: not sure if this is necessary because we are calling bootstrap() before this line
     this.config.pipeline.clearCache();
 
     // TODO: not sure if it's a good idea to render a null element but I couldn't find a better way
