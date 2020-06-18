@@ -2,7 +2,7 @@ import Tabular from '../../../src/tabular';
 import PaginationLimit from '../../../src/pipeline/limit/pagination';
 
 describe('PaginationLimit', () => {
-  let data: Tabular<string>;
+  let data: Tabular;
 
   beforeAll(() => {
     data = Tabular.fromArray([

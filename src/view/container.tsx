@@ -3,7 +3,7 @@ import { h, createContext, Context } from 'preact';
 import Tabular from '../tabular';
 import { BaseComponent, BaseProps } from './base';
 import { classJoin, className } from '../util/className';
-import { Status, TCell } from '../types';
+import { Status } from '../types';
 import { Table } from './table/table';
 import { HeaderContainer } from './headerContainer';
 import { FooterContainer } from './footerContainer';
@@ -14,7 +14,7 @@ import log from '../util/log';
 
 interface ContainerProps extends BaseProps {
   config: Config;
-  pipeline: Pipeline<Tabular<TCell>>;
+  pipeline: Pipeline<Tabular>;
   header?: Header;
   width?: string;
 }
@@ -22,7 +22,7 @@ interface ContainerProps extends BaseProps {
 interface ContainerState {
   status: Status;
   header?: Header;
-  data?: Tabular<TCell>;
+  data?: Tabular;
 }
 
 export class Container extends BaseComponent<ContainerProps, ContainerState> {

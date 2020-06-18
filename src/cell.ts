@@ -1,19 +1,20 @@
 import Base from './base';
+import {TCell} from "./types";
 
-class Cell<T> extends Base {
-  private _data: T;
+class Cell extends Base {
+  private _data: TCell;
 
-  constructor(data: T) {
+  constructor(data: TCell) {
     super();
 
     this.data = data;
   }
 
-  public get data(): T {
+  public get data(): TCell {
     return this._data;
   }
 
-  public set data(data: T) {
+  public set data(data: TCell) {
     this._data = data;
   }
 }

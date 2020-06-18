@@ -5,12 +5,12 @@ import { TR } from './tr';
 import Tabular from '../../tabular';
 import { BaseComponent, BaseProps } from '../base';
 import { className } from '../../util/className';
-import { Status, TCell } from '../../types';
+import { Status } from '../../types';
 import Header from '../../header';
 import { MessageRow } from './messageRow';
 
 interface TBodyProps extends BaseProps {
-  data: Tabular<TCell>;
+  data: Tabular;
   status: Status;
   header?: Header;
 }
@@ -27,7 +27,7 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
     return (
       <tbody className={className('tbody')}>
         {this.props.data &&
-          this.props.data.rows.map((row: Row<TCell>) => {
+          this.props.data.rows.map((row: Row) => {
             return <TR key={row.id} row={row} header={this.props.header} />;
           })}
 

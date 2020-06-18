@@ -2,7 +2,6 @@ import Cell from '../../src/cell';
 import Tabular from '../../src/tabular';
 import Row from '../../src/row';
 import search from '../../src/operator/search';
-import { TCell } from '../../src/types';
 
 describe('search', () => {
   const row1 = new Row([new Cell('hello'), new Cell('world'), new Cell('!')]);
@@ -14,7 +13,7 @@ describe('search', () => {
     new Cell('ping pong ping'),
     new Cell('bar'),
   ]);
-  const tabular: Tabular<TCell> = new Tabular([row1, row2, row3, row4, row5]);
+  const tabular: Tabular = new Tabular([row1, row2, row3, row4, row5]);
 
   it('should work with exact match', () => {
     expect(search('hello', tabular).rows).toStrictEqual(

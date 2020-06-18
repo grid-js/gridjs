@@ -3,7 +3,6 @@ import { BaseComponent, BaseProps } from '../base';
 import PaginationLimit from '../../pipeline/limit/pagination';
 import { className } from '../../util/className';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
-import { TCell } from '../../types';
 import Tabular from '../../tabular';
 import getConfig from '../../util/getConfig';
 
@@ -63,7 +62,7 @@ export class Pagination extends BaseComponent<
           body: this.props.server.body,
         });
 
-        this.config.pipeline.afterProcess((result: Tabular<TCell>) => {
+        this.config.pipeline.afterProcess((result: Tabular) => {
           this.setTotal(result.length);
         });
       } else {
@@ -75,7 +74,7 @@ export class Pagination extends BaseComponent<
         // Pagination (all Limit processors) is the last step in the pipeline
         // and we assume that at this stage, we have the rows that we care about.
         // Let's grab the rows before processing Pagination and set total number of rows
-        processor.beforeProcess(async (tabular: Tabular<TCell>) => {
+        processor.beforeProcess(async (tabular: Tabular) => {
           this.setTotal(tabular.length);
         });
       }

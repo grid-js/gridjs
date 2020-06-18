@@ -3,12 +3,12 @@ import { ComponentChild, h } from 'preact';
 import Cell from '../../cell';
 import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';
-import { TCell, TColumn } from '../../types';
+import { TColumn } from '../../types';
 import Row from '../../row';
 
 export interface TDProps extends BaseProps {
-  cell: Cell<TCell>;
-  row?: Row<TCell>;
+  cell: Cell;
+  row?: Row;
   column?: TColumn;
   colSpan?: number;
   className?: string;

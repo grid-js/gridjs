@@ -1,4 +1,4 @@
-import { OneDArray, TCell, TColumn } from './types';
+import { OneDArray, TColumn } from './types';
 import Base from './base';
 import { UserConfig } from './config';
 import Tabular from './tabular';
@@ -37,7 +37,7 @@ class Header extends Base {
   adjustWidth(
     container: Element,
     tempRef: RefObject<HTMLDivElement>,
-    data: Tabular<TCell>,
+    data: Tabular,
     autoWidth = true,
   ): this {
     if (!container) {

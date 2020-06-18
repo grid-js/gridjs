@@ -29,7 +29,7 @@ export interface Config {
   /** to parse a HTML table and load the data */
   from: HTMLElement;
   storage: Storage<any>;
-  pipeline: Pipeline<Tabular<TCell>>;
+  pipeline: Pipeline<Tabular>;
   /** to automatically calculate the columns width */
   autoWidth: boolean;
   /** sets the width of the container and table */

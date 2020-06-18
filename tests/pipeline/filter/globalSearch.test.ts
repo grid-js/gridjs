@@ -2,7 +2,7 @@ import GlobalSearchFilter from '../../../src/pipeline/filter/globalSearch';
 import Tabular from '../../../src/tabular';
 
 describe('GlobalSearch', () => {
-  let data: Tabular<any>;
+  let data: Tabular;
 
   beforeAll(() => {
     data = Tabular.fromArray([
