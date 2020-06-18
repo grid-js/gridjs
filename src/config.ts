@@ -10,6 +10,8 @@ import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
 import { Language, Translator } from './i18n/language';
 import { createRef, RefObject } from 'preact';
+import StorageUtils from "./storage/storageUtils";
+import PipelineUtils from "./pipeline/pipelineUtils";
 
 // Config type used internally
 export interface Config {
@@ -54,11 +56,11 @@ export type UserConfig = ProtoExtends<
 >;
 
 export class Config {
-  constructor(userConfig?: UserConfig) {
+  constructor(config?: Config) {
     // FIXME: not sure if this makes sense because Config is a subset of UserConfig
     const updatedConfig = {
       ...Config.defaultConfig(),
-      ...userConfig,
+      ...config,
     };
 
     Object.assign(this, updatedConfig);
@@ -77,33 +79,55 @@ export class Config {
     } as Config;
   }
 
-  static fromUserConfig(userConfig?: UserConfig): Config {
-    const config = new Config(userConfig);
+  static fromUserConfig(userConfig: UserConfig): Config {
+    const config = new Config(userConfig as Config);
 
-    if (!userConfig) return config;
+    config.update({
+      dispatcher: new Dispatcher<any>(),
+      storage: StorageUtils.createFromUserConfig(userConfig)
+    });
 
-    if (typeof config.sort === 'boolean' && config.sort) {
-      config.sort = {
-        multiColumn: true,
-      };
+    config.update({
+      pipeline: PipelineUtils.createFromConfig(config)
+    })
+
+    // Sort
+    if (typeof userConfig.sort === 'boolean' && userConfig.sort) {
+      config.update({
+        sort: {
+          multiColumn: true,
+        }
+      });
     }
 
-    config.header = Header.fromUserConfig(config);
+    // Header
+    config.update({
+      header: Header.fromUserConfig(config)
+    });
 
-    config.pagination = {
-      enabled:
-        userConfig.pagination === true ||
-        userConfig.pagination instanceof Object,
-      ...(userConfig.pagination as PaginationConfig),
-    };
+    // Pagination
+    config.update({
+      pagination: {
+        enabled:
+          userConfig.pagination === true ||
+          userConfig.pagination instanceof Object,
+        ...(userConfig.pagination as PaginationConfig),
+      }
+    });
 
-    config.search = {
-      enabled:
-        userConfig.search === true || userConfig.search instanceof Object,
-      ...(userConfig.search as SearchConfig),
-    };
+    // Search
+    config.update({
+      search: {
+        enabled:
+          userConfig.search === true || userConfig.search instanceof Object,
+        ...(userConfig.search as SearchConfig),
+      }
+    });
 
-    config.translator = new Translator(userConfig.language);
+    // Translator
+    config.update({
+      translator: new Translator(userConfig.language)
+    });
 
     return config;
   }
