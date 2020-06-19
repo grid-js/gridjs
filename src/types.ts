@@ -1,5 +1,4 @@
-// borrowed from https://github.com/Microsoft/TypeScript/issues/20920
-import { ComponentChild, VNode } from 'preact';
+import { ComponentChild } from 'preact';
 import Row from './row';
 import { SortConfig } from './view/plugin/sort/sort';
 
@@ -8,9 +7,8 @@ export type ProtoExtends<T, U> = U & Omit<T, keyof U>;
 export type OneDArray<T> = T[];
 export type TwoDArray<T> = T[][];
 
-// Table cell type
-export type TCellPrimitive = number | string | boolean | VNode<any>;
-export type TCell = TCellPrimitive | (() => TCellPrimitive);
+// Table cell types
+export type TCell = number | string | boolean | ComponentChild | HTMLElement;
 
 // Table header cell type
 export interface TColumn {

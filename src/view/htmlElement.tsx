@@ -7,7 +7,7 @@ export interface HTMLContentProps extends BaseProps {
   parentElement?: string;
 }
 
-export class HTMLContent extends BaseComponent<HTMLContentProps, {}> {
+export class HTMLElement extends BaseComponent<HTMLContentProps, {}> {
   static defaultProps = {
     parentElement: 'span',
   };
