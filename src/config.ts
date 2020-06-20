@@ -56,23 +56,56 @@ export type UserConfig = ProtoExtends<
 >;
 
 export class Config {
+  private _userConfig: UserConfig;
+
   constructor(config?: Config) {
-    // FIXME: not sure if this makes sense because Config is a subset of UserConfig
     const updatedConfig = {
       ...Config.defaultConfig(),
       ...config,
     };
 
+    this._userConfig = {};
+
     Object.assign(this, updatedConfig);
   }
 
-  update(updatedConfig: Partial<Config>): Config {
-    Object.assign(this, updatedConfig || {});
+  /**
+   * Assigns `updatedConfig` keys to the current config file
+   *
+   * @param updatedConfig
+   */
+  assign(updatedConfig: Partial<Config>): Config {
+    for (const key of Object.keys(updatedConfig)) {
+      // because we don't want to update the _userConfig cache
+      if (key === '_userConfig') continue;
+
+      this[key] = updatedConfig[key];
+    }
+
+    return this;
+  }
+
+  /**
+   * Updates the config from a UserConfig
+   *
+   * @param userConfig
+   */
+  update(userConfig: Partial<UserConfig>): Config {
+    if (!userConfig) return this;
+
+    this._userConfig = {
+      ...this._userConfig,
+      ...userConfig,
+    };
+
+    this.assign(Config.fromUserConfig(this._userConfig));
+
     return this;
   }
 
   static defaultConfig(): Config {
     return {
+      dispatcher: new Dispatcher<any>(),
       tempRef: createRef(),
       width: '100%',
       autoWidth: true,
@@ -82,18 +115,17 @@ export class Config {
   static fromUserConfig(userConfig: UserConfig): Config {
     const config = new Config(userConfig as Config);
 
-    config.update({
-      dispatcher: new Dispatcher<any>(),
+    config.assign({
       storage: StorageUtils.createFromUserConfig(userConfig),
     });
 
-    config.update({
+    config.assign({
       pipeline: PipelineUtils.createFromConfig(config),
     });
 
     // Sort
     if (typeof userConfig.sort === 'boolean' && userConfig.sort) {
-      config.update({
+      config.assign({
         sort: {
           multiColumn: true,
         },
@@ -101,12 +133,12 @@ export class Config {
     }
 
     // Header
-    config.update({
+    config.assign({
       header: Header.fromUserConfig(config),
     });
 
     // Pagination
-    config.update({
+    config.assign({
       pagination: {
         enabled:
           userConfig.pagination === true ||
@@ -116,7 +148,7 @@ export class Config {
     });
 
     // Search
-    config.update({
+    config.assign({
       search: {
         enabled:
           userConfig.search === true || userConfig.search instanceof Object,
@@ -125,7 +157,7 @@ export class Config {
     });
 
     // Translator
-    config.update({
+    config.assign({
       translator: new Translator(userConfig.language),
     });
 

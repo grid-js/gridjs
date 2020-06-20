@@ -5,31 +5,13 @@ import log from './util/log';
 
 class Grid {
   public config: Config;
-  private _userConfig: UserConfig;
 
   constructor(userConfig?: UserConfig) {
-    this._userConfig = userConfig;
+    this.config = new Config().update(userConfig);
   }
 
-  bootstrap(): void {
-    this.setConfig(this._userConfig);
-  }
-
-  public updateConfig(userConfig: UserConfig): this {
-    this._userConfig = {
-      ...this._userConfig,
-      ...userConfig,
-    };
-
-    return this;
-  }
-
-  private setConfig(userConfig: UserConfig): this {
-    if (!this.config) {
-      this.config = new Config();
-    }
-
-    this.config.update(Config.fromUserConfig(userConfig));
+  public updateConfig(userConfig: Partial<UserConfig>): this {
+    this.config.update(userConfig);
     return this;
   }
 
@@ -56,11 +38,7 @@ class Grid {
       );
     }
 
-    // re-creates essential components
-    this.bootstrap();
-
     // clear the pipeline cache
-    // FIXME: not sure if this is necessary because we are calling bootstrap() before this line
     this.config.pipeline.clearCache();
 
     // TODO: not sure if it's a good idea to render a null element but I couldn't find a better way
@@ -77,8 +55,6 @@ class Grid {
    * @param container
    */
   render(container: Element): this {
-    this.bootstrap();
-
     if (!container) {
       log.error('Container element cannot be null', true);
     }
