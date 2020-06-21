@@ -56,6 +56,8 @@ export type UserConfig = ProtoExtends<
 >;
 
 export class Config {
+  // this is the config file passed by the user
+  // we need this for Config.update()
   private _userConfig: UserConfig;
 
   constructor(config?: Config) {
@@ -114,6 +116,9 @@ export class Config {
 
   static fromUserConfig(userConfig: UserConfig): Config {
     const config = new Config(userConfig as Config);
+
+    // to set the initial _userConfig object
+    config._userConfig = userConfig;
 
     config.assign({
       storage: StorageUtils.createFromUserConfig(userConfig),

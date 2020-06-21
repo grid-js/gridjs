@@ -1,5 +1,4 @@
 import { Config } from '../src/config';
-import MemoryStorage from '../src/storage/memory';
 import Storage from '../src/storage/storage';
 import { Translator } from '../src/i18n/language';
 
@@ -7,9 +6,9 @@ describe('Config', () => {
   let config: Config = null;
 
   beforeEach(() => {
-    config = new Config();
-    config.data = [[1, 2, 3]];
-    config.storage = new MemoryStorage(config.data);
+    config = Config.fromUserConfig({
+      data: [[1, 2, 3]]
+    });
   });
 
   it('should have data property', () => {
@@ -114,5 +113,20 @@ describe('Config', () => {
       false,
       false,
     ]);
+  });
+
+  it('should assign config keys', () => {
+    config.assign({
+      width: '1000px'
+    });
+    expect(config.width).toBe('1000px');
+  });
+
+  it('should update config', () => {
+    config.update({
+      autoWidth: false
+    });
+    expect(config.width).toBe('100%');
+    expect(config.autoWidth).toBeFalsy();
   });
 });
