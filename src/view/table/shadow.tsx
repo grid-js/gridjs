@@ -26,7 +26,8 @@ export class ShadowTable extends BaseComponent<ShadowTableProps, {}> {
                 style={{
                   ...this.resetStyle(),
                   whiteSpace: 'nowrap',
-                  paddingRight: col.sort ? '16px' : '0',
+                  // pagination buttons
+                  paddingRight: col.sort ? '18px' : '0',
                 }}
               >
                 {col.name}
