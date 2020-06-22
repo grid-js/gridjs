@@ -16,7 +16,7 @@ interface ContainerProps extends BaseProps {
   config: Config;
   pipeline: Pipeline<Tabular>;
   header?: Header;
-  width?: string;
+  width: string;
 }
 
 interface ContainerState {
@@ -96,7 +96,12 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
             className('container'),
             this.state.status === Status.Loading ? className('loading') : null,
           )}
-          style={{ width: this.props.width }}
+          style={{
+            ...this.props.config.style.container,
+            ...{
+              width: this.props.width,
+            },
+          }}
         >
           {this.state.status === Status.Loading && (
             <div className={className('loading-bar')} />

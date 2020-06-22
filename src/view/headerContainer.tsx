@@ -34,7 +34,11 @@ export class HeaderContainer extends BaseComponent<{}, HeaderContainerState> {
 
     if (this.state.isActive) {
       return (
-        <div ref={this.headerRef} className={className('head')}>
+        <div
+          ref={this.headerRef}
+          className={className('head')}
+          style={{ ...this.config.style.header }}
+        >
           <Search {...config.search} />
         </div>
       );

@@ -47,7 +47,10 @@ export class TH extends BaseComponent<THProps, {}> {
       <th
         className={cls}
         onClick={this.onClick.bind(this)}
-        style={{ width: this.props.column.width }}
+        style={{
+          ...this.config.style.th,
+          ...{ width: this.props.column.width },
+        }}
         onKeyDown={this.keyDown.bind(this)}
         {...props}
       >

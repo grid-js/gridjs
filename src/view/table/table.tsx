@@ -12,23 +12,22 @@ interface TableProps extends BaseProps {
   data: Tabular;
   status: Status;
   header?: Header;
-  width?: string;
+  width: string;
 }
 
 export class Table extends BaseComponent<TableProps, {}> {
-  private getStyle(): { [key: string]: string } {
-    const style = {};
-
-    if (this.props.width) {
-      style['width'] = this.props.width;
-    }
-
-    return style;
-  }
-
   render() {
     return (
-      <table role="grid" className={className('table')} style={this.getStyle()}>
+      <table
+        role="grid"
+        className={className('table')}
+        style={{
+          ...this.config.style.table,
+          ...{
+            width: this.props.width,
+          },
+        }}
+      >
         <THead header={this.props.header} />
         <TBody
           data={this.props.data}
