@@ -36,7 +36,11 @@ describe('Table component', () => {
   it('should render a table', async () => {
     const table = mount(
       <configContext.Provider value={config}>
-        <Table data={await config.pipeline.process()} status={Status.Loaded} width="100%" />
+        <Table
+          data={await config.pipeline.process()}
+          status={Status.Loaded}
+          width="100%"
+        />
       </configContext.Provider>,
     );
 
@@ -46,7 +50,11 @@ describe('Table component', () => {
   it('should render a table with loading', async () => {
     const table = mount(
       <configContext.Provider value={config}>
-        <Table data={await config.pipeline.process()} status={Status.Loading} width="100%" />
+        <Table
+          data={await config.pipeline.process()}
+          status={Status.Loading}
+          width="100%"
+        />
       </configContext.Provider>,
     );
 
@@ -171,7 +179,12 @@ describe('Table component', () => {
 
     const table = mount(
       <configContext.Provider value={config}>
-        <Table data={null} header={header} status={Status.Loaded} width="100%" />
+        <Table
+          data={null}
+          header={header}
+          status={Status.Loaded}
+          width="100%"
+        />
       </configContext.Provider>,
     );
 
@@ -185,17 +198,22 @@ describe('Table component', () => {
 
     config.style = {
       th: {
-        border: '1px solid black'
+        border: '1px solid black',
       },
       table: {
         padding: '2px',
-        margin: '1px'
-      }
+        margin: '1px',
+      },
     };
 
     const table = mount(
       <configContext.Provider value={config}>
-        <Table data={null} header={header} status={Status.Loaded} width="100%" />
+        <Table
+          data={null}
+          header={header}
+          status={Status.Loaded}
+          width="100%"
+        />
       </configContext.Provider>,
     );
 

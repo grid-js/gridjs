@@ -1,8 +1,8 @@
 import { mount } from 'enzyme';
-import {createContext, h} from 'preact';
+import { createContext, h } from 'preact';
 import { TD } from '../../../src/view/table/td';
 import Cell from '../../../src/cell';
-import {Config} from "../../../src/config";
+import { Config } from '../../../src/config';
 
 describe('TD component', () => {
   let config: Config;
@@ -16,7 +16,7 @@ describe('TD component', () => {
     const td = mount(
       <configContext.Provider value={config}>
         <TD cell={new Cell('boo')} />
-      </configContext.Provider>
+      </configContext.Provider>,
     );
     expect(td.html()).toMatchSnapshot();
   });

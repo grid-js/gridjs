@@ -42,32 +42,32 @@ describe('Container component', () => {
 
   it('should attach styles', async () => {
     config.search = {
-      enabled: true
+      enabled: true,
     };
 
     config.pagination = {
-      enabled: true
+      enabled: true,
     };
 
     config.style = {
       container: {
-        border: '1px solid #ccc'
+        border: '1px solid #ccc',
       },
       header: {
-        padding: '5px'
+        padding: '5px',
       },
       footer: {
-        margin: '2px'
+        margin: '2px',
       },
       td: {
-        'font-weight': 'bold'
+        'font-weight': 'bold',
       },
       th: {
-        border: '2px solid red'
+        border: '2px solid red',
       },
       table: {
-        'font-size': '15px'
-      }
+        'font-size': '15px',
+      },
     };
 
     const container = mount(
@@ -84,7 +84,7 @@ describe('Container component', () => {
     };
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%"/>,
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
     );
     await container.instance().componentDidMount();
     expect(container.html()).toMatchSnapshot();
@@ -149,7 +149,7 @@ describe('Container component', () => {
     config.pipeline.register(new ErrorProcessor());
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%"/>,
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
     );
 
     await container.instance().componentDidMount();
@@ -169,7 +169,7 @@ describe('Container component', () => {
     config.sort = {};
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%"/>,
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
     );
 
     await container.instance().componentDidMount();
