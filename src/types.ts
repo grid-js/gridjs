@@ -36,3 +36,7 @@ export enum Status {
   Rendered,
   Error,
 }
+
+export type CSSDeclaration = {
+  [key: string]: string;
+};

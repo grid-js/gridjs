@@ -1,4 +1,11 @@
-import { OneDArray, ProtoExtends, TCell, TColumn, TwoDArray } from './types';
+import {
+  CSSDeclaration,
+  OneDArray,
+  ProtoExtends,
+  TCell,
+  TColumn,
+  TwoDArray,
+} from './types';
 import Storage from './storage/storage';
 import Pipeline from './pipeline/pipeline';
 import Tabular from './tabular';
@@ -38,6 +45,14 @@ export interface Config {
   pagination: PaginationConfig;
   sort: GenericSortConfig;
   translator: Translator;
+  style?: {
+    table?: CSSDeclaration;
+    td?: CSSDeclaration;
+    th?: CSSDeclaration;
+    container?: CSSDeclaration;
+    header?: CSSDeclaration;
+    footer?: CSSDeclaration;
+  };
 }
 
 // Config type used by the consumers
@@ -111,6 +126,7 @@ export class Config {
       tempRef: createRef(),
       width: '100%',
       autoWidth: true,
+      style: {},
     } as Config;
   }
 

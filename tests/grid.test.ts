@@ -11,6 +11,11 @@ describe('Grid class', () => {
   it('should init a memory storage', () => {
     const grid = new Grid({
       data: [[1, 2, 3]],
+      style: {
+        table: {
+          border: '1px',
+        },
+      },
     }).render(document.createElement('div'));
 
     expect(grid.config.storage).toBeInstanceOf(MemoryStorage);

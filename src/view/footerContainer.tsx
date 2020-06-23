@@ -34,7 +34,11 @@ export class FooterContainer extends BaseComponent<{}, FooterContainerState> {
 
     if (this.state.isActive) {
       return (
-        <div ref={this.footerRef} className={className('footer')}>
+        <div
+          ref={this.footerRef}
+          className={className('footer')}
+          style={{ ...this.config.style.footer }}
+        >
           <Pagination {...config.pagination} />
         </div>
       );

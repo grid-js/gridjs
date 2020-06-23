@@ -33,7 +33,45 @@ describe('Container component', () => {
 
   it('should render a container with table', async () => {
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} />,
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
+    );
+
+    await container.instance().componentDidMount();
+    expect(container.html()).toMatchSnapshot();
+  });
+
+  it('should attach styles', async () => {
+    config.search = {
+      enabled: true,
+    };
+
+    config.pagination = {
+      enabled: true,
+    };
+
+    config.style = {
+      container: {
+        border: '1px solid #ccc',
+      },
+      header: {
+        padding: '5px',
+      },
+      footer: {
+        margin: '2px',
+      },
+      td: {
+        'font-weight': 'bold',
+      },
+      th: {
+        border: '2px solid red',
+      },
+      table: {
+        'font-size': '15px',
+      },
+    };
+
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} width="500px" />,
     );
 
     await container.instance().componentDidMount();
@@ -46,7 +84,7 @@ describe('Container component', () => {
     };
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} />,
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
     );
     await container.instance().componentDidMount();
     expect(container.html()).toMatchSnapshot();
@@ -89,6 +127,7 @@ describe('Container component', () => {
         config={config}
         pipeline={config.pipeline}
         header={config.header}
+        width="100%"
       />,
     );
     await container.instance().componentDidMount();
@@ -110,7 +149,7 @@ describe('Container component', () => {
     config.pipeline.register(new ErrorProcessor());
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} />,
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
     );
 
     await container.instance().componentDidMount();
@@ -130,7 +169,7 @@ describe('Container component', () => {
     config.sort = {};
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} />,
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
     );
 
     await container.instance().componentDidMount();
@@ -168,7 +207,7 @@ describe('Container component', () => {
     ];
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} />,
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
     );
 
     return flushPromises().then(async () => {
@@ -196,7 +235,7 @@ describe('Container component', () => {
     ];
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} />,
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
     );
 
     return flushPromises().then(async () => {

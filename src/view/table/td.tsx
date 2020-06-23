@@ -37,6 +37,9 @@ export class TD extends BaseComponent<TDProps, {}> {
         role={this.props.role}
         colSpan={this.props.colSpan}
         className={classJoin(className('td'), this.props.className)}
+        style={{
+          ...this.config.style.td,
+        }}
       >
         {this.content()}
       </td>
