@@ -78,6 +78,56 @@ describe('Container component', () => {
     expect(container.html()).toMatchSnapshot();
   });
 
+  it('should attach classNames', async () => {
+    config.search = {
+      enabled: true,
+    };
+
+    config.pagination = {
+      enabled: true,
+    };
+
+    config.header = new Header();
+    config.header.columns = [
+      {
+        name: 'c1',
+        sort: {
+          enabled: false,
+        },
+      },
+      {
+        name: 'c2',
+        sort: {
+          enabled: true,
+        },
+      },
+      {
+        name: 'c3',
+        sort: {
+          enabled: true,
+        },
+      },
+    ];
+
+    config.className = {
+      container: 'test-container',
+      header: 'test-header',
+      footer: 'test-footer',
+      td: 'test-td',
+      th: 'test-th',
+      table: 'test-table',
+    };
+
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} width="500px" />,
+    );
+
+    return flushPromises().then(async () => {
+      await container.instance().componentDidMount();
+      expect(container.html()).toMatchSnapshot();
+    });
+  });
+
   it('should render a container with searchable table', async () => {
     config.search = {
       enabled: true,

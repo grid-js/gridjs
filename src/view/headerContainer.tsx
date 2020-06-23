@@ -1,7 +1,7 @@
 import { h } from 'preact';
 
 import { BaseComponent } from './base';
-import { className } from '../util/className';
+import { classJoin, className } from '../util/className';
 import { Search } from './plugin/search/search';
 import { useRef } from 'preact/hooks';
 import getConfig from '../util/getConfig';
@@ -36,7 +36,7 @@ export class HeaderContainer extends BaseComponent<{}, HeaderContainerState> {
       return (
         <div
           ref={this.headerRef}
-          className={className('head')}
+          className={classJoin(className('head'), this.config.className.header)}
           style={{ ...this.config.style.header }}
         >
           <Search {...config.search} />
