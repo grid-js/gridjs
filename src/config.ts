@@ -38,6 +38,14 @@ export interface Config {
   pagination: PaginationConfig;
   sort: GenericSortConfig;
   translator: Translator;
+  className: Partial<{
+    table?: string;
+    th?: string;
+    td?: string;
+    container?: string;
+    footer?: string;
+    header?: string;
+  }>
 }
 
 // Config type used by the consumers
@@ -111,6 +119,7 @@ export class Config {
       tempRef: createRef(),
       width: '100%',
       autoWidth: true,
+      className: {}
     } as Config;
   }
 
