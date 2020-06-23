@@ -5,7 +5,7 @@ import { TBody } from './tbody';
 import { THead } from './thead';
 import { BaseComponent, BaseProps } from '../base';
 import Header from '../../header';
-import {classJoin, className} from '../../util/className';
+import { classJoin, className } from '../../util/className';
 import { Status } from '../../types';
 
 interface TableProps extends BaseProps {

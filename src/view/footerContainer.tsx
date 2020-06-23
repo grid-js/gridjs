@@ -1,7 +1,7 @@
 import { h } from 'preact';
 
 import { BaseComponent } from './base';
-import {classJoin, className} from '../util/className';
+import { classJoin, className } from '../util/className';
 import { Pagination } from './plugin/pagination';
 import { useRef } from 'preact/hooks';
 import getConfig from '../util/getConfig';
@@ -36,7 +36,10 @@ export class FooterContainer extends BaseComponent<{}, FooterContainerState> {
       return (
         <div
           ref={this.footerRef}
-          className={classJoin(className('footer'), this.config.className.footer)}
+          className={classJoin(
+            className('footer'),
+            this.config.className.footer,
+          )}
           style={{ ...this.config.style.footer }}
         >
           <Pagination {...config.pagination} />

@@ -60,7 +60,7 @@ export interface Config {
     container: string;
     footer: string;
     header: string;
-  }>
+  }>;
 }
 
 // Config type used by the consumers
@@ -135,7 +135,7 @@ export class Config {
       width: '100%',
       autoWidth: true,
       style: {},
-      className: {}
+      className: {},
     } as Config;
   }
 

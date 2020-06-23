@@ -1,4 +1,4 @@
-import {classJoin, className} from "../../src/util/className";
+import { classJoin, className } from '../../src/util/className';
 
 describe('className', () => {
   describe('classJoin', () => {
