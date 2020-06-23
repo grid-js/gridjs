@@ -45,14 +45,22 @@ export interface Config {
   pagination: PaginationConfig;
   sort: GenericSortConfig;
   translator: Translator;
-  style?: {
-    table?: CSSDeclaration;
-    td?: CSSDeclaration;
-    th?: CSSDeclaration;
-    container?: CSSDeclaration;
-    header?: CSSDeclaration;
-    footer?: CSSDeclaration;
-  };
+  style?: Partial<{
+    table: CSSDeclaration;
+    td: CSSDeclaration;
+    th: CSSDeclaration;
+    container: CSSDeclaration;
+    header: CSSDeclaration;
+    footer: CSSDeclaration;
+  }>;
+  className?: Partial<{
+    table: string;
+    th: string;
+    td: string;
+    container: string;
+    footer: string;
+    header: string;
+  }>
 }
 
 // Config type used by the consumers
@@ -127,6 +135,7 @@ export class Config {
       width: '100%',
       autoWidth: true,
       style: {},
+      className: {}
     } as Config;
   }
 
