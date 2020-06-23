@@ -7,7 +7,7 @@ describe('Config', () => {
 
   beforeEach(() => {
     config = Config.fromUserConfig({
-      data: [[1, 2, 3]]
+      data: [[1, 2, 3]],
     });
   });
 
@@ -117,14 +117,14 @@ describe('Config', () => {
 
   it('should assign config keys', () => {
     config.assign({
-      width: '1000px'
+      width: '1000px',
     });
     expect(config.width).toBe('1000px');
   });
 
   it('should update config', () => {
     config.update({
-      autoWidth: false
+      autoWidth: false,
     });
     expect(config.width).toBe('100%');
     expect(config.autoWidth).toBeFalsy();
