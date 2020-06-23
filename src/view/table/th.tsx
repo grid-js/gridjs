@@ -32,11 +32,6 @@ export class TH extends BaseComponent<THProps, {}> {
   }
 
   render() {
-    const cls = classJoin(
-      className('th'),
-      this.isSortable() ? className('th', 'sort') : null,
-    );
-
     const props = {};
 
     if (this.isSortable()) {
@@ -45,7 +40,11 @@ export class TH extends BaseComponent<THProps, {}> {
 
     return (
       <th
-        className={cls}
+        className={classJoin(
+          className('th'),
+          this.isSortable() ? className('th', 'sort') : null,
+          this.config.className.th
+        )}
         onClick={this.onClick.bind(this)}
         style={{
           ...this.config.style.th,

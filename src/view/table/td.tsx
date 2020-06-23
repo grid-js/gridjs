@@ -36,7 +36,7 @@ export class TD extends BaseComponent<TDProps, {}> {
       <td
         role={this.props.role}
         colSpan={this.props.colSpan}
-        className={classJoin(className('td'), this.props.className)}
+        className={classJoin(className('td'), this.props.className, this.config.className.td)}
         style={{
           ...this.config.style.td,
         }}
