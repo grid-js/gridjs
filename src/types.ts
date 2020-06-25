@@ -13,6 +13,7 @@ export type TData = TwoDArray<TCell> | OneDArray<{ [key: string]: TCell }>;
 
 // Table header cell type
 export interface TColumn {
+  id?: string;
   name: string;
   width?: string;
   sort?: SortConfig;

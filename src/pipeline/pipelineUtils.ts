@@ -5,6 +5,7 @@ import StorageExtractor from './extractor/storage';
 import ArrayToTabularTransformer from './transformer/arrayToTabular';
 import ServerStorage from '../storage/server';
 import ServerInitiator from './initiator/server';
+import StorageResponseToArrayTransformer from "./transformer/storageResponseToArray";
 
 class PipelineUtils {
   static createFromConfig(config: Config): Pipeline<Tabular> {
@@ -19,6 +20,9 @@ class PipelineUtils {
     }
 
     pipeline.register(new StorageExtractor({ storage: config.storage }));
+    pipeline.register(
+      new StorageResponseToArrayTransformer({ header: config.header }),
+    );
     pipeline.register(new ArrayToTabularTransformer());
 
     return pipeline;

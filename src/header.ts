@@ -110,6 +110,15 @@ class Header extends Base {
     }
   }
 
+  private setID(): void {
+    for (const column of this.columns) {
+      if (!column.id) {
+        // let's guess the column ID if it's undefined
+        column.id = column.name.toLowerCase().replace(/ /g, '_');
+      }
+    }
+  }
+
   static fromUserConfig(userConfig: UserConfig): Header | null {
     // because we should be able to render a table without the header
     if (!userConfig.columns && !userConfig.from) {
@@ -134,6 +143,7 @@ class Header extends Base {
       }
     }
 
+    header.setID();
     header.setSort(userConfig);
 
     return header;

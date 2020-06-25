@@ -141,14 +141,6 @@ export class Config {
     // to set the initial _userConfig object
     config._userConfig = userConfig;
 
-    config.assign({
-      storage: StorageUtils.createFromUserConfig(userConfig),
-    });
-
-    config.assign({
-      pipeline: PipelineUtils.createFromConfig(config),
-    });
-
     // Sort
     if (typeof userConfig.sort === 'boolean' && userConfig.sort) {
       config.assign({
@@ -161,6 +153,14 @@ export class Config {
     // Header
     config.assign({
       header: Header.fromUserConfig(config),
+    });
+
+    config.assign({
+      storage: StorageUtils.createFromUserConfig(userConfig),
+    });
+
+    config.assign({
+      pipeline: PipelineUtils.createFromConfig(config),
     });
 
     // Pagination
