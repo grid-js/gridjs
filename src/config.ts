@@ -2,9 +2,8 @@ import {
   CSSDeclaration,
   OneDArray,
   ProtoExtends,
-  TCell,
   TColumn,
-  TwoDArray,
+  TData,
 } from './types';
 import Storage from './storage/storage';
 import Pipeline from './pipeline/pipeline';
@@ -27,10 +26,7 @@ export interface Config {
   container?: Element;
   /** gridjs-temp div which is used internally */
   tempRef?: RefObject<HTMLDivElement>;
-  data?:
-    | TwoDArray<TCell>
-    | (() => TwoDArray<TCell>)
-    | (() => Promise<TwoDArray<TCell>>);
+  data?: TData | (() => TData) | (() => Promise<TData>);
   server?: ServerStorageOptions;
   header?: Header;
   /** to parse a HTML table and load the data */
