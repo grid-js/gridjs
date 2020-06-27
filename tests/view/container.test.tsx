@@ -293,4 +293,72 @@ describe('Container component', () => {
       expect(container.html()).toMatchSnapshot();
     });
   });
+
+  it('should render a container with array of objects without columns input', async () => {
+    const config = Config.fromUserConfig({
+      data: [
+        { name: 'boo', phoneNumber: '123' },
+        { name: 'foo', phoneNumber: '456' },
+        { name: 'bar', phoneNumber: '789' },
+      ],
+    });
+
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
+    );
+
+    return flushPromises().then(async () => {
+      await container.instance().componentDidMount();
+      expect(container.html()).toMatchSnapshot();
+    });
+  });
+
+  it('should render a container with array of objects with string columns', async () => {
+    const config = Config.fromUserConfig({
+      columns: ['Name', 'Phone Number'],
+      data: [
+        { name: 'boo', phoneNumber: '123' },
+        { name: 'foo', phoneNumber: '456' },
+        { name: 'bar', phoneNumber: '789' },
+      ],
+    });
+
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
+    );
+
+    return flushPromises().then(async () => {
+      await container.instance().componentDidMount();
+      expect(container.html()).toMatchSnapshot();
+    });
+  });
+
+  it('should render a container with array of objects with object columns', async () => {
+    const config = Config.fromUserConfig({
+      columns: [
+        {
+          name: 'Name',
+          id: 'name',
+        },
+        {
+          name: 'Phone Number',
+          id: 'phone',
+        },
+      ],
+      data: [
+        { name: 'boo', phone: '123' },
+        { name: 'foo', phone: '456' },
+        { name: 'bar', phone: '789' },
+      ],
+    });
+
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
+    );
+
+    return flushPromises().then(async () => {
+      await container.instance().componentDidMount();
+      expect(container.html()).toMatchSnapshot();
+    });
+  });
 });

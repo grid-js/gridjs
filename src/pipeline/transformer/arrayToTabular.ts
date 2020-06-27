@@ -1,14 +1,19 @@
 import { PipelineProcessor, ProcessorType } from '../processor';
 import Tabular from '../../tabular';
-import { StorageResponse } from '../../storage/storage';
+import { ArrayResponse } from './storageResponseToArray';
 
 class ArrayToTabularTransformer extends PipelineProcessor<Tabular, {}> {
   get type(): ProcessorType {
     return ProcessorType.Transformer;
   }
 
-  _process(storageResponse: StorageResponse): Tabular {
-    return Tabular.fromStorageResponse(storageResponse);
+  _process(arrayResponse: ArrayResponse): Tabular {
+    const tabular = Tabular.fromArray(arrayResponse.data);
+
+    // for server-side storage
+    tabular.length = arrayResponse.total;
+
+    return tabular;
   }
 }
 

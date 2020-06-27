@@ -1,6 +1,8 @@
 /**
  * Base Storage class. All storage implementation must inherit this class
  */
+import { TData } from '../types';
+
 abstract class Storage<I> {
   /**
    * Returns all rows based on ...args
@@ -17,7 +19,7 @@ abstract class Storage<I> {
 }
 
 export interface StorageResponse {
-  data: any[][];
+  data: TData;
   total: number;
 }
 
