@@ -2,8 +2,7 @@ import Base from './base';
 import Row from './row';
 import Cell from './cell';
 import { OneDArray, TCell, TwoDArray } from './types';
-import { oneDtoTwoD } from './util/cast';
-import { StorageResponse } from './storage/storage';
+import { oneDtoTwoD } from './util/array';
 
 class Tabular extends Base {
   private _rows: Row[];
@@ -64,15 +63,6 @@ class Tabular extends Base {
     return new Tabular(
       data.map((row) => new Row(row.map((cell) => new Cell(cell)))),
     );
-  }
-
-  static fromStorageResponse(storageResponse: StorageResponse): Tabular {
-    const tabular = Tabular.fromArray(storageResponse.data);
-
-    // for server-side storage
-    tabular.length = storageResponse.total;
-
-    return tabular;
   }
 }
 

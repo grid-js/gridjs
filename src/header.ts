@@ -5,6 +5,7 @@ import Tabular from './tabular';
 import { width, px, getWidth } from './util/width';
 import { ShadowTable } from './view/table/shadow';
 import { createRef, h, RefObject, render } from 'preact';
+import { camelCase } from './util/string';
 
 class Header extends Base {
   private _columns: OneDArray<TColumn>;
@@ -114,24 +115,17 @@ class Header extends Base {
     for (const column of this.columns) {
       if (!column.id) {
         // let's guess the column ID if it's undefined
-        column.id = column.name.toLowerCase().replace(/ /g, '_');
+        column.id = camelCase(column.name);
       }
     }
   }
 
   static fromUserConfig(userConfig: UserConfig): Header | null {
-    // because we should be able to render a table without the header
-    if (!userConfig.columns && !userConfig.from) {
-      return null;
-    }
-
     const header = new Header();
 
     if (userConfig.from) {
       header.columns = Header.fromHTMLTable(userConfig.from).columns;
-    } else {
-      header.columns = [];
-
+    } else if (userConfig.columns) {
       for (const column of userConfig.columns) {
         if (typeof column === 'string') {
           header.columns.push({
@@ -141,12 +135,24 @@ class Header extends Base {
           header.columns.push(column as TColumn);
         }
       }
+    } else if (
+      userConfig.data &&
+      typeof userConfig.data[0] === 'object' &&
+      !(userConfig.data[0] instanceof Array)
+    ) {
+      // if data[0] is an object but not an Array
+      header.columns = Object.keys(userConfig.data[0]).map((name) => {
+        return { name: name };
+      });
     }
 
-    header.setID();
-    header.setSort(userConfig);
+    if (header.columns.length) {
+      header.setID();
+      header.setSort(userConfig);
+      return header;
+    }
 
-    return header;
+    return null;
   }
 
   static fromHTMLTable(element: HTMLElement): Header {

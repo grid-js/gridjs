@@ -5,7 +5,7 @@ import StorageExtractor from './extractor/storage';
 import ArrayToTabularTransformer from './transformer/arrayToTabular';
 import ServerStorage from '../storage/server';
 import ServerInitiator from './initiator/server';
-import StorageResponseToArrayTransformer from "./transformer/storageResponseToArray";
+import StorageResponseToArrayTransformer from './transformer/storageResponseToArray';
 
 class PipelineUtils {
   static createFromConfig(config: Config): Pipeline<Tabular> {

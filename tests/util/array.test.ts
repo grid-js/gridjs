@@ -1,4 +1,4 @@
-import { oneDtoTwoD } from '../../src/util/cast';
+import { oneDtoTwoD } from '../../src/util/array';
 
 describe('cast module', () => {
   describe('oneDtwoTwoD', () => {

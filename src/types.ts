@@ -9,7 +9,9 @@ export type TwoDArray<T> = T[][];
 
 // Table cell types
 export type TCell = number | string | boolean | ComponentChild | HTMLElement;
-export type TData = TwoDArray<TCell> | OneDArray<{ [key: string]: TCell }>;
+export type TDataArray = TwoDArray<TCell>;
+export type TDataObject = OneDArray<{ [key: string]: TCell }>;
+export type TData = TDataArray | TDataObject;
 
 // Table header cell type
 export interface TColumn {

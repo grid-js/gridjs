@@ -4,16 +4,16 @@ import {
   ProcessorType,
 } from '../processor';
 import { StorageResponse } from '../../storage/storage';
-import { TCell, TwoDArray } from '../../types';
+import { TCell, TData, TDataArray, TDataObject, TwoDArray } from '../../types';
 import Header from '../../header';
-import log from '../../util/log';
 
-export type ArrayResponse = {
+export interface ArrayResponse {
   data: TwoDArray<TCell>;
   total: number;
-};
+}
 
-interface StorageResponseToArrayTransformerProps extends PipelineProcessorProps {
+interface StorageResponseToArrayTransformerProps
+  extends PipelineProcessorProps {
   header: Header;
 }
 
@@ -25,40 +25,29 @@ class StorageResponseToArrayTransformer extends PipelineProcessor<
     return ProcessorType.Transformer;
   }
 
+  private castData(data: TData): TwoDArray<TCell> {
+    if (!data || !data.length) {
+      return [];
+    }
+
+    // if it's a 2d array already
+    if (data[0] instanceof Array) {
+      return data as TDataArray;
+    }
+
+    // if it's an array of objects (but not array of arrays)
+    if (typeof data[0] === 'object' && !(data[0] instanceof Array)) {
+      return (data as TDataObject).map((row) =>
+        this.props.header.columns.map((column) => row[column.id]),
+      );
+    }
+
+    return [];
+  }
+
   _process(storageResponse: StorageResponse): ArrayResponse {
-    if (!storageResponse.data || !storageResponse.total) {
-      return { data: [], total: 0 };
-    }
-
-    if (Array.isArray(storageResponse.data[0])) {
-      return {
-        data: storageResponse.data as TwoDArray<TCell>,
-        total: storageResponse.total,
-      };
-    }
-
-    const data: TwoDArray<TCell> = [];
-
-    for (const row of storageResponse.data) {
-      const parsed = [];
-
-      for (const column of this.props.header.columns) {
-        const cell = row[column.id];
-
-        if (cell === undefined) {
-          log.warn(
-            `Could not find the cell data for column "${column.name}" (column ID: ${column.id})`,
-          );
-        }
-
-        parsed.push(cell);
-      }
-
-      data.push(parsed);
-    }
-
     return {
-      data: data,
+      data: this.castData(storageResponse.data),
       total: storageResponse.total,
     };
   }
