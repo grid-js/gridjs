@@ -158,6 +158,37 @@ describe('Pipeline', () => {
     expect(d2).toBe(d3);
   });
 
+  it('should clear cache and reprocess', async () => {
+    const p1 = new NumberProcessor({ acc: 2 });
+    const p2 = new NumberProcessor({ acc: 3 });
+    const p3 = new NumberProcessor({ acc: 4 });
+
+    const callback1 = jest.fn();
+    const callback2 = jest.fn();
+    const callback3 = jest.fn();
+
+    p1.afterProcess(callback1);
+    p2.afterProcess(callback2);
+    p3.afterProcess(callback3);
+
+    const pipeline = new Pipeline();
+    pipeline.register(p1);
+    pipeline.register(p2);
+    pipeline.register(p3);
+
+    // first process() should cache the results
+    // and should not process them again
+    await pipeline.process(1);
+    pipeline.clearCache();
+    await pipeline.process(1);
+    pipeline.clearCache();
+    await pipeline.process(1);
+
+    expect(callback1).toBeCalledTimes(3);
+    expect(callback2).toBeCalledTimes(3);
+    expect(callback3).toBeCalledTimes(3);
+  });
+
   it('should process the newly added processor', async () => {
     const p1 = new NumberProcessor({ acc: 2 });
     const p2 = new NumberProcessor({ acc: 3 });
