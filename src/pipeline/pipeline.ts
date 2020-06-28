@@ -32,6 +32,7 @@ class Pipeline<T, P = {}> {
    */
   clearCache(): void {
     this.cache = new Map<string, any>();
+    this.lastProcessorIndexUpdated = -1;
   }
 
   /**
