@@ -20,6 +20,7 @@ export interface PaginationConfig {
   nextButton?: boolean;
   prevButton?: boolean;
   buttonsCount?: number;
+  resetPageOnUpdate?: boolean;
   server?: {
     url?: (prevUrl: string, page: number, limit: number) => string;
     body?: (prevBody: BodyInit, page: number, limit: number) => BodyInit;
@@ -38,6 +39,7 @@ export class Pagination extends BaseComponent<
     prevButton: true,
     buttonsCount: 3,
     limit: 10,
+    resetPageOnUpdate: true,
   };
 
   constructor(props, context) {
@@ -99,7 +101,7 @@ export class Pagination extends BaseComponent<
     config.pipeline.updated((processor) => {
       // this is to ensure that the current page is set to 0
       // when a processor is updated for some reason
-      if (processor !== this.processor) {
+      if (this.props.resetPageOnUpdate && processor !== this.processor) {
         this.setPage(0);
       }
     });
