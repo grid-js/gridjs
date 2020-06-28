@@ -133,8 +133,10 @@ export class Pagination extends BaseComponent<
     });
   }
 
-  render() {
-    if (!this.props.enabled) return null;
+  renderPages() {
+    if (this.props.buttonsCount <= 0) {
+      return null;
+    }
 
     // how many pagination buttons to render?
     const maxCount: number = Math.min(this.pages, this.props.buttonsCount);
@@ -145,7 +147,58 @@ export class Pagination extends BaseComponent<
     }
 
     return (
-      <div className={className('pagination')}>
+      <Fragment>
+        {this.pages > maxCount && this.state.page - pagePivot > 0 && (
+          <Fragment>
+            <button
+              tabIndex={0}
+              onClick={this.setPage.bind(this, 0)}
+              title={this._('pagination.firstPage')}
+            >
+              {this._('1')}
+            </button>
+            <button tabIndex={-1} className={className('spread')}>
+              ...
+            </button>
+          </Fragment>
+        )}
+
+        {Array.from(Array(maxCount).keys())
+          .map((i) => this.state.page + (i - pagePivot))
+          .map((i) => (
+            <button
+              tabIndex={0}
+              onClick={this.setPage.bind(this, i)}
+              className={
+                this.state.page === i ? className('currentPage') : null
+              }
+              title={this._('pagination.page', i + 1)}
+            >
+              {this._(`${i + 1}`)}
+            </button>
+          ))}
+
+        {this.pages > maxCount && this.pages > this.state.page + pagePivot + 1 && (
+          <Fragment>
+            <button tabIndex={-1} className={className('spread')}>
+              ...
+            </button>
+            <button
+              tabIndex={0}
+              onClick={this.setPage.bind(this, this.pages - 1)}
+              title={this._('pagination.page', this.pages)}
+            >
+              {this._(`${this.pages}`)}
+            </button>
+          </Fragment>
+        )}
+      </Fragment>
+    );
+  }
+
+  renderSummary() {
+    return (
+      <Fragment>
         {this.props.summary && this.state.total > 0 && (
           <div
             role="status"
@@ -171,6 +224,16 @@ export class Pagination extends BaseComponent<
             {this._('pagination.results')}
           </div>
         )}
+      </Fragment>
+    );
+  }
+
+  render() {
+    if (!this.props.enabled) return null;
+
+    return (
+      <div className={className('pagination')}>
+        {this.renderSummary()}
 
         <div className={className('pages')}>
           {this.props.prevButton && (
@@ -183,49 +246,7 @@ export class Pagination extends BaseComponent<
             </button>
           )}
 
-          {this.pages > maxCount && this.state.page - pagePivot > 0 && (
-            <Fragment>
-              <button
-                tabIndex={0}
-                onClick={this.setPage.bind(this, 0)}
-                title={this._('pagination.firstPage')}
-              >
-                {this._('1')}
-              </button>
-              <button className={className('spread')}>...</button>
-            </Fragment>
-          )}
-
-          {Array.from(Array(maxCount).keys())
-            .map((i) => this.state.page + (i - pagePivot))
-            .map((i) => (
-              <button
-                tabIndex={0}
-                onClick={this.setPage.bind(this, i)}
-                className={
-                  this.state.page === i ? className('currentPage') : null
-                }
-                title={this._('pagination.page', i + 1)}
-              >
-                {this._(`${i + 1}`)}
-              </button>
-            ))}
-
-          {this.pages > maxCount &&
-            this.pages > this.state.page + pagePivot + 1 && (
-              <Fragment>
-                <button tabIndex={-1} className={className('spread')}>
-                  ...
-                </button>
-                <button
-                  tabIndex={0}
-                  onClick={this.setPage.bind(this, this.pages - 1)}
-                  title={this._('pagination.page', this.pages)}
-                >
-                  {this._(`${this.pages}`)}
-                </button>
-              </Fragment>
-            )}
+          {this.renderPages()}
 
           {this.props.nextButton && (
             <button
