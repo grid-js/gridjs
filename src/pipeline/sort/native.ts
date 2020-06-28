@@ -66,9 +66,15 @@ class NativeSort extends PipelineProcessor<Tabular, NativeSortProps> {
   }
 
   protected _process(data: Tabular): Tabular {
-    const sorted = [...data.rows];
-    sorted.sort(this.compareWrapper.bind(this));
-    return new Tabular(sorted);
+    const sortedRows = [...data.rows];
+    sortedRows.sort(this.compareWrapper.bind(this));
+
+    const sorted = new Tabular(sortedRows);
+    // we have to set the tabular length manually
+    // because of the server-side storage
+    sorted.length = data.length;
+
+    return sorted;
   }
 }
 
