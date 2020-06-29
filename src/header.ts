@@ -113,7 +113,7 @@ class Header extends Base {
 
   private setID(): void {
     for (const column of this.columns) {
-      if (!column.id) {
+      if (!column.id && typeof column.name === "string") {
         // let's guess the column ID if it's undefined
         column.id = camelCase(column.name);
       }
