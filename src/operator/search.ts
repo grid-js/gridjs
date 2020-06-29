@@ -18,7 +18,7 @@ export default function (keyword: string, tabular: Tabular): Tabular {
         if (typeof cell.data === 'object') {
           // HTMLContent element
           const element = cell.data as VNode<HTMLContentProps>;
-          if (element.props.content) {
+          if (element.props && element.props.content) {
             // TODO: we should only search in the content of the element. props.content is the entire HTML element
             data = element.props.content;
           }
