@@ -15,7 +15,7 @@ import { ServerStorageOptions } from './storage/server';
 import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
 import { Language, Translator } from './i18n/language';
-import { createRef, RefObject } from 'preact';
+import { ComponentChild, createRef, RefObject } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
 
@@ -61,7 +61,7 @@ export interface Config {
 
 // Config type used by the consumers
 interface UserConfigExtend {
-  columns?: OneDArray<TColumn | Pick<TColumn, "name">>;
+  columns?: OneDArray<TColumn | string | ComponentChild>;
   search: SearchConfig | boolean;
   pagination: PaginationConfig | boolean;
   // implicit option to enable the sort plugin globally

@@ -4,7 +4,7 @@ import { UserConfig } from './config';
 import Tabular from './tabular';
 import { width, px, getWidth } from './util/width';
 import { ShadowTable } from './view/table/shadow';
-import { createRef, h, RefObject, render } from 'preact';
+import { createRef, h, isValidElement, RefObject, render } from 'preact';
 import { camelCase } from './util/string';
 
 class Header extends Base {
@@ -113,7 +113,7 @@ class Header extends Base {
 
   private setID(): void {
     for (const column of this.columns) {
-      if (!column.id && typeof column.name === "string") {
+      if (!column.id && typeof column.name === 'string') {
         // let's guess the column ID if it's undefined
         column.id = camelCase(column.name);
       }
@@ -127,7 +127,7 @@ class Header extends Base {
       header.columns = Header.fromHTMLTable(userConfig.from).columns;
     } else if (userConfig.columns) {
       for (const column of userConfig.columns) {
-        if (typeof column === 'string') {
+        if (typeof column === 'string' || isValidElement(column)) {
           header.columns.push({
             name: column,
           });

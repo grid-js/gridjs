@@ -16,7 +16,7 @@ export type TData = TDataArray | TDataObject;
 // Table header cell type
 export interface TColumn {
   id?: string;
-  name: string | ComponentChild | HTMLElement;
+  name: string | ComponentChild;
   width?: string;
   sort?: SortConfig;
   children?: OneDArray<TColumn>;
