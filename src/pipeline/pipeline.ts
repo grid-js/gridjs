@@ -1,9 +1,42 @@
 import { PipelineProcessor, ProcessorType } from './processor';
 import { ID } from '../util/id';
-import { trigger } from '../util/trigger';
 import log from '../util/log';
+import { EventEmitter } from '../util/eventEmitter';
 
-class Pipeline<T, P = {}> {
+interface PipelineEvents<T> {
+  /**
+   * Generic updated event. Triggers the callback function when the pipeline
+   * is updated, including when a new processor is registered, a processor's props
+   * get updated, etc.
+   */
+  updated: (processor: PipelineProcessor<any, any>) => void;
+  /**
+   * Triggers the callback function when a new
+   * processor is registered successfully
+   */
+  afterRegister: () => void;
+  /**
+   * Triggers the callback when a registered
+   * processor's property is updated
+   */
+  propsUpdated: () => void;
+  /**
+   * Triggers the callback function when the pipeline
+   * is fully processed, before returning the results
+   *
+   * afterProcess will not be called if there is an
+   * error in the pipeline (i.e a step throw an Error)
+   */
+  afterProcess: (prev: T) => void;
+  /**
+   * Triggers the callback function when the pipeline
+   * fails to process all steps or at least one step
+   * throws an Error
+   */
+  error: (prev: T) => void;
+}
+
+class Pipeline<T, P = {}> extends EventEmitter<PipelineEvents<T>> {
   // available steps for this pipeline
   private readonly _steps: Map<
     ProcessorType,
@@ -15,13 +48,10 @@ class Pipeline<T, P = {}> {
   // processors list and will be used to invalidate the cache
   // -1 means all new processors should be processed
   private lastProcessorIndexUpdated = -1;
-  private propsUpdatedCallback: Set<(...args) => void> = new Set();
-  private afterRegisterCallback: Set<(...args) => void> = new Set();
-  private updatedCallback: Set<(...args) => void> = new Set();
-  private afterProcessCallback: Set<(...args) => void> = new Set();
-  private onErrorCallback: Set<(...args) => void> = new Set();
 
   constructor(steps?: PipelineProcessor<any, any>[]) {
+    super();
+
     if (steps) {
       steps.forEach((step) => this.register(step));
     }
@@ -50,7 +80,7 @@ class Pipeline<T, P = {}> {
     }
 
     // binding the propsUpdated callback to the Pipeline
-    processor.propsUpdated(this.processorPropsUpdated.bind(this));
+    processor.on('propsUpdated', this.processorPropsUpdated.bind(this));
 
     this.addProcessorByPriority(processor, priority);
     this.afterRegistered(processor);
@@ -158,7 +188,7 @@ class Pipeline<T, P = {}> {
     } catch (e) {
       log.error(e);
       // trigger the onError callback
-      trigger(this.onErrorCallback, prev);
+      this.emit('error', prev);
 
       // rethrow
       throw e;
@@ -168,7 +198,7 @@ class Pipeline<T, P = {}> {
     this.lastProcessorIndexUpdated = steps.length;
 
     // triggers the afterProcess callbacks with the results
-    trigger(this.afterProcessCallback, prev);
+    this.emit('afterProcess', prev);
 
     return prev;
   }
@@ -197,74 +227,14 @@ class Pipeline<T, P = {}> {
 
   private processorPropsUpdated(processor): void {
     this.setLastProcessorIndex(processor);
-    trigger(this.propsUpdatedCallback);
-    trigger(this.updatedCallback, processor);
+    this.emit('propsUpdated');
+    this.emit('updated', processor);
   }
 
   private afterRegistered(processor): void {
     this.setLastProcessorIndex(processor);
-    trigger(this.afterRegisterCallback);
-    trigger(this.updatedCallback, processor);
-  }
-
-  /**
-   * Triggers the callback when a registered
-   * processor's property is updated
-   *
-   * @param fn
-   */
-  propsUpdated(fn: (...args) => void): this {
-    this.propsUpdatedCallback.add(fn);
-    return this;
-  }
-
-  /**
-   * Triggers the callback function when a new
-   * processor is registered successfully
-   *
-   * @param fn
-   */
-  afterRegister(fn: (...args) => void): this {
-    this.afterRegisterCallback.add(fn);
-    return this;
-  }
-
-  /**
-   * Generic updated event. Triggers the callback function when the pipeline
-   * is updated, including when a new processor is registered, a processor's props
-   * get updated, etc.
-   *
-   * @param fn
-   */
-  updated(fn: (...args) => void): this {
-    this.updatedCallback.add(fn);
-    return this;
-  }
-
-  /**
-   * Triggers the callback function when the pipeline
-   * is fully processed, before returning the results
-   *
-   * afterProcess() will not be called if there is an
-   * error in the pipeline (i.e a step throw an Error)
-   *
-   * @param fn
-   */
-  afterProcess(fn: (...args) => void): this {
-    this.afterProcessCallback.add(fn);
-    return this;
-  }
-
-  /**
-   * Triggers the callback function when the pipeline
-   * fails to process all steps or at least one step
-   * throws an Error
-   *
-   * @param fn
-   */
-  onError(fn: (...args) => void): this {
-    this.onErrorCallback.add(fn);
-    return this;
+    this.emit('afterRegister');
+    this.emit('updated', processor);
   }
 }
 

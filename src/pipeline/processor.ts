@@ -1,7 +1,7 @@
 // The order of enum items define the processing order of the processor type
 // e.g. Extractor = 0 will be processed before Transformer = 1
 import { generateID, ID } from '../util/id';
-import { trigger } from '../util/trigger';
+import { EventEmitter } from '../util/eventEmitter';
 
 export enum ProcessorType {
   Initiator,
@@ -15,24 +15,29 @@ export enum ProcessorType {
   Limit,
 }
 
+interface PipelineProcessorEvents<T, P> {
+  propsUpdated: (processor: PipelineProcessor<T, P>) => void;
+  beforeProcess: (...args) => void;
+  afterProcess: (...args) => void;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface PipelineProcessorProps {}
 
 export abstract class PipelineProcessor<
   T,
   P extends Partial<PipelineProcessorProps>
-> {
+> extends EventEmitter<PipelineProcessorEvents<T, P>> {
   public readonly id: ID;
   private readonly _props: P;
-  private propsUpdatedCallback: Set<(...args) => void> = new Set();
-  private beforeProcessCallback: Set<(...args) => void> = new Set();
-  private afterProcessCallback: Set<(...args) => void> = new Set();
 
   abstract get type(): ProcessorType;
   protected abstract _process(...args): T | Promise<T>;
   protected validateProps?(...args): void;
 
   constructor(props?: Partial<P>) {
+    super();
+
     this._props = {} as P;
     this.id = generateID();
 
@@ -50,34 +55,19 @@ export abstract class PipelineProcessor<
       this.validateProps(...args);
     }
 
-    trigger(this.beforeProcessCallback, ...args);
+    this.emit('beforeProcess', ...args);
     const result = this._process(...args);
-    trigger(this.afterProcessCallback, ...args);
+    this.emit('afterProcess', ...args);
     return result;
   }
 
   setProps(props: Partial<P>): this {
     Object.assign(this._props, props);
-    trigger(this.propsUpdatedCallback, this);
+    this.emit('propsUpdated', this);
     return this;
   }
 
   get props(): P {
     return this._props;
-  }
-
-  propsUpdated(callback: (...args) => void): this {
-    this.propsUpdatedCallback.add(callback);
-    return this;
-  }
-
-  beforeProcess(callback: (...args) => void): this {
-    this.beforeProcessCallback.add(callback);
-    return this;
-  }
-
-  afterProcess(callback: (...args) => void): this {
-    this.afterProcessCallback.add(callback);
-    return this;
   }
 }

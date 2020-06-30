@@ -23,6 +23,7 @@ export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
     | ServerGlobalSearchFilter;
   private readonly actions: SearchActions;
   private readonly store: SearchStore;
+  private readonly storeUpdatedFn: (...args) => void;
 
   static defaultProps = {
     debounceTimeout: 250,
@@ -39,7 +40,8 @@ export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
       // initial search
       this.actions.search(keyword);
 
-      this.store.on('updated', this.storeUpdated.bind(this));
+      this.storeUpdatedFn = this.storeUpdated.bind(this);
+      this.store.on('updated', this.storeUpdatedFn);
 
       let searchProcessor;
       if (props.server) {
@@ -59,6 +61,10 @@ export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
       // adds a new processor to the pipeline
       this.config.pipeline.register(searchProcessor);
     }
+  }
+
+  componentWillUnmount(): void {
+    this.store.off('updated', this.storeUpdatedFn);
   }
 
   private storeUpdated(state: SearchStoreState): void {

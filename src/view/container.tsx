@@ -11,6 +11,7 @@ import Pipeline from '../pipeline/pipeline';
 import Header from '../header';
 import { Config } from '../config';
 import log from '../util/log';
+import {PipelineProcessor} from "../pipeline/processor";
 
 interface ContainerProps extends BaseProps {
   config: Config;
@@ -27,6 +28,7 @@ interface ContainerState {
 
 export class Container extends BaseComponent<ContainerProps, ContainerState> {
   private readonly configContext: Context<Config>;
+  private processPipelineFn: (processor: PipelineProcessor<any, any>) => void;
 
   constructor(props, context) {
     super(props, context);
@@ -64,6 +66,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
   async componentDidMount() {
     const config = this.props.config;
 
+    // for the initial load
     await this.processPipeline();
 
     if (config.header && this.state.data && this.state.data.length) {
@@ -79,9 +82,12 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
       });
     }
 
-    this.props.pipeline.updated(async () => {
-      await this.processPipeline();
-    });
+    this.processPipelineFn = this.processPipeline.bind(this);
+    this.props.pipeline.on('updated', this.processPipelineFn);
+  }
+
+  componentWillUnmount() {
+    this.props.pipeline.off('updated', this.processPipelineFn);
   }
 
   render() {

@@ -4,7 +4,6 @@ import { BaseComponent } from './base';
 import { classJoin, className } from '../util/className';
 import { Pagination } from './plugin/pagination';
 import { useRef } from 'preact/hooks';
-import getConfig from '../util/getConfig';
 
 interface FooterContainerState {
   isActive: boolean;
@@ -30,8 +29,6 @@ export class FooterContainer extends BaseComponent<{}, FooterContainerState> {
   }
 
   render() {
-    const config = getConfig(this.context);
-
     if (this.state.isActive) {
       return (
         <div
@@ -42,7 +39,7 @@ export class FooterContainer extends BaseComponent<{}, FooterContainerState> {
           )}
           style={{ ...this.config.style.footer }}
         >
-          <Pagination {...config.pagination} />
+          <Pagination {...this.config.pagination} />
         </div>
       );
     }

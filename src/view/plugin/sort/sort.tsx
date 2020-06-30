@@ -5,7 +5,6 @@ import { classJoin, className } from '../../../util/className';
 import { ProcessorType } from '../../../pipeline/processor';
 import NativeSort from '../../../pipeline/sort/native';
 import { SortStore, SortStoreState } from './store';
-import log from '../../../util/log';
 import { Comparator, TCell, TColumnSort } from '../../../types';
 import { SortActions } from './actions';
 import ServerSort from '../../../pipeline/sort/server';
@@ -43,6 +42,8 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
   private readonly sortProcessor: NativeSort | ServerSort;
   private readonly actions: SortActions;
   private readonly store: SortStore;
+  private readonly storeUpdatedFn: (...args) => void;
+  private updateSortProcessorFn: (sortedColumns: SortStoreState) => void;
 
   constructor(props: SortProps & SortConfig, context) {
     super(props, context);
@@ -52,13 +53,16 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
 
     if (props.enabled) {
       this.sortProcessor = this.getOrCreateSortProcessor();
-      this.store.on('updated', this.storeUpdated.bind(this));
+      this.storeUpdatedFn = this.storeUpdated.bind(this);
+      this.store.on('updated', this.storeUpdatedFn);
       this.state = { direction: 0 };
     }
   }
 
   componentWillUnmount(): void {
-    this.store.off('updated', this.storeUpdated.bind(this));
+    this.store.off('updated', this.storeUpdatedFn);
+    if (this.updateSortProcessorFn)
+      this.store.off('updated', this.updateSortProcessorFn);
   }
 
   private storeUpdated(): void {
@@ -77,6 +81,13 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
     }
   }
 
+  private updateSortProcessor(sortedColumns: SortStoreState) {
+    // updates the Sorting processor
+    this.sortProcessor.setProps({
+      columns: sortedColumns,
+    });
+  }
+
   private getOrCreateSortProcessor(): NativeSort {
     let processorType = ProcessorType.Sort;
 
@@ -88,13 +99,8 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
 
     // my assumption is that we only have ONE sorting processor in the
     // entire pipeline and that's why I'm displaying a warning here
-    if (processors.length > 1) {
-      log.warn(
-        'There are more than sorting pipeline registered, selecting the first one',
-      );
-    }
-
     let processor;
+
     // A sort process is already registered
     if (processors.length > 0) {
       processor = processors[0];
@@ -103,12 +109,8 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
 
       // this event listener is here because
       // we want to subscribe to the sort store only once
-      this.store.on('updated', (sortedColumns: SortStoreState) => {
-        // updates the Sorting processor
-        this.sortProcessor.setProps({
-          columns: sortedColumns,
-        });
-      });
+      this.updateSortProcessorFn = this.updateSortProcessor.bind(this);
+      this.store.on('updated', this.updateSortProcessorFn);
 
       if (processorType === ProcessorType.ServerSort) {
         processor = new ServerSort({
