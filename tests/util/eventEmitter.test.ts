@@ -84,6 +84,21 @@ describe('EventEmitter class', () => {
     expect(handler3).not.toBeCalled();
   });
 
+  it('off should work with null', () => {
+    const emitter = new EventEmitter<EventGeneric>();
+
+    const handler1 = jest.fn();
+    const handler2 = jest.fn();
+
+    emitter.on('boo', handler1);
+    emitter.on('boo', handler2);
+    emitter.off('boo', null);
+    emitter.emit('boo', 'foo');
+
+    expect(handler1).toBeCalled();
+    expect(handler2).toBeCalled();
+  });
+
   it('should call handlers with correct args', () => {
     interface Event {
       boo: (a: number, b: number, x: string, q: boolean) => void;

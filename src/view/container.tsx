@@ -11,6 +11,7 @@ import Pipeline from '../pipeline/pipeline';
 import Header from '../header';
 import { Config } from '../config';
 import log from '../util/log';
+import {PipelineProcessor} from "../pipeline/processor";
 
 interface ContainerProps extends BaseProps {
   config: Config;
@@ -27,7 +28,7 @@ interface ContainerState {
 
 export class Container extends BaseComponent<ContainerProps, ContainerState> {
   private readonly configContext: Context<Config>;
-  private processPipelineFn: any;
+  private processPipelineFn: (processor: PipelineProcessor<any, any>) => void;
 
   constructor(props, context) {
     super(props, context);
