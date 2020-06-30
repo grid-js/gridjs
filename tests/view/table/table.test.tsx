@@ -239,4 +239,32 @@ describe('Table component', () => {
 
     expect(table.html()).toMatchSnapshot();
   });
+
+  it('should render header with TColumn object', async () => {
+    const header = Header.fromUserConfig({
+      columns: [
+        {
+          name: html('<h1>h1</h1>'),
+          id: 'boo',
+        },
+        'h2',
+        {
+          name: 'h3',
+        },
+      ],
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={null}
+          header={header}
+          status={Status.Loaded}
+          width="100%"
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
 });
