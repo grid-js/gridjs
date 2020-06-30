@@ -43,6 +43,7 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
   private readonly sortProcessor: NativeSort | ServerSort;
   private readonly actions: SortActions;
   private readonly store: SortStore;
+  private readonly storeUpdatedFn: (...args) => void;
 
   constructor(props: SortProps & SortConfig, context) {
     super(props, context);
@@ -52,13 +53,14 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
 
     if (props.enabled) {
       this.sortProcessor = this.getOrCreateSortProcessor();
-      this.store.on('updated', this.storeUpdated.bind(this));
+      this.storeUpdatedFn = this.storeUpdated.bind(this);
+      this.store.on('updated', this.storeUpdatedFn);
       this.state = { direction: 0 };
     }
   }
 
   componentWillUnmount(): void {
-    this.store.off('updated', this.storeUpdated.bind(this));
+    this.store.off('updated', this.storeUpdatedFn);
   }
 
   private storeUpdated(): void {

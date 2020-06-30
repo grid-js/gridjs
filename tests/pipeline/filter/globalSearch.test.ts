@@ -32,22 +32,19 @@ describe('GlobalSearch', () => {
 
   it('should call propsUpdated', () => {
     const callback = jest.fn();
-    new GlobalSearchFilter()
-      .propsUpdated(callback)
-      .setProps({ keyword: '1' })
-      .setProps({ keyword: '2' })
-      .process(data);
+    const search = new GlobalSearchFilter();
+    search.on('propsUpdated', callback);
+    search.setProps({ keyword: '1' }).setProps({ keyword: '2' }).process(data);
     expect(callback).toBeCalledTimes(2);
   });
 
   it('should call beforeProcess and afterProcess', () => {
     const beforeProcess = jest.fn();
     const afterProcess = jest.fn();
-    new GlobalSearchFilter()
-      .beforeProcess(beforeProcess)
-      .afterProcess(afterProcess)
-      .setProps({ keyword: '2' })
-      .process(data);
+    const search = new GlobalSearchFilter();
+    search.on('beforeProcess', beforeProcess);
+    search.on('afterProcess', afterProcess);
+    search.setProps({ keyword: '2' }).process(data);
 
     expect(beforeProcess).toBeCalledTimes(1);
     expect(afterProcess).toBeCalledTimes(1);

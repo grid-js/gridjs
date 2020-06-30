@@ -58,7 +58,7 @@ describe('Pipeline', () => {
   it('should should call afterRegister', async () => {
     const callback = jest.fn();
     const pipeline = new Pipeline();
-    pipeline.afterRegister(callback);
+    pipeline.on('afterRegister', callback);
     pipeline.register(new StringProcessor());
     expect(callback).toBeCalledTimes(1);
   });
@@ -101,8 +101,8 @@ describe('Pipeline', () => {
     const updatedCallback = jest.fn();
     const propsUpdatedCallback = jest.fn();
 
-    pipeline.updated(updatedCallback);
-    pipeline.propsUpdated(propsUpdatedCallback);
+    pipeline.on('updated', updatedCallback);
+    pipeline.on('propsUpdated', propsUpdatedCallback);
 
     p1.setProps({ acc: 5 });
 
@@ -136,9 +136,9 @@ describe('Pipeline', () => {
     const callback2 = jest.fn();
     const callback3 = jest.fn();
 
-    p1.afterProcess(callback1);
-    p2.afterProcess(callback2);
-    p3.afterProcess(callback3);
+    p1.on('afterProcess', callback1);
+    p2.on('afterProcess', callback2);
+    p3.on('afterProcess', callback3);
 
     const pipeline = new Pipeline();
     pipeline.register(p1);
@@ -167,9 +167,9 @@ describe('Pipeline', () => {
     const callback2 = jest.fn();
     const callback3 = jest.fn();
 
-    p1.afterProcess(callback1);
-    p2.afterProcess(callback2);
-    p3.afterProcess(callback3);
+    p1.on('afterProcess', callback1);
+    p2.on('afterProcess', callback2);
+    p3.on('afterProcess', callback3);
 
     const pipeline = new Pipeline();
     pipeline.register(p1);
@@ -198,9 +198,9 @@ describe('Pipeline', () => {
     const callback2 = jest.fn();
     const callback3 = jest.fn();
 
-    p1.afterProcess(callback1);
-    p2.afterProcess(callback2);
-    p3.afterProcess(callback3);
+    p1.on('afterProcess', callback1);
+    p2.on('afterProcess', callback2);
+    p3.on('afterProcess', callback3);
 
     const pipeline = new Pipeline();
     pipeline.register(p1);
