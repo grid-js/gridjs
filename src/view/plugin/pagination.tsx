@@ -64,7 +64,7 @@ export class Pagination extends BaseComponent<
           body: this.props.server.body,
         });
 
-        this.config.pipeline.afterProcess((result: Tabular) => {
+        this.config.pipeline.on('afterProcess', (result: Tabular) => {
           this.setTotal(result.length);
         });
       } else {
@@ -76,7 +76,7 @@ export class Pagination extends BaseComponent<
         // Pagination (all Limit processors) is the last step in the pipeline
         // and we assume that at this stage, we have the rows that we care about.
         // Let's grab the rows before processing Pagination and set total number of rows
-        processor.beforeProcess(async (tabular: Tabular) => {
+        processor.on('beforeProcess', async (tabular: Tabular) => {
           this.setTotal(tabular.length);
         });
       }
@@ -86,7 +86,7 @@ export class Pagination extends BaseComponent<
 
       // we need to make sure that the state is set
       // to the default props when an error happens
-      this.config.pipeline.onError(() => {
+      this.config.pipeline.on('error', () => {
         this.setState({
           total: 0,
           page: 0,
@@ -98,7 +98,7 @@ export class Pagination extends BaseComponent<
   componentDidMount(): void {
     const config = getConfig(this.context);
 
-    config.pipeline.updated((processor) => {
+    config.pipeline.on('updated', (processor) => {
       // this is to ensure that the current page is set to 0
       // when a processor is updated for some reason
       if (this.props.resetPageOnUpdate && processor !== this.processor) {
