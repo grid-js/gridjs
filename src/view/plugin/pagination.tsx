@@ -4,7 +4,7 @@ import PaginationLimit from '../../pipeline/limit/pagination';
 import { className } from '../../util/className';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
 import Tabular from '../../tabular';
-import getConfig from '../../util/getConfig';
+import { PipelineProcessor } from '../../pipeline/processor';
 
 interface PaginationState {
   page: number;
@@ -32,6 +32,8 @@ export class Pagination extends BaseComponent<
   PaginationState
 > {
   private processor: PaginationLimit | ServerPaginationLimit;
+  private onUpdateFn: (processor: PipelineProcessor<any, any>) => void;
+  private setTotalFromTabularFn: (tabular: Tabular) => void;
 
   static defaultProps = {
     summary: true,
@@ -56,6 +58,8 @@ export class Pagination extends BaseComponent<
     if (this.props.enabled) {
       let processor;
 
+      this.setTotalFromTabularFn = this.setTotalFromTabular.bind(this);
+
       if (this.props.server) {
         processor = new ServerPaginationLimit({
           limit: this.state.limit,
@@ -64,9 +68,7 @@ export class Pagination extends BaseComponent<
           body: this.props.server.body,
         });
 
-        this.config.pipeline.on('afterProcess', (result: Tabular) => {
-          this.setTotal(result.length);
-        });
+        this.config.pipeline.on('afterProcess', this.setTotalFromTabularFn);
       } else {
         processor = new PaginationLimit({
           limit: this.state.limit,
@@ -76,9 +78,7 @@ export class Pagination extends BaseComponent<
         // Pagination (all Limit processors) is the last step in the pipeline
         // and we assume that at this stage, we have the rows that we care about.
         // Let's grab the rows before processing Pagination and set total number of rows
-        processor.on('beforeProcess', async (tabular: Tabular) => {
-          this.setTotal(tabular.length);
-        });
+        processor.on('beforeProcess', this.setTotalFromTabularFn);
       }
 
       this.processor = processor;
@@ -95,16 +95,25 @@ export class Pagination extends BaseComponent<
     }
   }
 
-  componentDidMount(): void {
-    const config = getConfig(this.context);
+  private setTotalFromTabular(tabular: Tabular): void {
+    this.setTotal(tabular.length);
+  }
 
-    config.pipeline.on('updated', (processor) => {
-      // this is to ensure that the current page is set to 0
-      // when a processor is updated for some reason
-      if (this.props.resetPageOnUpdate && processor !== this.processor) {
-        this.setPage(0);
-      }
-    });
+  private onUpdate(processor): void {
+    // this is to ensure that the current page is set to 0
+    // when a processor is updated for some reason
+    if (this.props.resetPageOnUpdate && processor !== this.processor) {
+      this.setPage(0);
+    }
+  }
+
+  componentDidMount(): void {
+    this.onUpdateFn = this.onUpdate.bind(this);
+    this.config.pipeline.on('updated', this.onUpdateFn);
+  }
+
+  componentWillUnmount() {
+    this.config.pipeline.off('updated', this.onUpdateFn);
   }
 
   private get pages(): number {

@@ -12,6 +12,7 @@ import { PipelineProcessor, ProcessorType } from '../../src/pipeline/processor';
 import * as width from '../../src/util/width';
 import { flushPromises } from '../testUtil';
 import PipelineUtils from '../../src/pipeline/pipelineUtils';
+import { EventEmitter } from '../../src/util/eventEmitter';
 
 expect.extend(toHaveNoViolations);
 
@@ -359,6 +360,33 @@ describe('Container component', () => {
     return flushPromises().then(async () => {
       await container.instance().componentDidMount();
       expect(container.html()).toMatchSnapshot();
+    });
+  });
+
+  it('should remove the EventEmitter listeners', async () => {
+    const config = Config.fromUserConfig({
+      columns: ['Name', 'Phone Number'],
+      pagination: true,
+      search: true,
+      sort: true,
+      data: [
+        { name: 'boo', phoneNumber: '123' },
+        { name: 'foo', phoneNumber: '456' },
+        { name: 'bar', phoneNumber: '789' },
+      ],
+    });
+
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
+    );
+
+    const mockOn = jest.spyOn(EventEmitter.prototype, 'on');
+    const mockOff = jest.spyOn(EventEmitter.prototype, 'off');
+
+    return flushPromises().then(async () => {
+      await container.instance().componentDidMount();
+      container.unmount();
+      expect(mockOff.mock.calls.length).toBe(mockOn.mock.calls.length);
     });
   });
 });

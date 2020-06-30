@@ -4,7 +4,6 @@ import { BaseComponent } from './base';
 import { classJoin, className } from '../util/className';
 import { Search } from './plugin/search/search';
 import { useRef } from 'preact/hooks';
-import getConfig from '../util/getConfig';
 
 interface HeaderContainerState {
   isActive: boolean;
@@ -30,8 +29,6 @@ export class HeaderContainer extends BaseComponent<{}, HeaderContainerState> {
   }
 
   render() {
-    const config = getConfig(this.context);
-
     if (this.state.isActive) {
       return (
         <div
@@ -39,7 +36,7 @@ export class HeaderContainer extends BaseComponent<{}, HeaderContainerState> {
           className={classJoin(className('head'), this.config.className.header)}
           style={{ ...this.config.style.header }}
         >
-          <Search {...config.search} />
+          <Search {...this.config.search} />
         </div>
       );
     }
