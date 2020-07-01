@@ -113,6 +113,7 @@ export class Pagination extends BaseComponent<
   }
 
   componentWillUnmount() {
+    this.config.pipeline.unregister(this.processor);
     this.config.pipeline.off('updated', this.onUpdateFn);
   }
 

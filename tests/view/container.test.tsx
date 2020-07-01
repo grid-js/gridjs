@@ -389,4 +389,34 @@ describe('Container component', () => {
       expect(mockOff.mock.calls.length).toBe(mockOn.mock.calls.length);
     });
   });
+
+  it('should unregister the processors', async () => {
+    const config = Config.fromUserConfig({
+      columns: ['Name', 'Phone Number'],
+      pagination: true,
+      search: true,
+      sort: true,
+      data: [
+        { name: 'boo', phoneNumber: '123' },
+        { name: 'foo', phoneNumber: '456' },
+        { name: 'bar', phoneNumber: '789' },
+      ],
+    });
+
+    const mockRegister = jest.fn();
+    const mockUnregister = jest.fn();
+
+    config.pipeline.register = mockRegister;
+    config.pipeline.unregister = mockUnregister;
+
+    const container = mount(
+      <Container config={config} pipeline={config.pipeline} width="100%" />,
+    );
+
+    return flushPromises().then(async () => {
+      await container.instance().componentDidMount();
+      container.unmount();
+      expect(mockUnregister.mock.calls.length).toBe(mockRegister.mock.calls.length);
+    });
+  });
 });
