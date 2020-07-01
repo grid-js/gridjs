@@ -64,6 +64,7 @@ export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
   }
 
   componentWillUnmount(): void {
+    this.config.pipeline.unregister(this.searchProcessor);
     this.store.off('updated', this.storeUpdatedFn);
   }
 

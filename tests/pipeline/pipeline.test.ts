@@ -63,6 +63,17 @@ describe('Pipeline', () => {
     expect(callback).toBeCalledTimes(1);
   });
 
+  it('should unregister a processor', async () => {
+    const pipeline = new Pipeline();
+    const proc = new StringProcessor();
+    pipeline.register(proc);
+    expect(pipeline.steps).toHaveLength(1);
+    pipeline.unregister(null);
+    expect(pipeline.steps).toHaveLength(1);
+    pipeline.unregister(proc);
+    expect(pipeline.steps).toHaveLength(0);
+  });
+
   it('should register and process processors', async () => {
     const pipeline = new Pipeline();
     pipeline.register(new SubStrProcessor());

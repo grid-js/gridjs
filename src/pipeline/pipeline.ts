@@ -87,6 +87,21 @@ class Pipeline<T, P = {}> extends EventEmitter<PipelineEvents<T>> {
   }
 
   /**
+   * Removes a processor from the list
+   *
+   * @param processor
+   */
+  unregister(
+    processor: PipelineProcessor<any, any>
+  ): void {
+    if (!processor) return;
+
+    const subSteps = this._steps.get(processor.type);
+    this._steps.set(processor.type, subSteps.filter(proc => proc != processor));
+    this.emit('updated', processor);
+  }
+
+  /**
    * Registers a new processor
    *
    * @param processor
