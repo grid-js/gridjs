@@ -90,7 +90,6 @@ class Pipeline<T, P = {}> extends EventEmitter<PipelineEvents<T>> {
    * Removes a processor from the list
    *
    * @param processor
-   * @param priority
    */
   unregister(
     processor: PipelineProcessor<any, any>
