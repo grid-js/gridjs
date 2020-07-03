@@ -10,6 +10,10 @@ class Grid {
     this.config = new Config().update(userConfig);
   }
 
+  public on(event: any, listener: (...args) => any): any {
+    this.config.eventEmitter.on(event, listener);
+  }
+
   public updateConfig(userConfig: Partial<UserConfig>): this {
     this.config.update(userConfig);
     return this;

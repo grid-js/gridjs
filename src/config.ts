@@ -18,9 +18,12 @@ import { Language, Translator } from './i18n/language';
 import { ComponentChild, createRef, RefObject } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
+import {EventEmitter} from "./util/eventEmitter";
+import {GridEvents} from "./events";
 
 // Config type used internally
 export interface Config {
+  eventEmitter?: EventEmitter<GridEvents>;
   dispatcher?: Dispatcher<any>;
   /** container element that is used to mount the Grid.js to */
   container?: Element;
@@ -126,6 +129,7 @@ export class Config {
 
   static defaultConfig(): Config {
     return {
+      eventEmitter: new EventEmitter<any>(),
       dispatcher: new Dispatcher<any>(),
       tempRef: createRef(),
       width: '100%',
