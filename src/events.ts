@@ -1,3 +1,4 @@
-import { TableEvents } from './view/table/tableEvents';
+import { TableEvents } from './view/table/events';
+import { ContainerEvents } from './view/events';
 
-export type GridEvents = TableEvents;
+export type GridEvents = ContainerEvents & TableEvents;

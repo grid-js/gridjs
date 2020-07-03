@@ -1,5 +1,6 @@
 import Grid from '../src/grid';
 import MemoryStorage from '../src/storage/memory';
+import { mount } from 'enzyme';
 
 describe('Grid class', () => {
   it('should raise an exception with empty config', () => {
@@ -46,5 +47,22 @@ describe('Grid class', () => {
 
     expect(grid.config.data).toStrictEqual(config1.data);
     expect(grid.config.width).toStrictEqual(config2.width);
+  });
+
+  it('should trigger the load and beforeLoad events', async () => {
+    const grid = new Grid({
+      data: [[1, 2, 3]],
+    });
+
+    const loadMock = jest.fn();
+    const beforeLoadMock = jest.fn();
+    grid.on('load', loadMock);
+    grid.on('beforeLoad', beforeLoadMock);
+
+    const container = mount(grid.createElement());
+
+    await container.instance().componentDidMount();
+    expect(loadMock).toBeCalled();
+    expect(beforeLoadMock).toBeCalled();
   });
 });

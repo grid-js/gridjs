@@ -23,8 +23,8 @@ import { GridEvents } from './events';
 
 // Config type used internally
 export interface Config {
-  eventEmitter?: EventEmitter<GridEvents>;
-  dispatcher?: Dispatcher<any>;
+  eventEmitter: EventEmitter<GridEvents>;
+  dispatcher: Dispatcher<any>;
   /** container element that is used to mount the Grid.js to */
   container?: Element;
   /** gridjs-temp div which is used internally */
@@ -83,14 +83,12 @@ export class Config {
   private _userConfig: UserConfig;
 
   constructor(config?: Partial<Config>) {
-    const updatedConfig = {
+    Object.assign(this, {
       ...Config.defaultConfig(),
       ...config,
-    };
+    });
 
     this._userConfig = {};
-
-    Object.assign(this, updatedConfig);
   }
 
   /**
