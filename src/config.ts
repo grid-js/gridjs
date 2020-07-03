@@ -18,8 +18,8 @@ import { Language, Translator } from './i18n/language';
 import { ComponentChild, createRef, RefObject } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
-import {EventEmitter} from "./util/eventEmitter";
-import {GridEvents} from "./events";
+import { EventEmitter } from './util/eventEmitter';
+import { GridEvents } from './events';
 
 // Config type used internally
 export interface Config {
@@ -82,7 +82,7 @@ export class Config {
   // we need this for Config.update()
   private _userConfig: UserConfig;
 
-  constructor(config?: Config) {
+  constructor(config?: Partial<Config>) {
     const updatedConfig = {
       ...Config.defaultConfig(),
       ...config,
@@ -129,7 +129,6 @@ export class Config {
 
   static defaultConfig(): Config {
     return {
-      eventEmitter: new EventEmitter<any>(),
       dispatcher: new Dispatcher<any>(),
       tempRef: createRef(),
       width: '100%',

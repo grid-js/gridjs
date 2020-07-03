@@ -416,7 +416,9 @@ describe('Container component', () => {
     return flushPromises().then(async () => {
       await container.instance().componentDidMount();
       container.unmount();
-      expect(mockUnregister.mock.calls.length).toBe(mockRegister.mock.calls.length);
+      expect(mockUnregister.mock.calls.length).toBe(
+        mockRegister.mock.calls.length,
+      );
     });
   });
 });

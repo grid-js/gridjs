@@ -1,3 +1,3 @@
-import {TableEvents} from "./view/table/tableEvents";
+import { TableEvents } from './view/table/tableEvents';
 
 export type GridEvents = TableEvents;

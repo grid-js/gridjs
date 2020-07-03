@@ -11,7 +11,7 @@ import Pipeline from '../pipeline/pipeline';
 import Header from '../header';
 import { Config } from '../config';
 import log from '../util/log';
-import {PipelineProcessor} from "../pipeline/processor";
+import { PipelineProcessor } from '../pipeline/processor';
 
 interface ContainerProps extends BaseProps {
   config: Config;

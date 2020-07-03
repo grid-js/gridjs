@@ -1,4 +1,4 @@
-import {h, JSX} from 'preact';
+import { h, JSX } from 'preact';
 
 import Row from '../../row';
 import Cell from '../../cell';
