@@ -95,11 +95,14 @@ class Pipeline<T, P = {}> extends EventEmitter<PipelineEvents<T>> {
     if (!processor) return;
 
     const subSteps = this._steps.get(processor.type);
-    this._steps.set(
-      processor.type,
-      subSteps.filter((proc) => proc != processor),
-    );
-    this.emit('updated', processor);
+
+    if (subSteps && subSteps.length) {
+      this._steps.set(
+        processor.type,
+        subSteps.filter((proc) => proc != processor),
+      );
+      this.emit('updated', processor);
+    }
   }
 
   /**

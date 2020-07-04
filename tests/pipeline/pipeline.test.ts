@@ -70,6 +70,8 @@ describe('Pipeline', () => {
     expect(pipeline.steps).toHaveLength(1);
     pipeline.unregister(null);
     expect(pipeline.steps).toHaveLength(1);
+    pipeline.unregister(new NoopProcessor());
+    expect(pipeline.steps).toHaveLength(1);
     pipeline.unregister(proc);
     expect(pipeline.steps).toHaveLength(0);
   });
