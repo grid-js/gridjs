@@ -1,4 +1,4 @@
-import { ComponentChild, h } from 'preact';
+import { ComponentChild, h, JSX } from 'preact';
 
 import Cell from '../../cell';
 import { BaseComponent, BaseProps } from '../base';
@@ -31,6 +31,16 @@ export class TD extends BaseComponent<TDProps, {}> {
     return this.props.cell.data;
   }
 
+  private handleClick(e: JSX.TargetedMouseEvent<HTMLTableCellElement>): void {
+    this.config.eventEmitter.emit(
+      'cellClick',
+      e,
+      this.props.cell,
+      this.props.column,
+      this.props.row,
+    );
+  }
+
   render() {
     return (
       <td
@@ -44,6 +54,7 @@ export class TD extends BaseComponent<TDProps, {}> {
         style={{
           ...this.config.style.td,
         }}
+        onClick={this.handleClick.bind(this)}
       >
         {this.content()}
       </td>

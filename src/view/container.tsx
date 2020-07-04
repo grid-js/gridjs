@@ -11,7 +11,7 @@ import Pipeline from '../pipeline/pipeline';
 import Header from '../header';
 import { Config } from '../config';
 import log from '../util/log';
-import {PipelineProcessor} from "../pipeline/processor";
+import { PipelineProcessor } from '../pipeline/processor';
 
 interface ContainerProps extends BaseProps {
   config: Config;
@@ -44,15 +44,20 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
   }
 
   private async processPipeline() {
+    this.props.config.eventEmitter.emit('beforeLoad');
+
     this.setState({
       status: Status.Loading,
     });
 
     try {
+      const data = await this.props.pipeline.process();
       this.setState({
-        data: await this.props.pipeline.process(),
+        data: data,
         status: Status.Loaded,
       });
+
+      this.props.config.eventEmitter.emit('load', data);
     } catch (e) {
       log.error(e);
 

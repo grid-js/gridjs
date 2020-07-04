@@ -18,10 +18,13 @@ import { Language, Translator } from './i18n/language';
 import { ComponentChild, createRef, RefObject } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
+import { EventEmitter } from './util/eventEmitter';
+import { GridEvents } from './events';
 
 // Config type used internally
 export interface Config {
-  dispatcher?: Dispatcher<any>;
+  eventEmitter: EventEmitter<GridEvents>;
+  dispatcher: Dispatcher<any>;
   /** container element that is used to mount the Grid.js to */
   container?: Element;
   /** gridjs-temp div which is used internally */
@@ -79,15 +82,13 @@ export class Config {
   // we need this for Config.update()
   private _userConfig: UserConfig;
 
-  constructor(config?: Config) {
-    const updatedConfig = {
+  constructor(config?: Partial<Config>) {
+    Object.assign(this, {
       ...Config.defaultConfig(),
       ...config,
-    };
+    });
 
     this._userConfig = {};
-
-    Object.assign(this, updatedConfig);
   }
 
   /**

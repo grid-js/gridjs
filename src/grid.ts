@@ -2,12 +2,15 @@ import { Config, UserConfig } from './config';
 import { h, render, VNode } from 'preact';
 import { Container } from './view/container';
 import log from './util/log';
+import { EventEmitter } from './util/eventEmitter';
+import { GridEvents } from './events';
 
-class Grid {
+class Grid extends EventEmitter<GridEvents> {
   public config: Config;
 
   constructor(userConfig?: UserConfig) {
-    this.config = new Config().update(userConfig);
+    super();
+    this.config = new Config({ eventEmitter: this }).update(userConfig);
   }
 
   public updateConfig(userConfig: Partial<UserConfig>): this {

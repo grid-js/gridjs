@@ -13,6 +13,7 @@ import * as width from '../../src/util/width';
 import { flushPromises } from '../testUtil';
 import PipelineUtils from '../../src/pipeline/pipelineUtils';
 import { EventEmitter } from '../../src/util/eventEmitter';
+import { GridEvents } from '../../src/events';
 
 expect.extend(toHaveNoViolations);
 
@@ -28,6 +29,7 @@ describe('Container component', () => {
     config.autoWidth = true;
     config.storage = StorageUtils.createFromUserConfig(config);
     config.dispatcher = new Dispatcher();
+    config.eventEmitter = new EventEmitter<GridEvents>();
     config.translator = new Translator();
     config.pipeline = PipelineUtils.createFromConfig(config);
   });
@@ -297,6 +299,7 @@ describe('Container component', () => {
 
   it('should render a container with array of objects without columns input', async () => {
     const config = Config.fromUserConfig({
+      eventEmitter: new EventEmitter<GridEvents>(),
       data: [
         { name: 'boo', phoneNumber: '123' },
         { name: 'foo', phoneNumber: '456' },
@@ -316,6 +319,7 @@ describe('Container component', () => {
 
   it('should render a container with array of objects with string columns', async () => {
     const config = Config.fromUserConfig({
+      eventEmitter: new EventEmitter<GridEvents>(),
       columns: ['Name', 'Phone Number'],
       data: [
         { name: 'boo', phoneNumber: '123' },
@@ -336,6 +340,7 @@ describe('Container component', () => {
 
   it('should render a container with array of objects with object columns', async () => {
     const config = Config.fromUserConfig({
+      eventEmitter: new EventEmitter<GridEvents>(),
       columns: [
         {
           name: 'Name',
@@ -364,16 +369,15 @@ describe('Container component', () => {
   });
 
   it('should remove the EventEmitter listeners', async () => {
-    const config = Config.fromUserConfig({
+    config.search = {
+      enabled: true,
+    };
+    config.pagination = {
+      enabled: true,
+    };
+    config.header = Header.fromUserConfig({
       columns: ['Name', 'Phone Number'],
-      pagination: true,
-      search: true,
       sort: true,
-      data: [
-        { name: 'boo', phoneNumber: '123' },
-        { name: 'foo', phoneNumber: '456' },
-        { name: 'bar', phoneNumber: '789' },
-      ],
     });
 
     const container = mount(
@@ -391,16 +395,15 @@ describe('Container component', () => {
   });
 
   it('should unregister the processors', async () => {
-    const config = Config.fromUserConfig({
+    config.pagination = {
+      enabled: true,
+    };
+    config.search = {
+      enabled: true,
+    };
+    config.header = Header.fromUserConfig({
       columns: ['Name', 'Phone Number'],
-      pagination: true,
-      search: true,
       sort: true,
-      data: [
-        { name: 'boo', phoneNumber: '123' },
-        { name: 'foo', phoneNumber: '456' },
-        { name: 'bar', phoneNumber: '789' },
-      ],
     });
 
     const mockRegister = jest.fn();
@@ -416,7 +419,9 @@ describe('Container component', () => {
     return flushPromises().then(async () => {
       await container.instance().componentDidMount();
       container.unmount();
-      expect(mockUnregister.mock.calls.length).toBe(mockRegister.mock.calls.length);
+      expect(mockUnregister.mock.calls.length).toBe(
+        mockRegister.mock.calls.length,
+      );
     });
   });
 });
