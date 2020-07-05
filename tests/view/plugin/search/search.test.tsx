@@ -1,13 +1,13 @@
 import { mount } from 'enzyme';
-import {createContext, h} from 'preact';
-import {Config} from "../../../../src/config";
-import Dispatcher from "../../../../src/util/dispatcher";
-import {EventEmitter} from "../../../../src/util/eventEmitter";
-import {GridEvents} from "../../../../src/events";
-import PipelineUtils from "../../../../src/pipeline/pipelineUtils";
-import {Translator} from "../../../../src/i18n/language";
-import {Search} from "../../../../src/view/plugin/search/search";
-import {SearchActions} from "../../../../src/view/plugin/search/actions";
+import { createContext, h } from 'preact';
+import { Config } from '../../../../src/config';
+import Dispatcher from '../../../../src/util/dispatcher';
+import { EventEmitter } from '../../../../src/util/eventEmitter';
+import { GridEvents } from '../../../../src/events';
+import PipelineUtils from '../../../../src/pipeline/pipelineUtils';
+import { Translator } from '../../../../src/i18n/language';
+import { Search } from '../../../../src/view/plugin/search/search';
+import { SearchActions } from '../../../../src/view/plugin/search/actions';
 
 describe('Search plugin', () => {
   let config: Config;
@@ -31,8 +31,8 @@ describe('Search plugin', () => {
 
     const search = mount(
       <configContext.Provider value={config}>
-        <Search enabled={true} keyword={"boo"} />
-      </configContext.Provider>
+        <Search enabled={true} keyword={'boo'} />
+      </configContext.Provider>,
     );
 
     expect(mock).toBeCalledWith('boo');
@@ -45,7 +45,7 @@ describe('Search plugin', () => {
     mount(
       <configContext.Provider value={config}>
         <Search enabled={true} />
-      </configContext.Provider>
+      </configContext.Provider>,
     );
 
     expect(mock).not.toBeCalled();
@@ -57,12 +57,14 @@ describe('Search plugin', () => {
     const wrapper = mount(
       <configContext.Provider value={config}>
         <Search enabled={true} />
-      </configContext.Provider>
+      </configContext.Provider>,
     );
 
-     const input = wrapper.find('input');
-     input.getDOMNode<HTMLInputElement>().value = '123'
-     //input.simulate('change', { target: { value: 'Changed' } });
+    // https://github.com/preactjs/enzyme-adapter-preact-pure/issues/45
+    const input = wrapper.find('input');
+    input.getDOMNode<HTMLInputElement>().value = '123';
+
+    input.simulate('input');
 
     expect(mock).toBeCalledWith('123');
   });
