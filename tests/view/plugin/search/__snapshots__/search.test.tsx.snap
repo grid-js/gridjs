@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search plugin should render the search box 1`] = `"<div class=\\"gridjs-search\\"><input type=\\"search\\" placeholder=\\"Type a keyword...\\" aria-label=\\"Type a keyword...\\" class=\\"gridjs-input gridjs-search-input\\"></div>"`;

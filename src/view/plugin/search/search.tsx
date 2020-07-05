@@ -38,7 +38,8 @@ export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
 
     if (enabled) {
       // initial search
-      this.actions.search(keyword);
+      if (keyword)
+        this.actions.search(keyword);
 
       this.storeUpdatedFn = this.storeUpdated.bind(this);
       this.store.on('updated', this.storeUpdatedFn);
