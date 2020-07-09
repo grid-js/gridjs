@@ -24,6 +24,7 @@ class Grid extends EventEmitter<GridEvents> {
       pipeline: this.config.pipeline,
       header: this.config.header,
       width: this.config.width,
+      height: this.config.height,
     });
   }
 

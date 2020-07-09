@@ -13,6 +13,7 @@ interface TableProps extends BaseProps {
   status: Status;
   header?: Header;
   width: string;
+  height: string;
 }
 
 export class Table extends BaseComponent<TableProps, {}> {
@@ -25,6 +26,7 @@ export class Table extends BaseComponent<TableProps, {}> {
           ...this.config.style.table,
           ...{
             width: this.props.width,
+            height: this.props.height,
           },
         }}
       >

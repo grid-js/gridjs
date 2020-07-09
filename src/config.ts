@@ -40,6 +40,8 @@ export interface Config {
   autoWidth: boolean;
   /** sets the width of the container and table */
   width: string;
+  /** sets the height of the table */
+  height: string;
   search: SearchConfig;
   pagination: PaginationConfig;
   sort: GenericSortConfig;
@@ -130,6 +132,7 @@ export class Config {
       dispatcher: new Dispatcher<any>(),
       tempRef: createRef(),
       width: '100%',
+      height: 'auto',
       autoWidth: true,
       style: {},
       className: {},

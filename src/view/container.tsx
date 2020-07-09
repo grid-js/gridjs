@@ -18,6 +18,7 @@ interface ContainerProps extends BaseProps {
   pipeline: Pipeline<Tabular>;
   header?: Header;
   width: string;
+  height: string;
 }
 
 interface ContainerState {
@@ -123,12 +124,13 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
           <div
             className={className('wrapper')}
-            style={{ width: this.props.width }}
+            style={{ width: this.props.width, height: this.props.height }}
           >
             <Table
               data={this.state.data}
               header={this.state.header}
               width={this.props.width}
+              height={this.props.height}
               status={this.state.status}
             />
           </div>
