@@ -113,7 +113,9 @@ class Header extends Base {
 
   private setFixedHeader(userConfig: UserConfig): void {
     for (const column of this.columns) {
-      column.fixedHeader = column.fixedHeader || userConfig.fixedHeader;
+      if (column.fixedHeader === undefined) {
+        column.fixedHeader = userConfig.fixedHeader;
+      }
     }
   }
 

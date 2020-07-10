@@ -279,4 +279,63 @@ describe('Table component', () => {
 
     expect(table.html()).toMatchSnapshot();
   });
+
+  it('should attach the fixedHeader classname', async () => {
+    const config = Config.fromUserConfig({
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+      columns: ['c', 'd', 'e'],
+      fixedHeader: true,
+      dispatcher: new Dispatcher<any>(),
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={config.header}
+          status={Status.Loaded}
+          width={config.width}
+          height={config.height}
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
+
+  it('should only attached fixedHeader to some columns', async () => {
+    const config = Config.fromUserConfig({
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+      columns: [
+        'c',
+        'd',
+        {
+          name: 'e',
+          fixedHeader: false,
+        },
+      ],
+      fixedHeader: true,
+      dispatcher: new Dispatcher<any>(),
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={config.header}
+          status={Status.Loaded}
+          width={config.width}
+          height={config.height}
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
 });
