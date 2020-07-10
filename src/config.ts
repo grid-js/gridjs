@@ -66,7 +66,9 @@ export interface Config {
 
 // Config type used by the consumers
 interface UserConfigExtend {
-  columns?: OneDArray<TColumn | string | ComponentChild>;
+  /** fixes the table header to the top of the table */
+  fixedHeader: boolean;
+  columns: OneDArray<TColumn | string | ComponentChild>;
   search: SearchConfig | boolean;
   pagination: PaginationConfig | boolean;
   // implicit option to enable the sort plugin globally

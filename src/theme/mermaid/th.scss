@@ -2,7 +2,10 @@
 
 th.gridjs {
   &-th {
+    color: $gray5;
+    background-color: $gray1;
     border: 1px solid $gray3;
+    border-top: none;
     padding: 14px 24px;
     user-select: none;
     box-sizing: content-box;
@@ -19,6 +22,16 @@ th.gridjs {
 
     &-sort:focus {
       background-color: $gray3;
+    }
+
+    &-fixed {
+      top: 0;
+      position: sticky;
+      box-shadow: 0 1px 0 0 $gray3;
+
+      @supports (-moz-appearance:none) {
+        box-shadow: 0 0 0 1px $gray3;
+      }
     }
   }
 

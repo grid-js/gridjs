@@ -1,4 +1,8 @@
 .gridjs {
+  &-tr {
+    border: none;
+  }
+
   &-tr:last-child td {
     border-bottom: 0;
   }
