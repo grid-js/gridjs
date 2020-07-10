@@ -6,8 +6,6 @@ import { Config } from '../../src/config';
 import { Container } from '../../src/view/container';
 import StorageUtils from '../../src/storage/storageUtils';
 import Header from '../../src/header';
-import Dispatcher from '../../src/util/dispatcher';
-import { Translator } from '../../src/i18n/language';
 import { PipelineProcessor, ProcessorType } from '../../src/pipeline/processor';
 import * as width from '../../src/util/width';
 import { flushPromises } from '../testUtil';
@@ -21,22 +19,23 @@ describe('Container component', () => {
   let config: Config;
 
   beforeEach(() => {
-    config = new Config();
-    config.data = [
-      [1, 2, 3],
-      ['a', 'b', 'c'],
-    ];
-    config.autoWidth = true;
-    config.storage = StorageUtils.createFromUserConfig(config);
-    config.dispatcher = new Dispatcher();
+    config = Config.fromUserConfig({
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+    });
     config.eventEmitter = new EventEmitter<GridEvents>();
-    config.translator = new Translator();
-    config.pipeline = PipelineUtils.createFromConfig(config);
   });
 
   it('should render a container with table', async () => {
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
     );
 
     await container.instance().componentDidMount();
@@ -74,7 +73,12 @@ describe('Container component', () => {
     };
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="500px" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width="500px"
+        height={config.height}
+      />,
     );
 
     await container.instance().componentDidMount();
@@ -122,7 +126,12 @@ describe('Container component', () => {
     };
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="500px" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width="500px"
+        height={config.height}
+      />,
     );
 
     return flushPromises().then(async () => {
@@ -137,7 +146,12 @@ describe('Container component', () => {
     };
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
     );
     await container.instance().componentDidMount();
     expect(container.html()).toMatchSnapshot();
@@ -180,7 +194,8 @@ describe('Container component', () => {
         config={config}
         pipeline={config.pipeline}
         header={config.header}
-        width="100%"
+        width={config.width}
+        height={config.height}
       />,
     );
     await container.instance().componentDidMount();
@@ -202,7 +217,12 @@ describe('Container component', () => {
     config.pipeline.register(new ErrorProcessor());
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
     );
 
     await container.instance().componentDidMount();
@@ -222,7 +242,12 @@ describe('Container component', () => {
     config.sort = {};
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
     );
 
     await container.instance().componentDidMount();
@@ -260,7 +285,12 @@ describe('Container component', () => {
     ];
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
     );
 
     return flushPromises().then(async () => {
@@ -288,7 +318,12 @@ describe('Container component', () => {
     ];
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
     );
 
     return flushPromises().then(async () => {
@@ -308,7 +343,12 @@ describe('Container component', () => {
     });
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
     );
 
     return flushPromises().then(async () => {
@@ -329,7 +369,12 @@ describe('Container component', () => {
     });
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
     );
 
     return flushPromises().then(async () => {
@@ -359,7 +404,12 @@ describe('Container component', () => {
     });
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
     );
 
     return flushPromises().then(async () => {
@@ -381,7 +431,12 @@ describe('Container component', () => {
     });
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
     );
 
     const mockOn = jest.spyOn(EventEmitter.prototype, 'on');
@@ -413,7 +468,12 @@ describe('Container component', () => {
     config.pipeline.unregister = mockUnregister;
 
     const container = mount(
-      <Container config={config} pipeline={config.pipeline} width="100%" />,
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
     );
 
     return flushPromises().then(async () => {

@@ -111,6 +111,14 @@ class Header extends Base {
     }
   }
 
+  private setFixedHeader(userConfig: UserConfig): void {
+    for (const column of this.columns) {
+      if (column.fixedHeader === undefined) {
+        column.fixedHeader = userConfig.fixedHeader;
+      }
+    }
+  }
+
   private setID(): void {
     for (const column of this.columns) {
       if (!column.id && typeof column.name === 'string') {
@@ -149,6 +157,7 @@ class Header extends Base {
     if (header.columns.length) {
       header.setID();
       header.setSort(userConfig);
+      header.setFixedHeader(userConfig);
       return header;
     }
 

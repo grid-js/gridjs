@@ -20,6 +20,7 @@ export interface TColumn {
   width?: string;
   sort?: SortConfig;
   children?: OneDArray<TColumn>;
+  fixedHeader?: boolean;
   formatter?: (cell: TCell, row: Row, column: TColumn) => ComponentChild;
 }
 

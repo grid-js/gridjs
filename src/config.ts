@@ -40,6 +40,8 @@ export interface Config {
   autoWidth: boolean;
   /** sets the width of the container and table */
   width: string;
+  /** sets the height of the table */
+  height: string;
   search: SearchConfig;
   pagination: PaginationConfig;
   sort: GenericSortConfig;
@@ -64,7 +66,9 @@ export interface Config {
 
 // Config type used by the consumers
 interface UserConfigExtend {
-  columns?: OneDArray<TColumn | string | ComponentChild>;
+  /** fixes the table header to the top of the table */
+  fixedHeader: boolean;
+  columns: OneDArray<TColumn | string | ComponentChild>;
   search: SearchConfig | boolean;
   pagination: PaginationConfig | boolean;
   // implicit option to enable the sort plugin globally
@@ -130,6 +134,7 @@ export class Config {
       dispatcher: new Dispatcher<any>(),
       tempRef: createRef(),
       width: '100%',
+      height: 'auto',
       autoWidth: true,
       style: {},
       className: {},

@@ -43,6 +43,7 @@ export class TH extends BaseComponent<THProps, {}> {
         className={classJoin(
           className('th'),
           this.isSortable() ? className('th', 'sort') : null,
+          this.props.column.fixedHeader ? className('th', 'fixed') : null,
           this.config.className.th,
         )}
         onClick={this.onClick.bind(this)}
