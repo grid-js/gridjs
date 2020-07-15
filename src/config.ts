@@ -8,25 +8,25 @@ import {
 import Storage from './storage/storage';
 import Pipeline from './pipeline/pipeline';
 import Tabular from './tabular';
-import { SearchConfig } from './view/plugin/search/search';
+import { Search, SearchConfig } from './view/plugin/search/search';
 import { PaginationConfig } from './view/plugin/pagination';
 import Header from './header';
 import { ServerStorageOptions } from './storage/server';
 import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
 import { Language, Translator } from './i18n/language';
-import { ComponentChild, createRef, RefObject } from 'preact';
+import { ComponentChild, createRef, h, RefObject } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
 import { EventEmitter } from './util/eventEmitter';
 import { GridEvents } from './events';
-import {PluginManager} from "./plugin";
+import { PluginManager, PluginPosition } from './plugin';
 
 // Config type used internally
 export interface Config {
   eventEmitter: EventEmitter<GridEvents>;
   dispatcher: Dispatcher<any>;
-  pluginManager: PluginManager;
+  plugin: PluginManager;
   /** container element that is used to mount the Grid.js to */
   container?: Element;
   /** gridjs-temp div which is used internally */
@@ -44,7 +44,6 @@ export interface Config {
   width: string;
   /** sets the height of the table */
   height: string;
-  search: SearchConfig;
   pagination: PaginationConfig;
   sort: GenericSortConfig;
   translator: Translator;
@@ -133,7 +132,7 @@ export class Config {
 
   static defaultConfig(): Config {
     return {
-      pluginManager: new PluginManager(),
+      plugin: new PluginManager(),
       dispatcher: new Dispatcher<any>(),
       tempRef: createRef(),
       width: '100%',
@@ -172,6 +171,21 @@ export class Config {
       pipeline: PipelineUtils.createFromConfig(config),
     });
 
+    // Translator
+    config.assign({
+      translator: new Translator(userConfig.language),
+    });
+
+    // Search
+    config.plugin.add({
+      position: PluginPosition.Header,
+      component: h(Search, {
+        enabled:
+          userConfig.search === true || userConfig.search instanceof Object,
+        ...(userConfig.search as SearchConfig),
+      }),
+    });
+
     // Pagination
     config.assign({
       pagination: {
@@ -180,20 +194,6 @@ export class Config {
           userConfig.pagination instanceof Object,
         ...(userConfig.pagination as PaginationConfig),
       },
-    });
-
-    // Search
-    config.assign({
-      search: {
-        enabled:
-          userConfig.search === true || userConfig.search instanceof Object,
-        ...(userConfig.search as SearchConfig),
-      },
-    });
-
-    // Translator
-    config.assign({
-      translator: new Translator(userConfig.language),
     });
 
     return config;

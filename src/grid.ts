@@ -1,18 +1,9 @@
-import {Config, UserConfig} from './config';
-import {h, render, VNode} from 'preact';
-import {Container} from './view/container';
+import { Config, UserConfig } from './config';
+import { h, render, VNode } from 'preact';
+import { Container } from './view/container';
 import log from './util/log';
-import {EventEmitter} from './util/eventEmitter';
-import {GridEvents} from './events';
-import {BaseComponent} from "./view/base";
-import {PluginPosition} from "./plugin";
-
-
-class TestPlugin extends BaseComponent<any, any> {
-  render() {
-    return h('h1', {}, 'booo');
-  }
-}
+import { EventEmitter } from './util/eventEmitter';
+import { GridEvents } from './events';
 
 class Grid extends EventEmitter<GridEvents> {
   public config: Config;
@@ -20,11 +11,6 @@ class Grid extends EventEmitter<GridEvents> {
   constructor(userConfig?: UserConfig) {
     super();
     this.config = new Config({ eventEmitter: this }).update(userConfig);
-    this.config.pluginManager.add({
-      position: PluginPosition.Header,
-      component: h(TestPlugin, {}),
-      enabled: true
-    });
   }
 
   public updateConfig(userConfig: Partial<UserConfig>): this {

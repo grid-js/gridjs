@@ -1,15 +1,14 @@
-import {BaseComponent, BaseProps} from "./view/base";
-import {ComponentChild, Fragment, h} from "preact";
+import { BaseComponent, BaseProps } from './view/base';
+import {Fragment, h, VNode} from 'preact';
 
 export enum PluginPosition {
   Header,
-  Footer
+  Footer,
 }
 
 export interface Plugin {
-  enabled: boolean;
   position: PluginPosition;
-  component: ComponentChild;
+  component: VNode<any>;
 }
 
 export class PluginManager {
@@ -20,17 +19,18 @@ export class PluginManager {
   }
 
   add(plugin: Plugin): this {
-    if (plugin.enabled === undefined) {
-      plugin.enabled = true;
-    }
-
     this.plugins.push(plugin);
+    return this;
+  }
+
+  remove(plugin: Plugin): this {
+    this.plugins.splice(this.plugins.indexOf(plugin), 1);
     return this;
   }
 
   list(position?: PluginPosition): Plugin[] {
     if (position) {
-      return this.plugins.filter(p => p.position === position);
+      return this.plugins.filter((p) => p.position === position);
     }
 
     return this.plugins;
@@ -38,11 +38,15 @@ export class PluginManager {
 }
 
 export interface PluginRendererProps extends BaseProps {
-  position?: PluginPosition
+  position?: PluginPosition;
 }
 
 export class PluginRenderer extends BaseComponent<PluginRendererProps, {}> {
   render() {
-    return h(Fragment, {}, this.config.pluginManager.list(this.props.position).filter(p => p.enabled).map(p => p.component));
+    return h(
+      Fragment,
+      {},
+      this.config.plugin.list(this.props.position).map((p) => p.component),
+    );
   }
 }
