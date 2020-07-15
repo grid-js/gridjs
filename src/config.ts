@@ -20,11 +20,13 @@ import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
 import { EventEmitter } from './util/eventEmitter';
 import { GridEvents } from './events';
+import {PluginManager} from "./plugin";
 
 // Config type used internally
 export interface Config {
   eventEmitter: EventEmitter<GridEvents>;
   dispatcher: Dispatcher<any>;
+  pluginManager: PluginManager;
   /** container element that is used to mount the Grid.js to */
   container?: Element;
   /** gridjs-temp div which is used internally */
@@ -131,6 +133,7 @@ export class Config {
 
   static defaultConfig(): Config {
     return {
+      pluginManager: new PluginManager(),
       dispatcher: new Dispatcher<any>(),
       tempRef: createRef(),
       width: '100%',

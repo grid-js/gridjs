@@ -4,6 +4,7 @@ import { BaseComponent } from './base';
 import { classJoin, className } from '../util/className';
 import { Search } from './plugin/search/search';
 import { useRef } from 'preact/hooks';
+import {PluginRenderer} from "../plugin";
 
 interface HeaderContainerState {
   isActive: boolean;
@@ -37,6 +38,7 @@ export class HeaderContainer extends BaseComponent<{}, HeaderContainerState> {
           style={{ ...this.config.style.header }}
         >
           <Search {...this.config.search} />
+          <PluginRenderer />
         </div>
       );
     }
