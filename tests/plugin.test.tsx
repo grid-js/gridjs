@@ -41,6 +41,38 @@ describe('Plugin', () => {
     expect(manager.list()).toHaveLength(0);
   });
 
+  it('should return unordered plugins', () => {
+    const manager = new PluginManager();
+
+    expect(manager.list()).toHaveLength(0);
+
+    manager.add({
+      id: 'dummy',
+      position: PluginPosition.Header,
+      component: h(DummyPlugin, {}),
+    });
+
+    manager.add({
+      id: 'dummy2',
+      order: 1,
+      position: PluginPosition.Header,
+      component: h(DummyPlugin, {}),
+    });
+
+    manager.add({
+      id: 'dummy3',
+      order: 10,
+      position: PluginPosition.Footer,
+      component: h(DummyPlugin, {}),
+    });
+
+    expect(manager.list().map((x) => x.id)).toStrictEqual([
+      'dummy',
+      'dummy2',
+      'dummy3',
+    ]);
+  });
+
   it('should return plugins in the correct order', () => {
     const manager = new PluginManager();
 
@@ -67,10 +99,17 @@ describe('Plugin', () => {
       component: h(DummyPlugin, {}),
     });
 
+    manager.add({
+      id: 'dummy4',
+      position: PluginPosition.Footer,
+      component: h(DummyPlugin, {}),
+    });
+
     expect(manager.list().map((x) => x.id)).toStrictEqual([
       'dummy2',
       'dummy',
       'dummy3',
+      'dummy4',
     ]);
     expect(manager.list(PluginPosition.Header).map((x) => x.id)).toStrictEqual([
       'dummy2',
