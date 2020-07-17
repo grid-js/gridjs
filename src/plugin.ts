@@ -11,6 +11,7 @@ export interface Plugin {
   id: string;
   position: PluginPosition;
   component: VNode<any>;
+  order?: number;
 }
 
 export class PluginManager {
@@ -51,11 +52,15 @@ export class PluginManager {
   }
 
   list(position?: PluginPosition): Plugin[] {
+    let plugins: Plugin[];
+
     if (position != null || position != undefined) {
-      return this.plugins.filter((p) => p.position === position);
+      plugins = this.plugins.filter((p) => p.position === position);
+    } else {
+      plugins = this.plugins;
     }
 
-    return this.plugins;
+    return plugins.sort((a, b) => a.order - b.order);
   }
 }
 
