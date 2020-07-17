@@ -2,8 +2,8 @@ import { h } from 'preact';
 
 import { BaseComponent } from './base';
 import { classJoin, className } from '../util/className';
-import { Pagination } from './plugin/pagination';
 import { useRef } from 'preact/hooks';
+import { PluginPosition, PluginRenderer } from '../plugin';
 
 interface FooterContainerState {
   isActive: boolean;
@@ -39,7 +39,7 @@ export class FooterContainer extends BaseComponent<{}, FooterContainerState> {
           )}
           style={{ ...this.config.style.footer }}
         >
-          <Pagination {...this.config.pagination} />
+          <PluginRenderer position={PluginPosition.Footer} />
         </div>
       );
     }

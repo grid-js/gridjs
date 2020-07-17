@@ -9,7 +9,7 @@ import Storage from './storage/storage';
 import Pipeline from './pipeline/pipeline';
 import Tabular from './tabular';
 import { Search, SearchConfig } from './view/plugin/search/search';
-import { PaginationConfig } from './view/plugin/pagination';
+import { Pagination, PaginationConfig } from './view/plugin/pagination';
 import Header from './header';
 import { ServerStorageOptions } from './storage/server';
 import Dispatcher from './util/dispatcher';
@@ -178,6 +178,7 @@ export class Config {
 
     // Search
     config.plugin.add({
+      id: 'search',
       position: PluginPosition.Header,
       component: h(Search, {
         enabled:
@@ -187,13 +188,15 @@ export class Config {
     });
 
     // Pagination
-    config.assign({
-      pagination: {
+    config.plugin.add({
+      id: 'pagination',
+      position: PluginPosition.Footer,
+      component: h(Pagination, {
         enabled:
           userConfig.pagination === true ||
           userConfig.pagination instanceof Object,
         ...(userConfig.pagination as PaginationConfig),
-      },
+      }),
     });
 
     return config;

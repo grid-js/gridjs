@@ -1,5 +1,6 @@
 import { BaseComponent, BaseProps } from './view/base';
-import {Fragment, h, VNode} from 'preact';
+import { Fragment, h, VNode } from 'preact';
+import log from './util/log';
 
 export enum PluginPosition {
   Header,
@@ -7,6 +8,7 @@ export enum PluginPosition {
 }
 
 export interface Plugin {
+  id: string;
   position: PluginPosition;
   component: VNode<any>;
 }
@@ -18,18 +20,38 @@ export class PluginManager {
     this.plugins = [];
   }
 
+  get(id: string): Plugin | null {
+    const plugins = this.plugins.filter((p) => p.id === id);
+
+    if (plugins.length > 0) {
+      return plugins[0];
+    }
+
+    return null;
+  }
+
   add(plugin: Plugin): this {
+    if (!plugin.id) {
+      log.error('Plugin ID cannot be empty');
+      return this;
+    }
+
+    if (this.get(plugin.id) !== null) {
+      log.error(`Duplicate plugin ID: ${plugin.id}`);
+      return this;
+    }
+
     this.plugins.push(plugin);
     return this;
   }
 
-  remove(plugin: Plugin): this {
-    this.plugins.splice(this.plugins.indexOf(plugin), 1);
+  remove(id: string): this {
+    this.plugins.splice(this.plugins.indexOf(this.get(id)), 1);
     return this;
   }
 
   list(position?: PluginPosition): Plugin[] {
-    if (position) {
+    if (position != null || position != undefined) {
       return this.plugins.filter((p) => p.position === position);
     }
 

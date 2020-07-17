@@ -29,7 +29,6 @@ describe('Config', () => {
 
     expect(conf.data).toStrictEqual(data);
     expect(conf.header).toBeNull();
-    expect(conf.pagination).toStrictEqual({ enabled: false });
     expect(conf.translator).toBeInstanceOf(Translator);
     expect(conf.width).toBe('400px');
     expect(conf.height).toBe('500px');
@@ -42,8 +41,7 @@ describe('Config', () => {
       search: true,
     });
 
-    expect(conf.plugin.list()).toHaveLength(1);
-    expect(conf.plugin.list()[0].component.props.enabled).toBeTruthy();
+    expect(conf.plugin.get('search').component.props.enabled).toBeTruthy();
   });
 
   it('should create a userConfig with pagination', () => {
@@ -53,7 +51,7 @@ describe('Config', () => {
       pagination: true,
     });
 
-    expect(conf.pagination).toStrictEqual({ enabled: true });
+    expect(conf.plugin.get('pagination').component.props.enabled).toBeTruthy();
   });
 
   it('should create a userConfig with header', () => {
