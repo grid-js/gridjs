@@ -3,9 +3,8 @@ import { Config } from '../config';
 import getConfig from '../util/getConfig';
 import { useTranslator } from '../i18n/language';
 
-export interface BaseProps {
-  classNamePrefix?: string;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface BaseProps {}
 
 export abstract class BaseComponent<P extends BaseProps, S> extends Component<
   P,
