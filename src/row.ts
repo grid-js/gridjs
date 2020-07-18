@@ -1,5 +1,6 @@
 import Cell from './cell';
 import Base from './base';
+import { TCell } from './types';
 
 class Row extends Base {
   private _cells: Cell[];
@@ -16,6 +17,10 @@ class Row extends Base {
 
   public set cells(cells: Cell[]) {
     this._cells = cells;
+  }
+
+  public toArray(): TCell[] {
+    return this.cells.map((cell) => cell.data);
   }
 
   /**

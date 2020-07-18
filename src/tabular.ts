@@ -37,6 +37,10 @@ class Tabular extends Base {
     this._length = len;
   }
 
+  public toArray(): TCell[][] {
+    return this.rows.map((row) => row.toArray());
+  }
+
   /**
    * Creates a new Tabular from an array of Row(s)
    * This method generates a new ID for the Tabular and all nested elements
