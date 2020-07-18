@@ -12,6 +12,7 @@ import { flushPromises } from '../testUtil';
 import PipelineUtils from '../../src/pipeline/pipelineUtils';
 import { EventEmitter } from '../../src/util/eventEmitter';
 import { GridEvents } from '../../src/events';
+import { PluginManager } from '../../src/plugin';
 
 expect.extend(toHaveNoViolations);
 
@@ -26,6 +27,7 @@ describe('Container component', () => {
       ],
     });
     config.eventEmitter = new EventEmitter<GridEvents>();
+    config.plugin = new PluginManager();
   });
 
   it('should render a container with table', async () => {
@@ -43,34 +45,34 @@ describe('Container component', () => {
   });
 
   it('should attach styles', async () => {
-    config.search = {
-      enabled: true,
-    };
-
-    config.pagination = {
-      enabled: true,
-    };
-
-    config.style = {
-      container: {
-        border: '1px solid #ccc',
+    config.update({
+      search: {
+        enabled: true,
       },
-      header: {
-        padding: '5px',
+      pagination: {
+        enabled: true,
       },
-      footer: {
-        margin: '2px',
+      style: {
+        container: {
+          border: '1px solid #ccc',
+        },
+        header: {
+          padding: '5px',
+        },
+        footer: {
+          margin: '2px',
+        },
+        td: {
+          'font-weight': 'bold',
+        },
+        th: {
+          border: '2px solid red',
+        },
+        table: {
+          'font-size': '15px',
+        },
       },
-      td: {
-        'font-weight': 'bold',
-      },
-      th: {
-        border: '2px solid red',
-      },
-      table: {
-        'font-size': '15px',
-      },
-    };
+    });
 
     const container = mount(
       <Container
@@ -86,44 +88,42 @@ describe('Container component', () => {
   });
 
   it('should attach classNames', async () => {
-    config.search = {
-      enabled: true,
-    };
-
-    config.pagination = {
-      enabled: true,
-    };
-
-    config.header = new Header();
-    config.header.columns = [
-      {
-        name: 'c1',
-        sort: {
-          enabled: false,
-        },
+    config.update({
+      search: {
+        enabled: true,
       },
-      {
-        name: 'c2',
-        sort: {
-          enabled: true,
-        },
+      pagination: {
+        enabled: true,
       },
-      {
-        name: 'c3',
-        sort: {
-          enabled: true,
+      columns: [
+        {
+          name: 'c1',
+          sort: {
+            enabled: false,
+          },
         },
+        {
+          name: 'c2',
+          sort: {
+            enabled: true,
+          },
+        },
+        {
+          name: 'c3',
+          sort: {
+            enabled: true,
+          },
+        },
+      ],
+      className: {
+        container: 'test-container',
+        header: 'test-header',
+        footer: 'test-footer',
+        td: 'test-td',
+        th: 'test-th',
+        table: 'test-table',
       },
-    ];
-
-    config.className = {
-      container: 'test-container',
-      header: 'test-header',
-      footer: 'test-footer',
-      td: 'test-td',
-      th: 'test-th',
-      table: 'test-table',
-    };
+    });
 
     const container = mount(
       <Container
@@ -141,9 +141,11 @@ describe('Container component', () => {
   });
 
   it('should render a container with searchable table', async () => {
-    config.search = {
-      enabled: true,
-    };
+    config.update({
+      search: {
+        enabled: true,
+      },
+    });
 
     const container = mount(
       <Container
@@ -158,36 +160,35 @@ describe('Container component', () => {
   });
 
   it('should render a container with sortable and paginated table', async () => {
-    config.search = {
-      enabled: true,
-    };
-
-    config.pagination = {
-      enabled: true,
-      limit: 5,
-    };
-
-    config.header = new Header();
-    config.header.columns = [
-      {
-        name: 'c1',
-        sort: {
-          enabled: false,
-        },
+    config.update({
+      search: {
+        enabled: true,
       },
-      {
-        name: 'c2',
-        sort: {
-          enabled: true,
-        },
+      pagination: {
+        enabled: true,
+        limit: 5,
       },
-      {
-        name: 'c3',
-        sort: {
-          enabled: true,
+      columns: [
+        {
+          name: 'c1',
+          sort: {
+            enabled: false,
+          },
         },
-      },
-    ];
+        {
+          name: 'c2',
+          sort: {
+            enabled: true,
+          },
+        },
+        {
+          name: 'c3',
+          sort: {
+            enabled: true,
+          },
+        },
+      ],
+    });
 
     const container = mount(
       <Container
@@ -230,16 +231,16 @@ describe('Container component', () => {
   });
 
   it('should not violate accessibility test', async () => {
-    config.pagination = {
-      enabled: true,
-      limit: 1,
-    };
-
-    config.search = {
-      enabled: true,
-    };
-
-    config.sort = {};
+    config.update({
+      pagination: {
+        enabled: true,
+        limit: 1,
+      },
+      search: {
+        enabled: true,
+      },
+      sort: true,
+    });
 
     const container = mount(
       <Container
@@ -419,13 +420,13 @@ describe('Container component', () => {
   });
 
   it('should remove the EventEmitter listeners', async () => {
-    config.search = {
-      enabled: true,
-    };
-    config.pagination = {
-      enabled: true,
-    };
-    config.header = Header.fromUserConfig({
+    config.update({
+      search: {
+        enabled: true,
+      },
+      pagination: {
+        enabled: true,
+      },
       columns: ['Name', 'Phone Number'],
       sort: true,
     });
@@ -450,12 +451,17 @@ describe('Container component', () => {
   });
 
   it('should unregister the processors', async () => {
-    config.pagination = {
-      enabled: true,
-    };
-    config.search = {
-      enabled: true,
-    };
+    config.update({
+      pagination: {
+        enabled: true,
+      },
+      search: {
+        enabled: true,
+      },
+      columns: ['Name', 'Phone Number'],
+      sort: true,
+    });
+
     config.header = Header.fromUserConfig({
       columns: ['Name', 'Phone Number'],
       sort: true,

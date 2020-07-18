@@ -24,14 +24,14 @@ describe('Config', () => {
     const conf = Config.fromUserConfig({
       data: data,
       width: '400px',
+      height: '500px',
     });
 
     expect(conf.data).toStrictEqual(data);
     expect(conf.header).toBeNull();
-    expect(conf.search).toStrictEqual({ enabled: false });
-    expect(conf.pagination).toStrictEqual({ enabled: false });
     expect(conf.translator).toBeInstanceOf(Translator);
     expect(conf.width).toBe('400px');
+    expect(conf.height).toBe('500px');
   });
 
   it('should create a userConfig with search', () => {
@@ -41,7 +41,7 @@ describe('Config', () => {
       search: true,
     });
 
-    expect(conf.search).toStrictEqual({ enabled: true });
+    expect(conf.plugin.get('search').component.props.enabled).toBeTruthy();
   });
 
   it('should create a userConfig with pagination', () => {
@@ -51,7 +51,7 @@ describe('Config', () => {
       pagination: true,
     });
 
-    expect(conf.pagination).toStrictEqual({ enabled: true });
+    expect(conf.plugin.get('pagination').component.props.enabled).toBeTruthy();
   });
 
   it('should create a userConfig with header', () => {

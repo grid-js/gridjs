@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Plugin should render the plugins 1`] = `"<b>dummyheader</b><b>dummyfooter</b>"`;
