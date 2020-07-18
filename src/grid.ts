@@ -4,13 +4,16 @@ import { Container } from './view/container';
 import log from './util/log';
 import { EventEmitter } from './util/eventEmitter';
 import { GridEvents } from './events';
+import { PluginManager } from './plugin';
 
 class Grid extends EventEmitter<GridEvents> {
   public config: Config;
+  public plugin: PluginManager;
 
   constructor(userConfig?: UserConfig) {
     super();
     this.config = new Config({ eventEmitter: this }).update(userConfig);
+    this.plugin = this.config.plugin;
   }
 
   public updateConfig(userConfig: Partial<UserConfig>): this {
