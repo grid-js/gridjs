@@ -5,9 +5,11 @@ import {
   PipelineProcessorProps,
   ProcessorType,
 } from '../processor';
+import { TCell } from '../../types';
 
 interface GlobalSearchFilterProps extends PipelineProcessorProps {
   keyword: string;
+  selector?: (cell: TCell, rowIndex: number, cellIndex: number) => string;
 }
 
 class GlobalSearchFilter extends PipelineProcessor<
@@ -20,7 +22,11 @@ class GlobalSearchFilter extends PipelineProcessor<
 
   _process(data: Tabular): Tabular {
     if (this.props.keyword) {
-      return search(String(this.props.keyword).trim(), data);
+      return search(
+        String(this.props.keyword).trim(),
+        data,
+        this.props.selector,
+      );
     }
 
     return data;

@@ -6,11 +6,13 @@ import { SearchStore, SearchStoreState } from './store';
 import { SearchActions } from './actions';
 import ServerGlobalSearchFilter from '../../../pipeline/filter/serverGlobalSearch';
 import { debounce } from '../../../util/debounce';
+import { TCell } from '../../../types';
 
 export interface SearchConfig {
   keyword?: string;
   enabled?: boolean;
   debounceTimeout?: number;
+  selector?: (cell: TCell, rowIndex: number, cellIndex: number) => string;
   server?: {
     url?: (prevUrl: string, keyword: string) => string;
     body?: (prevBody: BodyInit, keyword: string) => BodyInit;
@@ -53,6 +55,7 @@ export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
       } else {
         searchProcessor = new GlobalSearchFilter({
           keyword: props.keyword,
+          selector: props.selector,
         });
       }
 
