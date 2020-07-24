@@ -42,4 +42,20 @@ describe('search', () => {
       new Tabular([row3]).rows,
     );
   });
+
+  it('should use the selector with hardcoded string', () => {
+    expect(search('test', tabular, () => 'custom keyword').rows).toStrictEqual(
+      new Tabular([]).rows,
+    );
+  });
+
+  it('should use the selector with dynamic string', () => {
+    expect(
+      search(
+        '00',
+        tabular,
+        (_, rowIndex, cellIndex) => `${rowIndex}${cellIndex}`,
+      ).rows,
+    ).toStrictEqual(new Tabular([row1]).rows);
+  });
 });
