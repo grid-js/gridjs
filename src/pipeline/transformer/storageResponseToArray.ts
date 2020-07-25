@@ -38,7 +38,13 @@ class StorageResponseToArrayTransformer extends PipelineProcessor<
     // if it's an array of objects (but not array of arrays)
     if (typeof data[0] === 'object' && !(data[0] instanceof Array)) {
       return (data as TDataObject).map((row) =>
-        this.props.header.columns.map((column) => row[column.id]),
+        this.props.header.columns.map((column) => {
+          if (typeof column.id === 'function') {
+            return column.id(row);
+          } else {
+            return row[column.id];
+          }
+        }),
       );
     }
 
