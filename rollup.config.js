@@ -31,6 +31,7 @@ export default [
       typescript({
         tsconfig: "tsconfig.json",
         tsconfigOverride: {
+          exclude: ["tests/**/*"],
           compilerOptions : {
             module: "es2015"
           }
