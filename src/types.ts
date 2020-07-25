@@ -7,15 +7,22 @@ export type ProtoExtends<T, U> = U & Omit<T, keyof U>;
 export type OneDArray<T> = T[];
 export type TwoDArray<T> = T[][];
 
-// Table cell types
+/**
+ * Table cell types
+ */
 export type TCell = number | string | boolean | ComponentChild | HTMLElement;
-export type TDataArray = TwoDArray<TCell>;
-export type TDataObject = OneDArray<{ [key: string]: TCell }>;
+// Array of Arrays
+export type TDataArrayRow = OneDArray<TCell>;
+export type TDataArray = OneDArray<TDataArrayRow>;
+// Array of Objects
+export type TDataObjectRow = { [key: string]: TCell };
+export type TDataObject = OneDArray<TDataObjectRow>;
+// (Array of Arrays) and (Array of Objects)
 export type TData = TDataArray | TDataObject;
 
 // Table header cell type
 export interface TColumn {
-  id?: string;
+  id?: string | ((row: TDataArrayRow | TDataObjectRow) => string);
   name: string | ComponentChild;
   width?: string;
   sort?: SortConfig;
