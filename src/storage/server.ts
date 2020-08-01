@@ -1,11 +1,8 @@
 import Storage, { StorageResponse } from './storage';
 import log from '../util/log';
 
-export interface ServerStorageOptions {
+export interface ServerStorageOptions extends RequestInit {
   url: string;
-  method?: string;
-  headers?: HeadersInit;
-  body?: BodyInit;
   // to format the data and columns
   then?: (data: any) => any[][];
   // to handle the response from the server. `handle` will
@@ -15,6 +12,9 @@ export interface ServerStorageOptions {
   // before calling the `then` function
   handle?: (response: Response) => Promise<any>;
   total?: (data: any) => number;
+  // to bypass the current implementation of ServerStorage and process the
+  // request manually (e.g. when user wants to connect their own SDK/HTTP Client)
+  data?: (opts: ServerStorageOptions) => Promise<StorageResponse>;
 }
 
 class ServerStorage extends Storage<ServerStorageOptions> {
@@ -48,6 +48,14 @@ class ServerStorage extends Storage<ServerStorageOptions> {
       ...this.options,
       ...options,
     };
+
+    // if `options.data` is provided, the current ServerStorage
+    // implementation will be ignored and we let options.data to
+    // handle the request. Useful when HTTP client needs to be
+    // replaced with something else
+    if (typeof opts.data === 'function') {
+      return opts.data(opts);
+    }
 
     return fetch(opts.url, opts)
       .then(this.handler.bind(this))
