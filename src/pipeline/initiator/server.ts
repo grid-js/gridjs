@@ -18,7 +18,12 @@ class ServerInitiator extends PipelineProcessor<
   }
 
   _process(): ServerStorageOptions {
-    return this.props.serverStorageOptions;
+    return Object.entries(this.props.serverStorageOptions)
+      .filter(([_, val]) => typeof val !== 'function')
+      .reduce(
+        (acc, [k, v]) => ({ ...acc, [k]: v }),
+        {},
+      ) as ServerStorageOptions;
   }
 }
 
