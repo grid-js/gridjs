@@ -18,10 +18,7 @@ class ServerInitiator extends PipelineProcessor<
   }
 
   _process(): ServerStorageOptions {
-    return {
-      url: this.props.serverStorageOptions.url,
-      method: this.props.serverStorageOptions.method,
-    };
+    return this.props.serverStorageOptions;
   }
 }
 
