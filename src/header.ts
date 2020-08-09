@@ -171,7 +171,7 @@ class Header extends Base {
 
     for (const th of ths as any) {
       header.columns.push({
-        name: th.innerText,
+        name: th.innerHTML,
         width: th.width,
       });
     }

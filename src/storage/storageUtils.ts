@@ -57,7 +57,7 @@ class StorageUtils {
           cell.childNodes.length === 1 &&
           cell.childNodes[0].nodeType === Node.TEXT_NODE
         ) {
-          parsedRow.push(cell.innerText);
+          parsedRow.push(cell.innerHTML);
         } else {
           parsedRow.push(html(cell.innerHTML));
         }
