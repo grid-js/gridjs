@@ -39,7 +39,7 @@ describe('Table component', () => {
       <configContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
@@ -70,7 +70,7 @@ describe('Table component', () => {
         <Table
           data={await config.pipeline.process()}
           header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
@@ -88,7 +88,7 @@ describe('Table component', () => {
           width="300px"
           height={config.height}
           header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
-          status={Status.Loaded}
+          status={Status.Rendered}
         />
       </configContext.Provider>,
     );
@@ -106,7 +106,7 @@ describe('Table component', () => {
         <Table
           data={await config.pipeline.process()}
           header={header}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
@@ -130,7 +130,7 @@ describe('Table component', () => {
         <Table
           data={await config.pipeline.process()}
           header={header}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
@@ -151,7 +151,7 @@ describe('Table component', () => {
         <Table
           data={await config.pipeline.process()}
           header={header}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
@@ -171,7 +171,7 @@ describe('Table component', () => {
         <Table
           data={Tabular.fromArray<TCell>([])}
           header={header}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
@@ -191,7 +191,7 @@ describe('Table component', () => {
         <Table
           data={null}
           header={header}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
@@ -221,7 +221,7 @@ describe('Table component', () => {
         <Table
           data={null}
           header={header}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
@@ -241,7 +241,7 @@ describe('Table component', () => {
         <Table
           data={null}
           header={header}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
@@ -270,7 +270,7 @@ describe('Table component', () => {
         <Table
           data={null}
           header={header}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
@@ -296,7 +296,7 @@ describe('Table component', () => {
         <Table
           data={await config.pipeline.process()}
           header={config.header}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
@@ -329,7 +329,7 @@ describe('Table component', () => {
         <Table
           data={await config.pipeline.process()}
           header={config.header}
-          status={Status.Loaded}
+          status={Status.Rendered}
           width={config.width}
           height={config.height}
         />

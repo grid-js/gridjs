@@ -42,6 +42,7 @@ describe('Container component', () => {
 
     await container.instance().componentDidMount();
     expect(container.html()).toMatchSnapshot();
+    expect(container.state('status')).toBe(3);
   });
 
   it('should attach styles', async () => {
