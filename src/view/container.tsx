@@ -96,6 +96,23 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     this.props.pipeline.off('updated', this.processPipelineFn);
   }
 
+  componentDidUpdate(
+    _: Readonly<ContainerProps>,
+    previousState: Readonly<ContainerState>,
+  ) {
+    // we can't jump to the Status.Rendered if previous status is not Status.Loaded
+    if (
+      previousState.status != Status.Rendered &&
+      previousState.status == Status.Loaded
+    ) {
+      this.setState({
+        status: Status.Rendered,
+      });
+
+      this.props.config.eventEmitter.emit('ready');
+    }
+  }
+
   render() {
     const configContext = this.configContext;
 
