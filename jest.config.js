@@ -1,5 +1,6 @@
 module.exports = {
   testEnvironment: 'node',
+  setupFilesAfterEnv: ["jest-extended"],
   globals: {
     'ts-jest': {
       tsConfig: 'tsconfig.test.json'
