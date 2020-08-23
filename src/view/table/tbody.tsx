@@ -40,7 +40,7 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
             />
           )}
 
-        {this.props.status === Status.Loaded &&
+        {this.props.status === Status.Rendered &&
           this.props.data &&
           this.props.data.length === 0 && (
             <MessageRow

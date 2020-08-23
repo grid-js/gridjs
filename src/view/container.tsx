@@ -103,7 +103,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     // we can't jump to the Status.Rendered if previous status is not Status.Loaded
     if (
       previousState.status != Status.Rendered &&
-      previousState.status == Status.Loaded
+      this.state.status == Status.Loaded
     ) {
       this.setState({
         status: Status.Rendered,

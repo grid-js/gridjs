@@ -1,6 +1,7 @@
 import Grid from '../src/grid';
 import MemoryStorage from '../src/storage/memory';
 import { mount } from 'enzyme';
+import { flushPromises } from './testUtil';
 
 describe('Grid class', () => {
   it('should raise an exception with empty config', () => {
@@ -81,13 +82,16 @@ describe('Grid class', () => {
     grid.on('ready', readyMock);
 
     const container = mount(grid.createElement());
-    await container.instance().componentDidMount();
 
-    expect(beforeLoadMock).toHaveBeenCalledBefore(loadMock);
-    expect(loadMock).toHaveBeenCalledBefore(readyMock);
+    return flushPromises().then(async () => {
+      await container.instance().componentDidMount();
 
-    expect(beforeLoadMock).toBeCalledTimes(2);
-    expect(loadMock).toBeCalledTimes(2);
-    expect(readyMock).toBeCalledTimes(2);
+      expect(beforeLoadMock).toHaveBeenCalledBefore(loadMock);
+      expect(loadMock).toHaveBeenCalledBefore(readyMock);
+
+      expect(beforeLoadMock).toBeCalledTimes(2);
+      expect(loadMock).toBeCalledTimes(2);
+      expect(readyMock).toBeCalledTimes(2);
+    });
   });
 });
