@@ -33,7 +33,7 @@
     "autoprefixer": "^9.8.0",
     "axe-core": "^4.0.0",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-preact-pure": "^2.2.0",
+    "enzyme-adapter-preact-pure": "^2.2.3",
     "eslint": "~6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-jest": "~23.20.0",
@@ -45,12 +45,12 @@
     "jsdom-global": "^3.0.2",
     "lerna-changelog": "^1.0.1",
     "node-sass": "^4.14.1",
-    "node-sass-chokidar": "^1.4.0",
+    "node-sass-chokidar": "^1.5.0",
     "prettier": "~2.1.0",
     "rimraf": "~3.0.2",
     "rollup": "^2.11.2",
     "rollup-plugin-postcss": "^3.1.1",
-    "rollup-plugin-sizes": "^1.0.2",
+    "rollup-plugin-sizes": "^1.0.3",
     "rollup-plugin-terser": "^7.0.0",
     "rollup-plugin-typescript2": "^0.27.1",
     "source-map-loader": "^0.2.4",
@@ -71,8 +71,8 @@
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "preact": "^10.4.4",
-    "tslib": "~2.0.0"
+    "preact": "^10.4.8",
+    "tslib": "^2.0.1"
   },
   "changelog": {
     "labels": {

@@ -40,6 +40,7 @@ export class TH extends BaseComponent<THProps, {}> {
 
     return (
       <th
+        data-column-id={this.props.column && this.props.column.id}
         className={classJoin(
           className('th'),
           this.isSortable() ? className('th', 'sort') : null,
