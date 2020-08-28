@@ -46,6 +46,7 @@ export class TD extends BaseComponent<TDProps, {}> {
       <td
         role={this.props.role}
         colSpan={this.props.colSpan}
+        data-column-id={this.props.column && this.props.column.id}
         className={classJoin(
           className('td'),
           this.props.className,
