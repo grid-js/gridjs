@@ -1,6 +1,6 @@
 // The order of enum items define the processing order of the processor type
 // e.g. Extractor = 0 will be processed before Transformer = 1
-import { generateID, ID } from '../util/id';
+import { generateUUID, ID } from '../util/id';
 import { EventEmitter } from '../util/eventEmitter';
 
 export enum ProcessorType {
@@ -39,7 +39,7 @@ export abstract class PipelineProcessor<
     super();
 
     this._props = {} as P;
-    this.id = generateID();
+    this.id = generateUUID();
 
     if (props) this.setProps(props);
   }
