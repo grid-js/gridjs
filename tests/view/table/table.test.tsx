@@ -7,11 +7,12 @@ import StorageUtils from '../../../src/storage/storageUtils';
 import Pipeline from '../../../src/pipeline/pipeline';
 import StorageExtractor from '../../../src/pipeline/extractor/storage';
 import ArrayToTabularTransformer from '../../../src/pipeline/transformer/arrayToTabular';
-import { Status, TCell } from '../../../src/types';
+import { Status, TCell, TColumn } from '../../../src/types';
 import Dispatcher from '../../../src/util/dispatcher';
 import { Translator } from '../../../src/i18n/language';
 import Tabular from '../../../src/tabular';
 import { html } from '../../../src/util/html';
+import Row from '../../../src/row';
 
 describe('Table component', () => {
   let config: Config;
@@ -321,6 +322,53 @@ describe('Table component', () => {
         },
       ],
       fixedHeader: true,
+      dispatcher: new Dispatcher<any>(),
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={config.header}
+          status={Status.Rendered}
+          width={config.width}
+          height={config.height}
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
+
+  it('should render custom attributes for cells', async () => {
+    const config = Config.fromUserConfig({
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+      columns: [
+        {
+          name: 'c',
+          attributes: (_: TCell, __: Row, column: TColumn) =>
+            column.name === 'c' ? { height: '30px' } : {},
+        },
+        {
+          name: 'd',
+          attributes: (cell: TCell) =>
+            cell === 'b'
+              ? {
+                  'data-row-c': true,
+                }
+              : {},
+        },
+        {
+          name: 'e',
+          attributes: {
+            rowSpan: 3,
+            'data-boo': 'xx',
+          },
+        },
+      ],
       dispatcher: new Dispatcher<any>(),
     });
 

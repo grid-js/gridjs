@@ -1,6 +1,7 @@
 import { ComponentChild } from 'preact';
 import Row from './row';
 import { SortConfig } from './view/plugin/sort/sort';
+import { JSXInternal } from 'preact/src/jsx';
 
 export type ProtoExtends<T, U> = U & Omit<T, keyof U>;
 
@@ -29,6 +30,13 @@ export interface TColumn {
   children?: OneDArray<TColumn>;
   fixedHeader?: boolean;
   formatter?: (cell: TCell, row: Row, column: TColumn) => ComponentChild;
+  attributes?:
+    | ((
+        cell: TCell,
+        row: Row,
+        column: TColumn,
+      ) => JSXInternal.HTMLAttributes<HTMLTableCellElement>)
+    | JSXInternal.HTMLAttributes<HTMLTableCellElement>;
 }
 
 // Comparator function for the sorting plugin

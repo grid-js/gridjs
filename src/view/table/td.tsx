@@ -5,6 +5,7 @@ import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';
 import { TColumn } from '../../types';
 import Row from '../../row';
+import { JSXInternal } from 'preact/src/jsx';
 
 export interface TDProps extends BaseProps {
   cell: Cell;
@@ -41,6 +42,24 @@ export class TD extends BaseComponent<TDProps, {}> {
     );
   }
 
+  private getCustomAttributes(
+    column: TColumn | null,
+  ): JSXInternal.HTMLAttributes<HTMLTableCellElement> {
+    if (column) {
+      if (typeof column.attributes === 'function') {
+        return column.attributes(
+          this.props.cell.data,
+          this.props.row,
+          this.props.column,
+        );
+      } else {
+        return column.attributes;
+      }
+    }
+
+    return {};
+  }
+
   render() {
     return (
       <td
@@ -56,6 +75,7 @@ export class TD extends BaseComponent<TDProps, {}> {
           ...this.config.style.td,
         }}
         onClick={this.handleClick.bind(this)}
+        {...this.getCustomAttributes(this.props.column)}
       >
         {this.content()}
       </td>
