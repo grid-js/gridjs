@@ -39,7 +39,7 @@
     "eslint-plugin-jest": "~23.20.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "~25.5.4",
-    "jest-axe": "^3.4.0",
+    "jest-axe": "^4.0.0",
     "jest-extended": "^0.11.5",
     "jsdom": "^16.2.2",
     "jsdom-global": "^3.0.2",
