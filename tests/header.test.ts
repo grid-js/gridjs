@@ -1,4 +1,4 @@
-import Header from "../src/header";
+import Header from '../src/header';
 
 describe('Header class', () => {
   it('should return a tabular header cell (single row)', () => {
@@ -62,15 +62,19 @@ describe('Header class', () => {
           columns: [
             {
               name: 'h1-h1',
-              columns: [{
-                name: 'h1-h1-h1'
-              }]
+              columns: [
+                {
+                  name: 'h1-h1-h1',
+                },
+              ],
             },
             {
               name: 'h1-h2',
-              columns: [{
-                name: 'h1-h2-h1'
-              }]
+              columns: [
+                {
+                  name: 'h1-h2-h1',
+                },
+              ],
             },
           ],
         },
@@ -80,14 +84,19 @@ describe('Header class', () => {
           columns: [
             {
               name: 'h3-h1',
-              columns: [{
-                name: 'h3-h1-h1'
-              }, {
-                name: 'h3-h1-h2',
-                columns: [{
-                  name: 'h3-h1-h2-h1'
-                }]
-              }]
+              columns: [
+                {
+                  name: 'h3-h1-h1',
+                },
+                {
+                  name: 'h3-h1-h2',
+                  columns: [
+                    {
+                      name: 'h3-h1-h2-h1',
+                    },
+                  ],
+                },
+              ],
             },
             {
               name: 'h3-h2',
@@ -132,11 +141,14 @@ describe('Header class', () => {
             },
             {
               name: 'h3-h2',
-              columns: [{
-                name: 'h3-h2-h1'
-              }, {
-                name: 'h3-h2-h2'
-              }]
+              columns: [
+                {
+                  name: 'h3-h2-h1',
+                },
+                {
+                  name: 'h3-h2-h2',
+                },
+              ],
             },
           ],
         },

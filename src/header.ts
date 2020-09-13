@@ -1,4 +1,4 @@
-import {OneDArray, TColumn, TwoDArray} from './types';
+import { OneDArray, TColumn, TwoDArray } from './types';
 import Base from './base';
 import { UserConfig } from './config';
 import Tabular from './tabular';
@@ -117,7 +117,10 @@ class Header extends Base {
     }
   }
 
-  private setFixedHeader(userConfig: UserConfig, columns?: OneDArray<TColumn>): void {
+  private setFixedHeader(
+    userConfig: UserConfig,
+    columns?: OneDArray<TColumn>,
+  ): void {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
