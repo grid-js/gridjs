@@ -1,4 +1,4 @@
-import { OneDArray, TColumn } from './types';
+import {OneDArray, TColumn, TwoDArray} from './types';
 import Base from './base';
 import { UserConfig } from './config';
 import Tabular from './tabular';
@@ -88,8 +88,10 @@ class Header extends Base {
     return this;
   }
 
-  private setSort(userConfig: UserConfig): void {
-    for (const column of this.columns) {
+  private setSort(userConfig: UserConfig, columns?: OneDArray<TColumn>): void {
+    const cols = columns || this.columns || [];
+
+    for (const column of cols) {
       // implicit userConfig.sort flag
       if (column.sort === undefined && userConfig.sort) {
         column.sort = {
@@ -108,22 +110,38 @@ class Header extends Base {
           ...column.sort,
         };
       }
-    }
-  }
 
-  private setFixedHeader(userConfig: UserConfig): void {
-    for (const column of this.columns) {
-      if (column.fixedHeader === undefined) {
-        column.fixedHeader = userConfig.fixedHeader;
+      if (column.columns) {
+        this.setSort(userConfig, column.columns);
       }
     }
   }
 
-  private setID(): void {
-    for (const column of this.columns) {
+  private setFixedHeader(userConfig: UserConfig, columns?: OneDArray<TColumn>): void {
+    const cols = columns || this.columns || [];
+
+    for (const column of cols) {
+      if (column.fixedHeader === undefined) {
+        column.fixedHeader = userConfig.fixedHeader;
+      }
+
+      if (column.columns) {
+        this.setFixedHeader(userConfig, column.columns);
+      }
+    }
+  }
+
+  private setID(columns?: OneDArray<TColumn>): void {
+    const cols = columns || this.columns || [];
+
+    for (const column of cols) {
       if (!column.id && typeof column.name === 'string') {
         // let's guess the column ID if it's undefined
         column.id = camelCase(column.name);
+      }
+
+      if (column.columns) {
+        this.setID(column.columns);
       }
     }
   }
@@ -177,6 +195,26 @@ class Header extends Base {
     }
 
     return header;
+  }
+
+  tabularColumns(columns?: OneDArray<TColumn>): TwoDArray<TColumn> {
+    let result: TwoDArray<TColumn> = [];
+    const cols = columns || this.columns || [];
+    let nextRow = [];
+
+    result.push(cols);
+
+    for (const col of cols) {
+      if (col.columns && col.columns.length) {
+        nextRow = nextRow.concat(col.columns);
+      }
+    }
+
+    if (nextRow.length) {
+      result = result.concat(this.tabularColumns(nextRow));
+    }
+
+    return result;
   }
 }
 
