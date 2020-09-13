@@ -205,16 +205,18 @@ class Header extends Base {
     const cols = columns || this.columns || [];
     let nextRow = [];
 
-    result.push(cols);
+    if (cols && cols.length) {
+      result.push(cols);
 
-    for (const col of cols) {
-      if (col.columns && col.columns.length) {
-        nextRow = nextRow.concat(col.columns);
+      for (const col of cols) {
+        if (col.columns && col.columns.length) {
+          nextRow = nextRow.concat(col.columns);
+        }
       }
-    }
 
-    if (nextRow.length) {
-      result = result.concat(this.tabularColumns(nextRow));
+      if (nextRow.length) {
+        result = result.concat(this.tabularColumns(nextRow));
+      }
     }
 
     return result;
