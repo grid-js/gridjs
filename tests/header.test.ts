@@ -14,7 +14,7 @@ describe('Header class', () => {
       ],
     });
 
-    const tabularColumns = header.tabularColumns();
+    const tabularColumns = Header.tabularFormat(header.columns);
     expect(tabularColumns).toHaveLength(1);
 
     expect(tabularColumns[0][0].name).toBe('h1');
@@ -43,7 +43,7 @@ describe('Header class', () => {
       ],
     });
 
-    const tabularColumns = header.tabularColumns();
+    const tabularColumns = Header.tabularFormat(header.columns);
     expect(tabularColumns).toHaveLength(2);
 
     expect(tabularColumns[0][0].name).toBe('h1');
@@ -106,7 +106,7 @@ describe('Header class', () => {
       ],
     });
 
-    const tabularColumns = header.tabularColumns();
+    const tabularColumns = Header.tabularFormat(header.columns);
     expect(tabularColumns).toHaveLength(4);
 
     expect(tabularColumns[0][0].name).toBe('h1');
@@ -155,7 +155,7 @@ describe('Header class', () => {
       ],
     });
 
-    const tabularColumns = header.tabularColumns();
+    const tabularColumns = Header.tabularFormat(header.columns);
     expect(tabularColumns).toHaveLength(3);
 
     expect(tabularColumns[0][0].name).toBe('h1');

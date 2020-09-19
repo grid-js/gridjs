@@ -5,7 +5,9 @@ import { classJoin, className } from '../../util/className';
 import { TColumn } from '../../types';
 import { Sort } from '../plugin/sort/sort';
 
-export interface THProps extends BaseProps {
+export interface THProps
+  extends BaseProps,
+    JSX.HTMLAttributes<HTMLTableCellElement> {
   index: number;
   column: TColumn;
 }
@@ -53,6 +55,8 @@ export class TH extends BaseComponent<THProps, {}> {
           ...{ width: this.props.column.width },
         }}
         onKeyDown={this.keyDown.bind(this)}
+        rowSpan={this.props.rowSpan}
+        colSpan={this.props.colSpan}
         {...props}
       >
         {this.props.column.name}

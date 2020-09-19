@@ -63,8 +63,6 @@ class Header extends Base {
         header: this,
       });
       el.ref = shadowTable;
-
-      // TODO: we should NOT query the container here. use Refs instead
       render(el, tempRef.current);
     }
 
@@ -76,6 +74,8 @@ class Header extends Base {
           getWidth(shadowTable.current.base, this.columns.indexOf(column)),
         );
       } else {
+        // column with is already defined
+        // sets the column with based on the width of its container
         column.width = px(width(column.width, containerWidth));
       }
     }
@@ -200,9 +200,28 @@ class Header extends Base {
     return header;
   }
 
-  tabularColumns(columns?: OneDArray<TColumn>): TwoDArray<TColumn> {
+  /**
+   * Converts the tree-like format of Header to a tabular format
+   *
+   * Example:
+   *
+   *    H1
+   *      H1-H1
+   *      H1-H2
+   *    H2
+   *      H2-H1
+   *
+   *    becomes:
+   *      [
+   *        [H1, H2],
+   *        [H1-H1, H1-H2, H2-H1]
+   *      ]
+   *
+   * @param columns
+   */
+  static tabularFormat(columns: OneDArray<TColumn>): TwoDArray<TColumn> {
     let result: TwoDArray<TColumn> = [];
-    const cols = columns || this.columns || [];
+    const cols = columns || [];
     let nextRow = [];
 
     if (cols && cols.length) {
@@ -215,11 +234,15 @@ class Header extends Base {
       }
 
       if (nextRow.length) {
-        result = result.concat(this.tabularColumns(nextRow));
+        result = result.concat(this.tabularFormat(nextRow));
       }
     }
 
     return result;
+  }
+
+  static maximumDepth(column: TColumn): number {
+    return this.tabularFormat([column]).length - 1;
   }
 }
 
