@@ -6,6 +6,8 @@ import { width, px, getWidth } from './util/width';
 import { ShadowTable } from './view/table/shadow';
 import { createRef, h, isValidElement, RefObject, render } from 'preact';
 import { camelCase } from './util/string';
+import { flatten } from './util/array';
+import logger from './util/log';
 
 class Header extends Base {
   private _columns: OneDArray<TColumn>;
@@ -66,13 +68,16 @@ class Header extends Base {
       render(el, tempRef.current);
     }
 
-    for (const column of this.columns) {
+    for (const column of flatten(Header.tabularFormat(this.columns))) {
+      // because we don't want to set the width of parent THs
+      if (column.columns && column.columns.length > 0) {
+        continue;
+      }
+
       if (!column.width && autoWidth) {
         // tries to find the corresponding cell
         // from the ShadowTable and set the correct width
-        column.width = px(
-          getWidth(shadowTable.current.base, this.columns.indexOf(column)),
-        );
+        column.width = px(getWidth(shadowTable.current.base, `${column.id}`));
       } else {
         // column with is already defined
         // sets the column with based on the width of its container
@@ -92,6 +97,13 @@ class Header extends Base {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
+      // sorting can only be enabled for columns without any children
+      if (column.columns && column.columns.length > 0) {
+        column.sort = {
+          enabled: false,
+        };
+      }
+
       // implicit userConfig.sort flag
       if (column.sort === undefined && userConfig.sort) {
         column.sort = {
@@ -143,6 +155,13 @@ class Header extends Base {
         column.id = camelCase(column.name);
       }
 
+      if (!column.id) {
+        logger.error(
+          `Could not find a valid ID for one of the columns. Make sure a valid "id" is set for all columns.`,
+        );
+      }
+
+      // nested columns
       if (column.columns) {
         this.setID(column.columns);
       }
@@ -241,6 +260,34 @@ class Header extends Base {
     return result;
   }
 
+  /**
+   * Returns an array of leaf columns (last columns in the tree)
+   *
+   * @param columns
+   */
+  static leafColumns(columns: OneDArray<TColumn>): OneDArray<TColumn> {
+    let result: OneDArray<TColumn> = [];
+    const cols = columns || [];
+
+    if (cols && cols.length) {
+      for (const col of cols) {
+        if (!col.columns || col.columns.length === 0) {
+          result.push(col);
+        }
+
+        if (col.columns) {
+          result = result.concat(this.leafColumns(col.columns));
+        }
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Returns the maximum depth of a column tree
+   * @param column
+   */
   static maximumDepth(column: TColumn): number {
     return this.tabularFormat([column]).length - 1;
   }

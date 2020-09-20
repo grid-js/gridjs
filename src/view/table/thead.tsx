@@ -1,4 +1,4 @@
-import { h, Fragment } from 'preact';
+import { h } from 'preact';
 
 import { TR } from './tr';
 import { BaseComponent, BaseProps } from '../base';
@@ -6,6 +6,7 @@ import { TH } from './th';
 import { className } from '../../util/className';
 import Header from '../../header';
 import { TColumn } from '../../types';
+import { calculateRowColSpans } from '../../util/table';
 
 interface THeadProps extends BaseProps {
   header: Header;
@@ -18,10 +19,11 @@ export class THead extends BaseComponent<THeadProps, {}> {
     columnIndex: number,
     totalRows: number,
   ) {
-    const depth = Header.maximumDepth(column);
-    const remainingRows = totalRows - rowIndex;
-    const rowSpan = Math.floor(remainingRows - depth - depth / remainingRows);
-    const colSpan = (column.columns && column.columns.length) || 1;
+    const { rowSpan, colSpan } = calculateRowColSpans(
+      column,
+      rowIndex,
+      totalRows,
+    );
 
     return (
       <TH
@@ -34,10 +36,17 @@ export class THead extends BaseComponent<THeadProps, {}> {
   }
 
   private renderRow(row: TColumn[], rowIndex: number, totalRows: number) {
+    const leafColumns = Header.leafColumns(this.props.header.columns);
+
     return (
       <TR>
-        {row.map((col, columnIndex) => {
-          return this.renderColumn(col, rowIndex, columnIndex, totalRows);
+        {row.map((col) => {
+          return this.renderColumn(
+            col,
+            rowIndex,
+            leafColumns.indexOf(col),
+            totalRows,
+          );
         })}
       </TR>
     );
@@ -46,12 +55,8 @@ export class THead extends BaseComponent<THeadProps, {}> {
   private renderRows() {
     const rows = Header.tabularFormat(this.props.header.columns);
 
-    return (
-      <Fragment>
-        {rows.map((row, rowIndex) =>
-          this.renderRow(row, rowIndex, rows.length),
-        )}
-      </Fragment>
+    return rows.map((row, rowIndex) =>
+      this.renderRow(row, rowIndex, rows.length),
     );
   }
 

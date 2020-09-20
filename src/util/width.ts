@@ -20,17 +20,19 @@ export function px(width: number): string {
  * that is already rendered on the web browser
  *
  * @param shadowTable
- * @param columnIndex
+ * @param columnId
  */
-export function getWidth(shadowTable: Element, columnIndex): number {
+export function getWidth(shadowTable: Element, columnId: string): number {
   if (!shadowTable) {
     return null;
   }
 
-  const tds = shadowTable.querySelectorAll('tr:first-child > td');
+  const td = shadowTable.querySelector(
+    `thead th[data-column-id="${columnId}"]`,
+  );
 
-  if (tds && tds[columnIndex]) {
-    return tds[columnIndex].clientWidth;
+  if (td) {
+    return td.clientWidth;
   }
 
   return null;
