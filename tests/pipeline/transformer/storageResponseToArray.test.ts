@@ -59,7 +59,7 @@ describe('StorageResponseToArray', () => {
     ]);
   });
 
-  it('should convert array of objects when id is a function', async () => {
+  it('should convert array of objects when selector is a function', async () => {
     const raw = {
       data: [
         {
@@ -84,12 +84,16 @@ describe('StorageResponseToArray', () => {
       header: Header.fromUserConfig({
         columns: [
           {
-            id: (row: any) => row.name.first,
+            selector: (row: any) => row.name.first,
             name: 'firstName',
           },
           {
-            id: (row: any) => row.name.last,
+            selector: (row: any) => row.name.last,
             name: 'lastname',
+          },
+          {
+            selector: (row: any) => row.name.first + ' ' + row.name.last,
+            name: 'firstlastname',
           },
           {
             name: 'age',
@@ -101,8 +105,8 @@ describe('StorageResponseToArray', () => {
     const data = await transformer.process(raw);
 
     expect(data.data).toStrictEqual([
-      ['boo', 'bar', 8],
-      ['foo', 'far', 10],
+      ['boo', 'bar', 'boo bar', 8],
+      ['foo', 'far', 'foo far', 10],
     ]);
   });
 });
