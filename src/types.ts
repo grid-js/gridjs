@@ -58,5 +58,5 @@ export enum Status {
 }
 
 export type CSSDeclaration = {
-  [key: string]: string;
+  [key: string]: string | number;
 };

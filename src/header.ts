@@ -4,7 +4,14 @@ import { UserConfig } from './config';
 import Tabular from './tabular';
 import { width, px, getWidth } from './util/width';
 import { ShadowTable } from './view/table/shadow';
-import { createRef, h, isValidElement, RefObject, render } from 'preact';
+import {
+  ComponentChild,
+  createRef,
+  h,
+  isValidElement,
+  RefObject,
+  render,
+} from 'preact';
 import { camelCase } from './util/string';
 import { flatten } from './util/array';
 import logger from './util/log';
@@ -168,27 +175,46 @@ class Header extends Base {
     }
   }
 
+  static fromColumns(
+    columns: OneDArray<TColumn | string | ComponentChild>,
+  ): Header {
+    const header = new Header();
+
+    for (const column of columns) {
+      if (typeof column === 'string' || isValidElement(column)) {
+        header.columns.push({
+          name: column,
+        });
+      } else if (typeof column === 'object') {
+        const typedColumn = column as TColumn;
+
+        if (typedColumn.columns) {
+          typedColumn.columns = Header.fromColumns(typedColumn.columns).columns;
+        }
+
+        // TColumn type
+        header.columns.push(column as TColumn);
+      }
+    }
+
+    return header;
+  }
+
   static fromUserConfig(userConfig: UserConfig): Header | null {
     const header = new Header();
 
+    // TODO: this part needs some refactoring
     if (userConfig.from) {
       header.columns = Header.fromHTMLTable(userConfig.from).columns;
     } else if (userConfig.columns) {
-      for (const column of userConfig.columns) {
-        if (typeof column === 'string' || isValidElement(column)) {
-          header.columns.push({
-            name: column,
-          });
-        } else if (typeof column === 'object') {
-          header.columns.push(column as TColumn);
-        }
-      }
+      header.columns = Header.fromColumns(userConfig.columns).columns;
     } else if (
       userConfig.data &&
       typeof userConfig.data[0] === 'object' &&
       !(userConfig.data[0] instanceof Array)
     ) {
       // if data[0] is an object but not an Array
+      // used for when a JSON payload is provided
       header.columns = Object.keys(userConfig.data[0]).map((name) => {
         return { name: name };
       });
