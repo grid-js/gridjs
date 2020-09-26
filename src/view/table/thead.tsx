@@ -29,13 +29,14 @@ export class THead extends BaseComponent<THeadProps, {}> {
       <TH
         column={column}
         index={columnIndex}
-        colSpan={colSpan > 1 ? colSpan : undefined}
-        rowSpan={rowSpan > 1 ? rowSpan : undefined}
+        colSpan={colSpan}
+        rowSpan={rowSpan}
       />
     );
   }
 
   private renderRow(row: TColumn[], rowIndex: number, totalRows: number) {
+    // because the only sortable columns are leaf columns (not parents)
     const leafColumns = Header.leafColumns(this.props.header.columns);
 
     return (
