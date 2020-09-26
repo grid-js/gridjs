@@ -27,7 +27,7 @@ export interface TColumn {
   name: string | ComponentChild;
   width?: string;
   sort?: SortConfig;
-  children?: OneDArray<TColumn>;
+  columns?: OneDArray<TColumn>;
   fixedHeader?: boolean;
   formatter?: (cell: TCell, row: Row, column: TColumn) => ComponentChild;
   attributes?:
@@ -58,5 +58,5 @@ export enum Status {
 }
 
 export type CSSDeclaration = {
-  [key: string]: string;
+  [key: string]: string | number;
 };

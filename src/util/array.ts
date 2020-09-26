@@ -7,3 +7,7 @@ export function oneDtoTwoD<T>(data: OneDArray<T> | TwoDArray<T>): TwoDArray<T> {
 
   return data as TwoDArray<T>;
 }
+
+export function flatten<T>(arrays: TwoDArray<T>): OneDArray<T> {
+  return arrays.reduce((prev, x) => prev.concat(x), []);
+}

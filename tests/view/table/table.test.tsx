@@ -234,7 +234,17 @@ describe('Table component', () => {
 
   it('should render header with complex content', async () => {
     const header = Header.fromUserConfig({
-      columns: [html('<h1>h1</h1>'), 'h2', html('<b>h3</b>')],
+      columns: [
+        {
+          id: 'h1',
+          name: html('<h1>h1</h1>'),
+        },
+        'h2',
+        {
+          id: 'h3',
+          name: html('<b>h3</b>'),
+        },
+      ],
     });
 
     const table = mount(
@@ -322,6 +332,102 @@ describe('Table component', () => {
         },
       ],
       fixedHeader: true,
+      dispatcher: new Dispatcher<any>(),
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={config.header}
+          status={Status.Rendered}
+          width={config.width}
+          height={config.height}
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
+
+  it('should set the correct top attribute for nested headers', async () => {
+    // to mock the offsetTop
+    Object.defineProperty(HTMLElement.prototype, 'offsetTop', {
+      configurable: true,
+      value: 50,
+    });
+
+    const config = Config.fromUserConfig({
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+      columns: [
+        {
+          name: 'c',
+          columns: ['c1', 'c2'],
+        },
+        'd',
+        {
+          name: 'e',
+          columns: [
+            {
+              name: 'e1',
+              columns: ['e11', 'e12'],
+            },
+            {
+              name: 'e2',
+              columns: ['e21'],
+            },
+          ],
+        },
+      ],
+      fixedHeader: true,
+      dispatcher: new Dispatcher<any>(),
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={config.header}
+          status={Status.Rendered}
+          width={config.width}
+          height={config.height}
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
+
+  it('should set the correct sort attribute for nested headers', async () => {
+    const config = Config.fromUserConfig({
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+      columns: [
+        {
+          name: 'c',
+          columns: ['c1', 'c2'],
+        },
+        'd',
+        {
+          name: 'e',
+          columns: [
+            {
+              name: 'e1',
+              columns: ['e11', 'e12'],
+            },
+            {
+              name: 'e2',
+              columns: ['e21'],
+            },
+          ],
+        },
+      ],
+      sort: true,
       dispatcher: new Dispatcher<any>(),
     });
 

@@ -5,6 +5,7 @@ import { BaseComponent, BaseProps } from '../base';
 import Header from '../../header';
 import Row from '../../row';
 import Cell from '../../cell';
+import { calculateRowColSpans } from '../../util/table';
 
 interface ShadowTableProps extends BaseProps {
   data: Tabular;
@@ -17,24 +18,40 @@ export class ShadowTable extends BaseComponent<ShadowTableProps, {}> {
   }
 
   head() {
+    const rows = Header.tabularFormat(this.props.header.columns);
+    const totalRows = rows.length;
+
     return (
       <thead style={this.resetStyle()}>
-        <tr>
-          {this.props.header.columns.map((col) => {
-            return (
-              <th
-                style={{
-                  ...this.resetStyle(),
-                  whiteSpace: 'nowrap',
-                  // pagination buttons
-                  paddingRight: col.sort ? '18px' : '0',
-                }}
-              >
-                {col.name}
-              </th>
-            );
-          })}
-        </tr>
+        {rows.map((row, rowIndex) => {
+          return (
+            <tr>
+              {row.map((col) => {
+                const { rowSpan, colSpan } = calculateRowColSpans(
+                  col,
+                  rowIndex,
+                  totalRows,
+                );
+
+                return (
+                  <th
+                    data-column-id={col && col.id}
+                    style={{
+                      ...this.resetStyle(),
+                      whiteSpace: 'nowrap',
+                      // pagination buttons
+                      paddingRight: col.sort && col.sort.enabled ? '18px' : '0',
+                    }}
+                    colSpan={colSpan > 1 ? colSpan : undefined}
+                    rowSpan={rowSpan > 1 ? rowSpan : undefined}
+                  >
+                    {col.name}
+                  </th>
+                );
+              })}
+            </tr>
+          );
+        })}
       </thead>
     );
   }
