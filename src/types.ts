@@ -23,7 +23,8 @@ export type TData = TDataArray | TDataObject;
 
 // Table header cell type
 export interface TColumn {
-  id?: string | ((row: TDataArrayRow | TDataObjectRow) => string);
+  id?: string;
+  selector?: (row: TDataArrayRow | TDataObjectRow) => TCell;
   name: string | ComponentChild;
   width?: string;
   sort?: SortConfig;

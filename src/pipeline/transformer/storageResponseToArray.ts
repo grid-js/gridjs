@@ -6,6 +6,7 @@ import {
 import { StorageResponse } from '../../storage/storage';
 import { TCell, TData, TDataArray, TDataObject, TwoDArray } from '../../types';
 import Header from '../../header';
+import logger from '../../util/log';
 
 export interface ArrayResponse {
   data: TwoDArray<TCell>;
@@ -35,14 +36,18 @@ class StorageResponseToArrayTransformer extends PipelineProcessor<
       return data as TDataArray;
     }
 
-    // if it's an array of objects (but not array of arrays)
+    // if it's an array of objects (but not array of arrays, i.e JSON payload)
     if (typeof data[0] === 'object' && !(data[0] instanceof Array)) {
       return (data as TDataObject).map((row) =>
-        this.props.header.columns.map((column) => {
-          if (typeof column.id === 'function') {
-            return column.id(row);
-          } else {
+        this.props.header.columns.map((column, i) => {
+          if (typeof column.selector === 'function') {
+            return column.selector(row);
+          } else if (column.id) {
             return row[column.id];
+          } else {
+            logger.error(`Could not find the correct cell for column at position ${i}.
+                          Make sure either 'id' or 'selector' is defined for all columns.`);
+            return null;
           }
         }),
       );
