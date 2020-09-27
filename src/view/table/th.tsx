@@ -49,7 +49,7 @@ export class TH extends BaseComponent<THProps, THState> {
   componentDidMount() {
     setTimeout(() => {
       // sets the `top` style if the current TH is fixed
-      if (this.props.column.fixedHeader && this.thRef && this.thRef.current) {
+      if (this.props.column.fixedHeader && this.thRef.current) {
         const offsetTop = this.thRef.current.offsetTop;
 
         if (typeof offsetTop === 'number') {
