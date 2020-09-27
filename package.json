@@ -1,6 +1,6 @@
 {
   "name": "gridjs",
-  "version": "1.17.0",
+  "version": "2.0.0",
   "description": "Advanced table plugin",
   "keywords": [
     "grid",
@@ -12,7 +12,8 @@
     "sort",
     "pagination",
     "react",
-    "angular"
+    "angular",
+    "jquery"
   ],
   "homepage": "https://gridjs.io",
   "repository": "https://github.com/grid-js/gridjs",
@@ -77,7 +78,7 @@
   "changelog": {
     "labels": {
       "new feature": ":rocket: New Feature",
-      "breaking change": ":boom: Breaking Change",
+      "breaking": ":boom: Breaking Change",
       "bug fix": ":bug: Bug Fix",
       "polish": ":nail_care: Polish",
       "documentation": ":memo: Documentation",

@@ -314,7 +314,12 @@ describe('Table component', () => {
       </configContext.Provider>,
     );
 
-    expect(table.html()).toMatchSnapshot();
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        expect(table.html()).toMatchSnapshot();
+        resolve();
+      }, 0);
+    });
   });
 
   it('should only attached fixedHeader to some columns', async () => {
@@ -347,7 +352,12 @@ describe('Table component', () => {
       </configContext.Provider>,
     );
 
-    expect(table.html()).toMatchSnapshot();
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        expect(table.html()).toMatchSnapshot();
+        resolve();
+      }, 0);
+    });
   });
 
   it('should set the correct top attribute for nested headers', async () => {
@@ -398,7 +408,12 @@ describe('Table component', () => {
       </configContext.Provider>,
     );
 
-    expect(table.html()).toMatchSnapshot();
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        expect(table.html()).toMatchSnapshot();
+        resolve();
+      }, 0);
+    });
   });
 
   it('should set the correct sort attribute for nested headers', async () => {
