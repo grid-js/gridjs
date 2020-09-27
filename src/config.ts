@@ -28,6 +28,7 @@ export interface Config {
   dispatcher: Dispatcher<any>;
   plugin: PluginManager;
   /** container element that is used to mount the Grid.js to */
+  // TODO: change this to an element reference
   container?: Element;
   /** gridjs-temp div which is used internally */
   tempRef?: RefObject<HTMLDivElement>;

@@ -47,18 +47,20 @@ export class TH extends BaseComponent<THProps, THState> {
   }
 
   componentDidMount() {
-    // sets the `top` style if the current TH is fixed
-    if (this.props.column.fixedHeader && this.thRef && this.thRef.current) {
-      const offsetTop = this.thRef.current.offsetTop;
+    setTimeout(() => {
+      // sets the `top` style if the current TH is fixed
+      if (this.props.column.fixedHeader && this.thRef && this.thRef.current) {
+        const offsetTop = this.thRef.current.offsetTop;
 
-      if (typeof offsetTop === 'number') {
-        this.setState({
-          style: {
-            top: offsetTop,
-          },
-        });
+        if (typeof offsetTop === 'number') {
+          this.setState({
+            style: {
+              top: offsetTop,
+            },
+          });
+        }
       }
-    }
+    }, 0);
   }
 
   render() {
