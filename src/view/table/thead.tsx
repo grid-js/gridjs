@@ -42,6 +42,8 @@ export class THead extends BaseComponent<THeadProps, {}> {
     return (
       <TR>
         {row.map((col) => {
+          if (col.hidden) return null;
+
           return this.renderColumn(
             col,
             rowIndex,

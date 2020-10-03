@@ -27,6 +27,8 @@ export class ShadowTable extends BaseComponent<ShadowTableProps, {}> {
           return (
             <tr>
               {row.map((col) => {
+                if (col.hidden) return null;
+
                 const { rowSpan, colSpan } = calculateRowColSpans(
                   col,
                   rowIndex,
@@ -63,7 +65,13 @@ export class ShadowTable extends BaseComponent<ShadowTableProps, {}> {
   tr(row: Row) {
     return (
       <tr style={this.resetStyle()}>
-        {row.cells.map((cell: Cell) => {
+        {row.cells.map((cell: Cell, i) => {
+          if (this.props.header) {
+            const column = this.props.header.columns[i];
+
+            if (column && column.hidden) return null;
+          }
+
           return this.td(cell);
         })}
       </tr>
