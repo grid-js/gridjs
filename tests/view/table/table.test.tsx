@@ -507,4 +507,46 @@ describe('Table component', () => {
 
     expect(table.html()).toMatchSnapshot();
   });
+
+  it('should hide the columns with hidden: true', async () => {
+    const config = Config.fromUserConfig({
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+      columns: [
+        {
+          name: 'c',
+          hidden: true,
+        },
+        {
+          name: 'd',
+          hidden: true,
+          sort: true,
+        },
+        {
+          name: 'e',
+        },
+      ],
+      search: true,
+      dispatcher: new Dispatcher<any>(),
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={config.header}
+          status={Status.Rendered}
+          width={config.width}
+          height={config.height}
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+    expect(table.find('td').length).toBe(2);
+    expect(table.find('th').text()).toBe('e');
+    expect(table.find('th').length).toBe(1);
+  });
 });

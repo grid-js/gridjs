@@ -33,12 +33,16 @@ export class TR extends BaseComponent<TRProps, {}> {
       return (
         <tr className={className('tr')} onClick={this.handleClick.bind(this)}>
           {this.props.row.cells.map((cell: Cell, i) => {
+            const column = this.getColumn(i);
+
+            if (column && column.hidden) return null;
+
             return (
               <TD
                 key={cell.id}
                 cell={cell}
                 row={this.props.row}
-                column={this.getColumn(i)}
+                column={column}
               />
             );
           })}
