@@ -1,4 +1,4 @@
-@import "colors";
+@import 'colors';
 
 th.gridjs {
   &-th {
@@ -28,7 +28,7 @@ th.gridjs {
       position: sticky;
       box-shadow: 0 1px 0 0 $gray3;
 
-      @supports (-moz-appearance:none) {
+      @supports (-moz-appearance: none) {
         box-shadow: 0 0 0 1px $gray3;
       }
     }

@@ -7,6 +7,7 @@ import { className } from '../../util/className';
 import { TColumn } from '../../types';
 import { TD } from './td';
 import Header from '../../header';
+import { PluginPosition, PluginRenderer } from '../../plugin';
 
 export interface TRProps extends BaseProps {
   row?: Row;
@@ -32,6 +33,14 @@ export class TR extends BaseComponent<TRProps, {}> {
     } else {
       return (
         <tr className={className('tr')} onClick={this.handleClick.bind(this)}>
+          <PluginRenderer
+            position={PluginPosition.Cell}
+            props={{
+              rowId: this.props.row.id,
+              boo: 123,
+            }}
+          />
+
           {this.props.row.cells.map((cell: Cell, i) => {
             const column = this.getColumn(i);
 

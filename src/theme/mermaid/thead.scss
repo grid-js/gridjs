@@ -1,7 +1,9 @@
-@import "colors";
+@import 'colors';
 
 .gridjs {
-  *, :after, :before {
+  *,
+  :after,
+  :before {
     box-sizing: border-box;
   }
 }

@@ -1,9 +1,9 @@
-@import "colors";
+@import 'colors';
 
 .gridjs-pagination {
   color: $gray6;
 
-  &::after{
+  &::after {
     content: '';
     display: block;
     clear: both;
@@ -27,7 +27,7 @@
     }
 
     button:focus {
-      box-shadow: 0 0 0 2px rgba(149, 189, 243, 0.50);
+      box-shadow: 0 0 0 2px rgba(149, 189, 243, 0.5);
     }
 
     button:hover {
@@ -36,7 +36,9 @@
       outline: none;
     }
 
-    button:disabled, button[disabled], button:hover:disabled {
+    button:disabled,
+    button[disabled],
+    button:hover:disabled {
       cursor: default;
       background-color: $white;
       color: $gray5;

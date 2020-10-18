@@ -15,12 +15,13 @@ import { ServerStorageOptions } from './storage/server';
 import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
 import { Language, Translator } from './i18n/language';
-import { ComponentChild, createRef, h, RefObject } from 'preact';
+import { ComponentChild, createRef, RefObject } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
 import { EventEmitter } from './util/eventEmitter';
 import { GridEvents } from './events';
 import { PluginManager, PluginPosition } from './plugin';
+import { Checkbox } from './view/plugin/checkbox/checkbox';
 
 // Config type used internally
 export interface Config {
@@ -181,23 +182,31 @@ export class Config {
     config.plugin.add({
       id: 'search',
       position: PluginPosition.Header,
-      component: h(Search, {
+      component: Search,
+      props: {
         enabled:
           userConfig.search === true || userConfig.search instanceof Object,
         ...(userConfig.search as SearchConfig),
-      }),
+      },
     });
 
     // Pagination
     config.plugin.add({
       id: 'pagination',
       position: PluginPosition.Footer,
-      component: h(Pagination, {
+      component: Pagination,
+      props: {
         enabled:
           userConfig.pagination === true ||
           userConfig.pagination instanceof Object,
         ...(userConfig.pagination as PaginationConfig),
-      }),
+      },
+    });
+
+    config.plugin.add({
+      id: 'cellone',
+      position: PluginPosition.Cell,
+      component: Checkbox,
     });
 
     return config;
