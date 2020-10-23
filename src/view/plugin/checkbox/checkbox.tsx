@@ -5,14 +5,21 @@ import { CheckboxActions } from './actions';
 import { TD } from '../../table/td';
 import Cell from '../../../cell';
 import { className } from '../../../util/className';
-import { ID } from '../../../util/id';
+import Row from '../../../row';
+import { TH } from '../../table/th';
+import { CSSDeclaration } from '../../../types';
 
 interface CheckboxState {
   isChecked: boolean;
 }
 
 interface CheckboxProps {
-  rowId: ID;
+  parent: BaseComponent<any, any>;
+  // it's optional because thead doesn't have a row
+  row?: Row;
+  highlightClassName?: string;
+  checkboxClassName?: string;
+  style?: CSSDeclaration;
 }
 
 export class Checkbox extends BaseComponent<
@@ -23,6 +30,17 @@ export class Checkbox extends BaseComponent<
   private readonly store: CheckboxStore;
   private readonly storeUpdatedFn: (...args) => void;
 
+  static defaultProps = {
+    highlightClassName: className('tr', 'highlight'),
+    checkboxClassName: className('checkbox'),
+    style: {
+      textAlign: 'center',
+      width: '35px',
+      padding: 0,
+      margin: 0,
+    },
+  };
+
   constructor(props: CheckboxProps & BaseProps, context) {
     super(props, context);
 
@@ -30,33 +48,48 @@ export class Checkbox extends BaseComponent<
       isChecked: false,
     };
 
-    this.actions = new CheckboxActions(this.config.dispatcher);
-    this.store = new CheckboxStore(this.config.dispatcher);
+    if (this.isTD(props)) {
+      this.actions = new CheckboxActions(this.config.dispatcher);
+      this.store = new CheckboxStore(this.config.dispatcher);
 
-    this.storeUpdatedFn = this.storeUpdated.bind(this);
-    this.store.on('updated', this.storeUpdatedFn);
-  }
-
-  private storeUpdated(state: CheckboxStoreState): void {
-    console.log('store updated', state);
-  }
-
-  private toggleCheckbox(): void {
-    const isChecked = this.state.isChecked;
-
-    if (isChecked) {
-      this.actions.uncheck(this.props.rowId);
-    } else {
-      this.actions.check(this.props.rowId);
+      this.storeUpdatedFn = this.storeUpdated.bind(this);
+      this.store.on('updated', this.storeUpdatedFn);
     }
-
-    this.setState({
-      isChecked: !isChecked,
-    });
   }
 
   componentWillUnmount(): void {
     this.store.off('updated', this.storeUpdatedFn);
+  }
+
+  private isTD(props): boolean {
+    return props.row !== undefined;
+  }
+
+  private getParent(): Element {
+    return this.props.parent.base as Element;
+  }
+
+  private storeUpdated(state: CheckboxStoreState): void {
+    const parent = this.getParent();
+    const isChecked = state.rowIds.indexOf(this.props.row.id) > -1;
+
+    this.setState({
+      isChecked: isChecked,
+    });
+
+    if (isChecked) {
+      parent.classList.add(this.props.highlightClassName);
+    } else {
+      parent.classList.remove(this.props.highlightClassName);
+    }
+  }
+
+  private toggleCheckbox(): void {
+    if (this.state.isChecked) {
+      this.actions.uncheck(this.props.row.id);
+    } else {
+      this.actions.check(this.props.row.id);
+    }
   }
 
   render() {
@@ -68,8 +101,25 @@ export class Checkbox extends BaseComponent<
       />
     );
 
-    return (
-      <TD cell={new Cell(checkboxElement)} className={className('checkbox')} />
-    );
+    if (this.isTD(this.props)) {
+      return (
+        <TD
+          cell={new Cell(checkboxElement)}
+          className={this.props.checkboxClassName}
+          style={this.props.style}
+        />
+      );
+    } else {
+      return (
+        <TH
+          column={{
+            sort: { enabled: false },
+            name: 'checkbox',
+          }}
+          style={this.props.style}
+          index={-1}
+        />
+      );
+    }
   }
 }

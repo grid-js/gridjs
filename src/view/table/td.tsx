@@ -3,17 +3,17 @@ import { ComponentChild, h, JSX } from 'preact';
 import Cell from '../../cell';
 import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';
-import { TColumn } from '../../types';
+import { CSSDeclaration, TColumn } from '../../types';
 import Row from '../../row';
 import { JSXInternal } from 'preact/src/jsx';
 
-export interface TDProps extends BaseProps {
+export interface TDProps
+  extends BaseProps,
+    JSX.HTMLAttributes<HTMLTableCellElement> {
   cell: Cell;
   row?: Row;
   column?: TColumn;
-  colSpan?: number;
-  className?: string;
-  role?: string;
+  style?: CSSDeclaration;
 }
 
 export class TD extends BaseComponent<TDProps, {}> {
@@ -72,6 +72,7 @@ export class TD extends BaseComponent<TDProps, {}> {
           this.config.className.td,
         )}
         style={{
+          ...this.props.style,
           ...this.config.style.td,
         }}
         onClick={this.handleClick.bind(this)}

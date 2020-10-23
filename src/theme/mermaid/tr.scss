@@ -1,6 +1,12 @@
+@import 'colors';
+
 .gridjs {
   &-tr {
     border: none;
+
+    &-highlight td {
+      background-color: $blue2;
+    }
   }
 
   &-tr:last-child td {

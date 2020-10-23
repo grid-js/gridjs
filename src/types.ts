@@ -24,6 +24,7 @@ export type TData = TDataArray | TDataObject;
 // Table header cell type
 export interface TColumn {
   id?: string;
+  // used when the input is a JSON payload
   selector?: (row: TDataArrayRow | TDataObjectRow) => TCell;
   name: string | ComponentChild;
   width?: string;

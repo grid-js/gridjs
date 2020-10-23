@@ -10,6 +10,7 @@ export interface THProps
     JSX.HTMLAttributes<HTMLTableCellElement> {
   index: number;
   column: TColumn;
+  style?: CSSDeclaration;
 }
 
 export interface THState {
@@ -85,6 +86,7 @@ export class TH extends BaseComponent<THProps, THState> {
           ...this.config.style.th,
           ...{ width: this.props.column.width },
           ...this.state.style,
+          ...this.props.style,
         }}
         onKeyDown={this.keyDown.bind(this)}
         rowSpan={this.props.rowSpan > 1 ? this.props.rowSpan : undefined}

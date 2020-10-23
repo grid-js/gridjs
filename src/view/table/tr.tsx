@@ -1,4 +1,4 @@
-import { h, JSX } from 'preact';
+import { h, JSX, Fragment, ComponentChildren } from 'preact';
 
 import Row from '../../row';
 import Cell from '../../cell';
@@ -27,17 +27,17 @@ export class TR extends BaseComponent<TRProps, {}> {
     this.config.eventEmitter.emit('rowClick', e, this.props.row);
   }
 
-  render() {
+  private getChildren(): ComponentChildren {
     if (this.props.children) {
-      return <tr className={className('tr')}>{this.props.children}</tr>;
+      return this.props.children;
     } else {
       return (
-        <tr className={className('tr')} onClick={this.handleClick.bind(this)}>
+        <Fragment>
           <PluginRenderer
             position={PluginPosition.Cell}
             props={{
-              rowId: this.props.row.id,
-              boo: 123,
+              parent: this,
+              row: this.props.row,
             }}
           />
 
@@ -55,8 +55,16 @@ export class TR extends BaseComponent<TRProps, {}> {
               />
             );
           })}
-        </tr>
+        </Fragment>
       );
     }
+  }
+
+  render() {
+    return (
+      <tr className={className('tr')} onClick={this.handleClick.bind(this)}>
+        {this.getChildren()}
+      </tr>
+    );
   }
 }
