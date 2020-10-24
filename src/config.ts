@@ -207,6 +207,9 @@ export class Config {
       id: 'cellone',
       position: PluginPosition.Cell,
       component: Checkbox,
+      props: {
+        checkboxClassName: 'bb',
+      },
     });
 
     return config;

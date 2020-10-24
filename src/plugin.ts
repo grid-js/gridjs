@@ -12,7 +12,7 @@ export interface Plugin<T> {
   id: string;
   position: PluginPosition;
   component: ComponentType<T>;
-  props?: Attributes & T;
+  props?: Partial<Attributes & T>;
   order?: number;
 }
 
@@ -83,7 +83,9 @@ export class PluginRenderer extends BaseComponent<PluginRendererProps, {}> {
       {},
       this.config.plugin
         .list(this.props.position)
-        .map((p) => h(p.component, { ...p.props, ...this.props.props })),
+        .map((p) =>
+          h(p.component, { plugin: p, ...p.props, ...this.props.props }),
+        ),
     );
   }
 }
