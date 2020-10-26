@@ -1,11 +1,11 @@
 import { BaseComponent, BaseProps } from './view/base';
-import { Attributes, ComponentType, Fragment, h } from 'preact';
+import { ComponentProps, Fragment, h } from 'preact';
 import log from './util/log';
 
 /**
  * BaseProps for all plugins
  */
-export interface PluginBaseProps<T> {
+export interface PluginBaseProps<T extends PluginBaseComponent> {
   plugin: Plugin<T>;
 }
 
@@ -13,9 +13,8 @@ export interface PluginBaseProps<T> {
  * BaseComponent for all plugins
  */
 export abstract class PluginBaseComponent<
-  T,
-  P extends PluginBaseProps<T>,
-  S
+  P extends PluginBaseProps<any> = any,
+  S = {}
 > extends BaseComponent<P, S> {}
 
 export enum PluginPosition {
@@ -24,11 +23,11 @@ export enum PluginPosition {
   Cell,
 }
 
-export interface Plugin<T> {
+export interface Plugin<T extends PluginBaseComponent> {
   id: string;
   position: PluginPosition;
-  component: ComponentType<T>;
-  props?: Partial<Attributes & T>;
+  component: T;
+  props?: Partial<ComponentProps<T>>;
   order?: number;
 }
 
@@ -39,7 +38,7 @@ export class PluginManager {
     this.plugins = [];
   }
 
-  get<T>(id: string): Plugin<T> | null {
+  get<T extends PluginBaseComponent>(id: string): Plugin<T> | null {
     const plugins = this.plugins.filter((p) => p.id === id);
 
     if (plugins.length > 0) {
@@ -49,7 +48,7 @@ export class PluginManager {
     return null;
   }
 
-  add<T>(plugin: Plugin<T>): this {
+  add<T extends PluginBaseComponent>(plugin: Plugin<T>): this {
     if (!plugin.id) {
       log.error('Plugin ID cannot be empty');
       return this;
@@ -69,7 +68,7 @@ export class PluginManager {
     return this;
   }
 
-  list(position?: PluginPosition): Plugin<any>[] {
+  list<T extends PluginBaseComponent>(position?: PluginPosition): Plugin<T>[] {
     let plugins: Plugin<any>[];
 
     if (position != null || position != undefined) {

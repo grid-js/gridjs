@@ -6,10 +6,10 @@ import { useTranslator } from '../i18n/language';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface BaseProps {}
 
-export abstract class BaseComponent<P extends BaseProps, S> extends Component<
-  P,
-  S
-> {
+export abstract class BaseComponent<
+  P extends BaseProps = {},
+  S = {}
+> extends Component<P, S> {
   protected config: Config;
   protected _: (message: string, ...args) => string;
 
@@ -21,4 +21,8 @@ export abstract class BaseComponent<P extends BaseProps, S> extends Component<
       this._ = useTranslator(this.config.translator);
     }
   }
+}
+
+export interface BaseComponent<P> {
+  new (props: P, context?: any): Component<P>;
 }

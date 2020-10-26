@@ -1,15 +1,14 @@
-import { PluginManager, PluginPosition, PluginRenderer } from '../src/plugin';
-import { BaseComponent, BaseProps } from '../src/view/base';
+import {PluginBaseComponent, PluginBaseProps, PluginManager, PluginPosition, PluginRenderer} from '../src/plugin';
 import { createContext, h } from 'preact';
 import { mount } from 'enzyme';
 import { Config } from '../src/config';
 
 describe('Plugin', () => {
-  interface DummyPluginProps extends BaseProps {
+  interface DummyPluginProps extends PluginBaseProps<DummyPlugin> {
     text?: string;
   }
 
-  class DummyPlugin extends BaseComponent<DummyPluginProps, {}> {
+  class DummyPlugin extends PluginBaseComponent<DummyPluginProps> {
     render() {
       return h('b', {}, this.props.text || 'hello!');
     }
@@ -23,13 +22,13 @@ describe('Plugin', () => {
     manager.add({
       id: 'dummy',
       position: PluginPosition.Header,
-      component: h(DummyPlugin, {}),
+      component: DummyPlugin.prototype,
     });
 
     manager.add({
       id: 'dummy2',
       position: PluginPosition.Header,
-      component: h(DummyPlugin, {}),
+      component: DummyPlugin.prototype,
     });
 
     expect(manager.list()).toHaveLength(2);
@@ -49,21 +48,21 @@ describe('Plugin', () => {
     manager.add({
       id: 'dummy',
       position: PluginPosition.Header,
-      component: h(DummyPlugin, {}),
+      component: DummyPlugin.prototype,
     });
 
     manager.add({
       id: 'dummy2',
       order: 1,
       position: PluginPosition.Header,
-      component: h(DummyPlugin, {}),
+      component: DummyPlugin.prototype,
     });
 
     manager.add({
       id: 'dummy3',
       order: 10,
       position: PluginPosition.Footer,
-      component: h(DummyPlugin, {}),
+      component: DummyPlugin.prototype,
     });
 
     expect(manager.list().map((x) => x.id)).toStrictEqual([
@@ -82,27 +81,27 @@ describe('Plugin', () => {
       id: 'dummy',
       order: 5,
       position: PluginPosition.Header,
-      component: h(DummyPlugin, {}),
+      component: DummyPlugin.prototype,
     });
 
     manager.add({
       id: 'dummy2',
       order: 1,
       position: PluginPosition.Header,
-      component: h(DummyPlugin, {}),
+      component: DummyPlugin.prototype,
     });
 
     manager.add({
       id: 'dummy3',
       order: 10,
       position: PluginPosition.Footer,
-      component: h(DummyPlugin, {}),
+      component: DummyPlugin.prototype,
     });
 
     manager.add({
       id: 'dummy4',
       position: PluginPosition.Footer,
-      component: h(DummyPlugin, {}),
+      component: DummyPlugin.prototype,
     });
 
     expect(manager.list().map((x) => x.id)).toStrictEqual([
@@ -120,7 +119,7 @@ describe('Plugin', () => {
   it('should return existing plugin by id', () => {
     const manager = new PluginManager();
 
-    const component = h(DummyPlugin, {});
+    const component = DummyPlugin.prototype;
     manager.add({
       id: 'dummy',
       position: PluginPosition.Header,
@@ -144,13 +143,15 @@ describe('Plugin', () => {
     config.plugin.add({
       id: 'dummyheader',
       position: PluginPosition.Header,
-      component: h(DummyPlugin, { text: 'dummyheader' }),
+      component: DummyPlugin.prototype,
+      props:{ text: 'dummyheader' },
     });
 
     config.plugin.add({
       id: 'dummyfooter',
       position: PluginPosition.Footer,
-      component: h(DummyPlugin, { text: 'dummyfooter' }),
+      component: DummyPlugin.prototype,
+      props: { text: 'dummyfooter' },
     });
 
     const renderer = mount(

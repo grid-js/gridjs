@@ -16,7 +16,11 @@ export interface TRProps extends BaseProps {
 export class TR extends BaseComponent<TRProps, {}> {
   private getColumn(cellIndex: number): TColumn {
     if (this.props.header) {
-      return this.props.header.columns[cellIndex];
+      const cols = Header.leafColumns(this.props.header.columns);
+
+      if (cols) {
+        return cols[cellIndex];
+      }
     }
 
     return null;

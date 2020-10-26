@@ -31,12 +31,19 @@ class StorageResponseToArrayTransformer extends PipelineProcessor<
       return [];
     }
 
+    if (!this.props.header || !this.props.header.columns) {
+      return data as TwoDArray<TCell>;
+    }
+
+    const columns = Header.leafColumns(this.props.header.columns);
+
     // if it's a 2d array already
     if (data[0] instanceof Array) {
       return (data as TDataArray).map((row) => {
         let pad = 0;
 
-        return this.props.header.columns.map((column, i) => {
+        return columns.map((column, i) => {
+          // default `data` is provided for this column
           if (column.data !== undefined) {
             pad++;
 
@@ -55,7 +62,7 @@ class StorageResponseToArrayTransformer extends PipelineProcessor<
     // if it's an array of objects (but not array of arrays, i.e JSON payload)
     if (typeof data[0] === 'object' && !(data[0] instanceof Array)) {
       return (data as TDataObject).map((row) =>
-        this.props.header.columns.map((column, i) => {
+        columns.map((column, i) => {
           if (column.data !== undefined) {
             if (typeof column.data === 'function') {
               return column.data(row);

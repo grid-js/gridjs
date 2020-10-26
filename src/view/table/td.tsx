@@ -19,9 +19,10 @@ export interface TDProps
 
 export class TD extends BaseComponent<TDProps, {}> {
   private content(): ComponentChild {
-    if (!this.props.column) return null;
-
-    if (typeof this.props.column.formatter === 'function') {
+    if (
+      this.props.column &&
+      typeof this.props.column.formatter === 'function'
+    ) {
       return this.props.column.formatter(
         this.props.cell.data,
         this.props.row,
@@ -29,7 +30,7 @@ export class TD extends BaseComponent<TDProps, {}> {
       );
     }
 
-    if (this.props.column.plugin) {
+    if (this.props.column && this.props.column.plugin) {
       return (
         <PluginRenderer
           pluginId={this.props.column.plugin.id}

@@ -20,7 +20,6 @@ interface CheckboxProps {
 }
 
 export class Checkbox extends PluginBaseComponent<
-  Checkbox,
   CheckboxProps & PluginBaseProps<Checkbox>,
   CheckboxState
 > {
