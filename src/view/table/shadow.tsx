@@ -1,109 +1,44 @@
-import { h } from 'preact';
-
-import Tabular from '../../tabular';
+import { Component, h, RefObject } from 'preact';
 import { BaseComponent, BaseProps } from '../base';
-import Header from '../../header';
-import Row from '../../row';
-import Cell from '../../cell';
-import { calculateRowColSpans } from '../../util/table';
+import { className } from '../../util/className';
 
 interface ShadowTableProps extends BaseProps {
-  data: Tabular;
-  header?: Header;
+  tableRef?: RefObject<Component>;
 }
 
+/**
+ * ShadowTable renders a hidden table and is used to calculate the column's width
+ * when autoWidth option is enabled
+ */
 export class ShadowTable extends BaseComponent<ShadowTableProps, {}> {
-  resetStyle(): { [key: string]: string | number } {
-    return { padding: 0, margin: 0, border: 'none', outline: 'none' };
-  }
-
-  head() {
-    const rows = Header.tabularFormat(this.props.header.columns);
-    const totalRows = rows.length;
-
-    return (
-      <thead style={this.resetStyle()}>
-        {rows.map((row, rowIndex) => {
-          return (
-            <tr>
-              {row.map((col) => {
-                if (col.hidden) return null;
-
-                const { rowSpan, colSpan } = calculateRowColSpans(
-                  col,
-                  rowIndex,
-                  totalRows,
-                );
-
-                return (
-                  <th
-                    data-column-id={col && col.id}
-                    style={{
-                      ...this.resetStyle(),
-                      whiteSpace: 'nowrap',
-                      // pagination buttons
-                      paddingRight: col.sort && col.sort.enabled ? '18px' : '0',
-                    }}
-                    colSpan={colSpan > 1 ? colSpan : undefined}
-                    rowSpan={rowSpan > 1 ? rowSpan : undefined}
-                  >
-                    {col.name}
-                  </th>
-                );
-              })}
-            </tr>
-          );
-        })}
-      </thead>
-    );
-  }
-
-  td(cell: Cell) {
-    return <td style={this.resetStyle()}>{cell.data}</td>;
-  }
-
-  tr(row: Row) {
-    return (
-      <tr style={this.resetStyle()}>
-        {row.cells.map((cell: Cell, i) => {
-          if (this.props.header) {
-            const column = this.props.header.columns[i];
-
-            if (column && column.hidden) return null;
-          }
-
-          return this.td(cell);
-        })}
-      </tr>
-    );
-  }
-
-  body() {
-    return (
-      <tbody style={this.resetStyle()}>
-        {this.props.data &&
-          this.props.data.rows.map((row: Row) => {
-            return this.tr(row);
-          })}
-      </tbody>
-    );
-  }
-
   render() {
-    return (
-      <table
-        style={{
-          position: 'absolute',
-          zIndex: '-2147483640',
-          visibility: 'hidden',
-          tableLayout: 'auto',
-          width: 'auto',
-          ...this.resetStyle(),
-        }}
-      >
-        {this.head()}
-        {this.body()}
-      </table>
-    );
+    if (this.props.tableRef.current) {
+      const tableRef = this.props.tableRef;
+      const tableElement = tableRef.current.base.cloneNode(
+        true,
+      ) as HTMLTableElement;
+
+      tableElement.className += ` ${className('shadowTable')}`;
+
+      tableElement.style.position = 'absolute';
+      tableElement.style.zIndex = '-2147483640';
+      tableElement.style.visibility = 'hidden';
+      tableElement.style.tableLayout = 'auto';
+      tableElement.style.width = 'auto';
+      tableElement.style.padding = '0';
+      tableElement.style.margin = '0';
+      tableElement.style.border = 'none';
+      tableElement.style.outline = 'none';
+
+      return (
+        <div
+          ref={(nodeElement) => {
+            nodeElement && nodeElement.appendChild(tableElement);
+          }}
+        />
+      );
+    }
+
+    return null;
   }
 }

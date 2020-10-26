@@ -1,10 +1,10 @@
 import { OneDArray, TColumn, TwoDArray } from './types';
 import Base from './base';
 import { UserConfig } from './config';
-import Tabular from './tabular';
 import { getWidth, px, width } from './util/width';
 import { ShadowTable } from './view/table/shadow';
 import {
+  Component,
   ComponentChild,
   createRef,
   h,
@@ -41,14 +41,14 @@ class Header extends Base {
    *    - Cell content of the last row
    *
    * @param container
+   * @param tableRef
    * @param tempRef
-   * @param data
    * @param autoWidth
    */
   adjustWidth(
     container: Element,
+    tableRef: RefObject<Component>,
     tempRef: RefObject<HTMLDivElement>,
-    data: Tabular,
     autoWidth = true,
   ): this {
     if (!container) {
@@ -66,11 +66,10 @@ class Header extends Base {
     // to render columns. One the table is rendered and widths are known,
     // we unmount the shadow table from the DOM and set the correct width
     const shadowTable = createRef();
-    if (data && data.length && autoWidth) {
+    if (tableRef.current && autoWidth) {
       // render a ShadowTable with the first 10 rows
       const el = h(ShadowTable, {
-        data: Tabular.fromRows(data.rows.slice(0, 10)),
-        header: this,
+        tableRef: tableRef,
       });
       el.ref = shadowTable;
       render(el, tempRef.current);
@@ -85,7 +84,7 @@ class Header extends Base {
       if (!column.width && autoWidth) {
         // tries to find the corresponding cell
         // from the ShadowTable and set the correct width
-        column.width = px(getWidth(shadowTable.current.base, `${column.id}`));
+        column.width = px(getWidth(shadowTable.current.base, column.id));
       } else {
         // column with is already defined
         // sets the column with based on the width of its container
@@ -93,7 +92,7 @@ class Header extends Base {
       }
     }
 
-    if (data && data.length && autoWidth) {
+    if (tableRef.current && autoWidth) {
       // unmount the shadow table from temp
       render(null, tempRef.current);
     }

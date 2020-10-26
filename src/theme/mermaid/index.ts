@@ -1,5 +1,6 @@
 import './colors.scss';
 import './button.scss';
+import './shadow.scss';
 import './head.scss';
 import './container.scss';
 import './footer.scss';
