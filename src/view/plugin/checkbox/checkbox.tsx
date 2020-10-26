@@ -1,28 +1,27 @@
 import { h } from 'preact';
-import { BaseComponent, BaseProps } from '../../base';
 import { CheckboxStore, CheckboxStoreState } from './store';
 import { CheckboxActions } from './actions';
 import { className } from '../../../util/className';
 import Row from '../../../row';
-import { CSSDeclaration } from '../../../types';
-import { Plugin } from '../../../plugin';
+import { PluginBaseComponent, PluginBaseProps } from '../../../plugin';
+import Cell from '../../../cell';
 
 interface CheckboxState {
   isChecked: boolean;
 }
 
 interface CheckboxProps {
-  plugin: Plugin<Checkbox>;
   // it's optional because thead doesn't have a row
   row?: Row;
+  cell?: Cell;
   checkboxStore?: CheckboxStore;
-  highlightClassName?: string;
+  selectedClassName?: string;
   checkboxClassName?: string;
-  style?: CSSDeclaration;
 }
 
-export class Checkbox extends BaseComponent<
-  CheckboxProps & BaseProps,
+export class Checkbox extends PluginBaseComponent<
+  Checkbox,
+  CheckboxProps & PluginBaseProps<Checkbox>,
   CheckboxState
 > {
   private readonly actions: CheckboxActions;
@@ -30,21 +29,17 @@ export class Checkbox extends BaseComponent<
   private readonly storeUpdatedFn: (...args) => void;
 
   private isDataCell = (props): boolean => props.row !== undefined;
-  private getParent = (): Element =>
-    this.base.parentElement.parentElement as Element;
+  private getParentTR = (): Element =>
+    this.base &&
+    this.base.parentElement &&
+    (this.base.parentElement.parentElement as Element);
 
   static defaultProps = {
-    highlightClassName: className('tr', 'highlight'),
+    selectedClassName: className('tr', 'selected'),
     checkboxClassName: className('checkbox'),
-    style: {
-      textAlign: 'center',
-      width: '35px',
-      padding: 0,
-      margin: 0,
-    },
   };
 
-  constructor(props: CheckboxProps & BaseProps, context) {
+  constructor(props: CheckboxProps & PluginBaseProps<Checkbox>, context) {
     super(props, context);
 
     this.state = {
@@ -69,6 +64,11 @@ export class Checkbox extends BaseComponent<
       this.actions = new CheckboxActions(this.config.dispatcher);
       this.storeUpdatedFn = this.storeUpdated.bind(this);
       this.store.on('updated', this.storeUpdatedFn);
+
+      // also mark this checkbox as checked if cell.data is true
+      if (props.cell.data) {
+        this.check();
+      }
     }
   }
 
@@ -81,7 +81,7 @@ export class Checkbox extends BaseComponent<
   }
 
   private storeUpdated(state: CheckboxStoreState): void {
-    const parent = this.getParent();
+    const parent = this.getParentTR();
 
     if (!parent) return;
 
@@ -92,17 +92,27 @@ export class Checkbox extends BaseComponent<
     });
 
     if (isChecked) {
-      parent.classList.add(this.props.highlightClassName);
+      parent.classList.add(this.props.selectedClassName);
     } else {
-      parent.classList.remove(this.props.highlightClassName);
+      parent.classList.remove(this.props.selectedClassName);
     }
   }
 
-  private toggleCheckbox(): void {
+  private check(): void {
+    this.actions.check(this.props.row.id);
+    this.props.cell.update(true);
+  }
+
+  private uncheck(): void {
+    this.actions.uncheck(this.props.row.id);
+    this.props.cell.update(false);
+  }
+
+  private toggle(): void {
     if (this.state.isChecked) {
-      this.actions.uncheck(this.props.row.id);
+      this.uncheck();
     } else {
-      this.actions.check(this.props.row.id);
+      this.check();
     }
   }
 
@@ -112,11 +122,12 @@ export class Checkbox extends BaseComponent<
         <input
           type={'checkbox'}
           checked={this.state.isChecked}
-          onChange={() => this.toggleCheckbox()}
+          onChange={() => this.toggle()}
+          className={this.props.checkboxClassName}
         />
       );
     } else {
-      return 'x';
+      return null;
     }
   }
 }

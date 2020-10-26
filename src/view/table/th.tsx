@@ -48,7 +48,7 @@ export class TH extends BaseComponent<THProps, THState> {
     }
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     setTimeout(() => {
       // sets the `top` style if the current TH is fixed
       if (this.props.column.fixedHeader && this.thRef.current) {
@@ -66,6 +66,10 @@ export class TH extends BaseComponent<THProps, THState> {
   }
 
   private content(): ComponentChild {
+    if (this.props.column.name !== undefined) {
+      return this.props.column.name;
+    }
+
     if (this.props.column.plugin !== undefined) {
       return (
         <PluginRenderer
@@ -77,7 +81,7 @@ export class TH extends BaseComponent<THProps, THState> {
       );
     }
 
-    return this.props.column.name;
+    return null;
   }
 
   render() {

@@ -15,3 +15,4 @@ import './thead.scss';
 import './wrapper.scss';
 import './search.scss';
 import './loadingBar.scss';
+import './checkbox.scss';

@@ -10,7 +10,7 @@ class Cell extends Base {
   constructor(data: TCell) {
     super();
 
-    this.setData(data);
+    this.update(data);
   }
 
   private cast(data: TCell): number | string | boolean | ComponentChild {
@@ -21,7 +21,12 @@ class Cell extends Base {
     return data;
   }
 
-  public setData(data: TCell): Cell {
+  /**
+   * Updates the Cell's data
+   *
+   * @param data
+   */
+  public update(data: TCell): Cell {
     this.data = this.cast(data);
     return this;
   }
