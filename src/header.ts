@@ -2,7 +2,7 @@ import { OneDArray, TColumn, TwoDArray } from './types';
 import Base from './base';
 import { UserConfig } from './config';
 import Tabular from './tabular';
-import { width, px, getWidth } from './util/width';
+import { getWidth, px, width } from './util/width';
 import { ShadowTable } from './view/table/shadow';
 import {
   ComponentChild,
@@ -15,6 +15,7 @@ import {
 import { camelCase } from './util/string';
 import { flatten } from './util/array';
 import logger from './util/log';
+import { PluginPosition } from './plugin';
 
 class Header extends Base {
   private _columns: OneDArray<TColumn>;
@@ -175,6 +176,23 @@ class Header extends Base {
     }
   }
 
+  private populatePlugins(
+    userConfig: UserConfig,
+    columns: OneDArray<TColumn>,
+  ): void {
+    // populate the cell columns
+    for (const column of columns) {
+      if (column.plugin !== undefined) {
+        userConfig.plugin.add({
+          id: column.id,
+          props: {},
+          ...column.plugin,
+          position: PluginPosition.Cell,
+        });
+      }
+    }
+  }
+
   static fromColumns(
     columns: OneDArray<TColumn | string | ComponentChild>,
   ): Header {
@@ -190,6 +208,14 @@ class Header extends Base {
 
         if (typedColumn.columns) {
           typedColumn.columns = Header.fromColumns(typedColumn.columns).columns;
+        }
+
+        // because the data for that cell is null
+        // if we are trying to render a plugin
+        if (typeof typedColumn.plugin === 'object') {
+          if (typedColumn.data === undefined) {
+            typedColumn.data = null;
+          }
         }
 
         // TColumn type
@@ -224,6 +250,7 @@ class Header extends Base {
       header.setID();
       header.setSort(userConfig);
       header.setFixedHeader(userConfig);
+      header.populatePlugins(userConfig, header.columns);
       return header;
     }
 

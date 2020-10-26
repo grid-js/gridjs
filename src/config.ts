@@ -21,7 +21,6 @@ import PipelineUtils from './pipeline/pipelineUtils';
 import { EventEmitter } from './util/eventEmitter';
 import { GridEvents } from './events';
 import { PluginManager, PluginPosition } from './plugin';
-import { Checkbox } from './view/plugin/checkbox/checkbox';
 
 // Config type used internally
 export interface Config {
@@ -200,15 +199,6 @@ export class Config {
           userConfig.pagination === true ||
           userConfig.pagination instanceof Object,
         ...(userConfig.pagination as PaginationConfig),
-      },
-    });
-
-    config.plugin.add({
-      id: 'cellone',
-      position: PluginPosition.Cell,
-      component: Checkbox,
-      props: {
-        checkboxClassName: 'bb',
       },
     });
 

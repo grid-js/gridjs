@@ -1,9 +1,10 @@
-import { createRef, h, JSX } from 'preact';
+import { ComponentChild, createRef, h, JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';
 import { CSSDeclaration, TColumn } from '../../types';
 import { Sort } from '../plugin/sort/sort';
+import { PluginRenderer } from '../../plugin';
 
 export interface THProps
   extends BaseProps,
@@ -64,6 +65,21 @@ export class TH extends BaseComponent<THProps, THState> {
     }, 0);
   }
 
+  private content(): ComponentChild {
+    if (this.props.column.plugin !== undefined) {
+      return (
+        <PluginRenderer
+          pluginId={this.props.column.plugin.id}
+          props={{
+            column: this.props.column,
+          }}
+        />
+      );
+    }
+
+    return this.props.column.name;
+  }
+
   render() {
     const props = {};
 
@@ -93,7 +109,7 @@ export class TH extends BaseComponent<THProps, THState> {
         colSpan={this.props.colSpan > 1 ? this.props.colSpan : undefined}
         {...props}
       >
-        {this.props.column.name}
+        {this.content()}
         {this.isSortable() && (
           <Sort
             ref={this.sortRef}

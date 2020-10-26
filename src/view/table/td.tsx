@@ -6,6 +6,7 @@ import { classJoin, className } from '../../util/className';
 import { CSSDeclaration, TColumn } from '../../types';
 import Row from '../../row';
 import { JSXInternal } from 'preact/src/jsx';
+import { PluginRenderer } from '../../plugin';
 
 export interface TDProps
   extends BaseProps,
@@ -18,14 +19,26 @@ export interface TDProps
 
 export class TD extends BaseComponent<TDProps, {}> {
   private content(): ComponentChild {
-    if (
-      this.props.column &&
-      typeof this.props.column.formatter === 'function'
-    ) {
+    if (!this.props.column) return null;
+
+    if (typeof this.props.column.formatter === 'function') {
       return this.props.column.formatter(
         this.props.cell.data,
         this.props.row,
         this.props.column,
+      );
+    }
+
+    if (this.props.column.plugin && this.base) {
+      return (
+        <PluginRenderer
+          pluginId={this.props.column.plugin.id}
+          props={{
+            column: this.props.column,
+            cell: this.props.cell,
+            row: this.props.row,
+          }}
+        />
       );
     }
 

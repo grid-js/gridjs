@@ -7,7 +7,6 @@ import { className } from '../../util/className';
 import { TColumn } from '../../types';
 import { TD } from './td';
 import Header from '../../header';
-import { PluginPosition, PluginRenderer } from '../../plugin';
 
 export interface TRProps extends BaseProps {
   row?: Row;
@@ -33,14 +32,6 @@ export class TR extends BaseComponent<TRProps, {}> {
     } else {
       return (
         <Fragment>
-          <PluginRenderer
-            position={PluginPosition.Cell}
-            props={{
-              parent: this,
-              row: this.props.row,
-            }}
-          />
-
           {this.props.row.cells.map((cell: Cell, i) => {
             const column = this.getColumn(i);
 

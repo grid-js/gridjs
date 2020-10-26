@@ -2,11 +2,8 @@ import { h } from 'preact';
 import { BaseComponent, BaseProps } from '../../base';
 import { CheckboxStore, CheckboxStoreState } from './store';
 import { CheckboxActions } from './actions';
-import { TD } from '../../table/td';
-import Cell from '../../../cell';
 import { className } from '../../../util/className';
 import Row from '../../../row';
-import { TH } from '../../table/th';
 import { CSSDeclaration } from '../../../types';
 import { Plugin } from '../../../plugin';
 
@@ -16,7 +13,6 @@ interface CheckboxState {
 
 interface CheckboxProps {
   plugin: Plugin<Checkbox>;
-  parent: BaseComponent<any, any>;
   // it's optional because thead doesn't have a row
   row?: Row;
   checkboxStore?: CheckboxStore;
@@ -34,7 +30,8 @@ export class Checkbox extends BaseComponent<
   private readonly storeUpdatedFn: (...args) => void;
 
   private isDataCell = (props): boolean => props.row !== undefined;
-  private getParent = (): Element => this.props.parent.base as Element;
+  private getParent = (): Element =>
+    this.base.parentElement.parentElement as Element;
 
   static defaultProps = {
     highlightClassName: className('tr', 'highlight'),
@@ -110,33 +107,16 @@ export class Checkbox extends BaseComponent<
   }
 
   render() {
-    const checkboxElement = (
-      <input
-        type={'checkbox'}
-        checked={this.state.isChecked}
-        onChange={() => this.toggleCheckbox()}
-      />
-    );
-
     if (this.isDataCell(this.props)) {
       return (
-        <TD
-          cell={new Cell(checkboxElement)}
-          className={this.props.checkboxClassName}
-          style={this.props.style}
+        <input
+          type={'checkbox'}
+          checked={this.state.isChecked}
+          onChange={() => this.toggleCheckbox()}
         />
       );
     } else {
-      return (
-        <TH
-          column={{
-            sort: { enabled: false },
-            name: 'checkbox',
-          }}
-          style={this.props.style}
-          index={-1}
-        />
-      );
+      return 'x';
     }
   }
 }

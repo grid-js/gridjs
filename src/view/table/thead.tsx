@@ -7,7 +7,6 @@ import { className } from '../../util/className';
 import Header from '../../header';
 import { TColumn } from '../../types';
 import { calculateRowColSpans } from '../../util/table';
-import { PluginPosition, PluginRenderer } from '../../plugin';
 
 interface THeadProps extends BaseProps {
   header: Header;
@@ -46,13 +45,6 @@ export class THead extends BaseComponent<THeadProps, {}> {
 
     return (
       <TR>
-        <PluginRenderer
-          position={PluginPosition.Cell}
-          props={{
-            parent: this,
-          }}
-        />
-
         {row.map((col) => {
           if (col.hidden) return null;
 

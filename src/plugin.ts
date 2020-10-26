@@ -1,5 +1,5 @@
 import { BaseComponent, BaseProps } from './view/base';
-import { Attributes, ComponentProps, ComponentType, Fragment, h } from 'preact';
+import { Attributes, ComponentType, Fragment, h } from 'preact';
 import log from './util/log';
 
 export enum PluginPosition {
@@ -67,17 +67,31 @@ export class PluginManager {
 }
 
 export interface PluginRendererProps extends BaseProps {
-  // TODO: change this to a typed ComponentProps
-  props?: ComponentProps<any>;
+  props?: any;
+  // to render a single plugin
+  pluginId?: string;
+  // to render all plugins in this PluginPosition
   position?: PluginPosition;
 }
 
 export class PluginRenderer extends BaseComponent<PluginRendererProps, {}> {
-  constructor(props, context) {
-    super(props, context);
-  }
-
   render() {
+    if (this.props.pluginId) {
+      const plugin = this.config.plugin.get(this.props.pluginId);
+
+      if (!plugin) return null;
+
+      return h(
+        Fragment,
+        {},
+        h(plugin.component, {
+          plugin: plugin,
+          ...plugin.props,
+          ...this.props.props,
+        }),
+      );
+    }
+
     return h(
       Fragment,
       {},
