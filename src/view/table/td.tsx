@@ -29,7 +29,7 @@ export class TD extends BaseComponent<TDProps, {}> {
       );
     }
 
-    if (this.props.column.plugin && this.base) {
+    if (this.props.column.plugin) {
       return (
         <PluginRenderer
           pluginId={this.props.column.plugin.id}

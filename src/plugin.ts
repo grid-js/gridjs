@@ -2,6 +2,22 @@ import { BaseComponent, BaseProps } from './view/base';
 import { Attributes, ComponentType, Fragment, h } from 'preact';
 import log from './util/log';
 
+/**
+ * BaseProps for all plugins
+ */
+export interface PluginBaseProps<T> {
+  plugin: Plugin<T>;
+}
+
+/**
+ * BaseComponent for all plugins
+ */
+export abstract class PluginBaseComponent<
+  T,
+  P extends PluginBaseProps<T>,
+  S
+> extends BaseComponent<P, S> {}
+
 export enum PluginPosition {
   Header,
   Footer,
