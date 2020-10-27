@@ -1,4 +1,10 @@
-import {PluginBaseComponent, PluginBaseProps, PluginManager, PluginPosition, PluginRenderer} from '../src/plugin';
+import {
+  PluginBaseComponent,
+  PluginBaseProps,
+  PluginManager,
+  PluginPosition,
+  PluginRenderer,
+} from '../src/plugin';
 import { createContext, h } from 'preact';
 import { mount } from 'enzyme';
 import { Config } from '../src/config';
@@ -143,14 +149,14 @@ describe('Plugin', () => {
     config.plugin.add({
       id: 'dummyheader',
       position: PluginPosition.Header,
-      component: DummyPlugin.prototype,
-      props:{ text: 'dummyheader' },
+      component: DummyPlugin,
+      props: { text: 'dummyheader' },
     });
 
     config.plugin.add({
       id: 'dummyfooter',
       position: PluginPosition.Footer,
-      component: DummyPlugin.prototype,
+      component: DummyPlugin,
       props: { text: 'dummyfooter' },
     });
 

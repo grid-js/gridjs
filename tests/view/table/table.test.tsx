@@ -369,8 +369,8 @@ describe('Table component', () => {
 
     const config = Config.fromUserConfig({
       data: [
-        [1, 2, 3],
-        ['a', 'b', 'c'],
+        [1, 2, 3, 4, 5, 6],
+        ['a', 'b', 'c', 'd', 'e', 'f'],
       ],
       columns: [
         {
@@ -417,11 +417,17 @@ describe('Table component', () => {
   });
 
   it('should set the correct sort attribute for nested headers', async () => {
+    const data = [
+      [1, 2, 3, 4, 5, 6],
+      ['a', 'b', 'c', 'd', 'e', 'f'],
+    ];
+
+    const flattenData = data
+      .reduce((prev, x) => [...prev, ...x], [])
+      .map((x) => x.toString());
+
     const config = Config.fromUserConfig({
-      data: [
-        [1, 2, 3],
-        ['a', 'b', 'c'],
-      ],
+      data: data,
       columns: [
         {
           name: 'c',
@@ -458,7 +464,27 @@ describe('Table component', () => {
       </configContext.Provider>,
     );
 
-    expect(table.html()).toMatchSnapshot();
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        expect(
+          table
+            .find('td')
+            .map((x) => x.text())
+            .every((x) => x),
+        ).toBeTrue();
+
+        expect(
+          table
+            .find('td')
+            .map((x) => x.text())
+            .every((x) => flattenData.indexOf(x.toString()) > -1),
+        ).toBeTrue();
+
+        expect(table.html()).toMatchSnapshot();
+
+        resolve();
+      }, 0);
+    });
   });
 
   it('should render custom attributes for cells', async () => {

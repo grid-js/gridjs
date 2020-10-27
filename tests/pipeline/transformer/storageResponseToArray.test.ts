@@ -82,7 +82,7 @@ describe('StorageResponseToArray', () => {
           },
           {
             name: 'def',
-            data: 42
+            data: 42,
           },
         ],
       }),

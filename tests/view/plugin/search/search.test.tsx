@@ -8,10 +8,16 @@ import PipelineUtils from '../../../../src/pipeline/pipelineUtils';
 import { Translator } from '../../../../src/i18n/language';
 import { Search } from '../../../../src/view/plugin/search/search';
 import { SearchActions } from '../../../../src/view/plugin/search/actions';
+import { Plugin, PluginPosition } from '../../../../src/plugin';
 
 describe('Search plugin', () => {
   let config: Config;
   const configContext = createContext(null);
+  const plugin: Plugin<any> = {
+    id: 'mysearch',
+    position: PluginPosition.Header,
+    component: {},
+  };
 
   beforeEach(() => {
     config = new Config();
@@ -31,7 +37,7 @@ describe('Search plugin', () => {
 
     const search = mount(
       <configContext.Provider value={config}>
-        <Search enabled={true} keyword={'boo'} />
+        <Search plugin={plugin} enabled={true} keyword={'boo'} />
       </configContext.Provider>,
     );
 
@@ -44,7 +50,7 @@ describe('Search plugin', () => {
 
     mount(
       <configContext.Provider value={config}>
-        <Search enabled={true} />
+        <Search plugin={plugin} enabled={true} />
       </configContext.Provider>,
     );
 
@@ -56,7 +62,7 @@ describe('Search plugin', () => {
 
     const wrapper = mount(
       <configContext.Provider value={config}>
-        <Search enabled={true} />
+        <Search plugin={plugin} enabled={true} />
       </configContext.Provider>,
     );
 
