@@ -24,7 +24,7 @@
     "dist/*"
   ],
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-node-resolve": "^10.0.0",
     "@types/enzyme": "^3.10.5",
     "@types/jest": "^26.0.0",
     "@types/jest-axe": "^3.2.2",
