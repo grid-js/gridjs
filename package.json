@@ -21,7 +21,13 @@
     "prettier": "~2.1.0"
   },
   "scripts": {
-    "prettier": "prettier --ignore-path dist --write 'packages/**/*.(ts|js|scss|css)'"
+    "prettier": "prettier --ignore-path dist --write 'packages/**/*.(ts|js|scss|css)'",
+    "clean": "lerna run clean",
+    "build": "leara run build",
+    "build:watch": "lerna run build:watch --stream --parallel",
+    "lint": "lerna run lint",
+    "test": "lerna run test",
+    "test:watch": "lerna run test:watch --stream --parallel"
   },
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
   "license": "MIT",
