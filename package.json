@@ -23,7 +23,7 @@
   "scripts": {
     "prettier": "prettier --ignore-path dist --write 'packages/**/*.(ts|js|scss|css)'",
     "clean": "lerna run clean",
-    "build": "leara run build",
+    "build": "lerna run build --stream",
     "build:watch": "lerna run build:watch --stream --parallel",
     "lint": "lerna run lint",
     "test": "lerna run test",
