@@ -18,8 +18,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
-    - run: npm run lint --if-present
-    - run: npm run build --if-present
+    - run: lerna bootstrap
+    - run: npm run lint
+    - run: npm run build
     - run: npm test
       env:
         CI: true
