@@ -8,6 +8,7 @@ import { useEffect, useRef } from 'preact/hooks';
 import { UserConfig, Config } from './src/config';
 import { BaseComponent, BaseProps } from './src/view/base';
 import { PluginPosition } from './src/plugin';
+import { Checkbox } from './src/view/plugin/checkbox/checkbox';
 
 export {
   Grid,
@@ -23,4 +24,5 @@ export {
   createRef,
   useEffect,
   useRef,
+  Checkbox
 };

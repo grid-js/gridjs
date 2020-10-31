@@ -1,4 +1,4 @@
-@import "colors";
+@import 'colors';
 
 input.gridjs-input {
   outline: none;
@@ -13,7 +13,7 @@ input.gridjs-input {
   appearance: none;
 
   &:focus {
-    box-shadow: 0 0 0 3px rgba(149, 189, 243, 0.50);
+    box-shadow: 0 0 0 3px rgba(149, 189, 243, 0.5);
     border-color: $blue1;
   }
 }

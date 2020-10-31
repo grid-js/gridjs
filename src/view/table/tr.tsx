@@ -1,4 +1,4 @@
-import { h, JSX } from 'preact';
+import { h, JSX, Fragment, ComponentChildren } from 'preact';
 
 import Row from '../../row';
 import Cell from '../../cell';
@@ -16,7 +16,11 @@ export interface TRProps extends BaseProps {
 export class TR extends BaseComponent<TRProps, {}> {
   private getColumn(cellIndex: number): TColumn {
     if (this.props.header) {
-      return this.props.header.columns[cellIndex];
+      const cols = Header.leafColumns(this.props.header.columns);
+
+      if (cols) {
+        return cols[cellIndex];
+      }
     }
 
     return null;
@@ -26,12 +30,12 @@ export class TR extends BaseComponent<TRProps, {}> {
     this.config.eventEmitter.emit('rowClick', e, this.props.row);
   }
 
-  render() {
+  private getChildren(): ComponentChildren {
     if (this.props.children) {
-      return <tr className={className('tr')}>{this.props.children}</tr>;
+      return this.props.children;
     } else {
       return (
-        <tr className={className('tr')} onClick={this.handleClick.bind(this)}>
+        <Fragment>
           {this.props.row.cells.map((cell: Cell, i) => {
             const column = this.getColumn(i);
 
@@ -46,8 +50,16 @@ export class TR extends BaseComponent<TRProps, {}> {
               />
             );
           })}
-        </tr>
+        </Fragment>
       );
     }
+  }
+
+  render() {
+    return (
+      <tr className={className('tr')} onClick={this.handleClick.bind(this)}>
+        {this.getChildren()}
+      </tr>
+    );
   }
 }

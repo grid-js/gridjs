@@ -2,6 +2,7 @@ import { ComponentChild } from 'preact';
 import Row from './row';
 import { SortConfig } from './view/plugin/sort/sort';
 import { JSXInternal } from 'preact/src/jsx';
+import { Plugin } from './plugin';
 
 export type ProtoExtends<T, U> = U & Omit<T, keyof U>;
 
@@ -24,14 +25,19 @@ export type TData = TDataArray | TDataObject;
 // Table header cell type
 export interface TColumn {
   id?: string;
-  selector?: (row: TDataArrayRow | TDataObjectRow) => TCell;
-  name: string | ComponentChild;
+  // default data for all columns
+  data?: ((row: TDataArrayRow | TDataObjectRow) => TCell) | TCell;
+  // column label
+  name?: string | ComponentChild;
+  plugin?: Plugin<any>;
+  // column width
   width?: string;
   sort?: SortConfig;
   columns?: OneDArray<TColumn>;
   fixedHeader?: boolean;
   hidden?: boolean;
   formatter?: (cell: TCell, row: Row, column: TColumn) => ComponentChild;
+  // HTML attributes to be added to all cells of this column
   attributes?:
     | ((
         cell: TCell,

@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import { ComponentChild, h } from 'preact';
 
 import { TR } from './tr';
 import { BaseComponent, BaseProps } from '../base';
@@ -18,7 +18,7 @@ export class THead extends BaseComponent<THeadProps, {}> {
     rowIndex: number,
     columnIndex: number,
     totalRows: number,
-  ) {
+  ): ComponentChild {
     const { rowSpan, colSpan } = calculateRowColSpans(
       column,
       rowIndex,
@@ -35,7 +35,11 @@ export class THead extends BaseComponent<THeadProps, {}> {
     );
   }
 
-  private renderRow(row: TColumn[], rowIndex: number, totalRows: number) {
+  private renderRow(
+    row: TColumn[],
+    rowIndex: number,
+    totalRows: number,
+  ): ComponentChild {
     // because the only sortable columns are leaf columns (not parents)
     const leafColumns = Header.leafColumns(this.props.header.columns);
 
@@ -55,7 +59,7 @@ export class THead extends BaseComponent<THeadProps, {}> {
     );
   }
 
-  private renderRows() {
+  private renderRows(): ComponentChild {
     const rows = Header.tabularFormat(this.props.header.columns);
 
     return rows.map((row, rowIndex) =>

@@ -1,15 +1,17 @@
-import { createRef, h, JSX } from 'preact';
+import { ComponentChild, createRef, h, JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';
 import { CSSDeclaration, TColumn } from '../../types';
 import { Sort } from '../plugin/sort/sort';
+import { PluginRenderer } from '../../plugin';
 
 export interface THProps
   extends BaseProps,
     JSX.HTMLAttributes<HTMLTableCellElement> {
   index: number;
   column: TColumn;
+  style?: CSSDeclaration;
 }
 
 export interface THState {
@@ -46,7 +48,7 @@ export class TH extends BaseComponent<THProps, THState> {
     }
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     setTimeout(() => {
       // sets the `top` style if the current TH is fixed
       if (this.props.column.fixedHeader && this.thRef.current) {
@@ -61,6 +63,25 @@ export class TH extends BaseComponent<THProps, THState> {
         }
       }
     }, 0);
+  }
+
+  private content(): ComponentChild {
+    if (this.props.column.name !== undefined) {
+      return this.props.column.name;
+    }
+
+    if (this.props.column.plugin !== undefined) {
+      return (
+        <PluginRenderer
+          pluginId={this.props.column.plugin.id}
+          props={{
+            column: this.props.column,
+          }}
+        />
+      );
+    }
+
+    return null;
   }
 
   render() {
@@ -85,13 +106,14 @@ export class TH extends BaseComponent<THProps, THState> {
           ...this.config.style.th,
           ...{ width: this.props.column.width },
           ...this.state.style,
+          ...this.props.style,
         }}
         onKeyDown={this.keyDown.bind(this)}
         rowSpan={this.props.rowSpan > 1 ? this.props.rowSpan : undefined}
         colSpan={this.props.colSpan > 1 ? this.props.colSpan : undefined}
         {...props}
       >
-        {this.props.column.name}
+        {this.content()}
         {this.isSortable() && (
           <Sort
             ref={this.sortRef}

@@ -1,10 +1,10 @@
 import { h, Fragment } from 'preact';
-import { BaseComponent, BaseProps } from '../base';
 import PaginationLimit from '../../pipeline/limit/pagination';
 import { className } from '../../util/className';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
 import Tabular from '../../tabular';
 import { PipelineProcessor } from '../../pipeline/processor';
+import { PluginBaseComponent, PluginBaseProps } from '../../plugin';
 
 interface PaginationState {
   page: number;
@@ -27,8 +27,8 @@ export interface PaginationConfig {
   };
 }
 
-export class Pagination extends BaseComponent<
-  BaseProps & PaginationConfig,
+export class Pagination extends PluginBaseComponent<
+  PluginBaseProps<Pagination> & PaginationConfig,
   PaginationState
 > {
   private processor: PaginationLimit | ServerPaginationLimit;

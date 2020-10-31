@@ -15,7 +15,7 @@ import { ServerStorageOptions } from './storage/server';
 import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
 import { Language, Translator } from './i18n/language';
-import { ComponentChild, createRef, h, RefObject } from 'preact';
+import { Component, ComponentChild, createRef, RefObject } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
 import { EventEmitter } from './util/eventEmitter';
@@ -30,6 +30,8 @@ export interface Config {
   /** container element that is used to mount the Grid.js to */
   // TODO: change this to an element reference
   container?: Element;
+  /** pointer to the main table element */
+  tableRef?: RefObject<Component>;
   /** gridjs-temp div which is used internally */
   tempRef?: RefObject<HTMLDivElement>;
   data?: TData | (() => TData) | (() => Promise<TData>);
@@ -135,6 +137,7 @@ export class Config {
     return {
       plugin: new PluginManager(),
       dispatcher: new Dispatcher<any>(),
+      tableRef: createRef(),
       tempRef: createRef(),
       width: '100%',
       height: 'auto',
@@ -181,23 +184,25 @@ export class Config {
     config.plugin.add({
       id: 'search',
       position: PluginPosition.Header,
-      component: h(Search, {
+      component: Search,
+      props: {
         enabled:
           userConfig.search === true || userConfig.search instanceof Object,
         ...(userConfig.search as SearchConfig),
-      }),
+      },
     });
 
     // Pagination
     config.plugin.add({
       id: 'pagination',
       position: PluginPosition.Footer,
-      component: h(Pagination, {
+      component: Pagination,
+      props: {
         enabled:
           userConfig.pagination === true ||
           userConfig.pagination instanceof Object,
         ...(userConfig.pagination as PaginationConfig),
-      }),
+      },
     });
 
     return config;

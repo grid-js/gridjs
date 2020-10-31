@@ -1,5 +1,4 @@
 import { h } from 'preact';
-import { BaseComponent, BaseProps } from '../../base';
 import GlobalSearchFilter from '../../../pipeline/filter/globalSearch';
 import { classJoin, className } from '../../../util/className';
 import { SearchStore, SearchStoreState } from './store';
@@ -7,6 +6,7 @@ import { SearchActions } from './actions';
 import ServerGlobalSearchFilter from '../../../pipeline/filter/serverGlobalSearch';
 import { debounce } from '../../../util/debounce';
 import { TCell } from '../../../types';
+import { PluginBaseComponent, PluginBaseProps } from '../../../plugin';
 
 export interface SearchConfig {
   keyword?: string;
@@ -19,7 +19,9 @@ export interface SearchConfig {
   };
 }
 
-export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
+export class Search extends PluginBaseComponent<
+  SearchConfig & PluginBaseProps<Search>
+> {
   private readonly searchProcessor:
     | GlobalSearchFilter
     | ServerGlobalSearchFilter;
@@ -31,7 +33,7 @@ export class Search extends BaseComponent<SearchConfig & BaseProps, {}> {
     debounceTimeout: 250,
   };
 
-  constructor(props: SearchConfig, context) {
+  constructor(props, context) {
     super(props, context);
 
     this.actions = new SearchActions(this.config.dispatcher);

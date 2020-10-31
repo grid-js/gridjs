@@ -1,5 +1,6 @@
 import './colors.scss';
 import './button.scss';
+import './shadow.scss';
 import './head.scss';
 import './container.scss';
 import './footer.scss';
@@ -15,3 +16,4 @@ import './thead.scss';
 import './wrapper.scss';
 import './search.scss';
 import './loadingBar.scss';
+import './checkbox.scss';

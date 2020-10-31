@@ -1,27 +1,51 @@
 import { BaseComponent, BaseProps } from './view/base';
-import { Fragment, h, VNode } from 'preact';
+import { Component, ComponentProps, Fragment, h } from 'preact';
 import log from './util/log';
+
+/**
+ * BaseProps for all plugins
+ */
+export interface PluginBaseProps<T extends PluginBaseComponentCtor> {
+  plugin: Plugin<T>;
+}
+
+/**
+ * BaseComponent for all plugins
+ */
+export abstract class PluginBaseComponent<
+  P extends PluginBaseProps<any> = any,
+  S = {}
+> extends BaseComponent<P, S> {}
+
+export interface PluginBaseComponentCtor<
+  P extends PluginBaseProps<any> = any,
+  S = {}
+> {
+  new (props: P, context?: any): Component<P, S>;
+}
 
 export enum PluginPosition {
   Header,
   Footer,
+  Cell,
 }
 
-export interface Plugin {
+export interface Plugin<T extends PluginBaseComponentCtor> {
   id: string;
   position: PluginPosition;
-  component: VNode<any>;
+  component: T;
+  props?: Partial<ComponentProps<T>>;
   order?: number;
 }
 
 export class PluginManager {
-  private readonly plugins: Plugin[];
+  private readonly plugins: Plugin<any>[];
 
   constructor() {
     this.plugins = [];
   }
 
-  get(id: string): Plugin | null {
+  get<T extends PluginBaseComponentCtor>(id: string): Plugin<T> | null {
     const plugins = this.plugins.filter((p) => p.id === id);
 
     if (plugins.length > 0) {
@@ -31,7 +55,7 @@ export class PluginManager {
     return null;
   }
 
-  add(plugin: Plugin): this {
+  add<T extends PluginBaseComponentCtor>(plugin: Plugin<T>): this {
     if (!plugin.id) {
       log.error('Plugin ID cannot be empty');
       return this;
@@ -51,8 +75,10 @@ export class PluginManager {
     return this;
   }
 
-  list(position?: PluginPosition): Plugin[] {
-    let plugins: Plugin[];
+  list<T extends PluginBaseComponentCtor>(
+    position?: PluginPosition,
+  ): Plugin<T>[] {
+    let plugins: Plugin<T>[];
 
     if (position != null || position != undefined) {
       plugins = this.plugins.filter((p) => p.position === position);
@@ -65,15 +91,39 @@ export class PluginManager {
 }
 
 export interface PluginRendererProps extends BaseProps {
+  props?: any;
+  // to render a single plugin
+  pluginId?: string;
+  // to render all plugins in this PluginPosition
   position?: PluginPosition;
 }
 
 export class PluginRenderer extends BaseComponent<PluginRendererProps, {}> {
   render() {
+    if (this.props.pluginId) {
+      const plugin = this.config.plugin.get(this.props.pluginId);
+
+      if (!plugin) return null;
+
+      return h(
+        Fragment,
+        {},
+        h(plugin.component, {
+          plugin: plugin,
+          ...plugin.props,
+          ...this.props.props,
+        }),
+      );
+    }
+
     return h(
       Fragment,
       {},
-      this.config.plugin.list(this.props.position).map((p) => p.component),
+      this.config.plugin
+        .list(this.props.position)
+        .map((p) =>
+          h(p.component, { plugin: p, ...p.props, ...this.props.props }),
+        ),
     );
   }
 }

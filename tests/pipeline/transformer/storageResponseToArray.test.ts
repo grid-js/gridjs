@@ -59,6 +59,44 @@ describe('StorageResponseToArray', () => {
     ]);
   });
 
+  it('should use static data field', async () => {
+    const raw = {
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+      total: 2,
+    };
+
+    const transformer = new StorageResponseToArrayTransformer({
+      header: Header.fromUserConfig({
+        columns: [
+          {
+            name: 'a',
+          },
+          {
+            name: 'b',
+          },
+          {
+            name: 'c',
+          },
+          {
+            name: 'def',
+            data: 42,
+          },
+        ],
+      }),
+    });
+    const data = await transformer.process(raw);
+
+    expect(data.total).toBe(2);
+    expect(data.data).toHaveLength(2);
+    expect(data.data).toStrictEqual([
+      [1, 2, 3, 42],
+      ['a', 'b', 'c', 42],
+    ]);
+  });
+
   it('should convert array of objects when selector is a function', async () => {
     const raw = {
       data: [
@@ -84,15 +122,15 @@ describe('StorageResponseToArray', () => {
       header: Header.fromUserConfig({
         columns: [
           {
-            selector: (row: any) => row.name.first,
+            data: (row: any) => row.name.first,
             name: 'firstName',
           },
           {
-            selector: (row: any) => row.name.last,
+            data: (row: any) => row.name.last,
             name: 'lastname',
           },
           {
-            selector: (row: any) => row.name.first + ' ' + row.name.last,
+            data: (row: any) => row.name.first + ' ' + row.name.last,
             name: 'firstlastname',
           },
           {

@@ -1,10 +1,10 @@
 import { OneDArray, TColumn, TwoDArray } from './types';
 import Base from './base';
 import { UserConfig } from './config';
-import Tabular from './tabular';
-import { width, px, getWidth } from './util/width';
+import { getWidth, px, width } from './util/width';
 import { ShadowTable } from './view/table/shadow';
 import {
+  Component,
   ComponentChild,
   createRef,
   h,
@@ -15,6 +15,7 @@ import {
 import { camelCase } from './util/string';
 import { flatten } from './util/array';
 import logger from './util/log';
+import { PluginPosition } from './plugin';
 
 class Header extends Base {
   private _columns: OneDArray<TColumn>;
@@ -40,14 +41,14 @@ class Header extends Base {
    *    - Cell content of the last row
    *
    * @param container
+   * @param tableRef
    * @param tempRef
-   * @param data
    * @param autoWidth
    */
   adjustWidth(
     container: Element,
+    tableRef: RefObject<Component>,
     tempRef: RefObject<HTMLDivElement>,
-    data: Tabular,
     autoWidth = true,
   ): this {
     if (!container) {
@@ -65,11 +66,10 @@ class Header extends Base {
     // to render columns. One the table is rendered and widths are known,
     // we unmount the shadow table from the DOM and set the correct width
     const shadowTable = createRef();
-    if (data && data.length && autoWidth) {
+    if (tableRef.current && autoWidth) {
       // render a ShadowTable with the first 10 rows
       const el = h(ShadowTable, {
-        data: Tabular.fromRows(data.rows.slice(0, 10)),
-        header: this,
+        tableRef: tableRef,
       });
       el.ref = shadowTable;
       render(el, tempRef.current);
@@ -84,7 +84,7 @@ class Header extends Base {
       if (!column.width && autoWidth) {
         // tries to find the corresponding cell
         // from the ShadowTable and set the correct width
-        column.width = px(getWidth(shadowTable.current.base, `${column.id}`));
+        column.width = px(getWidth(shadowTable.current.base, column.id));
       } else {
         // column with is already defined
         // sets the column with based on the width of its container
@@ -92,7 +92,7 @@ class Header extends Base {
       }
     }
 
-    if (data && data.length && autoWidth) {
+    if (tableRef.current && autoWidth) {
       // unmount the shadow table from temp
       render(null, tempRef.current);
     }
@@ -175,6 +175,23 @@ class Header extends Base {
     }
   }
 
+  private populatePlugins(
+    userConfig: UserConfig,
+    columns: OneDArray<TColumn>,
+  ): void {
+    // populate the cell columns
+    for (const column of columns) {
+      if (column.plugin !== undefined) {
+        userConfig.plugin.add({
+          id: column.id,
+          props: {},
+          ...column.plugin,
+          position: PluginPosition.Cell,
+        });
+      }
+    }
+  }
+
   static fromColumns(
     columns: OneDArray<TColumn | string | ComponentChild>,
   ): Header {
@@ -190,6 +207,14 @@ class Header extends Base {
 
         if (typedColumn.columns) {
           typedColumn.columns = Header.fromColumns(typedColumn.columns).columns;
+        }
+
+        // because the data for that cell is null
+        // if we are trying to render a plugin
+        if (typeof typedColumn.plugin === 'object') {
+          if (typedColumn.data === undefined) {
+            typedColumn.data = null;
+          }
         }
 
         // TColumn type
@@ -224,6 +249,7 @@ class Header extends Base {
       header.setID();
       header.setSort(userConfig);
       header.setFixedHeader(userConfig);
+      header.populatePlugins(userConfig, header.columns);
       return header;
     }
 

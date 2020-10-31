@@ -81,8 +81,8 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
       this.setState({
         header: config.header.adjustWidth(
           config.container,
+          config.tableRef,
           config.tempRef,
-          this.state.data,
           config.autoWidth,
         ),
       });
@@ -92,14 +92,14 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     this.props.pipeline.on('updated', this.processPipelineFn);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this.props.pipeline.off('updated', this.processPipelineFn);
   }
 
   componentDidUpdate(
     _: Readonly<ContainerProps>,
     previousState: Readonly<ContainerState>,
-  ) {
+  ): void {
     // we can't jump to the Status.Rendered if previous status is not Status.Loaded
     if (
       previousState.status != Status.Rendered &&
@@ -144,6 +144,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
             style={{ width: this.props.width, height: this.props.height }}
           >
             <Table
+              ref={this.props.config.tableRef}
               data={this.state.data}
               header={this.state.header}
               width={this.props.width}
