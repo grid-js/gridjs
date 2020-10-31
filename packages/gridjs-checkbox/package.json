@@ -5,7 +5,9 @@
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
   "homepage": "https://gridjs.io/packages/gridjs-checkbox",
   "license": "MIT",
-  "main": "lib/gridjs-checkbox.js",
+  "main": "dist/gridjs-checkbox.production.min.js",
+  "module": "dist/gridjs-checkbox.production.es.min.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/*"
   ],
@@ -30,7 +32,6 @@
     "preact": "^10.4.8",
     "tslib": "^2.0.1"
   },
-  "types": "dist/index.d.ts",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@types/enzyme": "^3.10.5",

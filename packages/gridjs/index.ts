@@ -8,7 +8,6 @@ import { useEffect, useRef } from 'preact/hooks';
 import { UserConfig, Config } from './src/config';
 import { BaseComponent, BaseProps } from './src/view/base';
 import { PluginPosition, PluginBaseComponent, PluginBaseProps } from './src/plugin';
-import { Checkbox } from './src/view/plugin/checkbox/checkbox';
 import { BaseActions } from './src/view/base/actions';
 import { ID } from './src/util/id';
 import { className } from './src/util/className';
@@ -37,6 +36,5 @@ export {
   Component,
   createRef,
   useEffect,
-  useRef,
-  Checkbox
+  useRef
 };
