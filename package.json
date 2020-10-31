@@ -25,8 +25,8 @@
     "clean": "lerna run clean",
     "build": "lerna run build --stream",
     "build:watch": "lerna run build:watch --stream --parallel",
-    "lint": "lerna run lint --stream",
-    "test": "lerna run test --stream",
+    "lint": "lerna run lint --stream --parallel",
+    "test": "lerna run test --stream --parallel",
     "test:watch": "lerna run test:watch --stream --parallel"
   },
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",

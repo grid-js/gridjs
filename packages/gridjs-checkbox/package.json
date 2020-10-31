@@ -1,7 +1,7 @@
 {
   "name": "gridjs-checkbox",
   "version": "2.1.0",
-  "description": "> TODO: description",
+  "description": "Adds checkbox column to Grid.js",
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
   "homepage": "https://gridjs.io/packages/gridjs-checkbox",
   "license": "MIT",
@@ -21,8 +21,7 @@
     "build:watch": "rollup -c --watch",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
-    "test:watch": "jest --watch",
-    "changelog": "lerna-changelog"
+    "test:watch": "jest --watch"
   },
   "bugs": {
     "url": "https://github.com/grid-js/gridjs/issues"
