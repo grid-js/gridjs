@@ -17,7 +17,11 @@
   "homepage": "https://gridjs.io",
   "repository": "https://github.com/grid-js/gridjs",
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "lerna": "^3.22.1",
+    "prettier": "~2.1.0"
+  },
+  "scripts": {
+    "prettier": "prettier --ignore-path dist --write 'packages/**/*.(ts|js|scss|css)'"
   },
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
   "license": "MIT",
