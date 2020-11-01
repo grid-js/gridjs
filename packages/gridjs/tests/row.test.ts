@@ -19,4 +19,27 @@ describe('Row class', () => {
 
     expect(row).toHaveLength(2);
   });
+
+  it('should return a single cell', () => {
+    const cell1 = new Cell(24);
+    const cell2 = new Cell(42);
+    const row = new Row();
+    row.cells.push(cell1);
+    row.cells.push(cell2);
+
+    expect(row.cell(0).data).toBe(24);
+    expect(row.cell(1).data).toBe(42);
+  });
+
+  it('should return a list of cells', () => {
+    const cell1 = new Cell(24);
+    const cell2 = new Cell(42);
+    const row = new Row();
+    row.cells.push(cell1);
+    row.cells.push(cell2);
+
+    expect(row.cells).toHaveLength(2);
+    expect(row.cells.map((x) => x.data)).toContain(24);
+    expect(row.cells.map((x) => x.data)).toContain(42);
+  });
 });

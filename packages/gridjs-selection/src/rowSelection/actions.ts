@@ -1,24 +1,23 @@
 import { BaseActions } from 'gridjs';
-import { ID } from 'gridjs';
 
 export interface RowSelectionActionsType {
   CHECK: {
-    ROW_ID: ID;
+    ROW_ID: string;
   };
 
   UNCHECK: {
-    ROW_ID: ID;
+    ROW_ID: string;
   };
 }
 
 export class RowSelectionActions extends BaseActions<RowSelectionActionsType> {
-  check(rowId: ID): void {
+  check(rowId: string): void {
     this.dispatch('CHECK', {
       ROW_ID: rowId,
     });
   }
 
-  uncheck(rowId: ID): void {
+  uncheck(rowId: string): void {
     this.dispatch('UNCHECK', {
       ROW_ID: rowId,
     });

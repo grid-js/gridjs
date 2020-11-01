@@ -1,9 +1,8 @@
 import { BaseStore } from 'gridjs';
 import { RowSelectionActionsType } from './actions';
-import { ID } from 'gridjs';
 
 export type RowSelectionStoreState = {
-  rowIds: ID[];
+  rowIds: string[];
 };
 
 export class RowSelectionStore extends BaseStore<
@@ -26,7 +25,7 @@ export class RowSelectionStore extends BaseStore<
     }
   }
 
-  private check(rowId: ID): void {
+  private check(rowId: string): void {
     // rowId already exists
     if (this.state.rowIds.indexOf(rowId) > -1) return;
 
@@ -35,7 +34,7 @@ export class RowSelectionStore extends BaseStore<
     });
   }
 
-  private uncheck(rowId: ID): void {
+  private uncheck(rowId: string): void {
     const index = this.state.rowIds.indexOf(rowId);
 
     // rowId doesn't exist

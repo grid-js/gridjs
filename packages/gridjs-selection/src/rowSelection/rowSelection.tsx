@@ -11,6 +11,8 @@ interface RowSelectionState {
 }
 
 interface RowSelectionProps {
+  // row identifier
+  id: (row: Row) => string;
   // it's optional because thead doesn't have a row
   row?: Row;
   cell?: Cell;
@@ -83,7 +85,7 @@ export class RowSelection extends PluginBaseComponent<
 
     if (!parent) return;
 
-    const isChecked = state.rowIds.indexOf(this.props.row.id) > -1;
+    const isChecked = state.rowIds.indexOf(this.props.id(this.props.row)) > -1;
 
     this.setState({
       isChecked: isChecked,
@@ -97,12 +99,12 @@ export class RowSelection extends PluginBaseComponent<
   }
 
   private check(): void {
-    this.actions.check(this.props.row.id);
+    this.actions.check(this.props.id(this.props.row));
     this.props.cell.update(true);
   }
 
   private uncheck(): void {
-    this.actions.uncheck(this.props.row.id);
+    this.actions.uncheck(this.props.id(this.props.row));
     this.props.cell.update(false);
   }
 

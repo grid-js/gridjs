@@ -11,6 +11,10 @@ class Row extends Base {
     this.cells = cells || [];
   }
 
+  public cell(index: number): Cell {
+    return this._cells[index];
+  }
+
   public get cells(): Cell[] {
     return this._cells;
   }
