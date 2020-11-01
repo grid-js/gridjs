@@ -1,14 +1,15 @@
 import typescript from 'rollup-plugin-typescript2';
-import autoprefixer from 'autoprefixer'
-import postcss from 'rollup-plugin-postcss'
-import { terser } from 'rollup-plugin-terser'
-import size from 'rollup-plugin-sizes'
+import autoprefixer from 'autoprefixer';
+import postcss from 'rollup-plugin-postcss';
+import { terser } from 'rollup-plugin-terser';
+import size from 'rollup-plugin-sizes';
 import resolve from '@rollup/plugin-node-resolve';
 import pathlib from 'path';
 
 const lib = 'gridjs';
 
-const path = (env, postfix) => `dist/${lib}.${env}${postfix ? '.' + postfix : ''}.js`;
+const path = (env, postfix) =>
+  `dist/${lib}.${env}${postfix ? '.' + postfix : ''}.js`;
 
 export default [
   {
@@ -21,49 +22,50 @@ export default [
       resolve(),
       postcss({
         use: ['sass'],
-        plugins: [
-          autoprefixer,
-        ],
+        plugins: [autoprefixer],
         sourceMap: true,
         extract: pathlib.resolve('./dist/theme/mermaid.css'),
-        extensions: ['.sass','.css', '.scss']
+        extensions: ['.sass', '.css', '.scss'],
       }),
       typescript({
-        tsconfig: "tsconfig.json",
+        tsconfig: 'tsconfig.json',
         tsconfigOverride: {
-          exclude: ["tests/**/*"],
-          compilerOptions : {
-            module: "es2015"
-          }
-        }
-      })
+          exclude: ['tests/**/*'],
+          compilerOptions: {
+            module: 'es2015',
+          },
+        },
+      }),
     ],
   },
   {
     input: 'index.ts',
     output: [
-      { file: path('production', 'min'), name: lib, format: 'umd', sourcemap: true },
+      {
+        file: path('production', 'min'),
+        name: lib,
+        format: 'umd',
+        sourcemap: true,
+      },
       { file: path('production', 'es.min'), format: 'es', sourcemap: true },
     ],
     plugins: [
       resolve(),
       postcss({
         use: ['sass'],
-        plugins: [
-          autoprefixer,
-        ],
+        plugins: [autoprefixer],
         extract: pathlib.resolve('./dist/theme/mermaid.min.css'),
-        extensions: ['.sass','.css', '.scss'],
-        minimize: true
+        extensions: ['.sass', '.css', '.scss'],
+        minimize: true,
       }),
       typescript({
-        tsconfig: "tsconfig.release.json",
+        tsconfig: 'tsconfig.release.json',
         tsconfigOverride: {
           compilerOptions: {
-            module: "es2015",
-            declaration: false
-          }
-        }
+            module: 'es2015',
+            declaration: false,
+          },
+        },
       }),
       terser(),
       size({
@@ -71,4 +73,4 @@ export default [
       }),
     ],
   },
-]
+];

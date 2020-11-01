@@ -1,30 +1,32 @@
-import { h } from 'preact';
-import { CheckboxStore, CheckboxStoreState } from './store';
-import { CheckboxActions } from './actions';
-import { className } from '../../../util/className';
-import Row from '../../../row';
-import { PluginBaseComponent, PluginBaseProps } from '../../../plugin';
-import Cell from '../../../cell';
+import { h } from 'gridjs';
+import { RowSelectionStore, RowSelectionStoreState } from './store';
+import { RowSelectionActions } from './actions';
+import { className } from 'gridjs';
+import { Row } from 'gridjs';
+import { PluginBaseComponent, PluginBaseProps } from 'gridjs';
+import { Cell } from 'gridjs';
 
-interface CheckboxState {
+interface RowSelectionState {
   isChecked: boolean;
 }
 
-interface CheckboxProps {
+interface RowSelectionProps {
+  // row identifier
+  id: (row: Row) => string;
   // it's optional because thead doesn't have a row
   row?: Row;
   cell?: Cell;
-  checkboxStore?: CheckboxStore;
+  store?: RowSelectionStore;
   selectedClassName?: string;
   checkboxClassName?: string;
 }
 
-export class Checkbox extends PluginBaseComponent<
-  CheckboxProps & PluginBaseProps<Checkbox>,
-  CheckboxState
+export class RowSelection extends PluginBaseComponent<
+  RowSelectionProps & PluginBaseProps<RowSelection>,
+  RowSelectionState
 > {
-  private readonly actions: CheckboxActions;
-  private readonly store: CheckboxStore;
+  private readonly actions: RowSelectionActions;
+  private readonly store: RowSelectionStore;
   private readonly storeUpdatedFn: (...args) => void;
 
   private isDataCell = (props): boolean => props.row !== undefined;
@@ -38,7 +40,7 @@ export class Checkbox extends PluginBaseComponent<
     checkboxClassName: className('checkbox'),
   };
 
-  constructor(props: CheckboxProps & PluginBaseProps<Checkbox>, context) {
+  constructor(props: RowSelectionProps & PluginBaseProps<RowSelection>, context) {
     super(props, context);
 
     this.state = {
@@ -48,19 +50,18 @@ export class Checkbox extends PluginBaseComponent<
     // store/dispatcher is required only if we are rendering a TD (not a TH)
     if (this.isDataCell(props)) {
       // create a new store if a global store doesn't exist
-      if (!props.checkboxStore) {
-        const store = new CheckboxStore(this.config.dispatcher);
+      if (!props.store) {
+        const store = new RowSelectionStore(this.config.dispatcher);
         this.store = store;
 
         // to reuse for other checkboxes
-        // TODO: investigate typechecking issue here
-        props.plugin.props['checkboxStore'] = store;
+        props.plugin.props.store = store;
       } else {
         // restore the existing store
-        this.store = props.checkboxStore;
+        this.store = props.store;
       }
 
-      this.actions = new CheckboxActions(this.config.dispatcher);
+      this.actions = new RowSelectionActions(this.config.dispatcher);
       this.storeUpdatedFn = this.storeUpdated.bind(this);
       this.store.on('updated', this.storeUpdatedFn);
 
@@ -79,12 +80,12 @@ export class Checkbox extends PluginBaseComponent<
     if (this.store) this.storeUpdated(this.store.state);
   }
 
-  private storeUpdated(state: CheckboxStoreState): void {
+  private storeUpdated(state: RowSelectionStoreState): void {
     const parent = this.getParentTR();
 
     if (!parent) return;
 
-    const isChecked = state.rowIds.indexOf(this.props.row.id) > -1;
+    const isChecked = state.rowIds.indexOf(this.props.id(this.props.row)) > -1;
 
     this.setState({
       isChecked: isChecked,
@@ -98,12 +99,12 @@ export class Checkbox extends PluginBaseComponent<
   }
 
   private check(): void {
-    this.actions.check(this.props.row.id);
+    this.actions.check(this.props.id(this.props.row));
     this.props.cell.update(true);
   }
 
   private uncheck(): void {
-    this.actions.uncheck(this.props.row.id);
+    this.actions.uncheck(this.props.id(this.props.row));
     this.props.cell.update(false);
   }
 
@@ -125,8 +126,8 @@ export class Checkbox extends PluginBaseComponent<
           className={this.props.checkboxClassName}
         />
       );
-    } else {
-      return null;
     }
+
+    return null;
   }
 }

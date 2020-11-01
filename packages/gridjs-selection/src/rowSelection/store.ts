@@ -1,16 +1,15 @@
-import BaseStore from '../../base/store';
-import { CheckboxActionsType } from './actions';
-import { ID } from '../../../util/id';
+import { BaseStore } from 'gridjs';
+import { RowSelectionActionsType } from './actions';
 
-export type CheckboxStoreState = {
-  rowIds: ID[];
+export type RowSelectionStoreState = {
+  rowIds: string[];
 };
 
-export class CheckboxStore extends BaseStore<
-  CheckboxStoreState,
-  CheckboxActionsType
+export class RowSelectionStore extends BaseStore<
+  RowSelectionStoreState,
+  RowSelectionActionsType
 > {
-  getInitialState(): CheckboxStoreState {
+  getInitialState(): RowSelectionStoreState {
     return { rowIds: [] };
   }
 
@@ -26,7 +25,7 @@ export class CheckboxStore extends BaseStore<
     }
   }
 
-  private check(rowId: ID): void {
+  private check(rowId: string): void {
     // rowId already exists
     if (this.state.rowIds.indexOf(rowId) > -1) return;
 
@@ -35,7 +34,7 @@ export class CheckboxStore extends BaseStore<
     });
   }
 
-  private uncheck(rowId: ID): void {
+  private uncheck(rowId: string): void {
     const index = this.state.rowIds.indexOf(rowId);
 
     // rowId doesn't exist
