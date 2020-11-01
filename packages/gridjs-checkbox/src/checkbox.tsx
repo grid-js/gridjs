@@ -53,8 +53,7 @@ export class Checkbox extends PluginBaseComponent<
         this.store = store;
 
         // to reuse for other checkboxes
-        // TODO: investigate typechecking issue here
-        props.plugin.props['checkboxStore'] = store;
+        props.plugin.props.checkboxStore = store;
       } else {
         // restore the existing store
         this.store = props.checkboxStore;
@@ -125,8 +124,8 @@ export class Checkbox extends PluginBaseComponent<
           className={this.props.checkboxClassName}
         />
       );
-    } else {
-      return null;
     }
+
+    return null;
   }
 }
