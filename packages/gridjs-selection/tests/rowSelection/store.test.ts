@@ -1,11 +1,11 @@
-import { CheckboxStore } from '../src/store';
+import { RowSelectionStore } from '../../src/rowSelection/store';
 import { Dispatcher } from 'gridjs';
 
 describe('Store', () => {
   const dispatcher = new Dispatcher();
 
   it('should handle check actions', () => {
-    const store = new CheckboxStore(dispatcher);
+    const store = new RowSelectionStore(dispatcher);
     store.handle('CHECK', {
       ROW_ID: 1,
     });
@@ -15,7 +15,7 @@ describe('Store', () => {
   });
 
   it('should handle uncheck', () => {
-    const store = new CheckboxStore(dispatcher);
+    const store = new RowSelectionStore(dispatcher);
 
     store.handle('CHECK', {
       ROW_ID: 1,
@@ -34,7 +34,7 @@ describe('Store', () => {
   });
 
   it('should handle uncheck with empty store', () => {
-    const store = new CheckboxStore(dispatcher);
+    const store = new RowSelectionStore(dispatcher);
 
     store.handle('UNCHECK', {
       ROW_ID: 1,
@@ -44,7 +44,7 @@ describe('Store', () => {
   });
 
   it('should not uncheck wrong items', () => {
-    const store = new CheckboxStore(dispatcher);
+    const store = new RowSelectionStore(dispatcher);
 
     store.handle('CHECK', {
       ROW_ID: 1,
@@ -64,7 +64,7 @@ describe('Store', () => {
   });
 
   it('should not check the same item twice', () => {
-    const store = new CheckboxStore(dispatcher);
+    const store = new RowSelectionStore(dispatcher);
 
     store.handle('CHECK', {
       ROW_ID: 1,

@@ -1,12 +1,12 @@
 {
-  "name": "gridjs-checkbox",
+  "name": "gridjs-selection",
   "version": "2.1.0",
-  "description": "Adds checkbox column to Grid.js",
+  "description": "Adds row and cell selection to Grid.js",
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
-  "homepage": "https://gridjs.io/packages/gridjs-checkbox",
+  "homepage": "https://gridjs.io/packages/gridjs-selection",
   "license": "MIT",
-  "main": "dist/gridjs-checkbox.production.min.js",
-  "module": "dist/gridjs-checkbox.production.es.min.js",
+  "main": "dist/gridjs-selection.production.min.js",
+  "module": "dist/gridjs-selection.production.es.min.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/*"

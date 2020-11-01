@@ -1,16 +1,16 @@
 import { BaseStore } from 'gridjs';
-import { CheckboxActionsType } from './actions';
+import { RowSelectionActionsType } from './actions';
 import { ID } from 'gridjs';
 
-export type CheckboxStoreState = {
+export type RowSelectionStoreState = {
   rowIds: ID[];
 };
 
-export class CheckboxStore extends BaseStore<
-  CheckboxStoreState,
-  CheckboxActionsType
+export class RowSelectionStore extends BaseStore<
+  RowSelectionStoreState,
+  RowSelectionActionsType
 > {
-  getInitialState(): CheckboxStoreState {
+  getInitialState(): RowSelectionStoreState {
     return { rowIds: [] };
   }
 

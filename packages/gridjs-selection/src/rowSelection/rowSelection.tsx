@@ -1,30 +1,30 @@
 import { h } from 'gridjs';
-import { CheckboxStore, CheckboxStoreState } from './store';
-import { CheckboxActions } from './actions';
+import { RowSelectionStore, RowSelectionStoreState } from './store';
+import { RowSelectionActions } from './actions';
 import { className } from 'gridjs';
 import { Row } from 'gridjs';
 import { PluginBaseComponent, PluginBaseProps } from 'gridjs';
 import { Cell } from 'gridjs';
 
-interface CheckboxState {
+interface RowSelectionState {
   isChecked: boolean;
 }
 
-interface CheckboxProps {
+interface RowSelectionProps {
   // it's optional because thead doesn't have a row
   row?: Row;
   cell?: Cell;
-  checkboxStore?: CheckboxStore;
+  store?: RowSelectionStore;
   selectedClassName?: string;
   checkboxClassName?: string;
 }
 
-export class Checkbox extends PluginBaseComponent<
-  CheckboxProps & PluginBaseProps<Checkbox>,
-  CheckboxState
+export class RowSelection extends PluginBaseComponent<
+  RowSelectionProps & PluginBaseProps<RowSelection>,
+  RowSelectionState
 > {
-  private readonly actions: CheckboxActions;
-  private readonly store: CheckboxStore;
+  private readonly actions: RowSelectionActions;
+  private readonly store: RowSelectionStore;
   private readonly storeUpdatedFn: (...args) => void;
 
   private isDataCell = (props): boolean => props.row !== undefined;
@@ -38,7 +38,7 @@ export class Checkbox extends PluginBaseComponent<
     checkboxClassName: className('checkbox'),
   };
 
-  constructor(props: CheckboxProps & PluginBaseProps<Checkbox>, context) {
+  constructor(props: RowSelectionProps & PluginBaseProps<RowSelection>, context) {
     super(props, context);
 
     this.state = {
@@ -48,18 +48,18 @@ export class Checkbox extends PluginBaseComponent<
     // store/dispatcher is required only if we are rendering a TD (not a TH)
     if (this.isDataCell(props)) {
       // create a new store if a global store doesn't exist
-      if (!props.checkboxStore) {
-        const store = new CheckboxStore(this.config.dispatcher);
+      if (!props.store) {
+        const store = new RowSelectionStore(this.config.dispatcher);
         this.store = store;
 
         // to reuse for other checkboxes
-        props.plugin.props.checkboxStore = store;
+        props.plugin.props.store = store;
       } else {
         // restore the existing store
-        this.store = props.checkboxStore;
+        this.store = props.store;
       }
 
-      this.actions = new CheckboxActions(this.config.dispatcher);
+      this.actions = new RowSelectionActions(this.config.dispatcher);
       this.storeUpdatedFn = this.storeUpdated.bind(this);
       this.store.on('updated', this.storeUpdatedFn);
 
@@ -78,7 +78,7 @@ export class Checkbox extends PluginBaseComponent<
     if (this.store) this.storeUpdated(this.store.state);
   }
 
-  private storeUpdated(state: CheckboxStoreState): void {
+  private storeUpdated(state: RowSelectionStoreState): void {
     const parent = this.getParentTR();
 
     if (!parent) return;

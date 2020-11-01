@@ -1,7 +1,7 @@
 import { BaseActions } from 'gridjs';
 import { ID } from 'gridjs';
 
-export interface CheckboxActionsType {
+export interface RowSelectionActionsType {
   CHECK: {
     ROW_ID: ID;
   };
@@ -11,7 +11,7 @@ export interface CheckboxActionsType {
   };
 }
 
-export class CheckboxActions extends BaseActions<CheckboxActionsType> {
+export class RowSelectionActions extends BaseActions<RowSelectionActionsType> {
   check(rowId: ID): void {
     this.dispatch('CHECK', {
       ROW_ID: rowId,
