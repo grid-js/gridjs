@@ -54,7 +54,7 @@
     "jsdom-global": "^3.0.2",
     "lerna": "^3.22.1",
     "lerna-changelog": "^1.0.1",
-    "node-sass": "^4.14.1",
+    "node-sass": "^5.0.0",
     "node-sass-chokidar": "^1.5.0",
     "prettier": "~2.1.0",
     "rimraf": "~3.0.2",
