@@ -17,7 +17,7 @@ export interface TDProps
   style?: CSSDeclaration;
 }
 
-export class TD extends BaseComponent<TDProps, {}> {
+export class TD extends BaseComponent<TDProps> {
   private content(): ComponentChild {
     if (
       this.props.column &&
@@ -33,7 +33,7 @@ export class TD extends BaseComponent<TDProps, {}> {
     if (this.props.column && this.props.column.plugin) {
       return (
         <PluginRenderer
-          pluginId={this.props.column.plugin.id}
+          pluginId={this.props.column.id}
           props={{
             column: this.props.column,
             cell: this.props.cell,

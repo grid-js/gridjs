@@ -13,7 +13,12 @@ export default [
     input: 'index.ts',
     external: external,
     output: [
-      { file: path('development'), name: 'gridjs.selection', format: 'umd', sourcemap: true },
+      {
+        file: path('development'),
+        name: 'gridjs.selection',
+        format: 'umd',
+        sourcemap: true,
+      },
       { file: path('development', 'es'), format: 'es', sourcemap: true },
     ],
     plugins: [

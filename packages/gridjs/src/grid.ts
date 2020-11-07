@@ -12,7 +12,9 @@ class Grid extends EventEmitter<GridEvents> {
 
   constructor(userConfig?: UserConfig) {
     super();
-    this.config = new Config({ eventEmitter: this }).update(userConfig);
+    this.config = new Config({ instance: this, eventEmitter: this }).update(
+      userConfig,
+    );
     this.plugin = this.config.plugin;
   }
 

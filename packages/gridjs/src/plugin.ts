@@ -98,9 +98,10 @@ export interface PluginRendererProps extends BaseProps {
   position?: PluginPosition;
 }
 
-export class PluginRenderer extends BaseComponent<PluginRendererProps, {}> {
+export class PluginRenderer extends BaseComponent<PluginRendererProps> {
   render() {
     if (this.props.pluginId) {
+      // render a single plugin
       const plugin = this.config.plugin.get(this.props.pluginId);
 
       if (!plugin) return null;
@@ -114,16 +115,19 @@ export class PluginRenderer extends BaseComponent<PluginRendererProps, {}> {
           ...this.props.props,
         }),
       );
+    } else if (this.props.position !== undefined) {
+      // render using a specific plugin position
+      return h(
+        Fragment,
+        {},
+        this.config.plugin
+          .list(this.props.position)
+          .map((p) =>
+            h(p.component, { plugin: p, ...p.props, ...this.props.props }),
+          ),
+      );
     }
 
-    return h(
-      Fragment,
-      {},
-      this.config.plugin
-        .list(this.props.position)
-        .map((p) =>
-          h(p.component, { plugin: p, ...p.props, ...this.props.props }),
-        ),
-    );
+    return null;
   }
 }

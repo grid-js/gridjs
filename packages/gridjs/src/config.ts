@@ -21,9 +21,12 @@ import PipelineUtils from './pipeline/pipelineUtils';
 import { EventEmitter } from './util/eventEmitter';
 import { GridEvents } from './events';
 import { PluginManager, PluginPosition } from './plugin';
+import Grid from './grid';
 
 // Config type used internally
 export interface Config {
+  // a reference to the current Grid.js instance
+  instance: Grid;
   eventEmitter: EventEmitter<GridEvents>;
   dispatcher: Dispatcher<any>;
   plugin: PluginManager;
