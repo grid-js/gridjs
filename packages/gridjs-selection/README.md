@@ -1,11 +1,14 @@
-# `gridjs-checkbox`
+# `gridjs-selection`
 
-> TODO: description
+> Row/cell selection plugin for Grid.js
 
-## Usage
+## Documentation :book:
 
-```
-const gridjsCheckbox = require('gridjs-checkbox');
+See [Selection plugin](https://gridjs.io/docs/examples/selection) docs on gridjs.io.  
 
-// TODO: DEMONSTRATE API
-```
+Full documentation of Grid.js installation, config, API and examples are available
+on Grid.js website [grid.js/docs](https://gridjs.io/docs/index). 
+
+## License
+
+[MIT](https://github.com/grid-js/gridjs/blob/master/LICENSE)
