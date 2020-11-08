@@ -1,6 +1,6 @@
 {
   "name": "gridjs-selection",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "description": "Adds row and cell selection to Grid.js",
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
   "homepage": "https://gridjs.io/packages/gridjs-selection",
@@ -27,7 +27,7 @@
     "url": "https://github.com/grid-js/gridjs/issues"
   },
   "dependencies": {
-    "gridjs": "^3.0.0-alpha.1",
+    "gridjs": "^3.0.0-alpha.2",
     "preact": "^10.4.8",
     "tslib": "^2.0.1"
   },
