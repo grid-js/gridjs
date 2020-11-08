@@ -3,7 +3,7 @@
   "version": "3.0.0-alpha.2",
   "description": "Adds row and cell selection to Grid.js",
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
-  "homepage": "https://gridjs.io/packages/gridjs-selection",
+  "homepage": "https://gridjs.io/docs/examples/selection",
   "license": "MIT",
   "main": "dist/gridjs-selection.production.min.js",
   "module": "dist/gridjs-selection.production.es.min.js",
