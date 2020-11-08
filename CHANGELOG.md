@@ -23,3 +23,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **row:** adding cell(index: number) function ([c15ed37](https://github.com/grid-js/gridjs/commit/c15ed378ce59f9683b93f53db9c2273ecad93cc7))
 * adding Lerna ([f1a0563](https://github.com/grid-js/gridjs/commit/f1a0563d791f2d14ec54431ae111dc32e9eeda3c))
 * **plugin:** adding PluginBaseComponent ([892cbb1](https://github.com/grid-js/gridjs/commit/892cbb1af3ed9b037756e0db205d69810fb2db65))
+
+### BREAKING CHANGES
+
+* `columns.selector` has been replaced with `columns.data`, e.g:
+
+```js
+{
+  columns: [{
+    data: (row) => row.name.first, // instead of `selector`
+    name: 'First Name'
+  }, {
+    data: (row) => row.name.last,
+    name: 'Last Name'
+  }]
+}
+```
