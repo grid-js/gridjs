@@ -62,12 +62,37 @@ export interface Config {
     footer: CSSDeclaration;
   }>;
   className?: Partial<{
-    table: string;
-    th: string;
-    td: string;
     container: string;
-    footer: string;
-    header: string;
+    header?: Partial<{
+      container: string;
+      search: string;
+    }>;
+    table?: Partial<{
+      container: string;
+      sort: string;
+      thead: string;
+      th: string;
+      td: string;
+      state?: Partial<{
+        loading: string;
+        notfound: string;
+        error: string
+      }>;
+    }>;
+    footer?: Partial<{
+      container: string;
+      pagination?: Partial<{
+        container: string;
+        summary: string;
+        buttons?: Partial<{
+          container: string;
+          default: string;
+          current: string;
+          prev: string;
+          next: string;
+        }>;
+      }>;
+    }>;
   }>;
 }
 

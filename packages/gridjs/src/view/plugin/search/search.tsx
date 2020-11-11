@@ -105,6 +105,7 @@ export class Search extends PluginBaseComponent<
           className={classJoin(
             className('input'),
             className('search', 'input'),
+            this.config.className?.header?.search
           )}
           value={this.store.state.keyword}
         />

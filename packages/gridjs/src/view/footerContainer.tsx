@@ -35,7 +35,7 @@ export class FooterContainer extends BaseComponent<{}, FooterContainerState> {
           ref={this.footerRef}
           className={classJoin(
             className('footer'),
-            this.config.className.footer,
+            this.config.className?.footer?.container
           )}
           style={{ ...this.config.style.footer }}
         >

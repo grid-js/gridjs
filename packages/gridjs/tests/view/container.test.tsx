@@ -118,11 +118,13 @@ describe('Container component', () => {
       ],
       className: {
         container: 'test-container',
-        header: 'test-header',
-        footer: 'test-footer',
-        td: 'test-td',
-        th: 'test-th',
-        table: 'test-table',
+        header: { container: 'test-header' },
+        footer: { container: 'test-footer' },
+        table: {
+          container: 'test-table',
+          td: 'test-td',
+          th: 'test-th'
+        },
       },
     });
 

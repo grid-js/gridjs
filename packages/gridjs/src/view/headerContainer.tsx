@@ -33,7 +33,10 @@ export class HeaderContainer extends BaseComponent<{}, HeaderContainerState> {
       return (
         <div
           ref={this.headerRef}
-          className={classJoin(className('head'), this.config.className.header)}
+          className={classJoin(
+            className('head'),
+            this.config.className?.header?.container
+          )}
           style={{ ...this.config.style.header }}
         >
           <PluginRenderer position={PluginPosition.Header} />

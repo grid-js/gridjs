@@ -83,7 +83,7 @@ export class TD extends BaseComponent<TDProps> {
         className={classJoin(
           className('td'),
           this.props.className,
-          this.config.className.td,
+          this.config.className?.table?.td,
         )}
         style={{
           ...this.props.style,

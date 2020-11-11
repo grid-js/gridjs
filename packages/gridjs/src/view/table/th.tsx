@@ -99,7 +99,7 @@ export class TH extends BaseComponent<THProps, THState> {
           className('th'),
           this.isSortable() ? className('th', 'sort') : null,
           this.props.column.fixedHeader ? className('th', 'fixed') : null,
-          this.config.className.th,
+          this.config.className?.table?.th,
         )}
         onClick={this.onClick.bind(this)}
         style={{

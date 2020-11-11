@@ -124,7 +124,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
             'gridjs',
             className('container'),
             this.state.status === Status.Loading ? className('loading') : null,
-            this.props.config.className.container,
+            this.props.config.className?.container,
           )}
           style={{
             ...this.props.config.style.container,

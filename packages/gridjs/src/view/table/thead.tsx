@@ -3,7 +3,7 @@ import { ComponentChild, h } from 'preact';
 import { TR } from './tr';
 import { BaseComponent, BaseProps } from '../base';
 import { TH } from './th';
-import { className } from '../../util/className';
+import { classJoin, className } from '../../util/className';
 import Header from '../../header';
 import { TColumn } from '../../types';
 import { calculateRowColSpans } from '../../util/table';
@@ -70,7 +70,12 @@ export class THead extends BaseComponent<THeadProps, {}> {
   render() {
     if (this.props.header) {
       return (
-        <thead key={this.props.header.id} className={className('thead')}>
+        <thead
+          key={this.props.header.id}
+          className={classJoin(
+            className('thead'),
+            this.config.className?.table?.thead
+          )}>
           {this.renderRows()}
         </thead>
       );

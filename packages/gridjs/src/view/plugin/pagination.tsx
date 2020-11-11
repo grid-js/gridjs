@@ -1,6 +1,6 @@
 import { h, Fragment } from 'preact';
 import PaginationLimit from '../../pipeline/limit/pagination';
-import { className } from '../../util/className';
+import { classJoin, className } from '../../util/className';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
 import Tabular from '../../tabular';
 import { PipelineProcessor } from '../../pipeline/processor';
@@ -162,12 +162,21 @@ export class Pagination extends PluginBaseComponent<
           <Fragment>
             <button
               tabIndex={0}
+              className={classJoin(
+                className('btn'),
+                this.config.className?.footer?.pagination?.buttons?.default
+              )}
               onClick={this.setPage.bind(this, 0)}
               title={this._('pagination.firstPage')}
             >
               {this._('1')}
             </button>
-            <button tabIndex={-1} className={className('spread')}>
+            <button
+              tabIndex={-1}
+              className={classJoin(
+                className('spread'),
+                this.config.className?.footer?.pagination?.buttons?.default
+              )}>
               ...
             </button>
           </Fragment>
@@ -179,9 +188,13 @@ export class Pagination extends PluginBaseComponent<
             <button
               tabIndex={0}
               onClick={this.setPage.bind(this, i)}
-              className={
-                this.state.page === i ? className('currentPage') : null
-              }
+              className={classJoin(
+                className('btn'),
+                this.state.page === i ? className('currentPage') : null,
+                this.state.page === i
+                  ? this.config.className?.footer?.pagination?.buttons?.current
+                  : this.config.className?.footer?.pagination?.buttons?.default
+              )}
               title={this._('pagination.page', i + 1)}
             >
               {this._(`${i + 1}`)}
@@ -190,11 +203,20 @@ export class Pagination extends PluginBaseComponent<
 
         {this.pages > maxCount && this.pages > this.state.page + pagePivot + 1 && (
           <Fragment>
-            <button tabIndex={-1} className={className('spread')}>
+            <button
+              tabIndex={-1}
+              className={classJoin(
+                className('spread'),
+                this.config.className?.footer?.pagination?.buttons?.default
+              )}>
               ...
             </button>
             <button
               tabIndex={0}
+              className={classJoin(
+                className('btn'),
+                this.config.className?.footer?.pagination?.buttons?.default
+              )}
               onClick={this.setPage.bind(this, this.pages - 1)}
               title={this._('pagination.page', this.pages)}
             >
@@ -212,7 +234,10 @@ export class Pagination extends PluginBaseComponent<
         {this.props.summary && this.state.total > 0 && (
           <div
             role="status"
-            className={className('summary')}
+            className={classJoin(
+              className('summary'),
+              this.config.className?.footer?.pagination?.summary
+            )}
             title={this._(
               'pagination.navigate',
               this.state.page + 1,
@@ -242,13 +267,27 @@ export class Pagination extends PluginBaseComponent<
     if (!this.props.enabled) return null;
 
     return (
-      <div className={className('pagination')}>
+      <div
+        className={classJoin(
+          className('pagination'),
+          this.config.className?.footer?.pagination?.container
+         )}>
         {this.renderSummary()}
 
-        <div className={className('pages')}>
+        <div
+          className={classJoin(
+            className('pages'),
+            this.config.className?.footer?.pagination?.buttons?.container
+          )}>
           {this.props.prevButton && (
             <button
               tabIndex={0}
+              className={classJoin(
+                className('btn'),
+                this.config.className?.footer?.pagination?.buttons?.prev
+                  ? this.config.className?.footer?.pagination?.buttons?.prev
+                  : this.config.className?.footer?.pagination?.buttons?.default
+              )}
               disabled={this.state.page === 0}
               onClick={this.setPage.bind(this, this.state.page - 1)}
             >
@@ -261,6 +300,12 @@ export class Pagination extends PluginBaseComponent<
           {this.props.nextButton && (
             <button
               tabIndex={0}
+              className={classJoin(
+                className('btn'),
+                this.config.className?.footer?.pagination?.buttons?.next
+                  ? this.config.className?.footer?.pagination?.buttons?.next
+                  : this.config.className?.footer?.pagination?.buttons?.default
+              )}
               disabled={this.pages === this.state.page + 1 || this.pages === 0}
               onClick={this.setPage.bind(this, this.state.page + 1)}
             >

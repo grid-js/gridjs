@@ -21,7 +21,10 @@ export class Table extends BaseComponent<TableProps, {}> {
     return (
       <table
         role="grid"
-        className={classJoin(className('table'), this.config.className.table)}
+        className={classJoin(
+          className('table'),
+          this.config.className?.table?.container
+        )}
         style={{
           ...this.config.style.table,
           ...{
