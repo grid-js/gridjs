@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/grid-js/gridjs/compare/3.0.0-alpha.2...3.0.1) (2020-11-15)
+
+
+### Bug Fixes
+
+* **sort:** button width and height ([95a1221](https://github.com/grid-js/gridjs/commit/95a1221f74447d5c4b2ffa00268ea1d79cdd04cc))
+* **sort:** using SVG icons and fixing the border issue ([94ba245](https://github.com/grid-js/gridjs/commit/94ba245a8750baaab25ade1b1a1f14f2e06272f1))
+
+
+
+
+
 # [3.0.0-alpha.2](https://github.com/grid-js/gridjs/compare/3.0.0-alpha.1...3.0.0-alpha.2) (2020-11-08)
 
 **Note:** Version bump only for package gridjs
