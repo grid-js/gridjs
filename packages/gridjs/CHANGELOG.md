@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2](https://github.com/grid-js/gridjs/compare/3.0.1...3.0.2) (2020-11-15)
+
+
+### Bug Fixes
+
+* **sort:** button background-color ([c8838a0](https://github.com/grid-js/gridjs/commit/c8838a0b4fd146d750e903f5659df9e87c9beb7d))
+
+
+
+
+
 ## [3.0.1](https://github.com/grid-js/gridjs/compare/3.0.0-alpha.2...3.0.1) (2020-11-15)
 
 
