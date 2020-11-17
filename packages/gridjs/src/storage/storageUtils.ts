@@ -3,7 +3,7 @@ import MemoryStorage from './memory';
 import Storage from './storage';
 import ServerStorage from './server';
 import log from '../util/log';
-import { html } from '../util/html';
+import { decode, html } from '../util/html';
 
 class StorageUtils {
   /**
@@ -57,7 +57,7 @@ class StorageUtils {
           cell.childNodes.length === 1 &&
           cell.childNodes[0].nodeType === Node.TEXT_NODE
         ) {
-          parsedRow.push(cell.innerHTML);
+          parsedRow.push(decode(cell.innerHTML));
         } else {
           parsedRow.push(html(cell.innerHTML));
         }
