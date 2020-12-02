@@ -48,7 +48,7 @@
     "lerna-changelog": "^1.0.1",
     "node-sass": "^5.0.0",
     "node-sass-chokidar": "^1.5.0",
-    "prettier": "~2.1.0",
+    "prettier": "~2.2.1",
     "rimraf": "~3.0.2",
     "rollup": "^2.11.2",
     "rollup-plugin-postcss": "^3.1.1",

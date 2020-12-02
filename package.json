@@ -18,7 +18,7 @@
   "repository": "https://github.com/grid-js/gridjs",
   "devDependencies": {
     "lerna": "^3.22.1",
-    "prettier": "~2.1.0"
+    "prettier": "~2.2.1"
   },
   "scripts": {
     "prettier": "prettier --ignore-path dist --write 'packages/**/*.(ts|js|scss|css)'",
