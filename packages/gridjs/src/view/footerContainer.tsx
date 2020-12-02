@@ -1,8 +1,7 @@
-import { h } from 'preact';
+import { createRef, h } from 'preact';
 
 import { BaseComponent } from './base';
 import { classJoin, className } from '../util/className';
-import { useRef } from 'preact/hooks';
 import { PluginPosition, PluginRenderer } from '../plugin';
 
 interface FooterContainerState {
@@ -10,7 +9,7 @@ interface FooterContainerState {
 }
 
 export class FooterContainer extends BaseComponent<{}, FooterContainerState> {
-  private footerRef = useRef(null);
+  private footerRef = createRef();
 
   constructor(props, context) {
     super(props, context);

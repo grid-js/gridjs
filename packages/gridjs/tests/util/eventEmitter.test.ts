@@ -24,6 +24,9 @@ describe('EventEmitter class', () => {
     const input = [1, 2, 5, 'boo', false];
 
     emitter.on('boo', (...args) => {
+      // TODO: fix the datatype issue here
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
       expect(args).toStrictEqual(input);
     });
 

@@ -2,7 +2,7 @@ import { h, VNode } from 'preact';
 import { HTMLElement } from '../view/htmlElement';
 
 export function decode(content: string): string {
-  const value = new DOMParser().parseFromString(content, "text/html");
+  const value = new DOMParser().parseFromString(content, 'text/html');
   return value.documentElement.textContent;
 }
 
