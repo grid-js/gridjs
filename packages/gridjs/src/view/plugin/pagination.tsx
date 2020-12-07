@@ -10,6 +10,7 @@ interface PaginationState {
   page: number;
   limit?: number;
   total: number;
+  hasNextPage: boolean;
 }
 
 export interface PaginationConfig {
@@ -51,6 +52,7 @@ export class Pagination extends PluginBaseComponent<
       limit: props.limit,
       page: props.page || 0,
       total: 0,
+      hasNextPage: false
     };
   }
 
@@ -90,6 +92,7 @@ export class Pagination extends PluginBaseComponent<
         this.setState({
           total: 0,
           page: 0,
+          hasNextPage: false
         });
       });
     }
@@ -261,7 +264,7 @@ export class Pagination extends PluginBaseComponent<
           {this.props.nextButton && (
             <button
               tabIndex={0}
-              disabled={this.pages === this.state.page + 1 || this.pages === 0}
+              disabled={!this.state.hasNextPage}
               onClick={this.setPage.bind(this, this.state.page + 1)}
             >
               {this._('pagination.next')}
