@@ -2,7 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "rootDir": ".",
-    "removeComments": true
+    "removeComments": true,
+    "outDir": "dist"
   },
   "include": [
     "index.ts",
