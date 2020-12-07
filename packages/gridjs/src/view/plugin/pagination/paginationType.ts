@@ -1,0 +1,1 @@
+export type PaginationType = "opaque-based" | "offset-based";

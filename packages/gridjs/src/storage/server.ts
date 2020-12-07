@@ -61,7 +61,6 @@ class ServerStorage extends Storage<ServerStorageOptions> {
     return fetch(opts.url, opts)
       .then(this.handler.bind(this))
       .then((res) => {
-        console.debug(`Has next page: ${opts.hasNextPage(res)}`);
         return {
           data: opts.then(res),
           total: typeof opts.total === 'function' ? opts.total(res) : undefined,
