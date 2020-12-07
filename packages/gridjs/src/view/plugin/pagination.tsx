@@ -22,16 +22,14 @@ export interface PaginationConfig {
   prevButton?: boolean;
   buttonsCount?: number;
   resetPageOnUpdate?: boolean;
+  skipPageVerification?: boolean;
   server?: {
     url?: (prevUrl: string, page: number, limit: number) => string;
     body?: (prevBody: BodyInit, page: number, limit: number) => BodyInit;
   };
 }
 
-export class Pagination extends PluginBaseComponent<
-  PluginBaseProps<Pagination> & PaginationConfig,
-  PaginationState
-> {
+export class Pagination extends PluginBaseComponent<PluginBaseProps<Pagination> & PaginationConfig, PaginationState> {
   private processor: PaginationLimit | ServerPaginationLimit;
   private onUpdateFn: (processor: PipelineProcessor<any, any>) => void;
   private setTotalFromTabularFn: (tabular: Tabular) => void;
@@ -71,6 +69,9 @@ export class Pagination extends PluginBaseComponent<
         });
 
         this.config.pipeline.on('afterProcess', this.setTotalFromTabularFn);
+        this.config.pipeline.process().then((data) => {
+          data.toArray()
+        });
       } else {
         processor = new PaginationLimit({
           limit: this.state.limit,
@@ -89,6 +90,7 @@ export class Pagination extends PluginBaseComponent<
       // we need to make sure that the state is set
       // to the default props when an error happens
       this.config.pipeline.on('error', () => {
+        console.error("An error ocurred.");
         this.setState({
           total: 0,
           page: 0,
@@ -99,7 +101,7 @@ export class Pagination extends PluginBaseComponent<
   }
 
   private setTotalFromTabular(tabular: Tabular): void {
-    this.setTotal(tabular.length);
+    this.setPagination(tabular.length, tabular.hasNextPage);
   }
 
   private onUpdate(processor): void {
@@ -125,8 +127,11 @@ export class Pagination extends PluginBaseComponent<
   }
 
   private setPage(page: number): void {
-    if (page >= this.pages || page < 0 || page === this.state.page) {
-      return null;
+    if(this.props.skipPageVerification === true) {
+      if (page >= this.pages || page < 0 || page === this.state.page) {
+        console.error("Cannot change page.");
+        return null;
+      }
     }
 
     this.setState({
@@ -138,11 +143,10 @@ export class Pagination extends PluginBaseComponent<
     });
   }
 
-  private setTotal(totalRows: number): void {
-    // to set the correct total number of rows
-    // when running in-memory operations
+  private setPagination(totalRows: number, hasNextPage: boolean): void {
     this.setState({
       total: totalRows,
+      hasNextPage: hasNextPage
     });
   }
 
@@ -244,6 +248,8 @@ export class Pagination extends PluginBaseComponent<
   render() {
     if (!this.props.enabled) return null;
 
+    console.log(this.state);
+
     return (
       <div className={className('pagination')}>
         {this.renderSummary()}
@@ -264,7 +270,7 @@ export class Pagination extends PluginBaseComponent<
           {this.props.nextButton && (
             <button
               tabIndex={0}
-              disabled={!this.state.hasNextPage}
+              disabled={this.state.hasNextPage === false}
               onClick={this.setPage.bind(this, this.state.page + 1)}
             >
               {this._('pagination.next')}

@@ -7,6 +7,7 @@ import { oneDtoTwoD } from './util/array';
 class Tabular extends Base {
   private _rows: Row[];
   private _length: number;
+  private _hasNextPage: boolean;
 
   constructor(rows?: Row[] | Row) {
     super();
@@ -30,6 +31,14 @@ class Tabular extends Base {
 
   get length(): number {
     return this._length || this.rows.length;
+  }
+
+  get hasNextPage(): boolean {
+    return this._hasNextPage;
+  }
+
+  set hasNextPage(hasNextPage: boolean) {
+    this._hasNextPage = hasNextPage;
   }
 
   // we want to sent the length when storage is ServerStorage

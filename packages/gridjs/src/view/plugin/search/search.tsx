@@ -19,9 +19,7 @@ export interface SearchConfig {
   };
 }
 
-export class Search extends PluginBaseComponent<
-  SearchConfig & PluginBaseProps<Search>
-> {
+export class Search extends PluginBaseComponent<SearchConfig & PluginBaseProps<Search>> {
   private readonly searchProcessor:
     | GlobalSearchFilter
     | ServerGlobalSearchFilter;

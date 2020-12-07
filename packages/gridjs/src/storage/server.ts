@@ -12,7 +12,7 @@ export interface ServerStorageOptions extends RequestInit {
   // before calling the `then` function
   handle?: (response: Response) => Promise<any>;
   total?: (data: any) => number;
-  hasNextPage?: boolean;
+  hasNextPage?: (data: any) => boolean;
   // to bypass the current implementation of ServerStorage and process the
   // request manually (e.g. when user wants to connect their own SDK/HTTP Client)
   data?: (opts: ServerStorageOptions) => Promise<StorageResponse>;
@@ -61,10 +61,11 @@ class ServerStorage extends Storage<ServerStorageOptions> {
     return fetch(opts.url, opts)
       .then(this.handler.bind(this))
       .then((res) => {
+        console.debug(`Has next page: ${opts.hasNextPage(res)}`);
         return {
           data: opts.then(res),
           total: typeof opts.total === 'function' ? opts.total(res) : undefined,
-          hasNextPage: opts.hasNextPage
+          hasNextPage: opts.hasNextPage(res),
         };
       });
   }

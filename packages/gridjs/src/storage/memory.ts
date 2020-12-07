@@ -14,7 +14,7 @@ class MemoryStorage extends Storage<TData> {
 
     return {
       data: data,
-      total: data.length,
+      total: data.length
     };
   }
 

@@ -24,10 +24,7 @@ interface PipelineProcessorEvents<T, P> {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface PipelineProcessorProps {}
 
-export abstract class PipelineProcessor<
-  T,
-  P extends Partial<PipelineProcessorProps>
-> extends EventEmitter<PipelineProcessorEvents<T, P>> {
+export abstract class PipelineProcessor<T, P extends Partial<PipelineProcessorProps>> extends EventEmitter<PipelineProcessorEvents<T, P>> {
   public readonly id: ID;
   private readonly _props: P;
 
