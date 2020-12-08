@@ -64,7 +64,7 @@ class ServerStorage extends Storage<ServerStorageOptions> {
         return {
           data: opts.then(res),
           total: typeof opts.total === 'function' ? opts.total(res) : undefined,
-          hasNextPage: opts.hasNextPage(res),
+          hasNextPage: typeof opts.hasNextPage === 'function' ? opts.hasNextPage((res)) : undefined,
         };
       });
   }

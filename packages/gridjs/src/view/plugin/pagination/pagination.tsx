@@ -11,7 +11,7 @@ interface PaginationState {
   page: number;
   limit?: number;
   total?: number;
-  hasNextPage: boolean;
+  hasNextPage?: boolean;
 }
 
 export interface PaginationConfig {
