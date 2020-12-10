@@ -1,12 +1,14 @@
+
 import { mount } from 'enzyme';
 import { createContext, h } from 'preact';
-import { TD } from '../../../src/view/table/td';
-import Cell from '../../../src/cell';
+import { Cell } from '../../..';
 import { Config } from '../../../src/config';
 import { EventEmitter } from '../../../src/util/eventEmitter';
 import { TableEvents } from '../../../src/view/table/events';
+import { TD } from '../../../src/view/table/td';
+import { TR } from '../../../src/view/table/tr';
 
-describe('TD component', () => {
+describe('TR component', () => {
   let config: Config;
   const configContext = createContext(null);
 
@@ -15,28 +17,32 @@ describe('TD component', () => {
   });
 
   it('should match the snapshot', () => {
-    const td = mount(
+    const tr = mount(
       <configContext.Provider value={config}>
-        <TD cell={new Cell('boo')} />
+        <TR >
+          <TD cell={new Cell('boo')} />
+        </TR>
       </configContext.Provider>,
     );
-    expect(td.html()).toMatchSnapshot();
+    expect(tr.html()).toMatchSnapshot();
   });
 
-  it('should emit cellClick', async () => {
+  it('should emit rowClick', async () => {
     config.eventEmitter = new EventEmitter<TableEvents>();
     const onClick = jest.fn();
 
-    const cells = mount(
+    const rows = mount(
       <configContext.Provider value={config}>
-        <TD cell={new Cell('boo')} />
+        <TR >
+          <TD cell={new Cell('boo')} />
+        </TR>
       </configContext.Provider>,
-    ).find('td');
+    ).find('tr');
 
-    config.eventEmitter.on('cellClick', onClick)
-    cells.map(td => td.simulate('click'));
+    config.eventEmitter.on('rowClick', onClick)
+    rows.map(tr => tr.simulate('click'));
 
-    expect(cells.length).toEqual(1);
+    expect(rows.length).toEqual(1);
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MessageRow component should match the snapshot 1`] = `"<tr class=\\"gridjs-tr\\"><td role=\\"alert\\" class=\\"gridjs-td gridjs-message\\">boo</td></tr>"`;

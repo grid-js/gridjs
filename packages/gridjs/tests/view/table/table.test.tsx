@@ -13,6 +13,8 @@ import { Translator } from '../../../src/i18n/language';
 import Tabular from '../../../src/tabular';
 import { html } from '../../../src/util/html';
 import Row from '../../../src/row';
+import { EventEmitter } from '../../../src/util/eventEmitter';
+import { TableEvents } from '../../../src/view/table/events';
 
 describe('Table component', () => {
   let config: Config;
@@ -504,8 +506,8 @@ describe('Table component', () => {
           attributes: (cell: TCell) =>
             cell === 'b'
               ? {
-                  'data-row-c': true,
-                }
+                'data-row-c': true,
+              }
               : {},
         },
         {
@@ -574,5 +576,29 @@ describe('Table component', () => {
     expect(table.find('td').length).toBe(2);
     expect(table.find('th').text()).toBe('e');
     expect(table.find('th').length).toBe(1);
+  });
+
+  it('should emit rowClick', async () => {
+    const header = Header.fromUserConfig({
+      columns: ['h1', 'h2', 'h3'],
+    });
+    config.eventEmitter = new EventEmitter<TableEvents>();
+    const onClick = jest.fn();
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={header}
+          status={Status.Rendered}
+          width={config.width}
+          height={config.height}
+        />
+      </configContext.Provider>,
+    );
+    config.eventEmitter.on('rowClick', onClick)
+    table.find('tbody tr').map(tr => tr.simulate('click'));
+
+    expect(onClick).toHaveBeenCalledTimes(config.data.length);
   });
 });
