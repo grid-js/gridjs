@@ -578,27 +578,4 @@ describe('Table component', () => {
     expect(table.find('th').length).toBe(1);
   });
 
-  it('should emit rowClick', async () => {
-    const header = Header.fromUserConfig({
-      columns: ['h1', 'h2', 'h3'],
-    });
-    config.eventEmitter = new EventEmitter<TableEvents>();
-    const onClick = jest.fn();
-
-    const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
-    );
-    config.eventEmitter.on('rowClick', onClick)
-    table.find('tbody tr').map(tr => tr.simulate('click'));
-
-    expect(onClick).toHaveBeenCalledTimes(config.data.length);
-  });
 });
