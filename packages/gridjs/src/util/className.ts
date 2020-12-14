@@ -8,8 +8,10 @@ export function className(...args: string[]): string {
 }
 
 export function classJoin(...classNames: string[]): string {
-  return classNames
-    .filter((x) => x)
-    .reduce((className, prev) => `${className || ''} ${prev}`, '')
-    .trim() || null;
+  return (
+    classNames
+      .filter((x) => x)
+      .reduce((className, prev) => `${className || ''} ${prev}`, '')
+      .trim() || null
+  );
 }

@@ -77,16 +77,21 @@ describe('Search plugin', () => {
 
   it('should add config.className.search', async () => {
     const search = mount(
-      <configContext.Provider value={{...config,
-        className: {
-          search: 'test-search-class-name'
-        }
-      }}>
+      <configContext.Provider
+        value={{
+          ...config,
+          className: {
+            search: 'test-search-class-name',
+          },
+        }}
+      >
         <Search plugin={plugin} enabled={true} keyword={'boo'} />
       </configContext.Provider>,
     );
 
-    expect(search.find('.test-search-class-name').hasClass('gridjs-search')).toBeTrue();
+    expect(
+      search.find('.test-search-class-name').hasClass('gridjs-search'),
+    ).toBeTrue();
     expect(search.find('.test-search-class-name').name()).toBe('div');
   });
 });
