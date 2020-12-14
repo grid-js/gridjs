@@ -123,6 +123,9 @@ describe('Container component', () => {
         td: 'test-td',
         th: 'test-th',
         table: 'test-table',
+        thead: 'test-head',
+        tbody: 'test-tbody',
+        sort: 'test-sort',
       },
     });
 
@@ -216,6 +219,9 @@ describe('Container component', () => {
       }
     }
 
+    config.className = {
+      error: 'my-error',
+    };
     config.pipeline.register(new ErrorProcessor());
 
     const container = mount(
@@ -252,7 +258,9 @@ describe('Container component', () => {
       />,
     );
 
+    container.update();
     await container.instance().componentDidMount();
+
     expect(await axe(container.html())).toHaveNoViolations();
   });
 

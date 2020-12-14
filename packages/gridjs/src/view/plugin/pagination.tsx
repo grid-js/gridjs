@@ -1,6 +1,6 @@
 import { h, Fragment } from 'preact';
 import PaginationLimit from '../../pipeline/limit/pagination';
-import { className } from '../../util/className';
+import { classJoin, className } from '../../util/className';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
 import Tabular from '../../tabular';
 import { PipelineProcessor } from '../../pipeline/processor';
@@ -162,12 +162,21 @@ export class Pagination extends PluginBaseComponent<
           <Fragment>
             <button
               tabIndex={0}
+              role="button"
               onClick={this.setPage.bind(this, 0)}
               title={this._('pagination.firstPage')}
+              aria-label={this._('pagination.firstPage')}
+              className={this.config.className.paginationButton}
             >
               {this._('1')}
             </button>
-            <button tabIndex={-1} className={className('spread')}>
+            <button
+              tabIndex={-1}
+              className={classJoin(
+                className('spread'),
+                this.config.className.paginationButton,
+              )}
+            >
               ...
             </button>
           </Fragment>
@@ -178,11 +187,19 @@ export class Pagination extends PluginBaseComponent<
           .map((i) => (
             <button
               tabIndex={0}
+              role="button"
               onClick={this.setPage.bind(this, i)}
-              className={
-                this.state.page === i ? className('currentPage') : null
-              }
+              className={classJoin(
+                this.state.page === i
+                  ? classJoin(
+                      className('currentPage'),
+                      this.config.className.paginationButtonCurrent,
+                    )
+                  : null,
+                this.config.className.paginationButton,
+              )}
               title={this._('pagination.page', i + 1)}
+              aria-label={this._('pagination.page', i + 1)}
             >
               {this._(`${i + 1}`)}
             </button>
@@ -190,13 +207,22 @@ export class Pagination extends PluginBaseComponent<
 
         {this.pages > maxCount && this.pages > this.state.page + pagePivot + 1 && (
           <Fragment>
-            <button tabIndex={-1} className={className('spread')}>
+            <button
+              tabIndex={-1}
+              className={classJoin(
+                className('spread'),
+                this.config.className.paginationButton,
+              )}
+            >
               ...
             </button>
             <button
               tabIndex={0}
+              role="button"
               onClick={this.setPage.bind(this, this.pages - 1)}
               title={this._('pagination.page', this.pages)}
+              aria-label={this._('pagination.page', this.pages)}
+              className={this.config.className.paginationButton}
             >
               {this._(`${this.pages}`)}
             </button>
@@ -212,7 +238,11 @@ export class Pagination extends PluginBaseComponent<
         {this.props.summary && this.state.total > 0 && (
           <div
             role="status"
-            className={className('summary')}
+            aria-live="polite"
+            className={classJoin(
+              className('summary'),
+              this.config.className.paginationSummary,
+            )}
             title={this._(
               'pagination.navigate',
               this.state.page + 1,
@@ -242,15 +272,27 @@ export class Pagination extends PluginBaseComponent<
     if (!this.props.enabled) return null;
 
     return (
-      <div className={className('pagination')}>
+      <div
+        className={classJoin(
+          className('pagination'),
+          this.config.className.pagination,
+        )}
+      >
         {this.renderSummary()}
 
         <div className={className('pages')}>
           {this.props.prevButton && (
             <button
               tabIndex={0}
+              role="button"
               disabled={this.state.page === 0}
               onClick={this.setPage.bind(this, this.state.page - 1)}
+              title={this._('pagination.previous')}
+              aria-label={this._('pagination.previous')}
+              className={classJoin(
+                this.config.className.paginationButton,
+                this.config.className.paginationButtonPrev,
+              )}
             >
               {this._('pagination.previous')}
             </button>
@@ -261,8 +303,15 @@ export class Pagination extends PluginBaseComponent<
           {this.props.nextButton && (
             <button
               tabIndex={0}
+              role="button"
               disabled={this.pages === this.state.page + 1 || this.pages === 0}
               onClick={this.setPage.bind(this, this.state.page + 1)}
+              title={this._('pagination.next')}
+              aria-label={this._('pagination.next')}
+              className={classJoin(
+                this.config.className.paginationButton,
+                this.config.className.paginationButtonNext,
+              )}
             >
               {this._('pagination.next')}
             </button>

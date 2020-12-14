@@ -169,6 +169,7 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
         className={classJoin(
           className('sort'),
           className('sort', sortClassName),
+          this.config.className.sort,
         )}
         onClick={this.changeDirection.bind(this)}
       />

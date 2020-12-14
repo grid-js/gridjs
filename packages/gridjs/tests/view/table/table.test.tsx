@@ -51,10 +51,14 @@ describe('Table component', () => {
   });
 
   it('should render a table with loading', async () => {
+    config.className = {
+      loading: 'my-loading-class',
+    };
+
     const table = mount(
       <configContext.Provider value={config}>
         <Table
-          data={await config.pipeline.process()}
+          data={new Tabular()}
           status={Status.Loading}
           width={config.width}
           height={config.height}
@@ -62,6 +66,10 @@ describe('Table component', () => {
       </configContext.Provider>,
     );
 
+    expect(table.find('.my-loading-class').hostNodes().name()).toBe('td');
+    expect(table.find('.my-loading-class').hostNodes().text()).toBe(
+      'Loading...',
+    );
     expect(table.html()).toMatchSnapshot();
   });
 
@@ -166,6 +174,10 @@ describe('Table component', () => {
     const header = Header.fromUserConfig({
       columns: ['h1', 'h2', 'h3'],
     });
+
+    config.className = {
+      notfound: 'my-notfound-class',
+    };
 
     const table = mount(
       <configContext.Provider value={config}>

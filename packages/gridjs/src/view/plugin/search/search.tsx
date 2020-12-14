@@ -96,7 +96,9 @@ export class Search extends PluginBaseComponent<
     }
 
     return (
-      <div className={className('search')}>
+      <div
+        className={className(classJoin('search', this.config.className.search))}
+      >
         <input
           type="search"
           placeholder={this._('search.placeholder')}

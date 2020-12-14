@@ -3,7 +3,7 @@ import { classJoin, className } from '../../src/util/className';
 describe('className', () => {
   describe('classJoin', () => {
     it('should join empty classes', () => {
-      expect(classJoin(null, undefined)).toBe('');
+      expect(classJoin(null, 'boo')).toBe('boo');
     });
 
     it('should join one class', () => {
@@ -12,6 +12,14 @@ describe('className', () => {
 
     it('should join two or more class', () => {
       expect(classJoin('boo', 'foo', 'bar')).toBe('boo foo bar');
+    });
+
+    it('should return null when inputs are null and undefined', () => {
+      expect(classJoin(null, undefined, null)).toBe(null);
+    });
+
+    it('should return null when inputs are null', () => {
+      expect(classJoin(null, null)).toBe(null);
     });
   });
 
