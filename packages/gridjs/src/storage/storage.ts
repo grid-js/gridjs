@@ -21,6 +21,7 @@ abstract class Storage<I> {
 export interface StorageResponse {
   data: TData;
   total: number;
+  hasNextPage?: boolean;
 }
 
 export default Storage;

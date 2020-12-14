@@ -12,10 +12,7 @@ export interface PluginBaseProps<T extends PluginBaseComponentCtor> {
 /**
  * BaseComponent for all plugins
  */
-export abstract class PluginBaseComponent<
-  P extends PluginBaseProps<any> = any,
-  S = {}
-> extends BaseComponent<P, S> {}
+export abstract class PluginBaseComponent<P extends PluginBaseProps<any> = any, S = {} > extends BaseComponent<P, S> {}
 
 export interface PluginBaseComponentCtor<
   P extends PluginBaseProps<any> = any,

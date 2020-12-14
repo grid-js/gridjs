@@ -9,6 +9,7 @@ class ArrayToTabularTransformer extends PipelineProcessor<Tabular, {}> {
 
   _process(arrayResponse: ArrayResponse): Tabular {
     const tabular = Tabular.fromArray(arrayResponse.data);
+    tabular.hasNextPage = arrayResponse.hasNextPage;
 
     // for server-side storage
     tabular.length = arrayResponse.total;

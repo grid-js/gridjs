@@ -1,15 +1,17 @@
 import { h, Fragment } from 'preact';
-import PaginationLimit from '../../pipeline/limit/pagination';
-import { className } from '../../util/className';
-import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
-import Tabular from '../../tabular';
-import { PipelineProcessor } from '../../pipeline/processor';
-import { PluginBaseComponent, PluginBaseProps } from '../../plugin';
+import PaginationLimit from '../../../pipeline/limit/pagination';
+import { className } from '../../../util/className';
+import ServerPaginationLimit from '../../../pipeline/limit/serverPagination';
+import Tabular from '../../../tabular';
+import { PipelineProcessor } from '../../../pipeline/processor';
+import { PluginBaseComponent, PluginBaseProps } from '../../../plugin';
+import { PaginationType } from './paginationType';
 
 interface PaginationState {
   page: number;
   limit?: number;
-  total: number;
+  total?: number;
+  hasNextPage?: boolean;
 }
 
 export interface PaginationConfig {
@@ -21,16 +23,14 @@ export interface PaginationConfig {
   prevButton?: boolean;
   buttonsCount?: number;
   resetPageOnUpdate?: boolean;
+  type: PaginationType;
   server?: {
     url?: (prevUrl: string, page: number, limit: number) => string;
     body?: (prevBody: BodyInit, page: number, limit: number) => BodyInit;
   };
 }
 
-export class Pagination extends PluginBaseComponent<
-  PluginBaseProps<Pagination> & PaginationConfig,
-  PaginationState
-> {
+export class Pagination extends PluginBaseComponent<PluginBaseProps<Pagination> & PaginationConfig, PaginationState> {
   private processor: PaginationLimit | ServerPaginationLimit;
   private onUpdateFn: (processor: PipelineProcessor<any, any>) => void;
   private setTotalFromTabularFn: (tabular: Tabular) => void;
@@ -51,6 +51,7 @@ export class Pagination extends PluginBaseComponent<
       limit: props.limit,
       page: props.page || 0,
       total: 0,
+      hasNextPage: false,
     };
   }
 
@@ -87,16 +88,18 @@ export class Pagination extends PluginBaseComponent<
       // we need to make sure that the state is set
       // to the default props when an error happens
       this.config.pipeline.on('error', () => {
+        console.error("An error ocurred.");
         this.setState({
           total: 0,
           page: 0,
+          hasNextPage: false
         });
       });
     }
   }
 
   private setTotalFromTabular(tabular: Tabular): void {
-    this.setTotal(tabular.length);
+    this.updateTotal(tabular.length, tabular.hasNextPage);
   }
 
   private onUpdate(processor): void {
@@ -122,8 +125,10 @@ export class Pagination extends PluginBaseComponent<
   }
 
   private setPage(page: number): void {
-    if (page >= this.pages || page < 0 || page === this.state.page) {
-      return null;
+    if(this.props.type == 'offset-based') {
+      if (page >= this.pages || page < 0 || page === this.state.page) {
+        return null;
+      }
     }
 
     this.setState({
@@ -135,18 +140,15 @@ export class Pagination extends PluginBaseComponent<
     });
   }
 
-  private setTotal(totalRows: number): void {
-    // to set the correct total number of rows
-    // when running in-memory operations
+  private updateTotal(totalRows: number, hasNextPage: boolean): void {
     this.setState({
       total: totalRows,
+      hasNextPage: hasNextPage
     });
   }
 
   renderPages() {
-    if (this.props.buttonsCount <= 0) {
-      return null;
-    }
+    if (this.props.buttonsCount <= 0 || this.props.type == 'opaque-based') return null;
 
     // how many pagination buttons to render?
     const maxCount: number = Math.min(this.pages, this.props.buttonsCount);
@@ -207,6 +209,8 @@ export class Pagination extends PluginBaseComponent<
   }
 
   renderSummary() {
+    if(this.props.type == 'opaque-based') return null;
+
     return (
       <Fragment>
         {this.props.summary && this.state.total > 0 && (
@@ -217,8 +221,7 @@ export class Pagination extends PluginBaseComponent<
               'pagination.navigate',
               this.state.page + 1,
               this.pages,
-            )}
-          >
+            )}>
             {this._('pagination.showing')}{' '}
             <b>{this._(`${this.state.page * this.state.limit + 1}`)}</b>{' '}
             {this._('pagination.to')}{' '}
@@ -250,8 +253,7 @@ export class Pagination extends PluginBaseComponent<
             <button
               tabIndex={0}
               disabled={this.state.page === 0}
-              onClick={this.setPage.bind(this, this.state.page - 1)}
-            >
+              onClick={this.setPage.bind(this, this.state.page - 1)}>
               {this._('pagination.previous')}
             </button>
           )}
@@ -261,9 +263,8 @@ export class Pagination extends PluginBaseComponent<
           {this.props.nextButton && (
             <button
               tabIndex={0}
-              disabled={this.pages === this.state.page + 1 || this.pages === 0}
-              onClick={this.setPage.bind(this, this.state.page + 1)}
-            >
+              disabled={this.props.type == 'offset-based' ? (this.pages === this.state.page + 1 || this.pages === 0) : (this.state.hasNextPage === false)}
+              onClick={this.setPage.bind(this, this.state.page + 1)}>
               {this._('pagination.next')}
             </button>
           )}

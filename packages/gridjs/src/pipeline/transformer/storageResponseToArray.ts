@@ -11,6 +11,7 @@ import logger from '../../util/log';
 export interface ArrayResponse {
   data: TwoDArray<TCell>;
   total: number;
+  hasNextPage?: boolean;
 }
 
 interface StorageResponseToArrayTransformerProps
@@ -87,6 +88,7 @@ class StorageResponseToArrayTransformer extends PipelineProcessor<
     return {
       data: this.castData(storageResponse.data),
       total: storageResponse.total,
+      hasNextPage: storageResponse.hasNextPage
     };
   }
 }
