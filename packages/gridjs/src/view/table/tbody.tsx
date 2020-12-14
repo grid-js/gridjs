@@ -4,7 +4,7 @@ import Row from '../../row';
 import { TR } from './tr';
 import Tabular from '../../tabular';
 import { BaseComponent, BaseProps } from '../base';
-import { className } from '../../util/className';
+import { classJoin, className } from '../../util/className';
 import { Status } from '../../types';
 import Header from '../../header';
 import { MessageRow } from './messageRow';
@@ -25,7 +25,9 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
 
   render() {
     return (
-      <tbody className={className('tbody')}>
+      <tbody
+        className={classJoin(className('tbody'), this.config.className.tbody)}
+      >
         {this.props.data &&
           this.props.data.rows.map((row: Row) => {
             return <TR key={row.id} row={row} header={this.props.header} />;
@@ -36,7 +38,10 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
             <MessageRow
               message={this._('loading')}
               colSpan={this.headerLength()}
-              className={className('loading')}
+              className={classJoin(
+                className('loading'),
+                this.config.className.loading,
+              )}
             />
           )}
 
@@ -46,7 +51,10 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
             <MessageRow
               message={this._('noRecordsFound')}
               colSpan={this.headerLength()}
-              className={className('notfound')}
+              className={classJoin(
+                className('notfound'),
+                this.config.className.notfound,
+              )}
             />
           )}
 
@@ -54,7 +62,10 @@ export class TBody extends BaseComponent<TBodyProps, {}> {
           <MessageRow
             message={this._('error')}
             colSpan={this.headerLength()}
-            className={className('error')}
+            className={classJoin(
+              className('error'),
+              this.config.className.error,
+            )}
           />
         )}
       </tbody>

@@ -11,5 +11,5 @@ export function classJoin(...classNames: string[]): string {
   return classNames
     .filter((x) => x)
     .reduce((className, prev) => `${className || ''} ${prev}`, '')
-    .trim();
+    .trim() || null;
 }

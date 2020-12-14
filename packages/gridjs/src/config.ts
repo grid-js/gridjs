@@ -64,10 +64,23 @@ export interface Config {
   className?: Partial<{
     table: string;
     th: string;
+    thead: string;
+    tbody: string;
     td: string;
     container: string;
     footer: string;
     header: string;
+    search: string;
+    sort: string;
+    pagination: string;
+    paginationSummary: string;
+    paginationButton: string;
+    paginationButtonNext: string;
+    paginationButtonCurrent: string;
+    paginationButtonPrev: string;
+    loading: string;
+    notfound: string;
+    error: string;
   }>;
 }
 
