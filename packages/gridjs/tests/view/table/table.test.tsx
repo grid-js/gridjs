@@ -13,8 +13,6 @@ import { Translator } from '../../../src/i18n/language';
 import Tabular from '../../../src/tabular';
 import { html } from '../../../src/util/html';
 import Row from '../../../src/row';
-import { EventEmitter } from '../../../src/util/eventEmitter';
-import { TableEvents } from '../../../src/view/table/events';
 
 describe('Table component', () => {
   let config: Config;
