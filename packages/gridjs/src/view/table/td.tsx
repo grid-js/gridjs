@@ -15,7 +15,7 @@ export interface TDProps
   row?: Row;
   column?: TColumn;
   style?: CSSDeclaration;
-  stylingCell?: boolean;
+  messageCell?: boolean;
 }
 
 export class TD extends BaseComponent<TDProps> {
@@ -48,7 +48,7 @@ export class TD extends BaseComponent<TDProps> {
   }
 
   private handleClick(e: JSX.TargetedMouseEvent<HTMLTableCellElement>): void {
-    if (this.props.stylingCell)
+    if (this.props.messageCell)
       return;
     this.config.eventEmitter.emit(
       'cellClick',
