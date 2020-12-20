@@ -10,11 +10,12 @@ import { PluginRenderer } from '../../plugin';
 
 export interface TDProps
   extends BaseProps,
-    JSX.HTMLAttributes<HTMLTableCellElement> {
+  JSX.HTMLAttributes<HTMLTableCellElement> {
   cell: Cell;
   row?: Row;
   column?: TColumn;
   style?: CSSDeclaration;
+  messageCell?: boolean;
 }
 
 export class TD extends BaseComponent<TDProps> {
@@ -47,6 +48,8 @@ export class TD extends BaseComponent<TDProps> {
   }
 
   private handleClick(e: JSX.TargetedMouseEvent<HTMLTableCellElement>): void {
+    if (this.props.messageCell)
+      return;
     this.config.eventEmitter.emit(
       'cellClick',
       e,

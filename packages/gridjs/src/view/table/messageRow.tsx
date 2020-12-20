@@ -15,10 +15,11 @@ export interface MessageRowProps extends BaseProps {
 export class MessageRow extends BaseComponent<MessageRowProps, {}> {
   render() {
     return (
-      <TR>
+      <TR messageRow={true}>
         <TD
           role="alert"
           colSpan={this.props.colSpan}
+          messageCell={true}
           cell={new Cell(this.props.message)}
           className={classJoin(
             className('message'),

@@ -1,12 +1,11 @@
 import { mount } from 'enzyme';
 import { createContext, h } from 'preact';
-import { TD } from '../../../src/view/table/td';
-import Cell from '../../../src/cell';
 import { Config } from '../../../src/config';
 import { EventEmitter } from '../../../src/util/eventEmitter';
 import { TableEvents } from '../../../src/view/table/events';
+import { MessageRow } from '../../../src/view/table/messageRow';
 
-describe('TD component', () => {
+describe('MessageRow component', () => {
   let config: Config;
   const configContext = createContext(null);
 
@@ -17,26 +16,27 @@ describe('TD component', () => {
   it('should match the snapshot', () => {
     const td = mount(
       <configContext.Provider value={config}>
-        <TD cell={new Cell('boo')} />
+        <MessageRow message="boo" />
       </configContext.Provider>,
     );
     expect(td.html()).toMatchSnapshot();
   });
 
-  it('should emit cellClick', async () => {
+  it('should prevent emit rowClick', async () => {
     config.eventEmitter = new EventEmitter<TableEvents>();
     const onClick = jest.fn();
 
-    const cells = mount(
+    const rows = mount(
       <configContext.Provider value={config}>
-        <TD cell={new Cell('boo')} />
+        <MessageRow message="boo" />
       </configContext.Provider>,
-    ).find('td');
+    ).find('tr');
 
-    config.eventEmitter.on('cellClick', onClick)
-    cells.map(td => td.simulate('click'));
+    config.eventEmitter.on('rowClick', onClick)
+    rows.map(tr => tr.simulate('click'));
 
-    expect(cells.length).toEqual(1);
-    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(rows.length).toEqual(1);
+    expect(onClick).toHaveBeenCalledTimes(0);
   });
 });
+
