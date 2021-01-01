@@ -1,12 +1,12 @@
 
 import { mount } from 'enzyme';
 import { createContext, h } from 'preact';
-import { Cell } from '../../..';
 import { Config } from '../../../src/config';
 import { EventEmitter } from '../../../src/util/eventEmitter';
 import { TableEvents } from '../../../src/view/table/events';
 import { TD } from '../../../src/view/table/td';
 import { TR } from '../../../src/view/table/tr';
+import Cell from '../../../src/cell';
 
 describe('TR component', () => {
   let config: Config;
