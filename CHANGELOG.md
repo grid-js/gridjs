@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.1](https://github.com/grid-js/gridjs/compare/3.2.0...3.2.1) (2021-01-01)
+
+
+### Bug Fixes
+
+* MessageRow click won't trigger rowClick event ([5e13468](https://github.com/grid-js/gridjs/commit/5e13468691a897d9e6dcff67355c11ad8f659178))
+
+
+
+
+
 # [3.2.0](https://github.com/grid-js/gridjs/compare/3.1.0...3.2.0) (2020-12-14)
 
 
