@@ -28,8 +28,7 @@ export class TR extends BaseComponent<TRProps, {}> {
   }
 
   private handleClick(e: JSX.TargetedMouseEvent<HTMLTableRowElement>): void {
-    if (this.props.messageRow)
-      return;
+    if (this.props.messageRow) return;
     this.config.eventEmitter.emit('rowClick', e, this.props.row);
   }
 

@@ -516,8 +516,8 @@ describe('Table component', () => {
           attributes: (cell: TCell) =>
             cell === 'b'
               ? {
-                'data-row-c': true,
-              }
+                  'data-row-c': true,
+                }
               : {},
         },
         {
@@ -587,5 +587,4 @@ describe('Table component', () => {
     expect(table.find('th').text()).toBe('e');
     expect(table.find('th').length).toBe(1);
   });
-
 });

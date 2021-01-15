@@ -1,4 +1,3 @@
-
 import { mount } from 'enzyme';
 import { createContext, h } from 'preact';
 import { Config } from '../../../src/config';
@@ -19,7 +18,7 @@ describe('TR component', () => {
   it('should match the snapshot', () => {
     const tr = mount(
       <configContext.Provider value={config}>
-        <TR >
+        <TR>
           <TD cell={new Cell('boo')} />
         </TR>
       </configContext.Provider>,
@@ -33,14 +32,14 @@ describe('TR component', () => {
 
     const rows = mount(
       <configContext.Provider value={config}>
-        <TR >
+        <TR>
           <TD cell={new Cell('boo')} />
         </TR>
       </configContext.Provider>,
     ).find('tr');
 
-    config.eventEmitter.on('rowClick', onClick)
-    rows.map(tr => tr.simulate('click'));
+    config.eventEmitter.on('rowClick', onClick);
+    rows.map((tr) => tr.simulate('click'));
 
     expect(rows.length).toEqual(1);
     expect(onClick).toHaveBeenCalledTimes(1);

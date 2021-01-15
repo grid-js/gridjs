@@ -33,8 +33,8 @@ describe('TD component', () => {
       </configContext.Provider>,
     ).find('td');
 
-    config.eventEmitter.on('cellClick', onClick)
-    cells.map(td => td.simulate('click'));
+    config.eventEmitter.on('cellClick', onClick);
+    cells.map((td) => td.simulate('click'));
 
     expect(cells.length).toEqual(1);
     expect(onClick).toHaveBeenCalledTimes(1);

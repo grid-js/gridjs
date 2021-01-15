@@ -82,7 +82,6 @@ export interface Config {
     notfound: string;
     error: string;
   }>;
-  plugins?: Plugin<any>[]
 }
 
 // Config type used by the consumers
@@ -95,6 +94,7 @@ interface UserConfigExtend {
   // implicit option to enable the sort plugin globally
   sort: GenericSortConfig | boolean;
   language: Language;
+  plugins?: Plugin<any>[];
 }
 
 export type UserConfig = ProtoExtends<
@@ -223,8 +223,8 @@ export class Config {
     });
 
     // Additional plugins
-    if (config.plugins) {
-      config.plugins.forEach((p: Plugin<any>) => config.plugin.add(p))
+    if (userConfig.plugins) {
+      userConfig.plugins.forEach((p) => config.plugin.add(p));
     }
 
     return config;

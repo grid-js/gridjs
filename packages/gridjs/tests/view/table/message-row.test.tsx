@@ -32,11 +32,10 @@ describe('MessageRow component', () => {
       </configContext.Provider>,
     ).find('tr');
 
-    config.eventEmitter.on('rowClick', onClick)
-    rows.map(tr => tr.simulate('click'));
+    config.eventEmitter.on('rowClick', onClick);
+    rows.map((tr) => tr.simulate('click'));
 
     expect(rows.length).toEqual(1);
     expect(onClick).toHaveBeenCalledTimes(0);
   });
 });
-

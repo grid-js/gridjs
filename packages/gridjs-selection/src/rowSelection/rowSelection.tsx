@@ -40,7 +40,10 @@ export class RowSelection extends PluginBaseComponent<
     checkboxClassName: className('checkbox'),
   };
 
-  constructor(props: RowSelectionProps & PluginBaseProps<RowSelection>, context) {
+  constructor(
+    props: RowSelectionProps & PluginBaseProps<RowSelection>,
+    context,
+  ) {
     super(props, context);
 
     this.state = {
