@@ -58,7 +58,7 @@
     "source-map-loader": "^0.2.4",
     "ts-jest": "^25.5.1",
     "ts-loader": "^8.0.0",
-    "tsutils": "~3.17.0",
+    "tsutils": "~3.19.1",
     "typescript": "^3.9.3"
   },
   "scripts": {
