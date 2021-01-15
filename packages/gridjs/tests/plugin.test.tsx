@@ -169,4 +169,21 @@ describe('Plugin', () => {
 
     expect(renderer.html()).toMatchSnapshot();
   });
+
+  it('should create a userConfig with custom plugin', () => {
+    const config = Config.fromUserConfig({
+      data: [[1, 2, 3]],
+      plugins: [{
+        id: 'dummyheader',
+        position: PluginPosition.Header,
+        component: DummyPlugin,
+        props: { text: 'dummyheader' },
+      }]
+    });
+
+    expect(config.plugin.get('dummyheader')).toMatchObject({
+      id: 'dummyheader',
+      position: PluginPosition.Header
+    });
+  });
 });

@@ -20,7 +20,7 @@ import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
 import { EventEmitter } from './util/eventEmitter';
 import { GridEvents } from './events';
-import { PluginManager, PluginPosition } from './plugin';
+import { PluginManager, PluginPosition, Plugin } from './plugin';
 import Grid from './grid';
 
 // Config type used internally
@@ -82,6 +82,7 @@ export interface Config {
     notfound: string;
     error: string;
   }>;
+  plugins?: Plugin<any>[]
 }
 
 // Config type used by the consumers
@@ -220,6 +221,11 @@ export class Config {
         ...(userConfig.pagination as PaginationConfig),
       },
     });
+
+    // Additional plugins
+    if (config.plugins) {
+      config.plugins.forEach((p: Plugin<any>) => config.plugin.add(p))
+    }
 
     return config;
   }
