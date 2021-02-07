@@ -61,19 +61,17 @@ export class TD extends BaseComponent<TDProps> {
   private getCustomAttributes(
     column: TColumn | null,
   ): JSXInternal.HTMLAttributes<HTMLTableCellElement> {
-    if (column) {
-      if (typeof column.attributes === 'function') {
-        return column.attributes(
-          this.props.cell.data,
-          this.props.row,
-          this.props.column,
-        );
-      } else {
-        return column.attributes;
-      }
-    }
+    if (!column) return {};
 
-    return {};
+    if (typeof column.attributes === 'function') {
+      return column.attributes(
+        this.props.cell.data,
+        this.props.row,
+        this.props.column,
+      );
+    } else {
+      return column.attributes;
+    }
   }
 
   render() {

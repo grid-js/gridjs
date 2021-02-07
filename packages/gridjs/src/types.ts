@@ -37,11 +37,12 @@ export interface TColumn {
   fixedHeader?: boolean;
   hidden?: boolean;
   formatter?: (cell: TCell, row: Row, column: TColumn) => ComponentChild;
-  // HTML attributes to be added to all cells of this column
+  // HTML attributes to be added to all cells and header of this column
   attributes?:
     | ((
-        cell: TCell,
-        row: Row,
+        // this is null when `attributes` is called for a th
+        cell: TCell | null,
+        row: Row | null,
         column: TColumn,
       ) => JSXInternal.HTMLAttributes<HTMLTableCellElement>)
     | JSXInternal.HTMLAttributes<HTMLTableCellElement>;

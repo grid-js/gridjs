@@ -5,6 +5,7 @@ import { classJoin, className } from '../../util/className';
 import { CSSDeclaration, TColumn } from '../../types';
 import { Sort } from '../plugin/sort/sort';
 import { PluginRenderer } from '../../plugin';
+import { JSXInternal } from 'preact/src/jsx';
 
 export interface THProps
   extends BaseProps,
@@ -84,6 +85,18 @@ export class TH extends BaseComponent<THProps, THState> {
     return null;
   }
 
+  private getCustomAttributes(): JSXInternal.HTMLAttributes<HTMLTableCellElement> {
+    const column = this.props.column;
+
+    if (!column) return {};
+
+    if (typeof column.attributes === 'function') {
+      return column.attributes(null, null, this.props.column);
+    } else {
+      return column.attributes;
+    }
+  }
+
   render() {
     const props = {};
 
@@ -111,6 +124,7 @@ export class TH extends BaseComponent<THProps, THState> {
         onKeyDown={this.keyDown.bind(this)}
         rowSpan={this.props.rowSpan > 1 ? this.props.rowSpan : undefined}
         colSpan={this.props.colSpan > 1 ? this.props.colSpan : undefined}
+        {...this.getCustomAttributes()}
         {...props}
       >
         {this.content()}
