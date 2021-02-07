@@ -546,6 +546,51 @@ describe('Table component', () => {
     expect(table.html()).toMatchSnapshot();
   });
 
+  it('should only render custom attributes for the cell header', async () => {
+    const config = Config.fromUserConfig({
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+      columns: [
+        {
+          name: 'c',
+          attributes: (cell, row, col) => {
+            // both cell and row are empty when attributes function is called for a th
+            if (!cell && !row) {
+              return {
+                'data-col-c': col.id,
+              };
+            }
+
+            return {};
+          },
+        },
+        {
+          name: 'd',
+        },
+        {
+          name: 'e',
+        },
+      ],
+      dispatcher: new Dispatcher<any>(),
+    });
+
+    const table = mount(
+      <configContext.Provider value={config}>
+        <Table
+          data={await config.pipeline.process()}
+          header={config.header}
+          status={Status.Rendered}
+          width={config.width}
+          height={config.height}
+        />
+      </configContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+  });
+
   it('should hide the columns with hidden: true', async () => {
     const config = Config.fromUserConfig({
       data: [
