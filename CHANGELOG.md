@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.3.0](https://github.com/grid-js/gridjs/compare/3.2.2...3.3.0) (2021-02-07)
+
+
+### Features
+
+* adding tr className to the config object ([8265d10](https://github.com/grid-js/gridjs/commit/8265d1099d1c0c3bd8444935aa95f1b18def8b11))
+
+
+
+
+
 ## [3.2.2](https://github.com/grid-js/gridjs/compare/3.2.1...3.2.2) (2021-01-15)
 
 **Note:** Version bump only for package gridjs
