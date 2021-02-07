@@ -44,4 +44,25 @@ describe('TR component', () => {
     expect(rows.length).toEqual(1);
     expect(onClick).toHaveBeenCalledTimes(1);
   });
+
+  it('should attach the custom tr className', async () => {
+    const tr = mount(
+      <configContext.Provider
+        value={{
+          ...config,
+          ...{
+            className: {
+              tr: 'custom-tr-classname',
+            },
+          },
+        }}
+      >
+        <TR>
+          <TD cell={new Cell('boo')} />
+        </TR>
+      </configContext.Provider>,
+    );
+
+    expect(tr.find('tr.custom-tr-classname')).toHaveLength(1);
+  });
 });

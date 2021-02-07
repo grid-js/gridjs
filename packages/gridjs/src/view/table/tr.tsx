@@ -3,7 +3,7 @@ import { h, JSX, Fragment, ComponentChildren } from 'preact';
 import Row from '../../row';
 import Cell from '../../cell';
 import { BaseComponent, BaseProps } from '../base';
-import { className } from '../../util/className';
+import { classJoin, className } from '../../util/className';
 import { TColumn } from '../../types';
 import { TD } from './td';
 import Header from '../../header';
@@ -59,7 +59,10 @@ export class TR extends BaseComponent<TRProps, {}> {
 
   render() {
     return (
-      <tr className={className('tr')} onClick={this.handleClick.bind(this)}>
+      <tr
+        className={classJoin(className('tr'), this.config.className.tr)}
+        onClick={this.handleClick.bind(this)}
+      >
         {this.getChildren()}
       </tr>
     );

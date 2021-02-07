@@ -66,6 +66,7 @@ export interface Config {
     th: string;
     thead: string;
     tbody: string;
+    tr: string;
     td: string;
     container: string;
     footer: string;
