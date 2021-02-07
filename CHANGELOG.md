@@ -10,7 +10,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * adding tr className to the config object ([8265d10](https://github.com/grid-js/gridjs/commit/8265d1099d1c0c3bd8444935aa95f1b18def8b11))
 
+### BREAKING CHANGES
 
+* `column.attributes` object will be used for header cells (`th`) as well. This might introduce some uexpected results. See https://gridjs.io/docs/examples/cell-attributes for more details.
 
 
 
