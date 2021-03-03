@@ -52,7 +52,7 @@
     "jest-extended": "^0.11.5",
     "jsdom": "^16.2.2",
     "jsdom-global": "^3.0.2",
-    "lerna": "^3.22.1",
+    "lerna": "^4.0.0",
     "lerna-changelog": "^1.0.1",
     "node-sass": "^5.0.0",
     "node-sass-chokidar": "^1.5.0",

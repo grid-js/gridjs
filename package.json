@@ -17,7 +17,7 @@
   "homepage": "https://gridjs.io",
   "repository": "https://github.com/grid-js/gridjs",
   "devDependencies": {
-    "lerna": "^3.22.1",
+    "lerna": "^4.0.0",
     "prettier": "~2.2.1"
   },
   "scripts": {
