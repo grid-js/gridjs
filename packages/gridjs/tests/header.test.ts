@@ -168,4 +168,22 @@ describe('Header class', () => {
     expect(tabularColumns[2][0].name).toBe('h3-h2-h1');
     expect(tabularColumns[2][1].name).toBe('h3-h2-h2');
   });
+
+  it('should set the hidden columns', () => {
+    const header = Header.fromUserConfig({
+      columns: [
+        {
+          name: 'h1',
+          hidden: true,
+        },
+        'h2',
+        {
+          name: 'h3',
+        },
+      ],
+    });
+
+    expect(header.visibleColumns.length).toBe(2);
+    expect(header.columns.length).toBe(3);
+  });
 });

@@ -34,6 +34,10 @@ class Header extends Base {
     this._columns = columns;
   }
 
+  get visibleColumns(): OneDArray<TColumn> {
+    return this._columns.filter((c) => !c.hidden);
+  }
+
   /**
    * Tries to automatically adjust the width of columns based on:
    *    - Header cell content

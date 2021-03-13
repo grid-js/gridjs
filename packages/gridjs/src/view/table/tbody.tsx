@@ -15,10 +15,10 @@ interface TBodyProps extends BaseProps {
   header?: Header;
 }
 
-export class TBody extends BaseComponent<TBodyProps, {}> {
+export class TBody extends BaseComponent<TBodyProps> {
   private headerLength(): number {
     if (this.props.header) {
-      return this.props.header.columns.length;
+      return this.props.header.visibleColumns.length;
     }
     return 0;
   }
