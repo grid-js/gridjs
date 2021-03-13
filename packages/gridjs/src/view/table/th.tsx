@@ -127,7 +127,11 @@ export class TH extends BaseComponent<THProps, THState> {
         {...this.getCustomAttributes()}
         {...props}
       >
-        {this.content()}
+        <div
+          className={className('th', 'content')}
+        >
+          {this.content()}
+        </div>
         {this.isSortable() && (
           <Sort
             ref={this.sortRef}

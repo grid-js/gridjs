@@ -90,7 +90,7 @@ class Header extends Base {
         // from the ShadowTable and set the correct width
         column.width = px(getWidth(shadowTable.current.base, column.id));
       } else {
-        // column with is already defined
+        // column width is already defined
         // sets the column with based on the width of its container
         column.width = px(width(column.width, containerWidth));
       }
