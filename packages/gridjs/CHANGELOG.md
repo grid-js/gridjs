@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0](https://github.com/grid-js/gridjs/compare/3.3.0...3.4.0) (2021-03-13)
+
+
+### Bug Fixes
+
+* MessageRow should only consider the visible columns ([1f8f3a8](https://github.com/grid-js/gridjs/commit/1f8f3a8bbbf4fbf8dda49377ad1f00c529560e90))
+
+
+### Features
+
+* adding th content element ([d2df219](https://github.com/grid-js/gridjs/commit/d2df219c8b7981ff6958c1a2c5f7577c9bb6d532))
+
+
+
+
+
 # [3.3.0](https://github.com/grid-js/gridjs/compare/3.2.2...3.3.0) (2021-02-07)
 
 
