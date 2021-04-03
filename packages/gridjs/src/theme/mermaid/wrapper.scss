@@ -15,7 +15,7 @@
     border-color: $gray3;
   }
 
-  &-wrapper:last-of-type {
+  &-wrapper:nth-last-of-type(2) {
     border-radius: 8px;
     border-bottom-width: 1px;
   }

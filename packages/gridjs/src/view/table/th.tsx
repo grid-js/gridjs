@@ -6,6 +6,7 @@ import { CSSDeclaration, TColumn } from '../../types';
 import { Sort } from '../plugin/sort/sort';
 import { PluginRenderer } from '../../plugin';
 import { JSXInternal } from 'preact/src/jsx';
+import {Resize} from "../plugin/resize/resize";
 
 export interface THProps
   extends BaseProps,
@@ -33,6 +34,10 @@ export class TH extends BaseComponent<THProps, THState> {
 
   private isSortable(): boolean {
     return this.props.column.sort.enabled;
+  }
+
+  private isResizable(): boolean {
+    return this.props.column.resizable;
   }
 
   private onClick(e: JSX.TargetedMouseEvent<HTMLInputElement>): void {
@@ -117,7 +122,10 @@ export class TH extends BaseComponent<THProps, THState> {
         onClick={this.onClick.bind(this)}
         style={{
           ...this.config.style.th,
-          ...{ width: this.props.column.width },
+          ...{
+            minWidth: this.props.column.minWidth,
+            width: this.props.column.width
+          },
           ...this.state.style,
           ...this.props.style,
         }}
@@ -138,6 +146,9 @@ export class TH extends BaseComponent<THProps, THState> {
             index={this.props.index}
             {...this.props.column.sort}
           />
+        )}
+        {this.isResizable() && this.props.index < this.config.header.visibleColumns.length - 1 && (
+          <Resize column={this.props.column} thRef={this.thRef} />
         )}
       </th>
     );

@@ -1,7 +1,7 @@
 import { OneDArray, TColumn, TwoDArray } from './types';
 import Base from './base';
 import { UserConfig } from './config';
-import { getWidth, px, width } from './util/width';
+import { px, width } from './util/width';
 import { ShadowTable } from './view/table/shadow';
 import {
   Component,
@@ -70,13 +70,18 @@ class Header extends Base {
     // to render columns. One the table is rendered and widths are known,
     // we unmount the shadow table from the DOM and set the correct width
     const shadowTable = createRef();
+    let widths = {};
+
     if (tableRef.current && autoWidth) {
       // render a ShadowTable with the first 10 rows
       const el = h(ShadowTable, {
         tableRef: tableRef,
       });
       el.ref = shadowTable;
+
       render(el, tempRef.current);
+
+      widths = shadowTable.current.widths();
     }
 
     for (const column of flatten(Header.tabularFormat(this.columns))) {
@@ -88,7 +93,12 @@ class Header extends Base {
       if (!column.width && autoWidth) {
         // tries to find the corresponding cell
         // from the ShadowTable and set the correct width
-        column.width = px(getWidth(shadowTable.current.base, column.id));
+
+        if (column.id in widths) {
+          // because a column can be hidden, too
+          column.width = px(widths[column.id]['width']);
+          column.minWidth = px(widths[column.id]['minWidth']);
+        }
       } else {
         // column width is already defined
         // sets the column with based on the width of its container
@@ -98,7 +108,7 @@ class Header extends Base {
 
     if (tableRef.current && autoWidth) {
       // unmount the shadow table from temp
-      render(null, tempRef.current);
+      //render(null, tempRef.current);
     }
 
     return this;
@@ -153,6 +163,23 @@ class Header extends Base {
 
       if (column.columns) {
         this.setFixedHeader(userConfig, column.columns);
+      }
+    }
+  }
+
+  private setResizable(
+    userConfig: UserConfig,
+    columns?: OneDArray<TColumn>,
+  ): void {
+    const cols = columns || this.columns || [];
+
+    for (const column of cols) {
+      if (column.resizable === undefined) {
+        column.resizable = userConfig.resizable;
+      }
+
+      if (column.columns) {
+        this.setResizable(userConfig, column.columns);
       }
     }
   }
@@ -253,6 +280,7 @@ class Header extends Base {
       header.setID();
       header.setSort(userConfig);
       header.setFixedHeader(userConfig);
+      header.setResizable(userConfig);
       header.populatePlugins(userConfig, header.columns);
       return header;
     }

@@ -154,13 +154,13 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
           </div>
 
           <FooterContainer />
-        </div>
 
-        <div
-          ref={this.props.config.tempRef}
-          id="gridjs-temp"
-          className={className('temp')}
-        />
+          <div
+            ref={this.props.config.tempRef}
+            id="gridjs-temp"
+            className={className('temp')}
+          />
+        </div>
       </configContext.Provider>
     );
   }

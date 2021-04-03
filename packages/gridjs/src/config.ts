@@ -89,6 +89,8 @@ export interface Config {
 interface UserConfigExtend {
   /** fixes the table header to the top of the table */
   fixedHeader: boolean;
+  /** Resizable columns? */
+  resizable: boolean;
   columns: OneDArray<TColumn | string | ComponentChild>;
   search: SearchConfig | boolean;
   pagination: PaginationConfig | boolean;
