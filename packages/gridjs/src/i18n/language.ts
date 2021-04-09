@@ -1,4 +1,5 @@
 import enUS from './en_US';
+import frFR from './fr_FR';
 type MessageFormat = (...args) => string;
 type Message = string | MessageFormat;
 export type Language = { [key: string]: Message | Language };
