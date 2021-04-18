@@ -18,7 +18,13 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
   private mouseMoveFn: (e) => void;
   private mouseUpFn: (e) => void;
 
-  private mouseDown(e): void {
+  private click(e: MouseEvent): void {
+    e.stopPropagation();
+  }
+
+  private mouseDown(e: MouseEvent): void {
+    e.stopPropagation();
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     const thElement: HTMLElement = this.props.thRef.current;
@@ -34,7 +40,9 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
     document.addEventListener('mousemove', this.mouseMoveFn);
   }
 
-  private mouseMove(e): void {
+  private mouseMove(e: MouseEvent): void {
+    e.stopPropagation();
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     const thElement: HTMLElement = this.props.thRef.current;
@@ -47,7 +55,9 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
     }
   }
 
-  private mouseUp(): void {
+  private mouseUp(e: MouseEvent): void {
+    e.stopPropagation();
+
     document.removeEventListener('mouseup', this.mouseUpFn);
     document.removeEventListener('mousemove', this.mouseMoveFn);
   }
@@ -61,7 +71,8 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
           className('resizable-right'),
         )}
         onMouseDown={this.mouseDown.bind(this)}
-      ></div>
+        onClick={this.click.bind(this)}
+      />
     );
   }
 }
