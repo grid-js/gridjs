@@ -19,6 +19,8 @@ import Row from './src/row';
 import Cell from './src/cell';
 import BaseStore from './src/view/base/store';
 import Dispatcher from './src/util/dispatcher';
+import enUS from './src/i18n/en_US';
+import frFR from './src/i18n/fr_FR';
 
 export {
   Grid,
@@ -43,4 +45,6 @@ export {
   createRef,
   useEffect,
   useRef,
+  enUS,
+  frFR
 };
