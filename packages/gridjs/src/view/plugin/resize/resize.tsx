@@ -1,18 +1,18 @@
-import {h, RefObject} from 'preact';
+import { h, RefObject } from 'preact';
 import { classJoin, className } from '../../../util/className';
-import {BaseComponent} from "../../base";
-import {TColumn} from "../../../types";
-import {TH} from "../../table/th";
+import { BaseComponent } from '../../base';
+import { TColumn } from '../../../types';
+import { TH } from '../../table/th';
 
 type ResizeProps = {
   column: TColumn;
-  thRef: RefObject<TH>
-}
+  thRef: RefObject<TH>;
+};
 
 type ResizeState = {
   width: string;
   offsetStart: number;
-}
+};
 
 export class Resize extends BaseComponent<ResizeProps, ResizeState> {
   private mouseMoveFn: (e) => void;
@@ -24,8 +24,8 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
     const thElement: HTMLElement = this.props.thRef.current;
 
     this.setState({
-      offsetStart: parseInt(thElement.style.width, 10) - e.pageX
-    })
+      offsetStart: parseInt(thElement.style.width, 10) - e.pageX,
+    });
 
     this.mouseUpFn = this.mouseUp.bind(this);
     this.mouseMoveFn = this.mouseMove.bind(this);
@@ -39,8 +39,11 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
     // @ts-ignore
     const thElement: HTMLElement = this.props.thRef.current;
 
-    if ((this.state.offsetStart + e.pageX) >= parseInt(thElement.style.minWidth, 10)) {
-      thElement.style.width = `${(this.state.offsetStart + e.pageX)}px`;
+    if (
+      this.state.offsetStart + e.pageX >=
+      parseInt(thElement.style.minWidth, 10)
+    ) {
+      thElement.style.width = `${this.state.offsetStart + e.pageX}px`;
     }
   }
 
@@ -52,10 +55,13 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
   render() {
     return (
       <div
-        className={classJoin(className('th'), className('resizable'), className('resizable-right'))}
+        className={classJoin(
+          className('th'),
+          className('resizable'),
+          className('resizable-right'),
+        )}
         onMouseDown={this.mouseDown.bind(this)}
-      >
-      </div>
+      ></div>
     );
   }
 }

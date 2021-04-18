@@ -1,4 +1,4 @@
-import {Component,  h, RefObject} from 'preact';
+import { Component, h, RefObject } from 'preact';
 import { BaseComponent, BaseProps } from '../base';
 import { className } from '../../util/className';
 
@@ -32,8 +32,10 @@ export class ShadowTable extends BaseComponent<ShadowTableProps> {
     this.tableStyle = this.tableElement.style.cssText;
   }
 
-  public widths(): {[columnId: string]: { minWidth: number, width: number }} {
-    this.tableElement.className = `${this.tableClassName} ${className('shadowTable')}`;
+  public widths(): { [columnId: string]: { minWidth: number; width: number } } {
+    this.tableElement.className = `${this.tableClassName} ${className(
+      'shadowTable',
+    )}`;
 
     this.tableElement.style.tableLayout = 'auto';
     this.tableElement.style.width = 'auto';
@@ -42,29 +44,31 @@ export class ShadowTable extends BaseComponent<ShadowTableProps> {
     this.tableElement.style.border = 'none';
     this.tableElement.style.outline = 'none';
 
-    let obj = Array.from(this.base.parentNode.querySelectorAll<HTMLElement>('thead th'))
-      .reduce((prev, current) => {
+    let obj = Array.from(
+      this.base.parentNode.querySelectorAll<HTMLElement>('thead th'),
+    ).reduce((prev, current) => {
+      current.style.width = `${current.clientWidth}px`;
 
-        current.style.width = `${current.clientWidth}px`;
-
-        return {
-          [current.getAttribute('data-column-id')]: {
-            minWidth: current.clientWidth
-          },
-          ...prev
-        }
-      }, {});
+      return {
+        [current.getAttribute('data-column-id')]: {
+          minWidth: current.clientWidth,
+        },
+        ...prev,
+      };
+    }, {});
 
     this.tableElement.className = this.tableClassName;
     this.tableElement.style.cssText = this.tableStyle;
     this.tableElement.style.tableLayout = 'auto';
 
-    obj = Array.from(this.base.parentNode.querySelectorAll<HTMLElement>('thead th'))
-      .reduce((prev, current) => {
-        prev[current.getAttribute('data-column-id')]['width'] = current.clientWidth;
+    obj = Array.from(
+      this.base.parentNode.querySelectorAll<HTMLElement>('thead th'),
+    ).reduce((prev, current) => {
+      prev[current.getAttribute('data-column-id')]['width'] =
+        current.clientWidth;
 
-        return prev;
-      }, obj);
+      return prev;
+    }, obj);
 
     return obj;
   }
