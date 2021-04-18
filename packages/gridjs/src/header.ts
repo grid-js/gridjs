@@ -108,7 +108,7 @@ class Header extends Base {
 
     if (tableRef.current && autoWidth) {
       // unmount the shadow table from temp
-      //render(null, tempRef.current);
+      render(null, tempRef.current);
     }
 
     return this;

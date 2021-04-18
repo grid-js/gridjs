@@ -23,11 +23,16 @@ export class ShadowTable extends BaseComponent<ShadowTableProps> {
       true,
     ) as HTMLTableElement;
 
+    this.tableElement.style.position = 'absolute';
+    this.tableElement.style.width = '100%';
+    this.tableElement.style.zIndex = '-2147483640';
+    this.tableElement.style.visibility = 'hidden';
+
     this.tableClassName = this.tableElement.className;
     this.tableStyle = this.tableElement.style.cssText;
   }
 
-  public widths(): {[key: string]: { minWidth: number, width: number }} {
+  public widths(): {[columnId: string]: { minWidth: number, width: number }} {
     this.tableElement.className = `${this.tableClassName} ${className('shadowTable')}`;
 
     this.tableElement.style.tableLayout = 'auto';
@@ -66,12 +71,6 @@ export class ShadowTable extends BaseComponent<ShadowTableProps> {
 
   render() {
     if (this.props.tableRef.current) {
-
-
-      //tableElement.style.position = 'absolute';
-      //tableElement.style.zIndex = '-2147483640';
-      //tableElement.style.visibility = 'hidden';
-
       return (
         <div
           ref={(nodeElement) => {

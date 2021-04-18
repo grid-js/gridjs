@@ -141,7 +141,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
           <div
             className={className('wrapper')}
-            style={{ width: this.props.width, height: this.props.height }}
+            style={{ height: this.props.height }}
           >
             <Table
               ref={this.props.config.tableRef}
