@@ -20,6 +20,7 @@ import Cell from './src/cell';
 import BaseStore from './src/view/base/store';
 import Dispatcher from './src/util/dispatcher';
 import enUS from './src/i18n/en_US';
+import esES from './src/i18n/es_ES';
 import frFR from './src/i18n/fr_FR';
 
 export {
@@ -46,5 +47,6 @@ export {
   useEffect,
   useRef,
   enUS,
+  esES,
   frFR
 };
