@@ -3,6 +3,7 @@ import { classJoin, className } from '../../../util/className';
 import { BaseComponent } from '../../base';
 import { TColumn } from '../../../types';
 import { TH } from '../../table/th';
+import { throttle } from '../../../util/throttle';
 
 type ResizeProps = {
   column: TColumn;
@@ -15,14 +16,18 @@ type ResizeState = {
 };
 
 export class Resize extends BaseComponent<ResizeProps, ResizeState> {
-  private mouseMoveFn: (e) => void;
-  private mouseUpFn: (e) => void;
+  private moveFn: (e) => void;
+  private upFn: (e) => void;
 
-  private click(e: MouseEvent): void {
-    e.stopPropagation();
+  private getPageX(e: MouseEvent | TouchEvent): number {
+    if (e instanceof MouseEvent) {
+      return Math.floor(e.pageX);
+    } else {
+      return Math.floor(e.changedTouches[0].pageX);
+    }
   }
 
-  private mouseDown(e: MouseEvent): void {
+  private start(e: MouseEvent | TouchEvent): void {
     e.stopPropagation();
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -30,17 +35,19 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
     const thElement: HTMLElement = this.props.thRef.current;
 
     this.setState({
-      offsetStart: parseInt(thElement.style.width, 10) - e.pageX,
+      offsetStart: parseInt(thElement.style.width, 10) - this.getPageX(e),
     });
 
-    this.mouseUpFn = this.mouseUp.bind(this);
-    this.mouseMoveFn = this.mouseMove.bind(this);
+    this.upFn = this.end.bind(this);
+    this.moveFn = throttle(this.move.bind(this), 10);
 
-    document.addEventListener('mouseup', this.mouseUpFn);
-    document.addEventListener('mousemove', this.mouseMoveFn);
+    document.addEventListener('mouseup', this.upFn);
+    document.addEventListener('touchend', this.upFn);
+    document.addEventListener('mousemove', this.moveFn);
+    document.addEventListener('touchmove', this.moveFn);
   }
 
-  private mouseMove(e: MouseEvent): void {
+  private move(e: MouseEvent | TouchEvent): void {
     e.stopPropagation();
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -48,18 +55,20 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
     const thElement: HTMLElement = this.props.thRef.current;
 
     if (
-      this.state.offsetStart + e.pageX >=
+      this.state.offsetStart + this.getPageX(e) >=
       parseInt(thElement.style.minWidth, 10)
     ) {
-      thElement.style.width = `${this.state.offsetStart + e.pageX}px`;
+      thElement.style.width = `${this.state.offsetStart + this.getPageX(e)}px`;
     }
   }
 
-  private mouseUp(e: MouseEvent): void {
+  private end(e: MouseEvent | TouchEvent): void {
     e.stopPropagation();
 
-    document.removeEventListener('mouseup', this.mouseUpFn);
-    document.removeEventListener('mousemove', this.mouseMoveFn);
+    document.removeEventListener('mouseup', this.upFn);
+    document.removeEventListener('mousemove', this.moveFn);
+    document.removeEventListener('touchmove', this.moveFn);
+    document.removeEventListener('touchend', this.upFn);
   }
 
   render() {
@@ -70,8 +79,9 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
           className('resizable'),
           className('resizable-right'),
         )}
-        onMouseDown={this.mouseDown.bind(this)}
-        onClick={this.click.bind(this)}
+        onMouseDown={this.start.bind(this)}
+        onTouchStart={this.start.bind(this)}
+        onClick={(e) => e.stopPropagation()}
       />
     );
   }

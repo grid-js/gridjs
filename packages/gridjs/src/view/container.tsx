@@ -79,12 +79,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
       // now that we have the data, let's adjust columns width
       // NOTE: that we only calculate the columns width once
       this.setState({
-        header: config.header.adjustWidth(
-          config.container,
-          config.tableRef,
-          config.tempRef,
-          config.autoWidth,
-        ),
+        header: config.header.adjustWidth(config),
       });
     }
 

@@ -1,6 +1,6 @@
 import { OneDArray, TColumn, TwoDArray } from './types';
 import Base from './base';
-import { UserConfig } from './config';
+import { Config, UserConfig } from './config';
 import { px, width } from './util/width';
 import { ShadowTable } from './view/table/shadow';
 import {
@@ -44,17 +44,14 @@ class Header extends Base {
    *    - Cell content of the first row
    *    - Cell content of the last row
    *
-   * @param container
-   * @param tableRef
-   * @param tempRef
-   * @param autoWidth
+   * @param config
    */
-  adjustWidth(
-    container: Element,
-    tableRef: RefObject<Component>,
-    tempRef: RefObject<HTMLDivElement>,
-    autoWidth = true,
-  ): this {
+  adjustWidth(config: Config): this {
+    const container: Element = config.container;
+    const tableRef: RefObject<Component> = config.tableRef;
+    const tempRef: RefObject<HTMLDivElement> = config.tempRef;
+    const autoWidth = config.tempRef || true;
+
     if (!container) {
       // we can't calculate the width because the container
       // is unknown at this stage
