@@ -25,7 +25,6 @@ export class Table extends BaseComponent<TableProps, {}> {
         style={{
           ...this.config.style.table,
           ...{
-            width: this.props.width,
             height: this.props.height,
           },
         }}

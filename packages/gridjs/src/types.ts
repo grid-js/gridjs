@@ -32,9 +32,11 @@ export interface TColumn {
   plugin?: Plugin<any>;
   // column width
   width?: string;
+  minWidth?: string;
   sort?: SortConfig;
   columns?: OneDArray<TColumn>;
   fixedHeader?: boolean;
+  resizable?: boolean;
   hidden?: boolean;
   formatter?: (cell: TCell, row: Row, column: TColumn) => ComponentChild;
   // HTML attributes to be added to all cells and header of this column

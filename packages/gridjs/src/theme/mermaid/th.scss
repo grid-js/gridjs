@@ -2,13 +2,14 @@
 
 th.gridjs {
   &-th {
+    position: relative;
     color: $gray5;
     background-color: $gray1;
     border: 1px solid $gray3;
     border-top: none;
     padding: 14px 24px;
     user-select: none;
-    box-sizing: content-box;
+    box-sizing: border-box;
     white-space: nowrap;
     outline: none;
     vertical-align: middle;

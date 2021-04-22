@@ -1,5 +1,4 @@
 import { mount } from 'enzyme';
-import { JSDOM } from 'jsdom';
 import { h } from 'preact';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Config } from '../../src/config';
@@ -7,7 +6,6 @@ import { Container } from '../../src/view/container';
 import StorageUtils from '../../src/storage/storageUtils';
 import Header from '../../src/header';
 import { PipelineProcessor, ProcessorType } from '../../src/pipeline/processor';
-import * as width from '../../src/util/width';
 import { flushPromises } from '../testUtil';
 import PipelineUtils from '../../src/pipeline/pipelineUtils';
 import { EventEmitter } from '../../src/util/eventEmitter';
@@ -262,51 +260,6 @@ describe('Container component', () => {
     await container.instance().componentDidMount();
 
     expect(await axe(container.html())).toHaveNoViolations();
-  });
-
-  it('should render a table with correct th widths', async () => {
-    const wrapper = new JSDOM('<div style="width: 500px"></div>');
-
-    const mock = jest.spyOn(width, 'getWidth');
-    mock.mockReturnValue(42);
-
-    config.container = wrapper;
-    config.header = new Header();
-    config.header.columns = [
-      {
-        name: 'hello world',
-        sort: {
-          enabled: false,
-        },
-      },
-      {
-        name: 'you are super cool',
-        sort: {
-          enabled: true,
-        },
-      },
-      {
-        name: 'actions',
-        width: '200px',
-        sort: {
-          enabled: true,
-        },
-      },
-    ];
-
-    const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width={config.width}
-        height={config.height}
-      />,
-    );
-
-    return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      expect(container.html()).toMatchSnapshot();
-    });
   });
 
   it('should render a container with null array', async () => {

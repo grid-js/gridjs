@@ -21,7 +21,7 @@
     "prettier": "~2.2.1"
   },
   "scripts": {
-    "prettier": "prettier --ignore-path dist --write 'packages/**/*.(ts|js|scss|css)'",
+    "prettier": "prettier --ignore-path dist --write 'packages/**/*.(ts|tsx|js|scss|css)'",
     "postinstall": "lerna bootstrap",
     "clean": "lerna run clean",
     "build": "lerna run build --stream",

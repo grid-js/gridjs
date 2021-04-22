@@ -79,12 +79,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
       // now that we have the data, let's adjust columns width
       // NOTE: that we only calculate the columns width once
       this.setState({
-        header: config.header.adjustWidth(
-          config.container,
-          config.tableRef,
-          config.tempRef,
-          config.autoWidth,
-        ),
+        header: config.header.adjustWidth(config),
       });
     }
 
@@ -141,7 +136,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
           <div
             className={className('wrapper')}
-            style={{ width: this.props.width, height: this.props.height }}
+            style={{ height: this.props.height }}
           >
             <Table
               ref={this.props.config.tableRef}
@@ -154,13 +149,13 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
           </div>
 
           <FooterContainer />
-        </div>
 
-        <div
-          ref={this.props.config.tempRef}
-          id="gridjs-temp"
-          className={className('temp')}
-        />
+          <div
+            ref={this.props.config.tempRef}
+            id="gridjs-temp"
+            className={className('temp')}
+          />
+        </div>
       </configContext.Provider>
     );
   }
