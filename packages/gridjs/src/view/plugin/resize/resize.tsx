@@ -76,8 +76,7 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
       <div
         className={classJoin(
           className('th'),
-          className('resizable'),
-          className('resizable-right'),
+          className('resizable')
         )}
         onMouseDown={this.start.bind(this)}
         onTouchStart={this.start.bind(this)}

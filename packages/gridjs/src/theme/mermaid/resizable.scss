@@ -5,19 +5,12 @@
     position: absolute;
     top: 0;
     bottom: 0;
+    right: 0;
     width: 5px;
 
     &:hover {
       cursor: ew-resize;
       background-color: $blue1;
-    }
-
-    &-right {
-      right: 0;
-    }
-
-    &-left {
-      left: 0;
     }
   }
 }
