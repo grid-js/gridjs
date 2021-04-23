@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/grid-js/gridjs/compare/3.4.0...4.0.0) (2021-04-23)
+
+
+### Bug Fixes
+
+* updating rollup and adding the lang file ([15a1c26](https://github.com/grid-js/gridjs/commit/15a1c2669e69a6c3498049cb08ebbcb6346116eb))
+* **resize:** adding missing stopPropagation ([03034f5](https://github.com/grid-js/gridjs/commit/03034f5f12aef7c00d8f2f05a52fe1fde5df92c2))
+* **resize:** adding touch event support ([880e48d](https://github.com/grid-js/gridjs/commit/880e48dd63c2da4cf9eaae19fd016c5e32e88741))
+* **resize:** removing left and right classes ([067b57e](https://github.com/grid-js/gridjs/commit/067b57ea9614107e0c2b82c0af6f94f777becf86))
+* gridjs-temp must be position relative in order to calculate the cells width correctly ([87de41f](https://github.com/grid-js/gridjs/commit/87de41f5be12c3ee6ace8fe2e1ded3af73d723b3))
+* removing getWidth ([57d887b](https://github.com/grid-js/gridjs/commit/57d887bfeb4f0f719057aa7c7bd48c3d76a3f60f))
+
+
+### Features
+
+* **resizable:** adding resizable module + changing the ShadowTable algorithm ([d91922d](https://github.com/grid-js/gridjs/commit/d91922dfca1bb1d5721d9b4e7175cbdd1617a307))
+
+
+
+
+
 # [3.4.0](https://github.com/grid-js/gridjs/compare/3.3.0...3.4.0) (2021-03-13)
 
 

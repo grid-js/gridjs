@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/grid-js/gridjs/compare/3.4.0...4.0.0) (2021-04-23)
+
+
+### Bug Fixes
+
+* updating rollup and adding the lang file ([15a1c26](https://github.com/grid-js/gridjs/commit/15a1c2669e69a6c3498049cb08ebbcb6346116eb))
+
+
+### Features
+
+* **resizable:** adding resizable module + changing the ShadowTable algorithm ([d91922d](https://github.com/grid-js/gridjs/commit/d91922dfca1bb1d5721d9b4e7175cbdd1617a307))
+
+
+
+
+
 # [3.4.0](https://github.com/grid-js/gridjs/compare/3.3.0...3.4.0) (2021-03-13)
 
 **Note:** Version bump only for package gridjs-selection
