@@ -209,6 +209,7 @@ export class Config {
         enabled:
           userConfig.search === true || userConfig.search instanceof Object,
         ...(userConfig.search as SearchConfig),
+        columns: userConfig.columns
       },
     });
 

@@ -5,10 +5,12 @@ import {
   PipelineProcessorProps,
   ProcessorType,
 } from '../processor';
-import { TCell } from '../../types';
+import { OneDArray, TCell, TColumn } from '../../types';
+import { ComponentChild } from "preact";
 
 interface GlobalSearchFilterProps extends PipelineProcessorProps {
   keyword: string;
+  columns: OneDArray<TColumn | string | ComponentChild>;
   selector?: (cell: TCell, rowIndex: number, cellIndex: number) => string;
 }
 
@@ -24,6 +26,7 @@ class GlobalSearchFilter extends PipelineProcessor<
     if (this.props.keyword) {
       return search(
         String(this.props.keyword).trim(),
+        this.props.columns,
         data,
         this.props.selector,
       );

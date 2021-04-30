@@ -1,10 +1,11 @@
 import Tabular from '../tabular';
-import { VNode } from 'preact';
+import { ComponentChild, VNode } from 'preact';
 import { HTMLContentProps } from '../view/htmlElement';
-import { TCell } from '../types';
+import { OneDArray, TCell, TColumn } from '../types';
 
 export default function (
   keyword: string,
+  columns: OneDArray<TColumn | string | ComponentChild>,
   tabular: Tabular,
   selector?: (cell: TCell, rowIndex: number, cellIndex: number) => string,
 ): Tabular {
@@ -16,6 +17,13 @@ export default function (
       row.cells.some((cell, cellIndex) => {
         if (!cell) {
           return false;
+        }
+
+        if (columns && columns[cellIndex] && typeof columns[cellIndex] === 'object') {
+          const typedColumn = columns[cellIndex] as TColumn;
+          if (typedColumn.hidden) {
+            return false;
+          }
         }
 
         let data = '';
