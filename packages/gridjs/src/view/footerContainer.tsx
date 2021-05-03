@@ -8,7 +8,7 @@ interface FooterContainerState {
   isActive: boolean;
 }
 
-export class FooterContainer extends BaseComponent<{}, FooterContainerState> {
+export class FooterContainer extends BaseComponent<Record<string, any>, FooterContainerState> {
   private footerRef = createRef();
 
   constructor(props, context) {

@@ -1,7 +1,7 @@
 import Pipeline from '../../src/pipeline/pipeline';
 import { PipelineProcessor, ProcessorType } from '../../src/pipeline/processor';
 
-class NoopProcessor extends PipelineProcessor<string, {}> {
+class NoopProcessor extends PipelineProcessor<string, any> {
   get type(): ProcessorType {
     return null;
   }
@@ -10,14 +10,14 @@ class NoopProcessor extends PipelineProcessor<string, {}> {
   }
 }
 
-class StringProcessor extends PipelineProcessor<string, {}> {
+class StringProcessor extends PipelineProcessor<string, any> {
   type: ProcessorType = ProcessorType.Transformer;
   _process(data: string): string {
     return data;
   }
 }
 
-class SubStrProcessor extends PipelineProcessor<string, {}> {
+class SubStrProcessor extends PipelineProcessor<string, any> {
   type: ProcessorType = ProcessorType.Transformer;
   _process(data: string): string {
     return data.substr(1);

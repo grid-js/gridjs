@@ -7,8 +7,8 @@ import { useTranslator } from '../i18n/language';
 export interface BaseProps {}
 
 export abstract class BaseComponent<
-  P extends BaseProps = {},
-  S = {}
+  P extends BaseProps = unknown,
+  S = unknown
 > extends Component<P, S> {
   protected config: Config;
   protected _: (message: string, ...args) => string;

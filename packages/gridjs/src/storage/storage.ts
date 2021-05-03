@@ -15,7 +15,7 @@ abstract class Storage<I> {
    *
    * @param data
    */
-  set?(data: I | Function): this;
+  set?(data: I | ((...args) => void)): this;
 }
 
 export interface StorageResponse {

@@ -12,7 +12,7 @@ export interface MessageRowProps extends BaseProps {
   className?: string;
 }
 
-export class MessageRow extends BaseComponent<MessageRowProps, {}> {
+export class MessageRow extends BaseComponent<MessageRowProps> {
   render() {
     return (
       <TR messageRow={true}>

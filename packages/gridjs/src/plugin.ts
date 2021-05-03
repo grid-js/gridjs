@@ -14,12 +14,12 @@ export interface PluginBaseProps<T extends PluginBaseComponentCtor> {
  */
 export abstract class PluginBaseComponent<
   P extends PluginBaseProps<any> = any,
-  S = {}
+  S = unknown
 > extends BaseComponent<P, S> {}
 
 export interface PluginBaseComponentCtor<
   P extends PluginBaseProps<any> = any,
-  S = {}
+  S = unknown
 > {
   new (props: P, context?: any): Component<P, S>;
 }

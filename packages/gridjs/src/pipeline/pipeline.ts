@@ -36,7 +36,7 @@ interface PipelineEvents<T> {
   error: (prev: T) => void;
 }
 
-class Pipeline<T, P = {}> extends EventEmitter<PipelineEvents<T>> {
+class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
   // available steps for this pipeline
   private readonly _steps: Map<
     ProcessorType,

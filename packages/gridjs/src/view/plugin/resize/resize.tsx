@@ -30,7 +30,7 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
   private start(e: MouseEvent | TouchEvent): void {
     e.stopPropagation();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const thElement: HTMLElement = this.props.thRef.current;
 
@@ -50,7 +50,7 @@ export class Resize extends BaseComponent<ResizeProps, ResizeState> {
   private move(e: MouseEvent | TouchEvent): void {
     e.stopPropagation();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const thElement: HTMLElement = this.props.thRef.current;
 

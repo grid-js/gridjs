@@ -14,7 +14,7 @@ export interface TRProps extends BaseProps {
   messageRow?: boolean;
 }
 
-export class TR extends BaseComponent<TRProps, {}> {
+export class TR extends BaseComponent<TRProps> {
   private getColumn(cellIndex: number): TColumn {
     if (this.props.header) {
       const cols = Header.leafColumns(this.props.header.columns);

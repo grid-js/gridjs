@@ -208,7 +208,7 @@ describe('Container component', () => {
   it('should render a container with error', async () => {
     console.error = jest.fn();
 
-    class ErrorProcessor extends PipelineProcessor<string, {}> {
+    class ErrorProcessor extends PipelineProcessor<string, any> {
       get type(): ProcessorType {
         return ProcessorType.Limit;
       }

@@ -16,7 +16,7 @@ interface TableProps extends BaseProps {
   height: string;
 }
 
-export class Table extends BaseComponent<TableProps, {}> {
+export class Table extends BaseComponent<TableProps> {
   render() {
     return (
       <table
