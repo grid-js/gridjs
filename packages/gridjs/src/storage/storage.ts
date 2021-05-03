@@ -8,7 +8,7 @@ abstract class Storage<I> {
    * Returns all rows based on ...args
    * @param args
    */
-  abstract async get(...args): Promise<StorageResponse>;
+  abstract get(...args): Promise<StorageResponse>;
 
   /**
    * To set all rows

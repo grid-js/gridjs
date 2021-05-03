@@ -3,7 +3,7 @@ module.exports = {
   setupFilesAfterEnv: ['jest-extended'],
   globals: {
     'ts-jest': {
-      tsConfig: 'tsconfig.test.json',
+      tsconfig: 'tsconfig.test.json',
     },
   },
   transform: {

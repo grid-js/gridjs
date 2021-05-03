@@ -326,7 +326,7 @@ describe('Table component', () => {
       </configContext.Provider>,
     );
 
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       setTimeout(() => {
         expect(table.html()).toMatchSnapshot();
         resolve();
@@ -364,7 +364,7 @@ describe('Table component', () => {
       </configContext.Provider>,
     );
 
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       setTimeout(() => {
         expect(table.html()).toMatchSnapshot();
         resolve();
@@ -420,7 +420,7 @@ describe('Table component', () => {
       </configContext.Provider>,
     );
 
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       setTimeout(() => {
         expect(table.html()).toMatchSnapshot();
         resolve();
@@ -476,7 +476,7 @@ describe('Table component', () => {
       </configContext.Provider>,
     );
 
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       setTimeout(() => {
         expect(
           table
