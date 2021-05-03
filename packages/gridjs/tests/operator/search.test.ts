@@ -4,7 +4,7 @@ import Row from '../../src/row';
 import search from '../../src/operator/search';
 
 describe('search', () => {
-  const column1 = "col1";
+  const column1 = { id: "col1", name: "col1" };
   const column2 = { id: "col2", name: "col2" };
   const column3 = { id: "col3", name: "col3" };
   const column4 = { id: "col4", name: "col4", hidden: true };
@@ -21,35 +21,35 @@ describe('search', () => {
   const tabular: Tabular = new Tabular([row1, row2, row3, row4, row5]);
 
   it('should work with exact match', () => {
-    expect(search('hello', columns, tabular).rows).toStrictEqual(
+    expect(search('hello', columns, true, tabular).rows).toStrictEqual(
       new Tabular([row1, row3]).rows,
     );
   });
 
   it('should return results with partial keyword', () => {
-    expect(search('h', columns, tabular).rows).toStrictEqual(
+    expect(search('h', columns, true, tabular).rows).toStrictEqual(
       new Tabular([row1, row3]).rows,
     );
   });
 
   it('should return results with exact match', () => {
-    expect(search('!!!', columns, tabular).rows).toStrictEqual(new Tabular([row3]).rows);
+    expect(search('!!!', columns, true, tabular).rows).toStrictEqual(new Tabular([row3]).rows);
   });
 
   it('should return results for a keyword with a space in', () => {
-    expect(search('ping pong', columns, tabular).rows).toStrictEqual(
+    expect(search('ping pong', columns, true, tabular).rows).toStrictEqual(
       new Tabular([row5]).rows,
     );
   });
 
   it('should return results for words with the letter s in', () => {
-    expect(search('test', columns, tabular).rows).toStrictEqual(
+    expect(search('test', columns, true, tabular).rows).toStrictEqual(
       new Tabular([row3]).rows,
     );
   });
 
   it('should use the selector with hardcoded string', () => {
-    expect(search('test', columns, tabular, () => 'custom keyword').rows).toStrictEqual(
+    expect(search('test', columns, true, tabular, () => 'custom keyword').rows).toStrictEqual(
       new Tabular([]).rows,
     );
   });
@@ -59,6 +59,7 @@ describe('search', () => {
       search(
         '00',
         columns,
+        true,
         tabular,
         (_, rowIndex, cellIndex) => `${rowIndex}${cellIndex}`,
       ).rows,
@@ -66,8 +67,14 @@ describe('search', () => {
   });
 
   it('should ignore content of hidden columns', () => {
-    expect(search('hidden', columns, tabular).rows).toStrictEqual(
+    expect(search('hidden', columns, true, tabular).rows).toStrictEqual(
       new Tabular([]).rows,
+    );
+  });
+
+  it('should not ignore content of hidden columns if ignoreHiddenColumns option is set to false', () => {
+    expect(search('hidden', columns, false, tabular).rows).toStrictEqual(
+      new Tabular([row1, row2, row3, row4]).rows,
     );
   });
 });

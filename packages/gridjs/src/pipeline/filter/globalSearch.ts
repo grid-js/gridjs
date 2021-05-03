@@ -6,11 +6,11 @@ import {
   ProcessorType,
 } from '../processor';
 import { OneDArray, TCell, TColumn } from '../../types';
-import { ComponentChild } from "preact";
 
 interface GlobalSearchFilterProps extends PipelineProcessorProps {
   keyword: string;
-  columns: OneDArray<TColumn | string | ComponentChild>;
+  columns: OneDArray<TColumn>;
+  ignoreHiddenColumns: boolean;
   selector?: (cell: TCell, rowIndex: number, cellIndex: number) => string;
 }
 
@@ -27,6 +27,7 @@ class GlobalSearchFilter extends PipelineProcessor<
       return search(
         String(this.props.keyword).trim(),
         this.props.columns,
+        this.props.ignoreHiddenColumns,
         data,
         this.props.selector,
       );

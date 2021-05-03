@@ -1,19 +1,19 @@
-import { ComponentChild, h } from 'preact';
+import { h } from 'preact';
 import GlobalSearchFilter from '../../../pipeline/filter/globalSearch';
 import { classJoin, className } from '../../../util/className';
 import { SearchStore, SearchStoreState } from './store';
 import { SearchActions } from './actions';
 import ServerGlobalSearchFilter from '../../../pipeline/filter/serverGlobalSearch';
 import { debounce } from '../../../util/debounce';
-import { OneDArray, TCell, TColumn } from '../../../types';
+import { TCell } from '../../../types';
 import { PluginBaseComponent, PluginBaseProps } from '../../../plugin';
 
 export interface SearchConfig {
   keyword?: string;
   enabled?: boolean;
+  ignoreHiddenColumns?: boolean;
   debounceTimeout?: number;
   selector?: (cell: TCell, rowIndex: number, cellIndex: number) => string;
-  columns?: OneDArray<TColumn | string | ComponentChild>;
   server?: {
     url?: (prevUrl: string, keyword: string) => string;
     body?: (prevBody: BodyInit, keyword: string) => BodyInit;
@@ -58,7 +58,8 @@ export class Search extends PluginBaseComponent<
       } else {
         searchProcessor = new GlobalSearchFilter({
           keyword: props.keyword,
-          columns: props.columns,
+          columns: this.config.header && this.config.header.columns,
+          ignoreHiddenColumns: props.ignoreHiddenColumns || props.ignoreHiddenColumns === undefined,
           selector: props.selector,
         });
       }
