@@ -11,6 +11,7 @@ import { PluginBaseComponent, PluginBaseProps } from '../../../plugin';
 export interface SearchConfig {
   keyword?: string;
   enabled?: boolean;
+  ignoreHiddenColumns?: boolean;
   debounceTimeout?: number;
   selector?: (cell: TCell, rowIndex: number, cellIndex: number) => string;
   server?: {
@@ -57,6 +58,8 @@ export class Search extends PluginBaseComponent<
       } else {
         searchProcessor = new GlobalSearchFilter({
           keyword: props.keyword,
+          columns: this.config.header && this.config.header.columns,
+          ignoreHiddenColumns: props.ignoreHiddenColumns || props.ignoreHiddenColumns === undefined,
           selector: props.selector,
         });
       }
