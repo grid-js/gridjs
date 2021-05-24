@@ -1,14 +1,14 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDir": ".",
     "removeComments": true
   },
   "include": [
-    "index.ts",
-    "src/**/*"
+    "index.ts"
   ],
   "exclude": [
-    "tests/**/*"
+    "tests/**/*",
+    "src/**/*"
   ]
 }

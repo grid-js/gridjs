@@ -72,17 +72,18 @@
     "typescript": "^4.2.4"
   },
   "scripts": {
-    "clean": "rimraf coverage dist tmp i18n/dist",
+    "clean": "rimraf coverage dist tmp i18n/dist 'plugins/!(node_modules)/dist'",
 
-    "build": "microbundle build --raw --external none --tsconfig tsconfig.release.json",
+    "build": "run-p build:grid build:i18n build:plugins",
+    "build:grid": "microbundle build --raw --external none --tsconfig tsconfig.release.json",
     "build:i18n": "microbundle build --raw --cwd i18n --tsconfig i18n/tsconfig.release.json",
+    "build:plugins": "microbundle build --raw --cwd plugins/selection --tsconfig plugins/selection/tsconfig.release.json",
 
     "prebuild:themes": "node-sass --include-path scss src/theme/mermaid/index.scss dist/theme/mermaid.css",
     "build:themes-dev": "postcss dist/theme/mermaid.css --output dist/theme/mermaid.css --env development --verbose",
     "build:themes-prod": "postcss dist/theme/mermaid.css --output dist/theme/mermaid.min.css --env production --verbose",
     "build:themes": "run-p build:themes-dev build:themes-prod",
 
-    "build:watch": "rollup -c --watch",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
