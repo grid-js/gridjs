@@ -5,10 +5,8 @@
     "removeComments": true
   },
   "include": [
-    "index.ts"
-  ],
-  "exclude": [
-    "tests/**/*",
-    "src/**/*"
+    "index.ts",
+    "src/**/*",
+    "tests/**/*"
   ]
 }
