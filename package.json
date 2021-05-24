@@ -74,7 +74,7 @@
   "scripts": {
     "clean": "rimraf coverage dist tmp i18n/dist 'plugins/!(node_modules)/dist'",
 
-    "build": "run-p build:grid build:i18n build:plugins",
+    "build": "run-p build:grid build:i18n build:plugins build:themes",
     "build:grid": "microbundle build --raw --external none --tsconfig tsconfig.release.json",
     "build:i18n": "microbundle build --raw --cwd i18n --tsconfig i18n/tsconfig.release.json",
     "build:plugins": "microbundle build --raw --cwd plugins/selection --tsconfig plugins/selection/tsconfig.release.json",
