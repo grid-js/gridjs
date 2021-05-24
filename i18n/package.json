@@ -1,0 +1,16 @@
+{
+  "name": "i18n",
+  "version": "0.1.0",
+  "private": true,
+  "description": "i18n for Grid.js",
+  "main": "dist/lang.js",
+  "module": "dist/lang.module.js",
+  "umd:main": "dist/lang.umd.js",
+  "types": "dist/index.d.ts",
+  "amdName": "gridjs",
+  "source": "index.ts",
+  "license": "MIT",
+  "peerDependencies": {
+    "gridjs": "^4.0.0"
+  }
+}

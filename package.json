@@ -72,8 +72,10 @@
     "typescript": "^4.2.4"
   },
   "scripts": {
-    "clean": "rimraf coverage dist tmp",
+    "clean": "rimraf coverage dist tmp i18n/dist",
+
     "build": "microbundle build --raw --external none --tsconfig tsconfig.release.json",
+    "build:i18n": "microbundle build --raw --cwd i18n --tsconfig i18n/tsconfig.release.json",
 
     "prebuild:themes": "node-sass --include-path scss src/theme/mermaid/index.scss dist/theme/mermaid.css",
     "build:themes-dev": "postcss dist/theme/mermaid.css --output dist/theme/mermaid.css --env development --verbose",
