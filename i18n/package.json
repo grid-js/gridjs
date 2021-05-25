@@ -4,7 +4,6 @@
   "private": true,
   "license": "MIT",
   "description": "i18n for Grid.js",
-
   "source": "index.ts",
   "main": "dist/lang.js",
   "module": "dist/lang.module.js",
