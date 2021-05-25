@@ -2,6 +2,8 @@
   "name": "gridjs",
   "version": "4.0.0",
   "description": "Advanced table plugin",
+  "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
+  "license": "MIT",
   "keywords": [
     "grid",
     "table",
@@ -21,8 +23,34 @@
   "files": [
     "dist/*"
   ],
+  "exports": {
+    ".": {
+      "browser": "./dist/gridjs.module.js",
+      "umd": "./dist/gridjs.umd.js",
+      "import": "./dist/gridjs.mjs",
+      "require": "./dist/gridjs.js"
+    },
+    "./legacy": {
+      "umd": "./dist/gridjs.production.min.js",
+      "browser": "./dist/gridjs.production.es.min.js"
+    },
+    "./i18n": {
+      "browser": "./i18n/dist/i18n.module.js",
+      "umd": "./i18n/dist/i18n.umd.js",
+      "require": "./i18n/dist/i18n.js",
+      "import": "./i18n/dist/i18n.mjs"
+    },
+    "./plugins/selection": {
+      "browser": "./plugins/selection/dist/selection.module.js",
+      "umd": "./plugins/selection/dist/selection.umd.js",
+      "require": "./plugins/selection/dist/selection.js",
+      "import": "./plugins/selection/dist/selection.mjs"
+    },
+    "./package.json": "./package.json",
+    "./": "./"
+  },
   "main": "dist/gridjs.js",
-  "module": "dist/gridjs.es.js",
+  "module": "dist/gridjs.module.js",
   "umd:main": "dist/gridjs.umd.js",
   "source": "index.ts",
   "devDependencies": {
@@ -35,6 +63,7 @@
     "@typescript-eslint/parser": "~4.22.0",
     "autoprefixer": "^9.8.0",
     "axe-core": "^4.0.0",
+    "check-export-map": "^1.1.1",
     "cssnano": "^4.1.11",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^3.0.0",
@@ -78,16 +107,17 @@
     "build:grid": "microbundle build --raw --external none --tsconfig tsconfig.release.json",
     "build:i18n": "microbundle build --raw --cwd i18n --tsconfig i18n/tsconfig.release.json",
     "build:plugins": "microbundle build --raw --cwd plugins/selection --tsconfig plugins/selection/tsconfig.release.json",
+    "postbuild": "node config/node-13-exports.js",
     "prebuild:themes": "node-sass --include-path scss src/theme/mermaid/index.scss dist/theme/mermaid.css",
     "build:themes-dev": "postcss dist/theme/mermaid.css --output dist/theme/mermaid.css --env development --verbose",
     "build:themes-prod": "postcss dist/theme/mermaid.css --output dist/theme/mermaid.min.css --env production --verbose",
     "build:themes": "run-p build:themes-dev build:themes-prod",
     "lint": "eslint . --ext .ts,.tsx",
-    "test": "jest --coverage",
+    "test": "run-p lint test:jest test:check-exports",
+    "test:jest": "jest --coverage",
+    "test:check-exports": "check-export-map",
     "test:watch": "jest --watch"
   },
-  "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
-  "license": "MIT",
   "dependencies": {
     "preact": "^10.5.12",
     "tslib": "^2.0.1"
