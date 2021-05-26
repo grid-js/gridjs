@@ -21,7 +21,9 @@
   "repository": "https://github.com/grid-js/gridjs",
   "types": "dist/index.d.ts",
   "files": [
-    "dist/*"
+    "dist/*",
+    "i18n/dist/*",
+    "plugins/!(node_modules)/dist/*"
   ],
   "exports": {
     ".": {
