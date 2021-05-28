@@ -67,6 +67,7 @@
     "axe-core": "^4.0.0",
     "check-export-map": "^1.1.1",
     "cssnano": "^4.1.11",
+    "cypress": "^7.4.0",
     "cypress-visual-regression": "^1.5.7",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^3.0.0",
