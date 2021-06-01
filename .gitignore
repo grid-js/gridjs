@@ -32,3 +32,8 @@ dist/
 
 # Lerna
 .changelog
+
+tests/dev-server/build
+tests/dev-server/size-plugin.json
+tests/cypress/snapshots
+tests/cypress/videos

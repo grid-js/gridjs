@@ -1,0 +1,20 @@
+{
+  "name": "selection",
+  "version": "4.0.0",
+  "private": true,
+  "description": "Adds row and cell selection to Grid.js",
+  "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
+  "homepage": "https://gridjs.io/docs/examples/selection",
+  "license": "MIT",
+  "source": "index.ts",
+  "main": "dist/selection.js",
+  "module": "dist/selection.module.js",
+  "umd:main": "dist/selection.umd.js",
+  "types": "dist/selection.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "dependencies": {
+    "gridjs": "^4.0.0"
+  }
+}
