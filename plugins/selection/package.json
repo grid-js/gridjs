@@ -15,6 +15,6 @@
     "dist/*"
   ],
   "dependencies": {
-    "gridjs": "^4.0.0"
+    "gridjs": "../../"
   }
 }
