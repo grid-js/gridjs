@@ -106,7 +106,7 @@
     "typescript": "^4.2.4"
   },
   "scripts": {
-    "postinstall": "find . ! -path '*/node_modules/*' ! -path './package.json' -name 'package.json' -execdir npm install \\;",
+    "postinstall": "find . ! -path '*/node_modules/*' ! -path './package.json' ! -path './tests/dev-server/package.json' -name 'package.json' -execdir npm install \\;",
     "clean": "rimraf coverage dist tmp i18n/dist 'plugins/!(node_modules)/dist'",
     "prebuild": "npm run clean",
     "build": "run-p build:grid build:i18n build:plugins build:themes",
@@ -123,7 +123,7 @@
     "test:jest": "jest --coverage --silent --ci --coverage --coverageReporters=\"text\" --coverageReporters=\"text-summary\"",
     "test:cypress": "cd tests && cypress run",
     "test:check-exports": "check-export-map",
-    "test:dev-server": "cd tests/dev-server && npm start",
+    "test:dev-server": "cd tests/dev-server && npm install && npm start",
     "test:e2e": "start-server-and-test test:dev-server http://localhost:8080 test:cypress",
     "test:watch": "jest --watch"
   },
