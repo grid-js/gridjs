@@ -120,7 +120,7 @@
     "build:themes": "run-p build:themes-dev build:themes-prod",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "run-p lint test:check-exports test:jest test:e2e",
-    "test:jest": "jest --coverage",
+    "test:jest": "jest --coverage --silent --ci --coverage --coverageReporters=\"text\" --coverageReporters=\"text-summary\"",
     "test:cypress": "cd tests && cypress run",
     "test:check-exports": "check-export-map",
     "test:dev-server": "cd tests/dev-server && npm start",
