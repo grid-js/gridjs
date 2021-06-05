@@ -123,7 +123,7 @@
     "test:jest": "jest --coverage --silent --ci --coverage --coverageReporters=\"text\" --coverageReporters=\"text-summary\"",
     "test:cypress": "cd tests && cypress run",
     "test:check-exports": "check-export-map",
-    "test:dev-server": "cd tests/dev-server && npm start",
+    "test:dev-server": "cd tests/dev-server && npm install && npm start",
     "test:e2e": "start-server-and-test test:dev-server http://localhost:8080 test:cypress",
     "test:watch": "jest --watch"
   },
