@@ -2,7 +2,10 @@ import { PipelineProcessor, ProcessorType } from '../processor';
 import Tabular from '../../tabular';
 import { ArrayResponse } from './storageResponseToArray';
 
-class ArrayToTabularTransformer extends PipelineProcessor<Tabular, Record<string, any>> {
+class ArrayToTabularTransformer extends PipelineProcessor<
+  Tabular,
+  Record<string, any>
+> {
   get type(): ProcessorType {
     return ProcessorType.Transformer;
   }

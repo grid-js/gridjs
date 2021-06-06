@@ -8,7 +8,10 @@ interface HeaderContainerState {
   isActive: boolean;
 }
 
-export class HeaderContainer extends BaseComponent<Record<string, any>, HeaderContainerState> {
+export class HeaderContainer extends BaseComponent<
+  Record<string, any>,
+  HeaderContainerState
+> {
   private headerRef = createRef();
 
   constructor(props, context) {

@@ -59,7 +59,9 @@ export class Search extends PluginBaseComponent<
         searchProcessor = new GlobalSearchFilter({
           keyword: props.keyword,
           columns: this.config.header && this.config.header.columns,
-          ignoreHiddenColumns: props.ignoreHiddenColumns || props.ignoreHiddenColumns === undefined,
+          ignoreHiddenColumns:
+            props.ignoreHiddenColumns ||
+            props.ignoreHiddenColumns === undefined,
           selector: props.selector,
         });
       }

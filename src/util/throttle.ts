@@ -1,4 +1,4 @@
-export const throttle = (fn: ((...args) => void), wait = 100) => {
+export const throttle = (fn: (...args) => void, wait = 100) => {
   let inThrottle: boolean;
   let lastFn: ReturnType<typeof setTimeout>;
   let lastTime: number;

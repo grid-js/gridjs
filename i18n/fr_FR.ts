@@ -3,8 +3,8 @@ export default {
     placeholder: '🔍 Recherche...',
   },
   sort: {
-    sortAsc: 'Trier la colonne dans l\'ordre croissant',
-    sortDesc: 'Trier la colonne dans l\'ordre décroissant',
+    sortAsc: "Trier la colonne dans l'ordre croissant",
+    sortDesc: "Trier la colonne dans l'ordre décroissant",
   },
   pagination: {
     previous: 'Précédent',

@@ -208,7 +208,7 @@ export class Config {
       props: {
         enabled:
           userConfig.search === true || userConfig.search instanceof Object,
-        ...(userConfig.search as SearchConfig)
+        ...(userConfig.search as SearchConfig),
       },
     });
 
