@@ -9,7 +9,7 @@ import { Translator } from '../../../../../src/i18n/language';
 import { Search } from '../../../../../src/view/plugin/search/search';
 import { SearchActions } from '../../../../../src/view/plugin/search/actions';
 import { Plugin, PluginPosition } from '../../../../../src/plugin';
-import Header from "../../../../../src/header";
+import Header from '../../../../../src/header';
 
 describe('Search plugin', () => {
   let config: Config;

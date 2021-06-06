@@ -4,15 +4,35 @@ import Row from '../../../src/row';
 import search from '../../../src/operator/search';
 
 describe('search', () => {
-  const column1 = { id: "col1", name: "col1" };
-  const column2 = { id: "col2", name: "col2" };
-  const column3 = { id: "col3", name: "col3" };
-  const column4 = { id: "col4", name: "col4", hidden: true };
+  const column1 = { id: 'col1', name: 'col1' };
+  const column2 = { id: 'col2', name: 'col2' };
+  const column3 = { id: 'col3', name: 'col3' };
+  const column4 = { id: 'col4', name: 'col4', hidden: true };
   const columns = [column1, column2, column3, column4];
-  const row1 = new Row([new Cell('hello'), new Cell('world'), new Cell('!'), new Cell('hidden content')]);
-  const row2 = new Row([new Cell('foo'), new Cell('boo'), new Cell('bar'), new Cell('hidden content')]);
-  const row3 = new Row([new Cell('hello'), new Cell('test'), new Cell('!!!'), new Cell('hidden content')]);
-  const row4 = new Row([new Cell(null), new Cell('xkcd'), new Cell('???'), new Cell('hidden content')]);
+  const row1 = new Row([
+    new Cell('hello'),
+    new Cell('world'),
+    new Cell('!'),
+    new Cell('hidden content'),
+  ]);
+  const row2 = new Row([
+    new Cell('foo'),
+    new Cell('boo'),
+    new Cell('bar'),
+    new Cell('hidden content'),
+  ]);
+  const row3 = new Row([
+    new Cell('hello'),
+    new Cell('test'),
+    new Cell('!!!'),
+    new Cell('hidden content'),
+  ]);
+  const row4 = new Row([
+    new Cell(null),
+    new Cell('xkcd'),
+    new Cell('???'),
+    new Cell('hidden content'),
+  ]);
   const row5 = new Row([
     new Cell('foo'),
     new Cell('ping pong ping'),
@@ -33,7 +53,9 @@ describe('search', () => {
   });
 
   it('should return results with exact match', () => {
-    expect(search('!!!', columns, true, tabular).rows).toStrictEqual(new Tabular([row3]).rows);
+    expect(search('!!!', columns, true, tabular).rows).toStrictEqual(
+      new Tabular([row3]).rows,
+    );
   });
 
   it('should return results for a keyword with a space in', () => {
@@ -49,9 +71,9 @@ describe('search', () => {
   });
 
   it('should use the selector with hardcoded string', () => {
-    expect(search('test', columns, true, tabular, () => 'custom keyword').rows).toStrictEqual(
-      new Tabular([]).rows,
-    );
+    expect(
+      search('test', columns, true, tabular, () => 'custom keyword').rows,
+    ).toStrictEqual(new Tabular([]).rows);
   });
 
   it('should use the selector with dynamic string', () => {

@@ -1,13 +1,14 @@
-html, body {
-	font: 14px/1.21 'Helvetica Neue', arial, sans-serif;
-	font-weight: 400;
+html,
+body {
+  font: 14px/1.21 'Helvetica Neue', arial, sans-serif;
+  font-weight: 400;
 }
 
 h1 {
-	text-align: center;
+  text-align: center;
 }
 
 #wrapper {
-	width: 900px;
-    margin: 0 auto;
+  width: 900px;
+  margin: 0 auto;
 }

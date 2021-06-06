@@ -5,7 +5,10 @@ import { Config } from '../../../src/config';
 import { Container } from '../../../src/view/container';
 import StorageUtils from '../../../src/storage/storageUtils';
 import Header from '../../../src/header';
-import { PipelineProcessor, ProcessorType } from '../../../src/pipeline/processor';
+import {
+  PipelineProcessor,
+  ProcessorType,
+} from '../../../src/pipeline/processor';
 import { flushPromises } from '../testUtil';
 import PipelineUtils from '../../../src/pipeline/pipelineUtils';
 import { EventEmitter } from '../../../src/util/eventEmitter';

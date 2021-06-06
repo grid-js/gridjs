@@ -1,5 +1,8 @@
 import Pipeline from '../../../src/pipeline/pipeline';
-import { PipelineProcessor, ProcessorType } from '../../../src/pipeline/processor';
+import {
+  PipelineProcessor,
+  ProcessorType,
+} from '../../../src/pipeline/processor';
 
 class NoopProcessor extends PipelineProcessor<string, any> {
   get type(): ProcessorType {
