@@ -7,13 +7,13 @@ export default function App() {
   const ref = useRef();
 
   useEffect(() => {
-    window.grid = new Grid({
+    new Grid({
       columns: ['a', 'b', 'c'],
       data: [
         [1, 2, 3],
         [4, 5, 6],
       ],
-    });
+    }).render(ref.current);
   });
 
   return (
