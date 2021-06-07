@@ -26,7 +26,7 @@ export interface PipelineProcessorProps {}
 
 export abstract class PipelineProcessor<
   T,
-  P extends Partial<PipelineProcessorProps>
+  P extends Partial<PipelineProcessorProps>,
 > extends EventEmitter<PipelineProcessorEvents<T, P>> {
   public readonly id: ID;
   private readonly _props: P;

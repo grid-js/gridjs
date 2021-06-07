@@ -38,10 +38,8 @@ interface PipelineEvents<T> {
 
 class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
   // available steps for this pipeline
-  private readonly _steps: Map<
-    ProcessorType,
-    PipelineProcessor<T, P>[]
-  > = new Map<ProcessorType, PipelineProcessor<T, P>[]>();
+  private readonly _steps: Map<ProcessorType, PipelineProcessor<T, P>[]> =
+    new Map<ProcessorType, PipelineProcessor<T, P>[]>();
   // used to cache the results of processors using their id field
   private cache: Map<string, any> = new Map<string, any>();
   // keeps the index of the last updated processor in the registered

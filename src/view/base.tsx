@@ -8,7 +8,7 @@ export interface BaseProps {}
 
 export abstract class BaseComponent<
   P extends BaseProps = unknown,
-  S = unknown
+  S = unknown,
 > extends Component<P, S> {
   protected config: Config;
   protected _: (message: string, ...args) => string;
