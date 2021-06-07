@@ -1,0 +1,13 @@
+{
+  "name": "l10n",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Localization libs for Grid.js",
+  "source": "index.ts",
+  "main": "dist/l10n.js",
+  "module": "dist/l10n.module.js",
+  "umd:main": "dist/l10n.umd.js",
+  "types": "dist/index.d.ts",
+  "amdName": "gridjs.l10n"
+}

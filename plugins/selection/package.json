@@ -10,6 +10,7 @@
   "main": "dist/selection.js",
   "module": "dist/selection.module.js",
   "umd:main": "dist/selection.umd.js",
+  "amdName": "gridjs.plugins.selection",
   "types": "dist/selection.d.ts",
   "files": [
     "dist/*"
