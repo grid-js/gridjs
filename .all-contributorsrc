@@ -23,6 +23,15 @@
       "contributions": [
         "plugin"
       ]
+    },
+    {
+      "login": "daniel-werner",
+      "name": "Daniel Werner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38726367?v=4",
+      "profile": "https://www.danielwerner.dev/",
+      "contributions": [
+        "plugin"
+      ]
     }
   ],
   "contributorsPerLine": 7,
