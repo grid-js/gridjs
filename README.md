@@ -1,6 +1,6 @@
 # Grid.js
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
@@ -57,12 +57,14 @@ on Grid.js website [grid.js/docs](https://gridjs.io/docs/index).
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="http://afshinm.name"><img src="https://avatars3.githubusercontent.com/u/314326?v=4" width="100px;" alt=""/><br /><sub><b>Afshin Mehrabani</b></sub></a><br /><a href="https://github.com/grid-js/gridjs/commits?author=afshinm" title="Code">💻</a> <a href="https://github.com/grid-js/gridjs/commits?author=afshinm" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://afshinm.name"><img src="https://avatars3.githubusercontent.com/u/314326?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Afshin Mehrabani</b></sub></a><br /><a href="https://github.com/grid-js/gridjs/commits?author=afshinm" title="Code">💻</a> <a href="https://github.com/grid-js/gridjs/commits?author=afshinm" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://self.agency"><img src="https://avatars.githubusercontent.com/u/2541728?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel Sieradski</b></sub></a><br /><a href="#plugin-selfagency" title="Plugin/utility libraries">🔌</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
