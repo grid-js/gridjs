@@ -99,7 +99,7 @@
     "typescript": "^4.2.4"
   },
   "scripts": {
-    "postinstall": "find . ! -path '*/node_modules/*' ! -path './package.json' ! -path './tests/dev-server/package.json' -name 'package.json' -execdir npm install \\;",
+    "prepare": "find . ! -path '*/node_modules/*' ! -path './package.json' ! -path './tests/dev-server/package.json' -name 'package.json' -execdir npm install \\;",
     "clean": "rimraf coverage dist tmp l10n/dist 'plugins/!(node_modules)/dist'",
     "prebuild": "npm run clean",
     "build": "run-p build:grid build:i18n build:plugins build:themes",
