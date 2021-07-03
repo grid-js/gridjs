@@ -75,7 +75,9 @@ export class Search extends PluginBaseComponent<
 
   componentWillUnmount(): void {
     this.config.pipeline.unregister(this.searchProcessor);
-    this.store.off('updated', this.storeUpdatedFn);
+
+    if (this.props.enabled)
+      this.store.off('updated', this.storeUpdatedFn);
   }
 
   private storeUpdated(state: SearchStoreState): void {

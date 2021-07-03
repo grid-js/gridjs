@@ -2,7 +2,7 @@ import { mount } from 'enzyme';
 import { createContext, h } from 'preact';
 import { Config } from '../../../../src/config';
 import { Plugin, PluginPosition } from '../../../../src/plugin';
-import { Pagination } from '../../../../src/view/plugin/pagination';
+import { Pagination } from '../../../../src/view/plugin/pagination/pagination';
 import Header from '../../../../src/header';
 
 describe('Pagination plugin', () => {

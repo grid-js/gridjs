@@ -94,4 +94,44 @@ describe('Grid class', () => {
       expect(readyMock).toBeCalledTimes(2);
     });
   });
+
+  it('should not reset the page after forceRender()', async () => {
+    const grid = new Grid({
+      columns: ['a', 'b', 'c'],
+      data: [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+      ],
+      pagination: {
+        enabled: true,
+        limit: 1,
+      },
+    });
+
+    const elm = document.createElement('div');
+    grid.render(elm);
+
+    await flushPromises();
+
+    expect(
+      Array.from(elm.querySelectorAll('td')).map((x) => x.innerHTML),
+    ).toStrictEqual(['1', '2', '3']);
+
+    elm.querySelectorAll('button')[2].click();
+
+    await flushPromises();
+
+    expect(
+      Array.from(elm.querySelectorAll('td')).map((x) => x.innerHTML),
+    ).toStrictEqual(['4', '5', '6']);
+
+    grid.forceRender();
+
+    await flushPromises();
+
+    expect(
+      Array.from(elm.querySelectorAll('td')).map((x) => x.innerHTML),
+    ).toStrictEqual(['4', '5', '6']);
+  });
 });

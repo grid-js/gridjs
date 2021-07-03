@@ -9,7 +9,10 @@ import Storage from './storage/storage';
 import Pipeline from './pipeline/pipeline';
 import Tabular from './tabular';
 import { Search, SearchConfig } from './view/plugin/search/search';
-import { Pagination, PaginationConfig } from './view/plugin/pagination';
+import {
+  Pagination,
+  PaginationConfig,
+} from './view/plugin/pagination/pagination';
 import Header from './header';
 import { ServerStorageOptions } from './storage/server';
 import Dispatcher from './util/dispatcher';

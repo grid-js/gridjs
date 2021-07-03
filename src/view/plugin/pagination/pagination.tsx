@@ -1,10 +1,12 @@
 import { h, Fragment } from 'preact';
-import PaginationLimit from '../../pipeline/limit/pagination';
-import { classJoin, className } from '../../util/className';
-import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
-import Tabular from '../../tabular';
-import { PipelineProcessor } from '../../pipeline/processor';
-import { PluginBaseComponent, PluginBaseProps } from '../../plugin';
+import PaginationLimit from '../../../pipeline/limit/pagination';
+import { classJoin, className } from '../../../util/className';
+import ServerPaginationLimit from '../../../pipeline/limit/serverPagination';
+import Tabular from '../../../tabular';
+import { PipelineProcessor } from '../../../pipeline/processor';
+import { PluginBaseComponent, PluginBaseProps } from '../../../plugin';
+import { PaginationActions } from './actions';
+import { PaginationStore, PaginationStoreState } from './store';
 
 interface PaginationState {
   page: number;
@@ -32,7 +34,10 @@ export class Pagination extends PluginBaseComponent<
   PaginationState
 > {
   private processor: PaginationLimit | ServerPaginationLimit;
+  private readonly actions: PaginationActions;
+  private readonly store: PaginationStore;
   private onUpdateFn: (processor: PipelineProcessor<any, any>) => void;
+  private onStoreUpdateFn: (state: PaginationStoreState) => void;
   private setTotalFromTabularFn: (tabular: Tabular) => void;
 
   static defaultProps = {
@@ -41,15 +46,22 @@ export class Pagination extends PluginBaseComponent<
     prevButton: true,
     buttonsCount: 3,
     limit: 10,
+    page: 0,
     resetPageOnUpdate: true,
   };
 
   constructor(props, context) {
     super(props, context);
 
+    this.actions = new PaginationActions(this.config.dispatcher);
+    this.store = new PaginationStore(this.config.dispatcher);
+
+    this.onStoreUpdateFn = this.onStoreUpdate.bind(this);
+    this.store.on('updated', this.onStoreUpdateFn);
+
     this.state = {
+      page: props.page,
       limit: props.limit,
-      page: props.page || 0,
       total: 0,
     };
   }
@@ -107,12 +119,25 @@ export class Pagination extends PluginBaseComponent<
     }
   }
 
+  private onStoreUpdate(state: PaginationStoreState): void {
+    const { page } = state;
+
+    this.setState({
+      page: page,
+    });
+
+    this.processor.setProps({
+      page: page,
+    });
+  }
+
   componentDidMount(): void {
     this.onUpdateFn = this.onUpdate.bind(this);
     this.config.pipeline.on('updated', this.onUpdateFn);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
+    this.store.off('updated', this.onStoreUpdateFn);
     this.config.pipeline.unregister(this.processor);
     this.config.pipeline.off('updated', this.onUpdateFn);
   }
@@ -126,13 +151,7 @@ export class Pagination extends PluginBaseComponent<
       return null;
     }
 
-    this.setState({
-      page: page,
-    });
-
-    this.processor.setProps({
-      page: page,
-    });
+    this.actions.goToPage(page);
   }
 
   private setTotal(totalRows: number): void {

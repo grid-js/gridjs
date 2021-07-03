@@ -14,6 +14,7 @@ import PipelineUtils from '../../../src/pipeline/pipelineUtils';
 import { EventEmitter } from '../../../src/util/eventEmitter';
 import { GridEvents } from '../../../src/events';
 import { PluginManager } from '../../../src/plugin';
+import {BaseStore} from "../../../index";
 
 expect.extend(toHaveNoViolations);
 
@@ -384,7 +385,7 @@ describe('Container component', () => {
     });
   });
 
-  it('should remove the EventEmitter listeners', async () => {
+  it('should remove the BaseStore listeners', async () => {
     config.update({
       search: {
         enabled: true,
@@ -396,6 +397,9 @@ describe('Container component', () => {
       sort: true,
     });
 
+    const mockOn = jest.spyOn(BaseStore.prototype, 'on');
+    const mockOff = jest.spyOn(BaseStore.prototype, 'off');
+
     const container = mount(
       <Container
         config={config}
@@ -405,14 +409,50 @@ describe('Container component', () => {
       />,
     );
 
-    const mockOn = jest.spyOn(EventEmitter.prototype, 'on');
-    const mockOff = jest.spyOn(EventEmitter.prototype, 'off');
+    await flushPromises();
+    await container.instance().componentDidMount();
+    container.unmount();
 
-    return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      container.unmount();
-      expect(mockOff.mock.calls.length).toBe(mockOn.mock.calls.length);
+    expect(mockOff.mock.calls.length).toBe(mockOn.mock.calls.length);
+
+    for (const instance of mockOn.mock.instances) {
+      expect(mockOff.mock.instances).toContain(instance);
+    }
+  });
+
+  it('should remove the BaseStore listeners when plugins are disabled', async () => {
+    config.update({
+      search: {
+        enabled: false,
+      },
+      pagination: {
+        enabled: false,
+      },
+      columns: ['Name', 'Phone Number'],
+      sort: false,
     });
+
+    const mockOn = jest.spyOn(BaseStore.prototype, 'on');
+    const mockOff = jest.spyOn(BaseStore.prototype, 'off');
+
+    const container = mount(
+      <Container
+        config={config}
+        pipeline={config.pipeline}
+        width={config.width}
+        height={config.height}
+      />,
+    );
+
+    await flushPromises();
+    await container.instance().componentDidMount();
+    container.unmount();
+
+    expect(mockOff.mock.calls.length).toBe(mockOn.mock.calls.length);
+
+    for (const instance of mockOn.mock.instances) {
+      expect(mockOff.mock.instances).toContain(instance);
+    }
   });
 
   it('should unregister the processors', async () => {

@@ -2,7 +2,7 @@ import { Config } from '../../src/config';
 import Storage from '../../src/storage/storage';
 import { Translator } from '../../src/i18n/language';
 import { Search } from '../../src/view/plugin/search/search';
-import { Pagination } from '../../src/view/plugin/pagination';
+import { Pagination } from '../../src/view/plugin/pagination/pagination';
 
 describe('Config', () => {
   let config: Config = null;
