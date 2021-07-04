@@ -7,6 +7,7 @@ import { PipelineProcessor } from '../../../pipeline/processor';
 import { PluginBaseComponent, PluginBaseProps } from '../../../plugin';
 import { PaginationActions } from './actions';
 import { PaginationStore, PaginationStoreState } from './store';
+import Pipeline from '../../../pipeline/pipeline';
 
 interface PaginationState {
   page: number;
@@ -15,7 +16,6 @@ interface PaginationState {
 }
 
 export interface PaginationConfig {
-  enabled: boolean;
   limit?: number;
   page?: number;
   summary?: boolean;
@@ -34,6 +34,7 @@ export class Pagination extends PluginBaseComponent<
   PaginationState
 > {
   private processor: PaginationLimit | ServerPaginationLimit;
+  private pipeline: Pipeline<any>;
   private readonly actions: PaginationActions;
   private readonly store: PaginationStore;
   private onUpdateFn: (processor: PipelineProcessor<any, any>) => void;
@@ -66,45 +67,55 @@ export class Pagination extends PluginBaseComponent<
     };
   }
 
-  componentWillMount(): void {
-    if (this.props.enabled) {
-      let processor;
-
-      this.setTotalFromTabularFn = this.setTotalFromTabular.bind(this);
-
-      if (this.props.server) {
-        processor = new ServerPaginationLimit({
-          limit: this.state.limit,
-          page: this.state.page,
-          url: this.props.server.url,
-          body: this.props.server.body,
-        });
-
-        this.config.pipeline.on('afterProcess', this.setTotalFromTabularFn);
-      } else {
-        processor = new PaginationLimit({
-          limit: this.state.limit,
-          page: this.state.page,
-        });
-
-        // Pagination (all Limit processors) is the last step in the pipeline
-        // and we assume that at this stage, we have the rows that we care about.
-        // Let's grab the rows before processing Pagination and set total number of rows
-        processor.on('beforeProcess', this.setTotalFromTabularFn);
-      }
-
-      this.processor = processor;
-      this.config.pipeline.register(processor);
-
-      // we need to make sure that the state is set
-      // to the default props when an error happens
-      this.config.pipeline.on('error', () => {
-        this.setState({
-          total: 0,
-          page: 0,
-        });
-      });
+  componentDidUpdate(): void {
+    if (this.pipeline !== this.config.pipeline) {
+      this.updatePipeline();
     }
+  }
+
+  componentWillMount(): void {
+    this.updatePipeline();
+  }
+
+  private updatePipeline() {
+    let processor;
+
+    this.pipeline = this.config.pipeline;
+
+    this.setTotalFromTabularFn = this.setTotalFromTabular.bind(this);
+
+    if (this.props.server) {
+      processor = new ServerPaginationLimit({
+        limit: this.state.limit,
+        page: this.state.page,
+        url: this.props.server.url,
+        body: this.props.server.body,
+      });
+
+      this.config.pipeline.on('afterProcess', this.setTotalFromTabularFn);
+    } else {
+      processor = new PaginationLimit({
+        limit: this.state.limit,
+        page: this.state.page,
+      });
+
+      // Pagination (all Limit processors) is the last step in the pipeline
+      // and we assume that at this stage, we have the rows that we care about.
+      // Let's grab the rows before processing Pagination and set total number of rows
+      processor.on('beforeProcess', this.setTotalFromTabularFn);
+    }
+
+    this.processor = processor;
+    this.config.pipeline.register(processor);
+
+    // we need to make sure that the state is set
+    // to the default props when an error happens
+    this.config.pipeline.on('error', () => {
+      this.setState({
+        total: 0,
+        page: 0,
+      });
+    });
   }
 
   private setTotalFromTabular(tabular: Tabular): void {
@@ -288,8 +299,6 @@ export class Pagination extends PluginBaseComponent<
   }
 
   render() {
-    if (!this.props.enabled) return null;
-
     return (
       <div
         className={classJoin(

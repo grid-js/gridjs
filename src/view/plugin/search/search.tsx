@@ -10,7 +10,6 @@ import { PluginBaseComponent, PluginBaseProps } from '../../../plugin';
 
 export interface SearchConfig {
   keyword?: string;
-  enabled?: boolean;
   ignoreHiddenColumns?: boolean;
   debounceTimeout?: number;
   selector?: (cell: TCell, rowIndex: number, cellIndex: number) => string;
@@ -39,45 +38,40 @@ export class Search extends PluginBaseComponent<
 
     this.actions = new SearchActions(this.config.dispatcher);
     this.store = new SearchStore(this.config.dispatcher);
-    const { enabled, keyword } = props;
+    const { keyword } = props;
 
-    if (enabled) {
-      // initial search
-      if (keyword) this.actions.search(keyword);
+    // initial search
+    if (keyword) this.actions.search(keyword);
 
-      this.storeUpdatedFn = this.storeUpdated.bind(this);
-      this.store.on('updated', this.storeUpdatedFn);
+    this.storeUpdatedFn = this.storeUpdated.bind(this);
+    this.store.on('updated', this.storeUpdatedFn);
 
-      let searchProcessor;
-      if (props.server) {
-        searchProcessor = new ServerGlobalSearchFilter({
-          keyword: props.keyword,
-          url: props.server.url,
-          body: props.server.body,
-        });
-      } else {
-        searchProcessor = new GlobalSearchFilter({
-          keyword: props.keyword,
-          columns: this.config.header && this.config.header.columns,
-          ignoreHiddenColumns:
-            props.ignoreHiddenColumns ||
-            props.ignoreHiddenColumns === undefined,
-          selector: props.selector,
-        });
-      }
-
-      this.searchProcessor = searchProcessor;
-
-      // adds a new processor to the pipeline
-      this.config.pipeline.register(searchProcessor);
+    let searchProcessor;
+    if (props.server) {
+      searchProcessor = new ServerGlobalSearchFilter({
+        keyword: props.keyword,
+        url: props.server.url,
+        body: props.server.body,
+      });
+    } else {
+      searchProcessor = new GlobalSearchFilter({
+        keyword: props.keyword,
+        columns: this.config.header && this.config.header.columns,
+        ignoreHiddenColumns:
+          props.ignoreHiddenColumns || props.ignoreHiddenColumns === undefined,
+        selector: props.selector,
+      });
     }
+
+    this.searchProcessor = searchProcessor;
+
+    // adds a new processor to the pipeline
+    this.config.pipeline.register(searchProcessor);
   }
 
   componentWillUnmount(): void {
     this.config.pipeline.unregister(this.searchProcessor);
-
-    if (this.props.enabled)
-      this.store.off('updated', this.storeUpdatedFn);
+    this.store.off('updated', this.storeUpdatedFn);
   }
 
   private storeUpdated(state: SearchStoreState): void {
@@ -93,8 +87,6 @@ export class Search extends PluginBaseComponent<
   }
 
   render() {
-    if (!this.props.enabled) return null;
-
     let onInput = this.onChange.bind(this);
 
     // add debounce to input only if it's a server-side search

@@ -7,27 +7,23 @@ import { Status } from '../types';
 import { Table } from './table/table';
 import { HeaderContainer } from './headerContainer';
 import { FooterContainer } from './footerContainer';
-import Pipeline from '../pipeline/pipeline';
 import Header from '../header';
 import { Config } from '../config';
 import log from '../util/log';
 import { PipelineProcessor } from '../pipeline/processor';
 
-interface ContainerProps extends BaseProps {
+interface Props extends BaseProps {
   config: Config;
-  pipeline: Pipeline<Tabular>;
-  header?: Header;
-  width: string;
-  height: string;
 }
 
-interface ContainerState {
+interface State {
+  config: Config;
   status: Status;
   header?: Header;
   data?: Tabular;
 }
 
-export class Container extends BaseComponent<ContainerProps, ContainerState> {
+export class Container extends BaseComponent<Props, State> {
   private readonly configContext: Context<Config>;
   private processPipelineFn: (processor: PipelineProcessor<any, any>) => void;
 
@@ -38,27 +34,28 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     this.configContext = createContext(null);
 
     this.state = {
+      config: props.config,
       status: Status.Loading,
-      header: props.header,
       data: null,
     };
   }
 
-  private async processPipeline() {
-    this.props.config.eventEmitter.emit('beforeLoad');
+  private async process() {
+    this.state.config.eventEmitter.emit('beforeLoad');
 
     this.setState({
       status: Status.Loading,
     });
 
     try {
-      const data = await this.props.pipeline.process();
+      const data = await this.state.config.pipeline.process();
+
       this.setState({
         data: data,
         status: Status.Loaded,
       });
 
-      this.props.config.eventEmitter.emit('load', data);
+      this.state.config.eventEmitter.emit('load', data);
     } catch (e) {
       log.error(e);
 
@@ -69,11 +66,13 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
     }
   }
 
-  async componentDidMount() {
-    const config = this.props.config;
+  private async processAndListen() {
+    const config = this.state.config;
 
-    // for the initial load
-    await this.processPipeline();
+    this.processPipelineFn = this.process.bind(this);
+    config.pipeline.on('updated', this.processPipelineFn);
+
+    await this.process();
 
     if (config.header && this.state.data && this.state.data.length) {
       // now that we have the data, let's adjust columns width
@@ -82,19 +81,27 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
         header: config.header.adjustWidth(config),
       });
     }
+  }
 
-    this.processPipelineFn = this.processPipeline.bind(this);
-    this.props.pipeline.on('updated', this.processPipelineFn);
+  async componentDidMount() {
+    const config = this.state.config;
+
+    config.eventEmitter.on('forceRender', async (cfg) => {
+      await this.processAndListen();
+
+      this.setState({
+        config: cfg,
+      });
+    });
+
+    await this.processAndListen();
   }
 
   componentWillUnmount(): void {
-    this.props.pipeline.off('updated', this.processPipelineFn);
+    this.state.config.pipeline.off('updated', this.processPipelineFn);
   }
 
-  componentDidUpdate(
-    _: Readonly<ContainerProps>,
-    previousState: Readonly<ContainerState>,
-  ): void {
+  componentDidUpdate(_: Readonly<Props>, previousState: Readonly<State>): void {
     // we can't jump to the Status.Rendered if previous status is not Status.Loaded
     if (
       previousState.status != Status.Rendered &&
@@ -104,31 +111,33 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
         status: Status.Rendered,
       });
 
-      this.props.config.eventEmitter.emit('ready');
+      this.state.config.eventEmitter.emit('ready');
     }
   }
 
   render() {
     const configContext = this.configContext;
+    const config = this.state.config;
+    const status = this.state.status;
 
     return (
-      <configContext.Provider value={this.props.config}>
+      <configContext.Provider value={config}>
         <div
           role="complementary"
           className={classJoin(
             'gridjs',
             className('container'),
-            this.state.status === Status.Loading ? className('loading') : null,
-            this.props.config.className.container,
+            status === Status.Loading ? className('loading') : null,
+            config.className.container,
           )}
           style={{
-            ...this.props.config.style.container,
+            ...config.style.container,
             ...{
-              width: this.props.width,
+              width: config.width,
             },
           }}
         >
-          {this.state.status === Status.Loading && (
+          {status === Status.Loading && (
             <div className={className('loading-bar')} />
           )}
 
@@ -136,14 +145,14 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
 
           <div
             className={className('wrapper')}
-            style={{ height: this.props.height }}
+            style={{ height: config.height }}
           >
             <Table
-              ref={this.props.config.tableRef}
+              ref={config.tableRef}
               data={this.state.data}
-              header={this.state.header}
-              width={this.props.width}
-              height={this.props.height}
+              header={config.header}
+              width={config.width}
+              height={config.height}
               status={this.state.status}
             />
           </div>
@@ -151,7 +160,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
           <FooterContainer />
 
           <div
-            ref={this.props.config.tempRef}
+            ref={config.tempRef}
             id="gridjs-temp"
             className={className('temp')}
           />

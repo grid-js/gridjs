@@ -185,7 +185,6 @@ export class Config {
       });
     }
 
-    // Header
     config.assign({
       header: Header.fromUserConfig(config),
     });
@@ -198,35 +197,36 @@ export class Config {
       pipeline: PipelineUtils.createFromConfig(config),
     });
 
-    // Translator
     config.assign({
       translator: new Translator(userConfig.language),
     });
 
-    // Search
-    config.plugin.add({
-      id: 'search',
-      position: PluginPosition.Header,
-      component: Search,
-      props: {
-        enabled:
-          userConfig.search === true || userConfig.search instanceof Object,
-        ...(userConfig.search as SearchConfig),
-      },
-    });
+    if (userConfig.search === true || userConfig.search instanceof Object) {
+      config.plugin.add({
+        id: 'search',
+        position: PluginPosition.Header,
+        component: Search,
+        props:
+          userConfig.search instanceof Object
+            ? (userConfig.search as SearchConfig)
+            : {},
+      });
+    }
 
-    // Pagination
-    config.plugin.add({
-      id: 'pagination',
-      position: PluginPosition.Footer,
-      component: Pagination,
-      props: {
-        enabled:
-          userConfig.pagination === true ||
-          userConfig.pagination instanceof Object,
-        ...(userConfig.pagination as PaginationConfig),
-      },
-    });
+    if (
+      userConfig.pagination === true ||
+      userConfig.pagination instanceof Object
+    ) {
+      config.plugin.add({
+        id: 'pagination',
+        position: PluginPosition.Footer,
+        component: Pagination,
+        props:
+          userConfig.pagination instanceof Object
+            ? (userConfig.pagination as PaginationConfig)
+            : {},
+      });
+    }
 
     // Additional plugins
     if (userConfig.plugins) {

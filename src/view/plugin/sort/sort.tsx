@@ -62,8 +62,7 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
   componentWillUnmount(): void {
     this.config.pipeline.unregister(this.sortProcessor);
 
-    if (this.props.enabled)
-      this.store.off('updated', this.updateStateFn);
+    if (this.props.enabled) this.store.off('updated', this.updateStateFn);
 
     if (this.updateSortProcessorFn)
       this.store.off('updated', this.updateSortProcessorFn);

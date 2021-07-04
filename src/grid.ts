@@ -26,10 +26,6 @@ class Grid extends EventEmitter<GridEvents> {
   createElement(): VNode {
     return h(Container, {
       config: this.config,
-      pipeline: this.config.pipeline,
-      header: this.config.header,
-      width: this.config.width,
-      height: this.config.height,
     });
   }
 
@@ -47,12 +43,7 @@ class Grid extends EventEmitter<GridEvents> {
       );
     }
 
-    // clear the pipeline cache
-    this.config.pipeline.clearCache();
-
-    // TODO: not sure if it's a good idea to render a null element but I couldn't find a better way
-    render(null, this.config.container);
-    render(this.createElement(), this.config.container);
+    this.config.eventEmitter.emit('forceRender', this.config);
 
     return this;
   }
