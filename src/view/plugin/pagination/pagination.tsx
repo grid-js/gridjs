@@ -7,7 +7,6 @@ import { PipelineProcessor } from '../../../pipeline/processor';
 import { PluginBaseComponent, PluginBaseProps } from '../../../plugin';
 import { PaginationActions } from './actions';
 import { PaginationStore, PaginationStoreState } from './store';
-import Pipeline from '../../../pipeline/pipeline';
 
 interface PaginationState {
   page: number;
@@ -34,7 +33,6 @@ export class Pagination extends PluginBaseComponent<
   PaginationState
 > {
   private processor: PaginationLimit | ServerPaginationLimit;
-  private pipeline: Pipeline<any>;
   private readonly actions: PaginationActions;
   private readonly store: PaginationStore;
   private onUpdateFn: (processor: PipelineProcessor<any, any>) => void;
@@ -60,6 +58,9 @@ export class Pagination extends PluginBaseComponent<
     this.onStoreUpdateFn = this.onStoreUpdate.bind(this);
     this.store.on('updated', this.onStoreUpdateFn);
 
+    this.onUpdateFn = this.onUpdate.bind(this);
+    this.config.pipeline.on('updated', this.onUpdateFn);
+
     this.state = {
       page: props.page,
       limit: props.limit,
@@ -67,20 +68,12 @@ export class Pagination extends PluginBaseComponent<
     };
   }
 
-  componentDidUpdate(): void {
-    if (this.pipeline !== this.config.pipeline) {
-      this.updatePipeline();
-    }
-  }
-
-  componentWillMount(): void {
+  configDidUpdate(): void {
     this.updatePipeline();
   }
 
   private updatePipeline() {
     let processor;
-
-    this.pipeline = this.config.pipeline;
 
     this.setTotalFromTabularFn = this.setTotalFromTabular.bind(this);
 
@@ -140,11 +133,6 @@ export class Pagination extends PluginBaseComponent<
     this.processor.setProps({
       page: page,
     });
-  }
-
-  componentDidMount(): void {
-    this.onUpdateFn = this.onUpdate.bind(this);
-    this.config.pipeline.on('updated', this.onUpdateFn);
   }
 
   componentWillUnmount(): void {

@@ -43,7 +43,7 @@ describe('Config', () => {
       search: true,
     });
 
-    expect(conf.plugin.get<Search>('search').props.enabled).toBeTruthy();
+    expect(conf.plugin.get<Search>('search')).toBeObject();
   });
 
   it('should create a userConfig with pagination', () => {
@@ -53,9 +53,7 @@ describe('Config', () => {
       pagination: true,
     });
 
-    expect(
-      conf.plugin.get<Pagination>('pagination').props.enabled,
-    ).toBeTruthy();
+    expect(conf.plugin.get<Pagination>('pagination')).toBeObject();
   });
 
   it('should create a userConfig with header', () => {

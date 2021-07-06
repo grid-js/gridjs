@@ -22,9 +22,7 @@ export interface SearchConfig {
 export class Search extends PluginBaseComponent<
   SearchConfig & PluginBaseProps<Search>
 > {
-  private readonly searchProcessor:
-    | GlobalSearchFilter
-    | ServerGlobalSearchFilter;
+  private searchProcessor: GlobalSearchFilter | ServerGlobalSearchFilter;
   private readonly actions: SearchActions;
   private readonly store: SearchStore;
   private readonly storeUpdatedFn: (...args) => void;
@@ -38,15 +36,15 @@ export class Search extends PluginBaseComponent<
 
     this.actions = new SearchActions(this.config.dispatcher);
     this.store = new SearchStore(this.config.dispatcher);
-    const { keyword } = props;
-
-    // initial search
-    if (keyword) this.actions.search(keyword);
 
     this.storeUpdatedFn = this.storeUpdated.bind(this);
     this.store.on('updated', this.storeUpdatedFn);
+  }
 
+  configDidUpdate(): void {
+    const props = this.props;
     let searchProcessor;
+
     if (props.server) {
       searchProcessor = new ServerGlobalSearchFilter({
         keyword: props.keyword,
@@ -67,6 +65,9 @@ export class Search extends PluginBaseComponent<
 
     // adds a new processor to the pipeline
     this.config.pipeline.register(searchProcessor);
+
+    // initial search
+    if (props.keyword) this.actions.search(props.keyword);
   }
 
   componentWillUnmount(): void {

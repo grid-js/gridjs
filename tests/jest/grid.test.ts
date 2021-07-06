@@ -104,7 +104,6 @@ describe('Grid class', () => {
         [7, 8, 9],
       ],
       pagination: {
-        enabled: true,
         limit: 1,
       },
     });

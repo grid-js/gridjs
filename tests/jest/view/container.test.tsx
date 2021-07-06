@@ -42,12 +42,8 @@ describe('Container component', () => {
 
   it('should attach styles', async () => {
     config.update({
-      search: {
-        enabled: true,
-      },
-      pagination: {
-        enabled: true,
-      },
+      search: {},
+      pagination: {},
       style: {
         container: {
           border: '1px solid #ccc',
@@ -79,12 +75,8 @@ describe('Container component', () => {
 
   it('should attach classNames', async () => {
     config.update({
-      search: {
-        enabled: true,
-      },
-      pagination: {
-        enabled: true,
-      },
+      search: {},
+      pagination: {},
       columns: [
         {
           name: 'c1',
@@ -129,9 +121,7 @@ describe('Container component', () => {
 
   it('should render a container with searchable table', async () => {
     config.update({
-      search: {
-        enabled: true,
-      },
+      search: {},
     });
 
     const container = mount(<Container config={config} />);
@@ -141,11 +131,8 @@ describe('Container component', () => {
 
   it('should render a container with sortable and paginated table', async () => {
     config.update({
-      search: {
-        enabled: true,
-      },
+      search: {},
       pagination: {
-        enabled: true,
         limit: 5,
       },
       columns: [
@@ -201,12 +188,9 @@ describe('Container component', () => {
   it('should not violate accessibility test', async () => {
     config.update({
       pagination: {
-        enabled: true,
         limit: 1,
       },
-      search: {
-        enabled: true,
-      },
+      search: {},
       sort: true,
     });
 
@@ -311,12 +295,8 @@ describe('Container component', () => {
 
   it('should remove the BaseStore listeners', async () => {
     config.update({
-      search: {
-        enabled: true,
-      },
-      pagination: {
-        enabled: true,
-      },
+      search: {},
+      pagination: {},
       columns: ['Name', 'Phone Number'],
       sort: true,
     });
@@ -339,12 +319,8 @@ describe('Container component', () => {
 
   it('should remove the BaseStore listeners when plugins are disabled', async () => {
     config.update({
-      search: {
-        enabled: false,
-      },
-      pagination: {
-        enabled: false,
-      },
+      search: {},
+      pagination: {},
       columns: ['Name', 'Phone Number'],
       sort: false,
     });
@@ -367,12 +343,8 @@ describe('Container component', () => {
 
   it('should unregister the processors', async () => {
     config.update({
-      pagination: {
-        enabled: true,
-      },
-      search: {
-        enabled: true,
-      },
+      pagination: {},
+      search: {},
       columns: ['Name', 'Phone Number'],
       sort: true,
     });

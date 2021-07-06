@@ -41,7 +41,7 @@ describe('Search plugin', () => {
 
     const search = mount(
       <configContext.Provider value={config}>
-        <Search plugin={plugin} enabled={true} keyword={'boo'} />
+        <Search plugin={plugin} keyword={'boo'} />
       </configContext.Provider>,
     );
 
@@ -54,7 +54,7 @@ describe('Search plugin', () => {
 
     mount(
       <configContext.Provider value={config}>
-        <Search plugin={plugin} enabled={true} />
+        <Search plugin={plugin} />
       </configContext.Provider>,
     );
 
@@ -66,7 +66,7 @@ describe('Search plugin', () => {
 
     const wrapper = mount(
       <configContext.Provider value={config}>
-        <Search plugin={plugin} enabled={true} />
+        <Search plugin={plugin} />
       </configContext.Provider>,
     );
 
@@ -89,7 +89,7 @@ describe('Search plugin', () => {
           },
         }}
       >
-        <Search plugin={plugin} enabled={true} keyword={'boo'} />
+        <Search plugin={plugin} keyword={'boo'} />
       </configContext.Provider>,
     );
 

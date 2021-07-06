@@ -1,9 +1,9 @@
 import { mount } from 'enzyme';
 import { createContext, h } from 'preact';
-import { Config } from '../../../../src/config';
-import { Plugin, PluginPosition } from '../../../../src/plugin';
-import { Pagination } from '../../../../src/view/plugin/pagination/pagination';
-import Header from '../../../../src/header';
+import { Config } from '../../../../../src/config';
+import { Plugin, PluginPosition } from '../../../../../src/plugin';
+import { Pagination } from '../../../../../src/view/plugin/pagination/pagination';
+import Header from '../../../../../src/header';
 
 describe('Pagination plugin', () => {
   let config: Config;
@@ -42,7 +42,7 @@ describe('Pagination plugin', () => {
           data: [],
         }}
       >
-        <Pagination plugin={plugin} enabled={true} />
+        <Pagination plugin={plugin} />
       </configContext.Provider>,
     );
 
@@ -53,7 +53,7 @@ describe('Pagination plugin', () => {
   it('should render the pagination with one page', async () => {
     const pagination = mount(
       <configContext.Provider value={config}>
-        <Pagination plugin={plugin} enabled={true} limit={3} />
+        <Pagination plugin={plugin} limit={3} />
       </configContext.Provider>,
     );
 
@@ -64,7 +64,7 @@ describe('Pagination plugin', () => {
   it('should render the pagination with three page', async () => {
     const pagination = mount(
       <configContext.Provider value={config}>
-        <Pagination plugin={plugin} enabled={true} limit={1} />
+        <Pagination plugin={plugin} limit={1} />
       </configContext.Provider>,
     );
 
@@ -89,7 +89,7 @@ describe('Pagination plugin', () => {
           },
         }}
       >
-        <Pagination plugin={plugin} enabled={true} limit={1} />
+        <Pagination plugin={plugin} limit={1} />
       </configContext.Provider>,
     );
 

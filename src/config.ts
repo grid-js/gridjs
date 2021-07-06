@@ -28,6 +28,7 @@ import Grid from './grid';
 
 // Config type used internally
 export interface Config {
+  version: number;
   // a reference to the current Grid.js instance
   instance: Grid;
   eventEmitter: EventEmitter<GridEvents>;
@@ -130,7 +131,7 @@ export class Config {
   assign(updatedConfig: Partial<Config>): Config {
     for (const key of Object.keys(updatedConfig)) {
       // because we don't want to update the _userConfig cache
-      if (key === '_userConfig') continue;
+      if (['_userConfig', 'version'].indexOf(key) > -1) continue;
 
       this[key] = updatedConfig[key];
     }
@@ -151,13 +152,18 @@ export class Config {
       ...userConfig,
     };
 
+    const version = this.version;
+
     this.assign(Config.fromUserConfig(this._userConfig));
+
+    this.version = version + 1;
 
     return this;
   }
 
   static defaultConfig(): Config {
     return {
+      version: 1,
       plugin: new PluginManager(),
       dispatcher: new Dispatcher<any>(),
       tableRef: createRef(),
