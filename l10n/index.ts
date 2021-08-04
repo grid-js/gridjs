@@ -5,6 +5,6 @@ import ptPT from './pt_PT';
 import trTR from './tr_TR';
 import koKR from './ko_KR';
 import ruRU from './ru_RU';
-import idID from './id_id';
+import idID from './id_ID';
 
 export { esES, frFR, itIT, ptPT, trTR, koKR, ruRU, idID };
