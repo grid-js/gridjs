@@ -77,7 +77,7 @@
     "jest": "~27.0.6",
     "jest-axe": "^5.0.1",
     "jest-extended": "^0.11.5",
-    "jsdom": "^16.2.2",
+    "jsdom": "^17.0.0",
     "jsdom-global": "^3.0.2",
     "lerna-changelog": "^1.0.1",
     "microbundle": "^0.13.0",
