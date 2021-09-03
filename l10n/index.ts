@@ -6,5 +6,6 @@ import trTR from './tr_TR';
 import koKR from './ko_KR';
 import ruRU from './ru_RU';
 import idID from './id_ID';
+import cnCN from './cn_CN';
 
-export { esES, frFR, itIT, ptPT, trTR, koKR, ruRU, idID };
+export { esES, frFR, itIT, ptPT, trTR, koKR, ruRU, idID, cnCN };
