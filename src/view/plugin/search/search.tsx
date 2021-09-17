@@ -7,6 +7,7 @@ import ServerGlobalSearchFilter from '../../../pipeline/filter/serverGlobalSearc
 import { debounce } from '../../../util/debounce';
 import { TCell } from '../../../types';
 import { PluginBaseComponent, PluginBaseProps } from '../../../plugin';
+import Row from '../../../row';
 
 export interface SearchConfig {
   keyword?: string;
@@ -18,6 +19,7 @@ export interface SearchConfig {
     url?: (prevUrl: string, keyword: string) => string;
     body?: (prevBody: BodyInit, keyword: string) => BodyInit;
   };
+  filter?: (keyword: string, rows: Row[]) => Row[];
 }
 
 export class Search extends PluginBaseComponent<
@@ -63,6 +65,7 @@ export class Search extends PluginBaseComponent<
             props.ignoreHiddenColumns ||
             props.ignoreHiddenColumns === undefined,
           selector: props.selector,
+          filter: props.filter,
         });
       }
 
