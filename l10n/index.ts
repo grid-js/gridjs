@@ -8,5 +8,6 @@ import ruRU from './ru_RU';
 import idID from './id_ID';
 import jaJP from './ja_JP';
 import cnCN from './cn_CN';
+import deDE from './de_DE';
 
-export { esES, frFR, itIT, ptPT, trTR, koKR, ruRU, idID, jaJP, cnCN };
+export { esES, frFR, itIT, ptPT, trTR, koKR, ruRU, idID, jaJP, cnCN, deDE };
