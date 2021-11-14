@@ -76,7 +76,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "~27.3.0",
     "jest-axe": "^5.0.1",
-    "jest-extended": "^0.11.5",
+    "jest-extended": "^1.1.0",
     "jsdom": "^18.0.1",
     "jsdom-global": "^3.0.2",
     "lerna-changelog": "^2.1.0",
