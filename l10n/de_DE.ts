@@ -17,6 +17,6 @@ export default {
     results: 'Resultaten',
   },
   loading: 'Lade...',
-  noRecordsFound: 'Keine passenden Eintröge gefunden',
+  noRecordsFound: 'Keine passenden Einträge gefunden',
   error: 'Beim Abrufen der Daten ist ein Fehler aufgetreten',
 };
