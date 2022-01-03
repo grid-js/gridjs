@@ -70,7 +70,7 @@
     "cypress-visual-regression": "^1.5.7",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^3.0.0",
-    "eslint": "~7.32.0",
+    "eslint": "~8.6.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-jest": "~25.2.2",
     "identity-obj-proxy": "^3.0.0",
