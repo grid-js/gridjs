@@ -72,7 +72,7 @@
     "enzyme-adapter-preact-pure": "^3.0.0",
     "eslint": "~7.32.0",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-jest": "~25.2.2",
+    "eslint-plugin-jest": "~26.5.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "~27.3.0",
     "jest-axe": "^6.0.0",
