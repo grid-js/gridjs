@@ -28,6 +28,9 @@
 
     button:focus {
       box-shadow: 0 0 0 2px rgba(149, 189, 243, 0.5);
+      position: relative;
+      margin-right: -1px;
+      border-right: 1px solid $gray4;
     }
 
     button:hover {
@@ -64,6 +67,10 @@
     button:first-child {
       border-bottom-left-radius: 6px;
       border-top-left-radius: 6px;
+    }
+    
+    button:last-child:focus {
+      margin-right: 0;
     }
   }
 }
