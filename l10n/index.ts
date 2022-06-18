@@ -4,6 +4,30 @@ import itIT from './it_IT';
 import ptPT from './pt_PT';
 import trTR from './tr_TR';
 import koKR from './ko_KR';
+import ruRU from './ru_RU';
+import idID from './id_ID';
+import jaJP from './ja_JP';
+import cnCN from './cn_CN';
+import arSA from './ar_SA';
+import deDE from './de_DE';
+import ptBR from './pt_BR';
+import faIR from './fa_IR';
 import nbNO from './nb_NO';
 
-export { esES, frFR, itIT, ptPT, trTR, koKR, nbNO };
+export {
+  esES,
+  frFR,
+  itIT,
+  ptPT,
+  trTR,
+  koKR,
+  ruRU,
+  idID,
+  jaJP,
+  cnCN,
+  arSA,
+  deDE,
+  ptBR,
+  faIR,
+  nbNO,
+};
