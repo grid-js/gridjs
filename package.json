@@ -33,20 +33,20 @@
       "require": "./dist/gridjs.js"
     },
     "./legacy": {
-      "umd": "./dist/gridjs.production.min.js",
-      "browser": "./dist/gridjs.production.es.min.js"
+      "browser": "./dist/gridjs.production.es.min.js",
+      "umd": "./dist/gridjs.production.min.js"
     },
     "./l10n": {
       "browser": "./l10n/dist/l10n.module.js",
       "umd": "./l10n/dist/l10n.umd.js",
-      "require": "./l10n/dist/l10n.js",
-      "import": "./l10n/dist/l10n.mjs"
+      "import": "./l10n/dist/l10n.mjs",
+      "require": "./l10n/dist/l10n.js"
     },
     "./plugins/selection": {
       "browser": "./plugins/selection/dist/selection.module.js",
       "umd": "./plugins/selection/dist/selection.umd.js",
-      "require": "./plugins/selection/dist/selection.js",
-      "import": "./plugins/selection/dist/selection.mjs"
+      "import": "./plugins/selection/dist/selection.mjs",
+      "require": "./plugins/selection/dist/selection.js"
     },
     "./package.json": "./package.json",
     "./": "./"
@@ -60,8 +60,8 @@
     "@types/jest": "^27.0.1",
     "@types/jest-axe": "^3.2.2",
     "@types/node": "^18.0.0",
-    "@typescript-eslint/eslint-plugin": "~4.33.0",
-    "@typescript-eslint/parser": "~4.33.0",
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0",
     "autoprefixer": "^10.3.1",
     "axe-core": "^4.0.0",
     "check-export-map": "^1.1.1",
@@ -70,8 +70,8 @@
     "cypress-visual-regression": "^1.5.7",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^3.0.0",
-    "eslint": "~7.32.0",
-    "eslint-config-prettier": "^6.11.0",
+    "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "~25.2.2",
     "identity-obj-proxy": "^3.0.0",
     "jest": "~27.3.0",
