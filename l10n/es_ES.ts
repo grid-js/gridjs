@@ -1,6 +1,6 @@
 export default {
   search: {
-    placeholder: '🔍 Busqueda...',
+    placeholder: 'Buscar...',
   },
   sort: {
     sortAsc: 'Ordenar la columna en orden ascendente',
@@ -11,12 +11,12 @@ export default {
     next: 'Siguiente',
     navigate: (page, pages) => `Página ${page} de ${pages}`,
     page: (page) => `Página ${page}`,
-    showing: 'Mostrando los resultados',
-    of: 'sobre',
-    to: 'a',
-    results: '',
+    showing: 'Mostrando registros del',
+    of: 'de un total de',
+    to: 'al',
+    results: 'registros',
   },
   loading: 'Cargando...',
-  noRecordsFound: 'Nigún resultado encontrado',
+  noRecordsFound: 'No se encontraron registros',
   error: 'Se produjo un error al recuperar datos',
 };
