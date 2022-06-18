@@ -11,6 +11,7 @@ import cnCN from './cn_CN';
 import arSA from './ar_SA';
 import deDE from './de_DE';
 import ptBR from './pt_BR';
+import faIR from './fa_IR';
 
 export {
   esES,
@@ -26,4 +27,5 @@ export {
   arSA,
   deDE,
   ptBR,
+  faIR,
 };
