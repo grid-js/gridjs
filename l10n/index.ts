@@ -12,6 +12,7 @@ import arSA from './ar_SA';
 import deDE from './de_DE';
 import ptBR from './pt_BR';
 import faIR from './fa_IR';
+import nbNO from './nb_NO';
 
 export {
   esES,
@@ -28,4 +29,5 @@ export {
   deDE,
   ptBR,
   faIR,
+  nbNO,
 };
