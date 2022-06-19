@@ -5,7 +5,7 @@ const roots = Object.entries(exps)
 
 module.exports = {
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['jest-extended'],
+  setupFilesAfterEnv: ["jest-extended/all"],
   roots: roots,
   globals: {
     'ts-jest': {

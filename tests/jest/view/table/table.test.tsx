@@ -483,14 +483,14 @@ describe('Table component', () => {
             .find('td')
             .map((x) => x.text())
             .every((x) => x),
-        ).toBeTrue();
+        ).toBe(true);
 
         expect(
           table
             .find('td')
             .map((x) => x.text())
             .every((x) => flattenData.indexOf(x.toString()) > -1),
-        ).toBeTrue();
+        ).toBe(true);
 
         expect(table.html()).toMatchSnapshot();
 

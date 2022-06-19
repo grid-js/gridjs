@@ -98,13 +98,13 @@ describe('Pagination plugin', () => {
 
     expect(
       pagination.find('.my-pagination-class').hasClass('gridjs-pagination'),
-    ).toBeTrue();
+    ).toBe(true);
     expect(pagination.find('.my-pagination-class').name()).toBe('div');
 
     expect(pagination.find('.my-button')).toHaveLength(5);
     expect(pagination.find('.my-next-button')).toHaveLength(1);
-    expect(pagination.find('.my-next-button').prop('disabled')).toBeFalse();
-    expect(pagination.find('.my-prev-button').prop('disabled')).toBeTrue();
+    expect(pagination.find('.my-next-button').prop('disabled')).toBe(false);
+    expect(pagination.find('.my-prev-button').prop('disabled')).toBe(true);
     expect(pagination.find('.my-prev-button')).toHaveLength(1);
     expect(pagination.find('.my-current-button')).toHaveLength(1);
     expect(pagination.find('.my-current-button').text()).toBe('1');

@@ -63,7 +63,7 @@
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
     "autoprefixer": "^10.3.1",
-    "axe-core": "^4.0.0",
+    "axe-core": "^4.4.2",
     "check-export-map": "^1.1.1",
     "cssnano": "^5.0.5",
     "cypress": "^8.1.0",
@@ -74,9 +74,9 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "~25.2.2",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "~27.3.0",
+    "jest": "^28.1.1",
     "jest-axe": "^6.0.0",
-    "jest-extended": "^0.11.5",
+    "jest-extended": "^2.0.0",
     "jsdom": "^19.0.0",
     "jsdom-global": "^3.0.2",
     "lerna-changelog": "^2.1.0",
@@ -92,8 +92,9 @@
     "sass": "^1.52.3",
     "source-map-loader": "^4.0.0",
     "start-server-and-test": "^1.12.3",
-    "ts-jest": "^27.0.3",
+    "ts-jest": "^28.0.5",
     "ts-loader": "^9.1.1",
+    "tslib": "^2.4.0",
     "tsutils": "~3.21.0",
     "typescript": "^4.2.4"
   },
@@ -122,8 +123,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "preact": "^10.5.12",
-    "tslib": "^2.0.1"
+    "preact": "^10.5.12"
   },
   "changelog": {
     "labels": {
