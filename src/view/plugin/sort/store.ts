@@ -74,7 +74,11 @@ export class SortStore extends BaseStore<SortStoreState, SortActionsType> {
       if (!multi) {
         // single column sorting
         if (count === 1) {
-          update = true;
+          if (column.direction === 1) {
+            update = true;
+          } else {
+            reset = true;
+          }
         } else if (count > 1) {
           // this situation happens when we have already entered
           // multi-sorting mode but then user tries to sort a single column
