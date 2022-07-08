@@ -13,6 +13,7 @@ import deDE from './de_DE';
 import ptBR from './pt_BR';
 import faIR from './fa_IR';
 import nbNO from './nb_NO';
+import msMY from './ms_MY';
 
 export {
   esES,
@@ -30,4 +31,5 @@ export {
   ptBR,
   faIR,
   nbNO,
+  msMY
 };
