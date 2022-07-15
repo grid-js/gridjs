@@ -1,6 +1,6 @@
 export default {
   search: {
-    placeholder: 'Cari pada table...',
+    placeholder: 'Cari pada tabel...',
   },
   sort: {
     sortAsc: 'Sortir kolom naik',
