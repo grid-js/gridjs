@@ -41,6 +41,16 @@
       "contributions": [
         "plugin"
       ]
+    },
+    {
+      "login": "Aloysb",
+      "name": "Aloysb",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17796338?v=4",
+      "profile": "https://aloys.dev",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
