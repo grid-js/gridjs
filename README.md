@@ -1,6 +1,6 @@
 # Grid.js
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <p align="center">
@@ -61,6 +61,7 @@ on Grid.js website [grid.js/docs](https://gridjs.io/docs/index).
     <td align="center"><a href="https://self.agency"><img src="https://avatars.githubusercontent.com/u/2541728?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel Sieradski</b></sub></a><br /><a href="#plugin-selfagency" title="Plugin/utility libraries">🔌</a></td>
     <td align="center"><a href="http://salamaashoush.com"><img src="https://avatars.githubusercontent.com/u/13505298?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Salama Ashoush</b></sub></a><br /><a href="#plugin-salamaashoush" title="Plugin/utility libraries">🔌</a></td>
     <td align="center"><a href="https://www.danielwerner.dev/"><img src="https://avatars.githubusercontent.com/u/38726367?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel Werner</b></sub></a><br /><a href="#plugin-daniel-werner" title="Plugin/utility libraries">🔌</a></td>
+    <td align="center"><a href="https://aloys.dev"><img src="https://avatars.githubusercontent.com/u/17796338?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aloysb</b></sub></a><br /><a href="https://github.com/grid-js/gridjs/commits?author=Aloysb" title="Code">💻</a> <a href="https://github.com/grid-js/gridjs/commits?author=Aloysb" title="Documentation">📖</a></td>
   </tr>
 </table>
 
