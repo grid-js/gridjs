@@ -113,7 +113,6 @@ export class Search extends PluginBaseComponent<
             className('input'),
             className('search', 'input'),
           )}
-          value={this.store.state.keyword}
         />
       </div>
     );
