@@ -22,7 +22,6 @@
   },
   "include": [
     "index.ts",
-    "src/**/*",
-    "tests/jest/**/*"
+   "src/**/*",
   ]
 }
