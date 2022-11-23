@@ -13,7 +13,7 @@ export function HeaderContainer() {
     if (headerRef.current.children.length === 0) {
       setIsActive(false);
     }
-  }, []);
+  }, [headerRef]);
 
   if (isActive) {
     return (

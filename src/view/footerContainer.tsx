@@ -1,51 +1,34 @@
-import { createRef, h } from 'preact';
-
-import { BaseComponent } from './base';
+import { h } from 'preact';
 import { classJoin, className } from '../util/className';
 import { PluginPosition, PluginRenderer } from '../plugin';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { useConfig } from '../hooks/useConfig';
 
-interface FooterContainerState {
-  isActive: boolean;
-}
+export function FooterContainer() {
+  const footerRef = useRef(null);
+  const [isActive, setIsActive] = useState(true);
+  const config = useConfig();
 
-export class FooterContainer extends BaseComponent<
-  Record<string, any>,
-  FooterContainerState
-> {
-  private footerRef = createRef();
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      isActive: true,
-    };
-  }
-
-  componentDidMount() {
-    if (this.footerRef.current.children.length === 0) {
-      this.setState({
-        isActive: false,
-      });
+  useEffect(() => {
+    if (footerRef.current.children.length === 0) {
+      setIsActive(false);
     }
+  }, [footerRef]);
+
+  if (isActive) {
+    return (
+      <div
+        ref={footerRef}
+        className={classJoin(
+          className('footer'),
+          config.className.footer,
+        )}
+        style={{ ...config.style.footer }}
+      >
+        <PluginRenderer position={PluginPosition.Footer} />
+      </div>
+    );
   }
 
-  render() {
-    if (this.state.isActive) {
-      return (
-        <div
-          ref={this.footerRef}
-          className={classJoin(
-            className('footer'),
-            this.config.className.footer,
-          )}
-          style={{ ...this.config.style.footer }}
-        >
-          <PluginRenderer position={PluginPosition.Footer} />
-        </div>
-      );
-    }
-
-    return null;
-  }
+  return null;
 }

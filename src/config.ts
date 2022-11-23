@@ -15,7 +15,13 @@ import { ServerStorageOptions } from './storage/server';
 import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
 import { Language, Translator } from './i18n/language';
-import { Component, ComponentChild, createContext, createRef, RefObject } from 'preact';
+import {
+  Component,
+  ComponentChild,
+  createContext,
+  createRef,
+  RefObject,
+} from 'preact';
 import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
 import { EventEmitter } from './util/eventEmitter';
