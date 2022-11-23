@@ -4,7 +4,7 @@ export default {
   },
   sort: {
     sortAsc: 'Сортування за зростанням',
-    sortDesc: 'Сортування за зменьшенням',
+    sortDesc: 'Сортування за зменшенням',
   },
   pagination: {
     previous: 'Назад',
