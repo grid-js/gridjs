@@ -105,6 +105,7 @@
     "build": "run-p build:grid build:i18n build:plugins build:themes",
     "build:grid": "microbundle build --raw --external none --tsconfig tsconfig.release.json",
     "build:i18n": "microbundle build --raw --cwd l10n --tsconfig l10n/tsconfig.release.json",
+    "build:watch": "microbundle build -w --raw --external none --tsconfig tsconfig.release.json",
     "build:plugins": "microbundle build --raw --cwd plugins/selection --tsconfig plugins/selection/tsconfig.release.json",
     "postbuild": "node build/node-13-exports.js",
     "prebuild:themes": "sass src/theme/mermaid/index.scss dist/theme/mermaid.css",
@@ -123,7 +124,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "preact": "^10.10.6"
+    "preact": "^10.11.3"
   },
   "changelog": {
     "labels": {

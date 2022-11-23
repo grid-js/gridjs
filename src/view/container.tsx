@@ -1,5 +1,4 @@
-import { h, createContext, Context } from 'preact';
-
+import { h } from 'preact';
 import Tabular from '../tabular';
 import { BaseComponent, BaseProps } from './base';
 import { classJoin, className } from '../util/className';
@@ -9,7 +8,7 @@ import { HeaderContainer } from './headerContainer';
 import { FooterContainer } from './footerContainer';
 import Pipeline from '../pipeline/pipeline';
 import Header from '../header';
-import { Config } from '../config';
+import { Config, ConfigContext } from '../config';
 import log from '../util/log';
 import { PipelineProcessor } from '../pipeline/processor';
 
@@ -28,14 +27,10 @@ interface ContainerState {
 }
 
 export class Container extends BaseComponent<ContainerProps, ContainerState> {
-  private readonly configContext: Context<Config>;
   private processPipelineFn: (processor: PipelineProcessor<any, any>) => void;
 
   constructor(props, context) {
     super(props, context);
-
-    // global Config context which is passed to all components
-    this.configContext = createContext(null);
 
     this.state = {
       status: Status.Loading,
@@ -109,10 +104,8 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
   }
 
   render() {
-    const configContext = this.configContext;
-
     return (
-      <configContext.Provider value={this.props.config}>
+      <ConfigContext.Provider value={this.props.config}>
         <div
           role="complementary"
           className={classJoin(
@@ -156,7 +149,7 @@ export class Container extends BaseComponent<ContainerProps, ContainerState> {
             className={className('temp')}
           />
         </div>
-      </configContext.Provider>
+      </ConfigContext.Provider>
     );
   }
 }
