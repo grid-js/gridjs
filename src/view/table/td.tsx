@@ -8,18 +8,18 @@ import { JSXInternal } from 'preact/src/jsx';
 import { PluginRenderer } from '../../plugin';
 import { useConfig } from '../../hooks/useConfig';
 
-export interface TDProps extends JSX.HTMLAttributes<HTMLTableCellElement> {
-  cell: Cell;
-  row?: Row;
-  column?: TColumn;
-  style?: CSSDeclaration;
-  messageCell?: boolean;
-}
-
-export function TD(props: TDProps) {
+export function TD(
+  props: {
+    cell: Cell;
+    row?: Row;
+    column?: TColumn;
+    style?: CSSDeclaration;
+    messageCell?: boolean;
+  } & Omit<JSX.HTMLAttributes<HTMLTableCellElement>, 'style'>,
+) {
   const config = useConfig();
 
-  function content(): ComponentChild {
+  const content = (): ComponentChild => {
     if (props.column && typeof props.column.formatter === 'function') {
       return props.column.formatter(props.cell.data, props.row, props.column);
     }
@@ -38,10 +38,13 @@ export function TD(props: TDProps) {
     }
 
     return props.cell.data;
-  }
+  };
 
-  function handleClick(e: JSX.TargetedMouseEvent<HTMLTableCellElement>): void {
+  const handleClick = (
+    e: JSX.TargetedMouseEvent<HTMLTableCellElement>,
+  ): void => {
     if (props.messageCell) return;
+
     config.eventEmitter.emit(
       'cellClick',
       e,
@@ -49,11 +52,11 @@ export function TD(props: TDProps) {
       props.column,
       props.row,
     );
-  }
+  };
 
-  function getCustomAttributes(
+  const getCustomAttributes = (
     column: TColumn | null,
-  ): JSXInternal.HTMLAttributes<HTMLTableCellElement> {
+  ): JSXInternal.HTMLAttributes<HTMLTableCellElement> => {
     if (!column) return {};
 
     if (typeof column.attributes === 'function') {
@@ -61,7 +64,7 @@ export function TD(props: TDProps) {
     } else {
       return column.attributes;
     }
-  }
+  };
 
   return (
     <td

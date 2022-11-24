@@ -1,6 +1,6 @@
 import { useContext } from 'preact/hooks';
-import { ConfigContext } from '../config';
+import { Config, ConfigContext } from '../config';
 
-export function useConfig() {
+export function useConfig(): Config {
   return useContext(ConfigContext);
 }
