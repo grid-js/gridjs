@@ -1,51 +1,44 @@
 import { Component, RefObject } from 'preact';
-import { BaseComponent, BaseProps } from '../base';
 import { className } from '../../util/className';
-
-interface ShadowTableProps extends BaseProps {
-  tableRef?: RefObject<Component>;
-}
+import { useEffect } from 'preact/hooks';
 
 /**
  * ShadowTable renders a hidden table and is used to calculate the column's width
  * when autoWidth option is enabled
  */
-export class ShadowTable extends BaseComponent<ShadowTableProps> {
-  private tableElement: HTMLTableElement;
-  private tableClassName: string;
-  private tableStyle: string;
+export function ShadowTable(props: { tableRef?: RefObject<HTMLTableElement> }) {
+  let tableElement: HTMLTableElement;
+  let tableClassName: string;
+  let tableStyle: string;
 
-  constructor(props, context) {
-    super(props, context);
+  useEffect(() => {
+    const tableRef = props.tableRef;
+    tableElement = tableRef.current.cloneNode(true) as HTMLTableElement;
 
-    const tableRef = this.props.tableRef;
-    this.tableElement = tableRef.current.base.cloneNode(
-      true,
-    ) as HTMLTableElement;
+    tableElement.style.position = 'absolute';
+    tableElement.style.width = '100%';
+    tableElement.style.zIndex = '-2147483640';
+    tableElement.style.visibility = 'hidden';
 
-    this.tableElement.style.position = 'absolute';
-    this.tableElement.style.width = '100%';
-    this.tableElement.style.zIndex = '-2147483640';
-    this.tableElement.style.visibility = 'hidden';
+    tableClassName = tableElement.className;
+    tableStyle = tableElement.style.cssText;
+  }, []);
 
-    this.tableClassName = this.tableElement.className;
-    this.tableStyle = this.tableElement.style.cssText;
-  }
+  const widths = (): {
+    [columnId: string]: { minWidth: number; width: number };
+  } => {
+    tableElement.className = `${tableClassName} ${className('shadowTable')}`;
 
-  public widths(): { [columnId: string]: { minWidth: number; width: number } } {
-    this.tableElement.className = `${this.tableClassName} ${className(
-      'shadowTable',
-    )}`;
-
-    this.tableElement.style.tableLayout = 'auto';
-    this.tableElement.style.width = 'auto';
-    this.tableElement.style.padding = '0';
-    this.tableElement.style.margin = '0';
-    this.tableElement.style.border = 'none';
-    this.tableElement.style.outline = 'none';
+    tableElement.style.tableLayout = 'auto';
+    tableElement.style.width = 'auto';
+    tableElement.style.padding = '0';
+    tableElement.style.margin = '0';
+    tableElement.style.border = 'none';
+    tableElement.style.outline = 'none';
 
     let obj = Array.from(
-      this.base.parentNode.querySelectorAll<HTMLElement>('thead th'),
+      // TODO: should this be this.base?
+      tableElement.parentNode.querySelectorAll<HTMLElement>('thead th'),
     ).reduce((prev, current) => {
       current.style.width = `${current.clientWidth}px`;
 
@@ -57,12 +50,13 @@ export class ShadowTable extends BaseComponent<ShadowTableProps> {
       };
     }, {});
 
-    this.tableElement.className = this.tableClassName;
-    this.tableElement.style.cssText = this.tableStyle;
-    this.tableElement.style.tableLayout = 'auto';
+    tableElement.className = tableClassName;
+    tableElement.style.cssText = tableStyle;
+    tableElement.style.tableLayout = 'auto';
 
     obj = Array.from(
-      this.base.parentNode.querySelectorAll<HTMLElement>('thead th'),
+      // TODO: should this be this.base?
+      tableElement.parentNode.querySelectorAll<HTMLElement>('thead th'),
     ).reduce((prev, current) => {
       prev[current.getAttribute('data-column-id')]['width'] =
         current.clientWidth;
@@ -71,19 +65,17 @@ export class ShadowTable extends BaseComponent<ShadowTableProps> {
     }, obj);
 
     return obj;
+  };
+
+  if (props.tableRef.current) {
+    return (
+      <div
+        ref={(nodeElement) => {
+          nodeElement && nodeElement.appendChild(tableElement);
+        }}
+      />
+    );
   }
 
-  render() {
-    if (this.props.tableRef.current) {
-      return (
-        <div
-          ref={(nodeElement) => {
-            nodeElement && nodeElement.appendChild(this.tableElement);
-          }}
-        />
-      );
-    }
-
-    return null;
-  }
+  return null;
 }

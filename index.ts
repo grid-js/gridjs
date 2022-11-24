@@ -4,7 +4,6 @@ import { html } from './src/util/html';
 import { h, createElement, Component, createRef } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 import { UserConfig, Config } from './src/config';
-import { BaseComponent, BaseProps } from './src/view/base';
 import {
   PluginPosition,
   PluginBaseComponent,
@@ -30,8 +29,6 @@ export {
   html,
   UserConfig,
   Config,
-  BaseComponent,
-  BaseProps,
   PluginPosition,
   PluginBaseComponent,
   PluginBaseProps,

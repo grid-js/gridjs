@@ -1,39 +1,36 @@
 import Tabular from '../../tabular';
 import { TBody } from './tbody';
 import { THead } from './thead';
-import { BaseComponent, BaseProps } from '../base';
 import Header from '../../header';
 import { classJoin, className } from '../../util/className';
 import { Status } from '../../types';
+import { useConfig } from '../../hooks/useConfig';
+import { RefObject } from 'preact';
 
-interface TableProps extends BaseProps {
+export function Table(props: {
+  ref: RefObject<HTMLTableElement>;
   data: Tabular;
   status: Status;
   header?: Header;
   width: string;
   height: string;
-}
+}) {
+  const config = useConfig();
 
-export class Table extends BaseComponent<TableProps> {
-  render() {
-    return (
-      <table
-        role="grid"
-        className={classJoin(className('table'), this.config.className.table)}
-        style={{
-          ...this.config.style.table,
-          ...{
-            height: this.props.height,
-          },
-        }}
-      >
-        <THead header={this.props.header} />
-        <TBody
-          data={this.props.data}
-          status={this.props.status}
-          header={this.props.header}
-        />
-      </table>
-    );
-  }
+  return (
+    <table
+      ref={props.ref}
+      role="grid"
+      className={classJoin(className('table'), config.className.table)}
+      style={{
+        ...config.style.table,
+        ...{
+          height: props.height,
+        },
+      }}
+    >
+      <THead header={props.header} />
+      <TBody data={props.data} status={props.status} header={props.header} />
+    </table>
+  );
 }

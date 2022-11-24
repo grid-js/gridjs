@@ -1,5 +1,4 @@
 import Tabular from '../tabular';
-import { BaseComponent, BaseProps } from './base';
 import { classJoin, className } from '../util/className';
 import { Status } from '../types';
 import { Table } from './table/table';
@@ -10,145 +9,115 @@ import Header from '../header';
 import { Config, ConfigContext } from '../config';
 import log from '../util/log';
 import { PipelineProcessor } from '../pipeline/processor';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { useConfig } from '../hooks/useConfig';
 
-interface ContainerProps extends BaseProps {
+export function Container(props: {
   config: Config;
   pipeline: Pipeline<Tabular>;
   header?: Header;
   width: string;
   height: string;
-}
+}) {
+  const config = useConfig();
+  const [status, setStatus] = useState(Status.Loading);
+  const prevStatusRef = useRef(Status.Loading);
+  const [header, setHeader] = useState(props.header);
+  const [data, setData] = useState(null);
+  let processPipelineFn: (processor: PipelineProcessor<any, any>) => void;
 
-interface ContainerState {
-  status: Status;
-  header?: Header;
-  data?: Tabular;
-}
+  useEffect(() => {
+    (async function () {
+      // for the initial load
+      await processPipeline();
 
-export class Container extends BaseComponent<ContainerProps, ContainerState> {
-  private processPipelineFn: (processor: PipelineProcessor<any, any>) => void;
+      if (config.header && data && data.length) {
+        // now that we have the data, let's adjust columns width
+        // NOTE: that we only calculate the columns width once
+        setHeader(config.header.adjustWidth(config));
+      }
 
-  constructor(props, context) {
-    super(props, context);
+      processPipelineFn = processPipeline.bind(this);
+      props.pipeline.on('updated', processPipelineFn);
+    })();
 
-    this.state = {
-      status: Status.Loading,
-      header: props.header,
-      data: null,
+    return () => {
+      props.pipeline.off('updated', processPipelineFn);
     };
-  }
+  }, []);
 
-  private async processPipeline() {
-    this.props.config.eventEmitter.emit('beforeLoad');
+  useEffect(() => {
+    // we can't jump to the Status.Rendered if previous status is not Status.Loaded
+    if (prevStatusRef.current != Status.Rendered && status == Status.Loaded) {
+      setStatus(Status.Rendered);
 
-    this.setState({
-      status: Status.Loading,
-    });
+      props.config.eventEmitter.emit('ready');
+    }
+
+    prevStatusRef.current = status;
+  }, [status]);
+
+  const processPipeline = async () => {
+    props.config.eventEmitter.emit('beforeLoad');
+
+    setStatus(Status.Loading);
 
     try {
-      const data = await this.props.pipeline.process();
-      this.setState({
-        data: data,
-        status: Status.Loaded,
-      });
+      const data = await props.pipeline.process();
+      setData(data);
+      setStatus(Status.Loaded);
 
-      this.props.config.eventEmitter.emit('load', data);
+      props.config.eventEmitter.emit('load', data);
     } catch (e) {
       log.error(e);
 
-      this.setState({
-        status: Status.Error,
-        data: null,
-      });
+      setData(null);
+      setStatus(Status.Error);
     }
-  }
+  };
 
-  async componentDidMount() {
-    const config = this.props.config;
+  return (
+    <ConfigContext.Provider value={props.config}>
+      <div
+        role="complementary"
+        className={classJoin(
+          'gridjs',
+          className('container'),
+          status === Status.Loading ? className('loading') : null,
+          props.config.className.container,
+        )}
+        style={{
+          ...props.config.style.container,
+          ...{
+            width: props.width,
+          },
+        }}
+      >
+        {status === Status.Loading && (
+          <div className={className('loading-bar')} />
+        )}
 
-    // for the initial load
-    await this.processPipeline();
+        <HeaderContainer />
 
-    if (config.header && this.state.data && this.state.data.length) {
-      // now that we have the data, let's adjust columns width
-      // NOTE: that we only calculate the columns width once
-      this.setState({
-        header: config.header.adjustWidth(config),
-      });
-    }
-
-    this.processPipelineFn = this.processPipeline.bind(this);
-    this.props.pipeline.on('updated', this.processPipelineFn);
-  }
-
-  componentWillUnmount(): void {
-    this.props.pipeline.off('updated', this.processPipelineFn);
-  }
-
-  componentDidUpdate(
-    _: Readonly<ContainerProps>,
-    previousState: Readonly<ContainerState>,
-  ): void {
-    // we can't jump to the Status.Rendered if previous status is not Status.Loaded
-    if (
-      previousState.status != Status.Rendered &&
-      this.state.status == Status.Loaded
-    ) {
-      this.setState({
-        status: Status.Rendered,
-      });
-
-      this.props.config.eventEmitter.emit('ready');
-    }
-  }
-
-  render() {
-    return (
-      <ConfigContext.Provider value={this.props.config}>
-        <div
-          role="complementary"
-          className={classJoin(
-            'gridjs',
-            className('container'),
-            this.state.status === Status.Loading ? className('loading') : null,
-            this.props.config.className.container,
-          )}
-          style={{
-            ...this.props.config.style.container,
-            ...{
-              width: this.props.width,
-            },
-          }}
-        >
-          {this.state.status === Status.Loading && (
-            <div className={className('loading-bar')} />
-          )}
-
-          <HeaderContainer />
-
-          <div
-            className={className('wrapper')}
-            style={{ height: this.props.height }}
-          >
-            <Table
-              ref={this.props.config.tableRef}
-              data={this.state.data}
-              header={this.state.header}
-              width={this.props.width}
-              height={this.props.height}
-              status={this.state.status}
-            />
-          </div>
-
-          <FooterContainer />
-
-          <div
-            ref={this.props.config.tempRef}
-            id="gridjs-temp"
-            className={className('temp')}
+        <div className={className('wrapper')} style={{ height: props.height }}>
+          <Table
+            ref={props.config.tableRef}
+            data={data}
+            header={header}
+            width={props.width}
+            height={props.height}
+            status={status}
           />
         </div>
-      </ConfigContext.Provider>
-    );
-  }
+
+        <FooterContainer />
+
+        <div
+          ref={props.config.tempRef}
+          id="gridjs-temp"
+          className={className('temp')}
+        />
+      </div>
+    </ConfigContext.Provider>
+  );
 }

@@ -1,6 +1,5 @@
 import { JSX } from 'preact';
 
-import { BaseComponent, BaseProps } from '../../base';
 import { classJoin, className } from '../../../util/className';
 import { ProcessorType } from '../../../pipeline/processor';
 import NativeSort from '../../../pipeline/sort/native';
@@ -8,6 +7,9 @@ import { SortStore, SortStoreState } from './store';
 import { Comparator, TCell, TColumnSort } from '../../../types';
 import { SortActions } from './actions';
 import ServerSort from '../../../pipeline/sort/server';
+import { useEffect, useState } from 'preact/hooks';
+import { useConfig } from '../../../hooks/useConfig';
+import { useTranslator } from '../../../i18n/language';
 
 // column specific config
 export interface SortConfig {
@@ -29,78 +31,67 @@ export interface GenericSortConfig {
   };
 }
 
-export interface SortProps extends BaseProps {
-  // column index
-  index: number;
-}
+export function Sort(
+  props: {
+    // column index
+    index: number;
+  } & SortConfig,
+) {
+  const config = useConfig();
+  const _ = useTranslator();
+  const [direction, setDirection] = useState(0);
+  const actions = new SortActions(config.dispatcher);
+  const store = new SortStore(config.dispatcher);
+  let sortProcessor: NativeSort | ServerSort;
+  let updateStateFn: (...args) => void;
+  let updateSortProcessorFn: (sortedColumns: SortStoreState) => void;
 
-interface SortState {
-  direction: 1 | -1 | 0;
-}
-
-export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
-  private readonly sortProcessor: NativeSort | ServerSort;
-  private readonly actions: SortActions;
-  private readonly store: SortStore;
-  private readonly updateStateFn: (...args) => void;
-  private updateSortProcessorFn: (sortedColumns: SortStoreState) => void;
-
-  constructor(props: SortProps & SortConfig, context) {
-    super(props, context);
-
-    this.actions = new SortActions(this.config.dispatcher);
-    this.store = new SortStore(this.config.dispatcher);
-
+  useEffect(() => {
     if (props.enabled) {
-      this.sortProcessor = this.getOrCreateSortProcessor();
-      this.updateStateFn = this.updateState.bind(this);
-      this.store.on('updated', this.updateStateFn);
-      this.state = { direction: 0 };
+      sortProcessor = getOrCreateSortProcessor();
+      updateStateFn = updateState;
+      store.on('updated', updateStateFn);
     }
-  }
 
-  componentWillUnmount(): void {
-    this.config.pipeline.unregister(this.sortProcessor);
+    return () => {
+      config.pipeline.unregister(sortProcessor);
 
-    this.store.off('updated', this.updateStateFn);
-    if (this.updateSortProcessorFn)
-      this.store.off('updated', this.updateSortProcessorFn);
-  }
+      store.off('updated', updateStateFn);
+
+      if (updateSortProcessorFn) {
+        store.off('updated', updateSortProcessorFn);
+      }
+    };
+  }, []);
 
   /**
    * Sets the internal state of component
    */
-  private updateState(): void {
-    const currentColumn = this.store.state.find(
-      (x) => x.index === this.props.index,
-    );
+  const updateState = () => {
+    const currentColumn = store.state.find((x) => x.index === props.index);
 
     if (!currentColumn) {
-      this.setState({
-        direction: 0,
-      });
+      setDirection(0);
     } else {
-      this.setState({
-        direction: currentColumn.direction,
-      });
+      setDirection(currentColumn.direction);
     }
-  }
+  };
 
-  private updateSortProcessor(sortedColumns: SortStoreState) {
+  const updateSortProcessor = (sortedColumns: SortStoreState) => {
     // updates the Sorting processor
-    this.sortProcessor.setProps({
+    sortProcessor.setProps({
       columns: sortedColumns,
     });
-  }
+  };
 
-  private getOrCreateSortProcessor(): NativeSort {
+  const getOrCreateSortProcessor = (): NativeSort => {
     let processorType = ProcessorType.Sort;
 
-    if (this.config.sort && typeof this.config.sort.server === 'object') {
+    if (config.sort && typeof config.sort.server === 'object') {
       processorType = ProcessorType.ServerSort;
     }
 
-    const processors = this.config.pipeline.getStepsByType(processorType);
+    const processors = config.pipeline.getStepsByType(processorType);
 
     // my assumption is that we only have ONE sorting processor in the
     // entire pipeline and that's why I'm displaying a warning here
@@ -114,65 +105,62 @@ export class Sort extends BaseComponent<SortProps & SortConfig, SortState> {
 
       // this event listener is here because
       // we want to subscribe to the sort store only once
-      this.updateSortProcessorFn = this.updateSortProcessor.bind(this);
-      this.store.on('updated', this.updateSortProcessorFn);
+      updateSortProcessorFn = updateSortProcessor.bind(this);
+      store.on('updated', updateSortProcessorFn);
 
       if (processorType === ProcessorType.ServerSort) {
         processor = new ServerSort({
-          columns: this.store.state,
-          ...this.config.sort.server,
+          columns: store.state,
+          ...config.sort.server,
         });
       } else {
         processor = new NativeSort({
-          columns: this.store.state,
+          columns: store.state,
         });
       }
 
-      this.config.pipeline.register(processor);
+      config.pipeline.register(processor);
     }
 
     return processor;
-  }
+  };
 
-  changeDirection(e: JSX.TargetedMouseEvent<HTMLButtonElement>): void {
+  const changeDirection = (e: JSX.TargetedMouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
     // to sort two or more columns at the same time
-    this.actions.sortToggle(
-      this.props.index,
-      e.shiftKey === true && this.config.sort.multiColumn,
-      this.props.compare,
+    actions.sortToggle(
+      props.index,
+      e.shiftKey === true && config.sort.multiColumn,
+      props.compare,
     );
+  };
+
+  if (!props.enabled) {
+    return null;
   }
 
-  render() {
-    if (!this.props.enabled) {
-      return null;
-    }
+  let sortClassName = 'neutral';
 
-    const direction = this.state.direction;
-    let sortClassName = 'neutral';
-
-    if (direction === 1) {
-      sortClassName = 'asc';
-    } else if (direction === -1) {
-      sortClassName = 'desc';
-    }
-
-    return (
-      <button
-        // because the corresponding <th> has tabIndex=0
-        tabIndex={-1}
-        aria-label={this._(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
-        title={this._(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
-        className={classJoin(
-          className('sort'),
-          className('sort', sortClassName),
-          this.config.className.sort,
-        )}
-        onClick={this.changeDirection.bind(this)}
-      />
-    );
+  if (direction === 1) {
+    sortClassName = 'asc';
+  } else if (direction === -1) {
+    sortClassName = 'desc';
   }
+
+  return (
+    <button
+      // because the corresponding <th> has tabIndex=0
+      tabIndex={-1}
+      aria-label={_(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
+      title={_(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
+      className={classJoin(
+        className('sort'),
+        className('sort', sortClassName),
+        config.className.sort,
+      )}
+      onClick={changeDirection}
+    />
+  );
 }

@@ -48,7 +48,7 @@ class Header extends Base {
    */
   adjustWidth(config: Config): this {
     const container: Element = config.container;
-    const tableRef: RefObject<Component> = config.tableRef;
+    const tableRef: RefObject<HTMLTableElement> = config.tableRef;
     const tempRef: RefObject<HTMLDivElement> = config.tempRef;
     const autoWidth = config.tempRef || true;
 

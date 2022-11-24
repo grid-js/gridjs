@@ -15,13 +15,7 @@ import { ServerStorageOptions } from './storage/server';
 import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
 import { Language, Translator } from './i18n/language';
-import {
-  Component,
-  ComponentChild,
-  createContext,
-  createRef,
-  RefObject,
-} from 'preact';
+import { ComponentChild, createContext, createRef, RefObject } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
 import { EventEmitter } from './util/eventEmitter';
@@ -42,7 +36,7 @@ export interface Config {
   // TODO: change this to an element reference
   container?: Element;
   /** pointer to the main table element */
-  tableRef?: RefObject<Component>;
+  tableRef?: RefObject<HTMLTableElement>;
   /** gridjs-temp div which is used internally */
   tempRef?: RefObject<HTMLDivElement>;
   data?: TData | (() => TData) | (() => Promise<TData>);

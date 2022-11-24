@@ -1,4 +1,5 @@
 import { Component, ComponentProps, Fragment, h } from 'preact';
+import { useConfig } from './hooks/useConfig';
 import log from './util/log';
 
 /**
@@ -89,44 +90,40 @@ export class PluginManager {
   }
 }
 
-export interface PluginRendererProps extends BaseProps {
+export function PluginRenderer(props: {
   props?: any;
   // to render a single plugin
   pluginId?: string;
   // to render all plugins in this PluginPosition
   position?: PluginPosition;
-}
+}) {
+  const config = useConfig();
 
-export class PluginRenderer extends BaseComponent<PluginRendererProps> {
-  render() {
-    if (this.props.pluginId) {
-      // render a single plugin
-      const plugin = this.config.plugin.get(this.props.pluginId);
+  if (props.pluginId) {
+    // render a single plugin
+    const plugin = config.plugin.get(props.pluginId);
 
-      if (!plugin) return null;
+    if (!plugin) return null;
 
-      return h(
-        Fragment,
-        {},
-        h(plugin.component, {
-          plugin: plugin,
-          ...plugin.props,
-          ...this.props.props,
-        }),
-      );
-    } else if (this.props.position !== undefined) {
-      // render using a specific plugin position
-      return h(
-        Fragment,
-        {},
-        this.config.plugin
-          .list(this.props.position)
-          .map((p) =>
-            h(p.component, { plugin: p, ...p.props, ...this.props.props }),
-          ),
-      );
-    }
-
-    return null;
+    return h(
+      Fragment,
+      {},
+      h(plugin.component, {
+        plugin: plugin,
+        ...plugin.props,
+        ...props.props,
+      }),
+    );
+  } else if (props.position !== undefined) {
+    // render using a specific plugin position
+    return h(
+      Fragment,
+      {},
+      config.plugin
+        .list(props.position)
+        .map((p) => h(p.component, { plugin: p, ...p.props, ...props.props })),
+    );
   }
+
+  return null;
 }
