@@ -1,4 +1,3 @@
-import { h } from 'gridjs';
 import { RowSelectionStore, RowSelectionStoreState } from './store';
 import { RowSelectionActions } from './actions';
 import { className } from 'gridjs';

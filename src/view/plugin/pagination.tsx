@@ -1,4 +1,4 @@
-import { h, Fragment } from 'preact';
+import { Fragment } from 'preact';
 import PaginationLimit from '../../pipeline/limit/pagination';
 import { classJoin, className } from '../../util/className';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';

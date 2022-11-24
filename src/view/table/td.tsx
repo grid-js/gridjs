@@ -1,4 +1,4 @@
-import { ComponentChild, h, JSX } from 'preact';
+import { ComponentChild, JSX } from 'preact';
 
 import Cell from '../../cell';
 import { BaseComponent, BaseProps } from '../base';

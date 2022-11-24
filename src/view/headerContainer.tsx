@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { classJoin, className } from '../util/className';
 import { PluginPosition, PluginRenderer } from '../plugin';
 import { useEffect, useRef, useState } from 'preact/hooks';

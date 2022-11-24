@@ -1,4 +1,4 @@
-import { h, JSX } from 'preact';
+import { JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../../base';
 import { classJoin, className } from '../../../util/className';

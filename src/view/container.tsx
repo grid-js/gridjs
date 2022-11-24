@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import Tabular from '../tabular';
 import { BaseComponent, BaseProps } from './base';
 import { classJoin, className } from '../util/className';

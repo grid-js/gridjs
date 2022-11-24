@@ -1,5 +1,5 @@
 import { mount } from 'enzyme';
-import { createContext, h } from 'preact';
+import { createContext } from 'preact';
 import { Config } from '../../../../src/config';
 import { Plugin, PluginPosition } from '../../../../src/plugin';
 import { Pagination } from '../../../../src/view/plugin/pagination';

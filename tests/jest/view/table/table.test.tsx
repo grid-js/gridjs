@@ -1,5 +1,5 @@
 import { mount } from 'enzyme';
-import { createContext, h } from 'preact';
+import { createContext } from 'preact';
 import { Table } from '../../../../src/view/table/table';
 import Header from '../../../../src/header';
 import { Config } from '../../../../src/config';

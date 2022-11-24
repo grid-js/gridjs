@@ -1,5 +1,3 @@
-import { h } from 'preact';
-
 import Cell from '../../cell';
 import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';

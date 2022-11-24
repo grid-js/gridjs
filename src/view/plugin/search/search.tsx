@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import GlobalSearchFilter from '../../../pipeline/filter/globalSearch';
 import { classJoin, className } from '../../../util/className';
 import { SearchStore, SearchStoreState } from './store';

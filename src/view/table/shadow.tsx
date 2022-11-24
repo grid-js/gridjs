@@ -1,4 +1,4 @@
-import { Component, h, RefObject } from 'preact';
+import { Component, RefObject } from 'preact';
 import { BaseComponent, BaseProps } from '../base';
 import { className } from '../../util/className';
 

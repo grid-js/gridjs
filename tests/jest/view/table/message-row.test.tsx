@@ -1,5 +1,5 @@
 import { mount } from 'enzyme';
-import { createContext, h } from 'preact';
+import { createContext } from 'preact';
 import { Config } from '../../../../src/config';
 import { EventEmitter } from '../../../../src/util/eventEmitter';
 import { TableEvents } from '../../../../src/view/table/events';

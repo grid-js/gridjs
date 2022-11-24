@@ -1,4 +1,4 @@
-import { ComponentChild, createRef, h, JSX } from 'preact';
+import { ComponentChild, createRef, JSX } from 'preact';
 
 import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';

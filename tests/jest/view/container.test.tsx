@@ -1,5 +1,4 @@
 import { mount } from 'enzyme';
-import { h } from 'preact';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Config } from '../../../src/config';
 import { Container } from '../../../src/view/container';

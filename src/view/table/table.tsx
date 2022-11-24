@@ -1,5 +1,3 @@
-import { h } from 'preact';
-
 import Tabular from '../../tabular';
 import { TBody } from './tbody';
 import { THead } from './thead';

@@ -1,4 +1,4 @@
-import { h, RefObject } from 'preact';
+import { RefObject } from 'preact';
 import { classJoin, className } from '../../../util/className';
 import { BaseComponent } from '../../base';
 import { TColumn } from '../../../types';

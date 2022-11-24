@@ -1,4 +1,4 @@
-import { ComponentChild, h } from 'preact';
+import { ComponentChild } from 'preact';
 
 import { TR } from './tr';
 import { BaseComponent, BaseProps } from '../base';
