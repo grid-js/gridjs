@@ -1,84 +1,72 @@
 import { RefObject } from 'preact';
 import { classJoin, className } from '../../../util/className';
-import { BaseComponent } from '../../base';
 import { TColumn } from '../../../types';
 import { TH } from '../../table/th';
 import { throttle } from '../../../util/throttle';
+import { useState } from 'preact/hooks';
 
-type ResizeProps = {
+export function Resize(props: {
   column: TColumn;
   thRef: RefObject<typeof TH>;
-};
+}) {
+  const [offsetStart, setOffsetStart] = useState(0);
 
-type ResizeState = {
-  width: string;
-  offsetStart: number;
-};
+  let moveFn: (e) => void;
+  let upFn: (e) => void;
 
-export class Resize extends BaseComponent<ResizeProps, ResizeState> {
-  private moveFn: (e) => void;
-  private upFn: (e) => void;
-
-  private getPageX(e: MouseEvent | TouchEvent): number {
+  const getPageX = (e: MouseEvent | TouchEvent) => {
     if (e instanceof MouseEvent) {
       return Math.floor(e.pageX);
     } else {
       return Math.floor(e.changedTouches[0].pageX);
     }
-  }
+  };
 
-  private start(e: MouseEvent | TouchEvent): void {
+  const start = (e: MouseEvent | TouchEvent) => {
     e.stopPropagation();
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const thElement: HTMLElement = this.props.thRef.current;
+    const thElement: HTMLElement = props.thRef.current;
 
-    this.setState({
-      offsetStart: parseInt(thElement.style.width, 10) - this.getPageX(e),
-    });
+    setOffsetStart(parseInt(thElement.style.width, 10) - getPageX(e));
 
-    this.upFn = this.end.bind(this);
-    this.moveFn = throttle(this.move.bind(this), 10);
+    upFn = end;
+    moveFn = throttle(move, 10);
 
-    document.addEventListener('mouseup', this.upFn);
-    document.addEventListener('touchend', this.upFn);
-    document.addEventListener('mousemove', this.moveFn);
-    document.addEventListener('touchmove', this.moveFn);
-  }
+    document.addEventListener('mouseup', upFn);
+    document.addEventListener('touchend', upFn);
+    document.addEventListener('mousemove', moveFn);
+    document.addEventListener('touchmove', moveFn);
+  };
 
-  private move(e: MouseEvent | TouchEvent): void {
+  const move = (e: MouseEvent | TouchEvent) => {
     e.stopPropagation();
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const thElement: HTMLElement = this.props.thRef.current;
+    const thElement: HTMLElement = props.thRef.current;
 
-    if (
-      this.state.offsetStart + this.getPageX(e) >=
-      parseInt(thElement.style.minWidth, 10)
-    ) {
-      thElement.style.width = `${this.state.offsetStart + this.getPageX(e)}px`;
+    if (offsetStart + getPageX(e) >= parseInt(thElement.style.minWidth, 10)) {
+      thElement.style.width = `${offsetStart + getPageX(e)}px`;
     }
-  }
+  };
 
-  private end(e: MouseEvent | TouchEvent): void {
+  const end = (e: MouseEvent | TouchEvent) => {
     e.stopPropagation();
 
-    document.removeEventListener('mouseup', this.upFn);
-    document.removeEventListener('mousemove', this.moveFn);
-    document.removeEventListener('touchmove', this.moveFn);
-    document.removeEventListener('touchend', this.upFn);
-  }
+    document.removeEventListener('mouseup', upFn);
+    document.removeEventListener('mousemove', moveFn);
+    document.removeEventListener('touchmove', moveFn);
+    document.removeEventListener('touchend', upFn);
+  };
 
-  render() {
-    return (
-      <div
-        className={classJoin(className('th'), className('resizable'))}
-        onMouseDown={this.start.bind(this)}
-        onTouchStart={this.start.bind(this)}
-        onClick={(e) => e.stopPropagation()}
-      />
-    );
-  }
+  return (
+    <div
+      className={classJoin(className('th'), className('resizable'))}
+      onMouseDown={start}
+      onTouchStart={start}
+      onClick={(e) => e.stopPropagation()}
+    />
+  );
 }

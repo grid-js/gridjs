@@ -1,4 +1,3 @@
-import { BaseComponent, BaseProps } from './view/base';
 import { Component, ComponentProps, Fragment, h } from 'preact';
 import log from './util/log';
 

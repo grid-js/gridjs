@@ -1,3 +1,4 @@
+import { useConfig } from '../hooks/useConfig';
 import enUS from './en_US';
 type MessageFormat = (...args) => string;
 type Message = string | MessageFormat;
@@ -58,8 +59,10 @@ export class Translator {
   }
 }
 
-export function useTranslator(translator: Translator) {
+export function useTranslator() {
+  const config = useConfig();
+
   return function (message: string, ...args): string {
-    return translator.translate(message, ...args);
+    return config.translator.translate(message, ...args);
   };
 }
