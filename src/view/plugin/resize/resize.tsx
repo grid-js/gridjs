@@ -7,7 +7,7 @@ import { throttle } from '../../../util/throttle';
 
 type ResizeProps = {
   column: TColumn;
-  thRef: RefObject<TH>;
+  thRef: RefObject<typeof TH>;
 };
 
 type ResizeState = {
