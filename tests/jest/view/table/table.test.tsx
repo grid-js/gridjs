@@ -1,8 +1,7 @@
 import { mount } from 'enzyme';
-import { createContext } from 'preact';
 import { Table } from '../../../../src/view/table/table';
 import Header from '../../../../src/header';
-import { Config } from '../../../../src/config';
+import { Config, ConfigContext } from '../../../../src/config';
 import StorageUtils from '../../../../src/storage/storageUtils';
 import Pipeline from '../../../../src/pipeline/pipeline';
 import StorageExtractor from '../../../../src/pipeline/extractor/storage';
@@ -16,7 +15,6 @@ import Row from '../../../../src/row';
 
 describe('Table component', () => {
   let config: Config;
-  const configContext = createContext(null);
 
   beforeEach(() => {
     config = new Config();
@@ -37,14 +35,14 @@ describe('Table component', () => {
 
   it('should render a table', async () => {
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           status={Status.Rendered}
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -56,14 +54,14 @@ describe('Table component', () => {
     };
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={new Tabular()}
           status={Status.Loading}
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.find('.my-loading-class').hostNodes().name()).toBe('td');
@@ -75,7 +73,7 @@ describe('Table component', () => {
 
   it('should render a table with header', async () => {
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
@@ -83,7 +81,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -91,7 +89,7 @@ describe('Table component', () => {
 
   it('should render a table with width', async () => {
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           width="300px"
@@ -99,7 +97,7 @@ describe('Table component', () => {
           header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
           status={Status.Rendered}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -111,7 +109,7 @@ describe('Table component', () => {
     header.columns[2].width = '300px';
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           header={header}
@@ -119,7 +117,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -135,7 +133,7 @@ describe('Table component', () => {
     };
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           header={header}
@@ -143,7 +141,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -156,7 +154,7 @@ describe('Table component', () => {
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           header={header}
@@ -164,7 +162,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -180,7 +178,7 @@ describe('Table component', () => {
     };
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={Tabular.fromArray<TCell>([])}
           header={header}
@@ -188,7 +186,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -200,7 +198,7 @@ describe('Table component', () => {
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={null}
           header={header}
@@ -208,7 +206,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -230,7 +228,7 @@ describe('Table component', () => {
     };
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={null}
           header={header}
@@ -238,7 +236,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -260,7 +258,7 @@ describe('Table component', () => {
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={null}
           header={header}
@@ -268,7 +266,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -289,7 +287,7 @@ describe('Table component', () => {
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={null}
           header={header}
@@ -297,7 +295,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -315,7 +313,7 @@ describe('Table component', () => {
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           header={config.header}
@@ -323,7 +321,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     return new Promise<void>((resolve) => {
@@ -353,7 +351,7 @@ describe('Table component', () => {
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           header={config.header}
@@ -361,7 +359,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     return new Promise<void>((resolve) => {
@@ -409,7 +407,7 @@ describe('Table component', () => {
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           header={config.header}
@@ -417,7 +415,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     return new Promise<void>((resolve) => {
@@ -465,7 +463,7 @@ describe('Table component', () => {
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           header={config.header}
@@ -473,7 +471,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     return new Promise<void>((resolve) => {
@@ -532,7 +530,7 @@ describe('Table component', () => {
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           header={config.header}
@@ -540,7 +538,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -577,7 +575,7 @@ describe('Table component', () => {
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           header={config.header}
@@ -585,7 +583,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -616,7 +614,7 @@ describe('Table component', () => {
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <Table
           data={await config.pipeline.process()}
           header={config.header}
@@ -624,7 +622,7 @@ describe('Table component', () => {
           width={config.width}
           height={config.height}
         />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();

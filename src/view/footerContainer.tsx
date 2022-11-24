@@ -18,10 +18,7 @@ export function FooterContainer() {
     return (
       <div
         ref={footerRef}
-        className={classJoin(
-          className('footer'),
-          config.className.footer,
-        )}
+        className={classJoin(className('footer'), config.className.footer)}
         style={{ ...config.style.footer }}
       >
         <PluginRenderer position={PluginPosition.Footer} />

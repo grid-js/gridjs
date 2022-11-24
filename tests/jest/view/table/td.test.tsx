@@ -1,14 +1,12 @@
 import { mount } from 'enzyme';
-import { createContext } from 'preact';
 import { TD } from '../../../../src/view/table/td';
 import Cell from '../../../../src/cell';
-import { Config } from '../../../../src/config';
+import { Config, ConfigContext } from '../../../../src/config';
 import { EventEmitter } from '../../../../src/util/eventEmitter';
 import { TableEvents } from '../../../../src/view/table/events';
 
 describe('TD component', () => {
   let config: Config;
-  const configContext = createContext(null);
 
   beforeEach(() => {
     config = new Config();
@@ -16,9 +14,9 @@ describe('TD component', () => {
 
   it('should match the snapshot', () => {
     const td = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <TD cell={new Cell('boo')} />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
     expect(td.html()).toMatchSnapshot();
   });
@@ -28,9 +26,9 @@ describe('TD component', () => {
     const onClick = jest.fn();
 
     const cells = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <TD cell={new Cell('boo')} />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     ).find('td');
 
     config.eventEmitter.on('cellClick', onClick);
