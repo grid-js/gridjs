@@ -202,31 +202,24 @@ export class Config {
       translator: new Translator(userConfig.language),
     });
 
-    // Search
-    config.plugin.add({
-      id: 'search',
-      position: PluginPosition.Header,
-      component: Search,
-      props: {
-        enabled:
-          userConfig.search === true || userConfig.search instanceof Object,
-        ...(userConfig.search as SearchConfig),
-      },
-    });
-
-    // Pagination
-    config.plugin.add({
-      id: 'pagination',
-      position: PluginPosition.Footer,
-      component: Pagination,
-      props: {
-        enabled:
-          userConfig.pagination === true ||
-          userConfig.pagination instanceof Object,
-        ...(userConfig.pagination as PaginationConfig),
-      },
-    });
-
+    if (userConfig.search) {
+      // Search
+      config.plugin.add({
+        id: 'search',
+        position: PluginPosition.Header,
+        component: Search,
+      });
+    }
+    
+    if (userConfig.pagination) {
+      // Pagination
+      config.plugin.add({
+        id: 'pagination',
+        position: PluginPosition.Footer,
+        component: Pagination,
+      });
+    }
+    
     // Additional plugins
     if (userConfig.plugins) {
       userConfig.plugins.forEach((p) => config.plugin.add(p));

@@ -1,4 +1,4 @@
-import { JSX } from 'preact';
+import { JSX, RefObject } from 'preact';
 
 import { classJoin, className } from '../../../util/className';
 import { ProcessorType } from '../../../pipeline/processor';
@@ -35,6 +35,7 @@ export function Sort(
   props: {
     // column index
     index: number;
+    ref: RefObject<any>;
   } & SortConfig,
 ) {
   const config = useConfig();
@@ -151,6 +152,7 @@ export function Sort(
 
   return (
     <button
+      ref={props.ref}
       // because the corresponding <th> has tabIndex=0
       tabIndex={-1}
       aria-label={_(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}

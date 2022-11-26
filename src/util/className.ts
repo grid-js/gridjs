@@ -10,13 +10,11 @@ export function className(...args: string[]): string {
 }
 
 export function classJoin(
-  ...classNames: (string | JSXInternal.SignalLike<string>)[]
+  ...classNames: (undefined | string | JSXInternal.SignalLike<string>)[]
 ): string {
-  return (
-    classNames
-      .filter((x) => x)
-      .map((x) => x.toString())
-      .reduce((className, prev) => `${className || ''} ${prev}`, '')
-      .trim() || null
-  );
+  return classNames
+    .map((x) => (x ? x.toString() : ''))
+    .filter((x) => x)
+    .reduce((className, prev) => `${className || ''} ${prev}`, '')
+    .trim();
 }

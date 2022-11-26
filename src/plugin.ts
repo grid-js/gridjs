@@ -1,28 +1,6 @@
-import { Component, ComponentProps, Fragment, h } from 'preact';
+import { Fragment, FunctionComponent, h } from 'preact';
 import { useConfig } from './hooks/useConfig';
 import log from './util/log';
-
-/**
- * BaseProps for all plugins
- */
-export interface PluginBaseProps<T extends PluginBaseComponentCtor> {
-  plugin: Plugin<T>;
-}
-
-/**
- * BaseComponent for all plugins
- */
-export abstract class PluginBaseComponent<
-  P extends PluginBaseProps<any> = any,
-  S = unknown,
-> extends BaseComponent<P, S> {}
-
-export interface PluginBaseComponentCtor<
-  P extends PluginBaseProps<any> = any,
-  S = unknown,
-> {
-  new (props: P, context?: any): Component<P, S>;
-}
 
 export enum PluginPosition {
   Header,
@@ -30,11 +8,10 @@ export enum PluginPosition {
   Cell,
 }
 
-export interface Plugin<T extends PluginBaseComponentCtor> {
+export interface Plugin<T extends FunctionComponent> {
   id: string;
   position: PluginPosition;
   component: T;
-  props?: Partial<ComponentProps<T>>;
   order?: number;
 }
 
@@ -45,17 +22,11 @@ export class PluginManager {
     this.plugins = [];
   }
 
-  get<T extends PluginBaseComponentCtor>(id: string): Plugin<T> | null {
-    const plugins = this.plugins.filter((p) => p.id === id);
-
-    if (plugins.length > 0) {
-      return plugins[0];
-    }
-
-    return null;
+  get<T extends FunctionComponent>(id: string): Plugin<T> | undefined {
+    return this.plugins.find((p) => p.id === id);
   }
 
-  add<T extends PluginBaseComponentCtor>(plugin: Plugin<T>): this {
+  add<T extends FunctionComponent<any>>(plugin: Plugin<T>): this {
     if (!plugin.id) {
       log.error('Plugin ID cannot be empty');
       return this;
@@ -71,13 +42,16 @@ export class PluginManager {
   }
 
   remove(id: string): this {
-    this.plugins.splice(this.plugins.indexOf(this.get(id)), 1);
+    const plugin = this.get(id);
+
+    if (plugin) {
+      this.plugins.splice(this.plugins.indexOf(plugin), 1);
+    }
+
     return this;
   }
 
-  list<T extends PluginBaseComponentCtor>(
-    position?: PluginPosition,
-  ): Plugin<T>[] {
+  list<T extends FunctionComponent>(position?: PluginPosition): Plugin<T>[] {
     let plugins: Plugin<T>[];
 
     if (position != null || position != undefined) {
@@ -86,7 +60,7 @@ export class PluginManager {
       plugins = this.plugins;
     }
 
-    return plugins.sort((a, b) => a.order - b.order);
+    return plugins.sort((a, b) => (a.order && b.order ? a.order - b.order : 1));
   }
 }
 
@@ -110,7 +84,6 @@ export function PluginRenderer(props: {
       {},
       h(plugin.component, {
         plugin: plugin,
-        ...plugin.props,
         ...props.props,
       }),
     );
@@ -121,7 +94,7 @@ export function PluginRenderer(props: {
       {},
       config.plugin
         .list(props.position)
-        .map((p) => h(p.component, { plugin: p, ...p.props, ...props.props })),
+        .map((p) => h(p.component, { plugin: p, ...props.props })),
     );
   }
 
