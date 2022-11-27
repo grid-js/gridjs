@@ -1,4 +1,4 @@
-import { RefObject } from 'preact';
+import { h, RefObject } from 'preact';
 import { className } from '../../util/className';
 import { useEffect } from 'preact/hooks';
 
@@ -32,10 +32,7 @@ export function ShadowTable(props: { tableRef?: RefObject<HTMLTableElement> }) {
   return null;
 }
 
-
-export function getShadowTableWidths(
-  tableElement: HTMLTableElement
-): {
+export function getShadowTableWidths(tableElement: HTMLTableElement): {
   [columnId: string]: { minWidth: number; width: number };
 } {
   const tableClassName = tableElement.className;
@@ -77,4 +74,4 @@ export function getShadowTableWidths(
   }, obj);
 
   return obj;
-};
+}

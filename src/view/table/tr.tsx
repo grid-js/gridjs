@@ -1,4 +1,4 @@
-import { JSX, Fragment, ComponentChildren } from 'preact';
+import { h, JSX, Fragment, ComponentChildren } from 'preact';
 
 import Row from '../../row';
 import Cell from '../../cell';

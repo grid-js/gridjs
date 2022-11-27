@@ -1,4 +1,4 @@
-import { Fragment } from 'preact';
+import { h, Fragment } from 'preact';
 import PaginationLimit from '../../pipeline/limit/pagination';
 import { classJoin, className } from '../../util/className';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
@@ -6,7 +6,6 @@ import Tabular from '../../tabular';
 import { useConfig } from '../../hooks/useConfig';
 import { useEffect, useState } from 'preact/hooks';
 import { useTranslator } from '../../i18n/language';
-
 
 export interface PaginationConfig {
   limit?: number;
@@ -41,7 +40,7 @@ export function Pagination(props: PaginationConfig) {
 
   const setTotalFromTabular = (tabular: Tabular) => {
     setTotal(tabular.length);
-  }
+  };
 
   if (props.server) {
     processor = new ServerPaginationLimit({
@@ -102,7 +101,7 @@ export function Pagination(props: PaginationConfig) {
     processor.setProps({
       page: page,
     });
-  }
+  };
 
   const renderPages = () => {
     if (props.buttonsCount <= 0) {
@@ -191,7 +190,7 @@ export function Pagination(props: PaginationConfig) {
         )}
       </Fragment>
     );
-  }
+  };
 
   const renderSummary = () => {
     return (
@@ -204,77 +203,65 @@ export function Pagination(props: PaginationConfig) {
               className('summary'),
               config.className.paginationSummary,
             )}
-            title={_(
-              'pagination.navigate',
-              currentPage + 1,
-              pages(),
-            )}
+            title={_('pagination.navigate', currentPage + 1, pages())}
           >
-            {_('pagination.showing')}{' '}
-            <b>{_(`${currentPage * limit + 1}`)}</b>{' '}
+            {_('pagination.showing')} <b>{_(`${currentPage * limit + 1}`)}</b>{' '}
             {_('pagination.to')}{' '}
-            <b>
-              {_(
-                `${Math.min(
-                  (currentPage + 1) * limit,
-                  total,
-                )}`,
-              )}
-            </b>{' '}
+            <b>{_(`${Math.min((currentPage + 1) * limit, total)}`)}</b>{' '}
             {_('pagination.of')} <b>{_(`${total}`)}</b>{' '}
             {_('pagination.results')}
           </div>
         )}
       </Fragment>
     );
-  }
+  };
 
-    return (
-      <div
-        className={classJoin(
-          className('pagination'),
-          config.className.pagination,
+  return (
+    <div
+      className={classJoin(
+        className('pagination'),
+        config.className.pagination,
+      )}
+    >
+      {renderSummary()}
+
+      <div className={className('pages')}>
+        {props.prevButton && (
+          <button
+            tabIndex={0}
+            role="button"
+            disabled={currentPage === 0}
+            onClick={setPage(currentPage - 1)}
+            title={_('pagination.previous')}
+            aria-label={_('pagination.previous')}
+            className={classJoin(
+              config.className.paginationButton,
+              config.className.paginationButtonPrev,
+            )}
+          >
+            {_('pagination.previous')}
+          </button>
         )}
-      >
-        {renderSummary()}
 
-        <div className={className('pages')}>
-          {props.prevButton && (
-            <button
-              tabIndex={0}
-              role="button"
-              disabled={currentPage === 0}
-              onClick={setPage(currentPage - 1)}
-              title={_('pagination.previous')}
-              aria-label={_('pagination.previous')}
-              className={classJoin(
-                config.className.paginationButton,
-                config.className.paginationButtonPrev,
-              )}
-            >
-              {_('pagination.previous')}
-            </button>
-          )}
+        {renderPages()}
 
-          {renderPages()}
-
-          {props.nextButton && (
-            <button
-              tabIndex={0}
-              role="button"
-              disabled={pages() === currentPage + 1 || pages() === 0}
-              onClick={setPage(currentPage + 1)}
-              title={_('pagination.next')}
-              aria-label={_('pagination.next')}
-              className={classJoin(
-                config.className.paginationButton,
-                config.className.paginationButtonNext,
-              )}
-            >
-              {_('pagination.next')}
-            </button>
-          )}
-        </div>
+        {props.nextButton && (
+          <button
+            tabIndex={0}
+            role="button"
+            disabled={pages() === currentPage + 1 || pages() === 0}
+            onClick={setPage(currentPage + 1)}
+            title={_('pagination.next')}
+            aria-label={_('pagination.next')}
+            className={classJoin(
+              config.className.paginationButton,
+              config.className.paginationButtonNext,
+            )}
+          >
+            {_('pagination.next')}
+          </button>
+        )}
       </div>
-    );
+    </div>
+  );
 }

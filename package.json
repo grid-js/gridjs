@@ -96,14 +96,14 @@
     "ts-loader": "^9.1.1",
     "tslib": "^2.4.0",
     "tsutils": "~3.21.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.9.3"
   },
   "scripts": {
     "install:plugins": "find ./plugins ! -path '*/node_modules/*' ! -path './package.json' -name 'package.json' -execdir npm install \\;",
     "clean": "rimraf coverage dist tmp l10n/dist 'plugins/!(node_modules)/dist'",
     "prebuild": "npm run clean",
     "build": "run-p build:grid build:i18n build:plugins build:themes",
-    "build:grid": "microbundle build --raw --external none --tsconfig tsconfig.release.json",
+    "build:grid": "microbundle build --raw --tsconfig tsconfig.release.json",
     "build:i18n": "microbundle build --raw --cwd l10n --tsconfig l10n/tsconfig.release.json",
     "build:watch": "microbundle build -w --raw --external none --tsconfig tsconfig.release.json",
     "build:plugins": "microbundle build --raw --cwd plugins/selection --tsconfig plugins/selection/tsconfig.release.json",

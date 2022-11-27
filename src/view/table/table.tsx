@@ -5,7 +5,7 @@ import Header from '../../header';
 import { classJoin, className } from '../../util/className';
 import { Status } from '../../types';
 import { useConfig } from '../../hooks/useConfig';
-import { RefObject } from 'preact';
+import { h, RefObject } from 'preact';
 
 export function Table(props: {
   ref: RefObject<HTMLTableElement>;

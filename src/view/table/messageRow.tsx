@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import Cell from '../../cell';
 import { classJoin, className } from '../../util/className';
 import { TR } from './tr';

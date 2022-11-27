@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import Row from '../../row';
 import { TR } from './tr';
 import Tabular from '../../tabular';

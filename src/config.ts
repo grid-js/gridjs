@@ -210,7 +210,7 @@ export class Config {
         component: Search,
       });
     }
-    
+
     if (userConfig.pagination) {
       // Pagination
       config.plugin.add({
@@ -219,7 +219,7 @@ export class Config {
         component: Pagination,
       });
     }
-    
+
     // Additional plugins
     if (userConfig.plugins) {
       userConfig.plugins.forEach((p) => config.plugin.add(p));

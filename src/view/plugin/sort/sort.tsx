@@ -1,4 +1,4 @@
-import { JSX, RefObject } from 'preact';
+import { h, JSX, RefObject } from 'preact';
 
 import { classJoin, className } from '../../../util/className';
 import { ProcessorType } from '../../../pipeline/processor';

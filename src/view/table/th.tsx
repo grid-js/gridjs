@@ -1,4 +1,4 @@
-import { ComponentChild, JSX } from 'preact';
+import { h, ComponentChild, JSX } from 'preact';
 
 import { classJoin, className } from '../../util/className';
 import { CSSDeclaration, TColumn } from '../../types';

@@ -40,9 +40,10 @@ describe('Container component', () => {
       />,
     );
 
-    await container.instance().componentDidMount();
-    expect(container.html()).toMatchSnapshot();
-    expect(container.state('status')).toBe(3);
+    setTimeout(() => {
+      expect(container.html()).toMatchSnapshot();
+      expect(container.state('status')).toBe(3);
+    }, 0);
   });
 
   it('should attach styles', async () => {
@@ -80,13 +81,14 @@ describe('Container component', () => {
       />,
     );
 
-    await container.instance().componentDidMount();
-    expect(container.html()).toMatchSnapshot();
+    setTimeout(() => {
+      expect(container.html()).toMatchSnapshot();
+    }, 0);
   });
 
   it('should attach classNames', async () => {
     config.update({
-      search: true ,
+      search: true,
       pagination: true,
       columns: [
         {
@@ -131,8 +133,9 @@ describe('Container component', () => {
     );
 
     return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      expect(container.html()).toMatchSnapshot();
+      setTimeout(() => {
+        expect(container.html()).toMatchSnapshot();
+      }, 0);
     });
   });
 
@@ -149,8 +152,9 @@ describe('Container component', () => {
         height={config.height}
       />,
     );
-    await container.instance().componentDidMount();
-    expect(container.html()).toMatchSnapshot();
+    setTimeout(() => {
+      expect(container.html()).toMatchSnapshot();
+    }, 0);
   });
 
   it('should render a container with sortable and paginated table', async () => {
@@ -190,8 +194,10 @@ describe('Container component', () => {
         height={config.height}
       />,
     );
-    await container.instance().componentDidMount();
-    expect(container.html()).toMatchSnapshot();
+
+    setTimeout(() => {
+      expect(container.html()).toMatchSnapshot();
+    }, 0);
   });
 
   it('should render a container with error', async () => {
@@ -220,8 +226,9 @@ describe('Container component', () => {
       />,
     );
 
-    await container.instance().componentDidMount();
-    expect(container.html()).toMatchSnapshot();
+    setTimeout(() => {
+      expect(container.html()).toMatchSnapshot();
+    }, 0);
   });
 
   it('should not violate accessibility test', async () => {
@@ -243,9 +250,10 @@ describe('Container component', () => {
     );
 
     container.update();
-    await container.instance().componentDidMount();
 
-    expect(await axe(container.html())).toHaveNoViolations();
+    setTimeout(async () => {
+      expect(await axe(container.html())).toHaveNoViolations();
+    }, 0);
   });
 
   it('should render a container with null array', async () => {
@@ -276,8 +284,9 @@ describe('Container component', () => {
     );
 
     return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      expect(container.html()).toMatchSnapshot();
+      setTimeout(() => {
+        expect(container.html()).toMatchSnapshot();
+      }, 0);
     });
   });
 
@@ -301,8 +310,9 @@ describe('Container component', () => {
     );
 
     return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      expect(container.html()).toMatchSnapshot();
+      setTimeout(() => {
+        expect(container.html()).toMatchSnapshot();
+      }, 0);
     });
   });
 
@@ -327,8 +337,9 @@ describe('Container component', () => {
     );
 
     return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      expect(container.html()).toMatchSnapshot();
+      setTimeout(() => {
+        expect(container.html()).toMatchSnapshot();
+      }, 0);
     });
   });
 
@@ -362,8 +373,9 @@ describe('Container component', () => {
     );
 
     return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      expect(container.html()).toMatchSnapshot();
+      setTimeout(() => {
+        expect(container.html()).toMatchSnapshot();
+      }, 0);
     });
   });
 
@@ -388,9 +400,11 @@ describe('Container component', () => {
     const mockOff = jest.spyOn(EventEmitter.prototype, 'off');
 
     return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
       container.unmount();
-      expect(mockOff.mock.calls.length).toBe(mockOn.mock.calls.length);
+
+      setTimeout(() => {
+        expect(mockOff.mock.calls.length).toBe(mockOn.mock.calls.length);
+      }, 0);
     });
   });
 
@@ -423,11 +437,12 @@ describe('Container component', () => {
     );
 
     return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
       container.unmount();
-      expect(mockUnregister.mock.calls.length).toBe(
-        mockRegister.mock.calls.length,
-      );
+      setTimeout(() => {
+        expect(mockUnregister.mock.calls.length).toBe(
+          mockRegister.mock.calls.length,
+        );
+      }, 0);
     });
   });
 });

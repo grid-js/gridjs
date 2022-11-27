@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import { TR } from './tr';
 import { TH } from './th';
 import { classJoin, className } from '../../util/className';

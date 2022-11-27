@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import Tabular from '../tabular';
 import { classJoin, className } from '../util/className';
 import { Status } from '../types';
@@ -30,7 +31,6 @@ export function Container(props: {
       // for the initial load
       await processPipeline();
 
-      console.log('config', config)
       if (config.header && data && data.length) {
         // now that we have the data, let's adjust columns width
         // NOTE: that we only calculate the columns width once
