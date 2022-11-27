@@ -2,9 +2,8 @@ import { OneDArray, TColumn, TwoDArray } from './types';
 import Base from './base';
 import { Config, UserConfig } from './config';
 import { px, width } from './util/width';
-import { ShadowTable } from './view/table/shadow';
+import { getShadowTableWidths, ShadowTable } from './view/table/shadow';
 import {
-  Component,
   ComponentChild,
   createRef,
   h,
@@ -78,7 +77,7 @@ class Header extends Base {
 
       render(el, tempRef.current);
 
-      widths = shadowTable.current.widths();
+      widths = getShadowTableWidths(shadowTable.current);
     }
 
     for (const column of flatten(Header.tabularFormat(this.columns))) {
@@ -212,7 +211,6 @@ class Header extends Base {
       if (column.plugin !== undefined) {
         userConfig.plugin.add({
           id: column.id,
-          props: {},
           ...column.plugin,
           position: PluginPosition.Cell,
         });

@@ -5,9 +5,7 @@ import { h, createElement, Component, createRef } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 import { UserConfig, Config } from './src/config';
 import {
-  PluginPosition,
-  PluginBaseComponent,
-  PluginBaseProps,
+  PluginPosition
 } from './src/plugin';
 import { BaseActions } from './src/view/base/actions';
 import { ID } from './src/util/id';
@@ -30,8 +28,6 @@ export {
   UserConfig,
   Config,
   PluginPosition,
-  PluginBaseComponent,
-  PluginBaseProps,
   h,
   createElement,
   Component,

@@ -10,7 +10,6 @@ import { Config, ConfigContext } from '../config';
 import log from '../util/log';
 import { PipelineProcessor } from '../pipeline/processor';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { useConfig } from '../hooks/useConfig';
 
 export function Container(props: {
   config: Config;
@@ -19,7 +18,7 @@ export function Container(props: {
   width: string;
   height: string;
 }) {
-  const config = useConfig();
+  const config = props.config;
   const [status, setStatus] = useState(Status.Loading);
   const prevStatusRef = useRef(Status.Loading);
   const [header, setHeader] = useState(props.header);
@@ -31,6 +30,7 @@ export function Container(props: {
       // for the initial load
       await processPipeline();
 
+      console.log('config', config)
       if (config.header && data && data.length) {
         // now that we have the data, let's adjust columns width
         // NOTE: that we only calculate the columns width once

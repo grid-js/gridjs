@@ -3,7 +3,6 @@ import PaginationLimit from '../../pipeline/limit/pagination';
 import { classJoin, className } from '../../util/className';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
 import Tabular from '../../tabular';
-import { PipelineProcessor } from '../../pipeline/processor';
 import { useConfig } from '../../hooks/useConfig';
 import { useEffect, useState } from 'preact/hooks';
 import { useTranslator } from '../../i18n/language';
@@ -24,10 +23,18 @@ export interface PaginationConfig {
 }
 
 export function Pagination(props: PaginationConfig) {
+  props.summary = props.summary || true;
+  props.nextButton = props.nextButton || true;
+  props.prevButton = props.prevButton || true;
+  props.buttonsCount = props.buttonsCount || 3;
+  props.limit = props.limit || 10;
+  props.page = props.page || 0;
+  props.resetPageOnUpdate = props.resetPageOnUpdate || true;
+
   let processor: PaginationLimit | ServerPaginationLimit;
 
-  const [currentPage, setCurrentPage] = useState(props.page || 0);
-  const [limit, setLimit] = useState(props.limit);
+  const [currentPage, setCurrentPage] = useState(props.page);
+  const [limit] = useState(props.limit);
   const [total, setTotal] = useState(0);
   const config = useConfig();
   const _ = useTranslator();
@@ -36,7 +43,7 @@ export function Pagination(props: PaginationConfig) {
     setTotal(tabular.length);
   }
 
-  if (this.props.server) {
+  if (props.server) {
     processor = new ServerPaginationLimit({
       limit: limit,
       page: currentPage,
@@ -189,33 +196,33 @@ export function Pagination(props: PaginationConfig) {
   const renderSummary = () => {
     return (
       <Fragment>
-        {this.props.summary && this.state.total > 0 && (
+        {props.summary && total > 0 && (
           <div
             role="status"
             aria-live="polite"
             className={classJoin(
               className('summary'),
-              this.config.className.paginationSummary,
+              config.className.paginationSummary,
             )}
-            title={this._(
+            title={_(
               'pagination.navigate',
-              this.state.page + 1,
-              this.pages,
+              currentPage + 1,
+              pages(),
             )}
           >
-            {this._('pagination.showing')}{' '}
-            <b>{this._(`${this.state.page * this.state.limit + 1}`)}</b>{' '}
-            {this._('pagination.to')}{' '}
+            {_('pagination.showing')}{' '}
+            <b>{_(`${currentPage * limit + 1}`)}</b>{' '}
+            {_('pagination.to')}{' '}
             <b>
-              {this._(
+              {_(
                 `${Math.min(
-                  (this.state.page + 1) * this.state.limit,
-                  this.state.total,
+                  (currentPage + 1) * limit,
+                  total,
                 )}`,
               )}
             </b>{' '}
-            {this._('pagination.of')} <b>{this._(`${this.state.total}`)}</b>{' '}
-            {this._('pagination.results')}
+            {_('pagination.of')} <b>{_(`${total}`)}</b>{' '}
+            {_('pagination.results')}
           </div>
         )}
       </Fragment>
