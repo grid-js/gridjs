@@ -7,6 +7,7 @@ import { PluginRenderer } from '../../plugin';
 import { Resize } from '../plugin/resize/resize';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useConfig } from '../../hooks/useConfig';
+import { SortActions } from '../plugin/sort/actions';
 
 export function TH(
   props: {
@@ -16,9 +17,9 @@ export function TH(
   } & Omit<JSX.HTMLAttributes<HTMLTableCellElement>, 'style'>,
 ) {
   const config = useConfig();
-  const sortRef = useRef(null);
   const thRef = useRef(null);
   const [style, setStyle] = useState({});
+  const sortActions = new SortActions(config.dispatcher);
 
   useEffect(() => {
     setTimeout(() => {
@@ -45,7 +46,7 @@ export function TH(
     e.stopPropagation();
 
     if (isSortable()) {
-      sortRef.current.changeDirection(e);
+      sortActions.sortToggle(props.index);
     }
   };
 
@@ -114,7 +115,7 @@ export function TH(
     >
       <div className={className('th', 'content')}>{content()}</div>
       {isSortable() && (
-        <Sort ref={sortRef} index={props.index} {...props.column.sort} />
+        <Sort index={props.index} {...props.column.sort} />
       )}
       {isResizable() &&
         props.index < config.header.visibleColumns.length - 1 && (

@@ -32,7 +32,7 @@ export class PluginManager {
       return this;
     }
 
-    if (this.get(plugin.id) !== null) {
+    if (this.get(plugin.id)) {
       log.error(`Duplicate plugin ID: ${plugin.id}`);
       return this;
     }

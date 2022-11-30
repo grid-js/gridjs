@@ -2,9 +2,8 @@ import { h, Fragment } from 'preact';
 import PaginationLimit from '../../pipeline/limit/pagination';
 import { classJoin, className } from '../../util/className';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
-import Tabular from '../../tabular';
 import { useConfig } from '../../hooks/useConfig';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { useTranslator } from '../../i18n/language';
 
 export interface PaginationConfig {
@@ -21,62 +20,60 @@ export interface PaginationConfig {
   };
 }
 
-export function Pagination(props: PaginationConfig) {
-  props.summary = props.summary || true;
-  props.nextButton = props.nextButton || true;
-  props.prevButton = props.prevButton || true;
-  props.buttonsCount = props.buttonsCount || 3;
-  props.limit = props.limit || 10;
-  props.page = props.page || 0;
-  props.resetPageOnUpdate = props.resetPageOnUpdate || true;
-
-  let processor: PaginationLimit | ServerPaginationLimit;
-
-  const [currentPage, setCurrentPage] = useState(props.page);
-  const [limit] = useState(props.limit);
-  const [total, setTotal] = useState(0);
+export function Pagination() {
   const config = useConfig();
+  const {
+    server,
+    summary = true,
+    nextButton = true,
+    prevButton = true,
+    buttonsCount = 3,
+    limit = 10,
+    page = 0,
+    resetPageOnUpdate = true
+  } = config.pagination;
+
+  const processor = useRef<PaginationLimit | ServerPaginationLimit>(null);
+  const [currentPage, setCurrentPage] = useState(page);
+  const [total, setTotal] = useState(0);
   const _ = useTranslator();
 
-  const setTotalFromTabular = (tabular: Tabular) => {
-    setTotal(tabular.length);
-  };
-
-  if (props.server) {
-    processor = new ServerPaginationLimit({
-      limit: limit,
-      page: currentPage,
-      url: props.server.url,
-      body: props.server.body,
-    });
-
-    config.pipeline.on('afterProcess', setTotalFromTabular);
-  } else {
-    processor = new PaginationLimit({
-      limit: limit,
-      page: currentPage,
-    });
-
-    // Pagination (all Limit processors) is the last step in the pipeline
-    // and we assume that at this stage, we have the rows that we care about.
-    // Let's grab the rows before processing Pagination and set total number of rows
-    processor.on('beforeProcess', setTotalFromTabular);
-  }
-
-  config.pipeline.register(processor);
-
-  // we need to make sure that the state is set
-  // to the default props when an error happens
-  config.pipeline.on('error', () => {
-    setTotal(0);
-    setCurrentPage(0);
-  });
-
   useEffect(() => {
+    if (server) {
+      processor.current = new ServerPaginationLimit({
+        limit: limit,
+        page: currentPage,
+        url: server.url,
+        body: server.body,
+      });
+    } else {
+      processor.current = new PaginationLimit({
+        limit: limit,
+        page: currentPage,
+      });
+    }
+
+    if (processor.current instanceof ServerPaginationLimit) {
+      config.pipeline.on('afterProcess', (tabular) => setTotal(tabular.length));
+    } else if (processor.current instanceof PaginationLimit) {
+      // Pagination (all Limit processors) is the last step in the pipeline
+      // and we assume that at this stage, we have the rows that we care about.
+      // Let's grab the rows before processing Pagination and set total number of rows
+      processor.current.on('beforeProcess', (tabular) => setTotal(tabular.length));
+    }
+
     config.pipeline.on('updated', onUpdate);
+    config.pipeline.register(processor.current);
+
+    // we need to make sure that the state is set
+    // to the default props when an error happens
+    config.pipeline.on('error', () => {
+      setTotal(0);
+      setCurrentPage(0);
+    });
 
     return () => {
-      config.pipeline.unregister(processor);
+      config.pipeline.unregister(processor.current);
       config.pipeline.off('updated', onUpdate);
     };
   }, []);
@@ -84,7 +81,7 @@ export function Pagination(props: PaginationConfig) {
   const onUpdate = (updatedProcessor) => {
     // this is to ensure that the current page is set to 0
     // when a processor is updated for some reason
-    if (props.resetPageOnUpdate && updatedProcessor !== processor) {
+    if (resetPageOnUpdate && updatedProcessor !== processor.current) {
       setCurrentPage(0);
     }
   };
@@ -98,18 +95,18 @@ export function Pagination(props: PaginationConfig) {
 
     setCurrentPage(page);
 
-    processor.setProps({
+    processor.current.setProps({
       page: page,
     });
   };
 
   const renderPages = () => {
-    if (props.buttonsCount <= 0) {
+    if (buttonsCount <= 0) {
       return null;
     }
 
     // how many pagination buttons to render?
-    const maxCount: number = Math.min(pages(), props.buttonsCount);
+    const maxCount: number = Math.min(pages(), buttonsCount);
 
     let pagePivot = Math.min(currentPage, Math.floor(maxCount / 2));
     if (currentPage + Math.floor(maxCount / 2) >= pages()) {
@@ -123,7 +120,7 @@ export function Pagination(props: PaginationConfig) {
             <button
               tabIndex={0}
               role="button"
-              onClick={setPage(0)}
+              onClick={() => setPage(0)}
               title={_('pagination.firstPage')}
               aria-label={_('pagination.firstPage')}
               className={config.className.paginationButton}
@@ -148,7 +145,7 @@ export function Pagination(props: PaginationConfig) {
             <button
               tabIndex={0}
               role="button"
-              onClick={setPage(i)}
+              onClick={() => setPage(i)}
               className={classJoin(
                 currentPage === i
                   ? classJoin(
@@ -179,7 +176,7 @@ export function Pagination(props: PaginationConfig) {
             <button
               tabIndex={0}
               role="button"
-              onClick={setPage(pages() - 1)}
+              onClick={() => setPage(pages() - 1)}
               title={_('pagination.page', pages())}
               aria-label={_('pagination.page', pages())}
               className={config.className.paginationButton}
@@ -195,7 +192,7 @@ export function Pagination(props: PaginationConfig) {
   const renderSummary = () => {
     return (
       <Fragment>
-        {props.summary && total > 0 && (
+        {summary && total > 0 && (
           <div
             role="status"
             aria-live="polite"
@@ -226,12 +223,12 @@ export function Pagination(props: PaginationConfig) {
       {renderSummary()}
 
       <div className={className('pages')}>
-        {props.prevButton && (
+        {prevButton && (
           <button
             tabIndex={0}
             role="button"
             disabled={currentPage === 0}
-            onClick={setPage(currentPage - 1)}
+            onClick={() => setPage(currentPage - 1)}
             title={_('pagination.previous')}
             aria-label={_('pagination.previous')}
             className={classJoin(
@@ -245,12 +242,12 @@ export function Pagination(props: PaginationConfig) {
 
         {renderPages()}
 
-        {props.nextButton && (
+        {nextButton && (
           <button
             tabIndex={0}
             role="button"
             disabled={pages() === currentPage + 1 || pages() === 0}
-            onClick={setPage(currentPage + 1)}
+            onClick={() => setPage(currentPage + 1)}
             title={_('pagination.next')}
             aria-label={_('pagination.next')}
             className={classJoin(
