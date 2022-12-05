@@ -18,5 +18,5 @@ export default {
   },
   loading: 'Carregant...',
   noRecordsFound: 'No s\'han trobat coincidències',
-  error: 'Hi hagut un error mentre es carregaven les dades',
+  error: 'Hi ha hagut un error mentre es carregaven les dades',
 };
