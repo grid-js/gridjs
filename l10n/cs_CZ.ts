@@ -7,6 +7,7 @@ export default {
         sortDesc: 'Seřadit sloupec sestupně',
     },
     pagination: {
+        firstPage: 'První stránka',
         previous: 'Předchozí',
         next: 'Další',
         navigate: (page, pages) => `Stránka ${page} z ${pages}`,
