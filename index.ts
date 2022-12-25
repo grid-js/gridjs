@@ -7,12 +7,10 @@ import { UserConfig, Config } from './src/config';
 import {
   PluginPosition
 } from './src/plugin';
-import { BaseActions } from './src/view/base/actions';
 import { ID } from './src/util/id';
 import { className } from './src/util/className';
 import Row from './src/row';
 import Cell from './src/cell';
-import BaseStore from './src/view/base/store';
 import Dispatcher from './src/util/dispatcher';
 
 export {
@@ -21,8 +19,6 @@ export {
   Dispatcher,
   Row,
   Cell,
-  BaseActions,
-  BaseStore,
   className,
   html,
   UserConfig,

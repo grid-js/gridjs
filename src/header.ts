@@ -116,26 +116,19 @@ class Header extends Base {
     for (const column of cols) {
       // sorting can only be enabled for columns without any children
       if (column.columns && column.columns.length > 0) {
-        column.sort = {
-          enabled: false,
-        };
+        column.sort = undefined;
       }
 
       // implicit userConfig.sort flag
       if (column.sort === undefined && userConfig.sort) {
-        column.sort = {
-          enabled: true,
-        };
+        column.sort = {};
       }
 
       // false, null, etc.
       if (!column.sort) {
-        column.sort = {
-          enabled: false,
-        };
+        column.sort = undefined;
       } else if (typeof column.sort === 'object') {
         column.sort = {
-          enabled: true,
           ...column.sort,
         };
       }

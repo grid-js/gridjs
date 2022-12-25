@@ -3,17 +3,16 @@ import { h, JSX } from 'preact';
 import { classJoin, className } from '../../../util/className';
 import { ProcessorType } from '../../../pipeline/processor';
 import NativeSort from '../../../pipeline/sort/native';
-import { SortStore, SortStoreState } from './store';
 import { Comparator, TCell, TColumnSort } from '../../../types';
-import { SortActions } from './actions';
+import * as actions from './actions';
 import ServerSort from '../../../pipeline/sort/server';
 import { useEffect, useState } from 'preact/hooks';
 import { useConfig } from '../../../hooks/useConfig';
 import { useTranslator } from '../../../i18n/language';
+import useSelector from '../../../hooks/useSelector';
 
 // column specific config
 export interface SortConfig {
-  enabled?: boolean;
   compare?: Comparator<TCell>;
 }
 
@@ -40,51 +39,47 @@ export function Sort(
   const config = useConfig();
   const _ = useTranslator();
   const [direction, setDirection] = useState(0);
-  const actions = new SortActions(config.dispatcher);
-  const store = new SortStore(config.dispatcher);
-  let sortProcessor: NativeSort | ServerSort;
-  let updateStateFn: (...args) => void;
-  let updateSortProcessorFn: (sortedColumns: SortStoreState) => void;
+  const [processor, setProcessor] = useState<NativeSort | ServerSort>(
+    undefined,
+  );
+  const state = useSelector((state) => state.sort);
 
   useEffect(() => {
-    if (props.enabled) {
-      sortProcessor = getOrCreateSortProcessor();
-      updateStateFn = updateState;
-      store.on('updated', updateStateFn);
-    }
-
-    return () => {
-      config.pipeline.unregister(sortProcessor);
-
-      store.off('updated', updateStateFn);
-
-      if (updateSortProcessorFn) {
-        store.off('updated', updateSortProcessorFn);
-      }
-    };
+    const processor = getOrCreateSortProcessor();
+    if (processor) setProcessor(processor);
   }, []);
+
+  useEffect(() => {
+    if (processor) config.pipeline.register(processor);
+
+    return () => config.pipeline.unregister(processor);
+  }, [config, processor]);
 
   /**
    * Sets the internal state of component
    */
-  const updateState = () => {
-    const currentColumn = store.state.find((x) => x.index === props.index);
+  useEffect(() => {
+    if (!state) return;
+
+    const currentColumn = state.columns.find((x) => x.index === props.index);
 
     if (!currentColumn) {
       setDirection(0);
     } else {
       setDirection(currentColumn.direction);
     }
-  };
+  }, [state]);
 
-  const updateSortProcessor = (sortedColumns: SortStoreState) => {
-    // updates the Sorting processor
-    sortProcessor.setProps({
-      columns: sortedColumns,
+  useEffect(() => {
+    if (!processor) return;
+    if (!state) return;
+
+    processor.setProps({
+      columns: state.columns,
     });
-  };
+  }, [state]);
 
-  const getOrCreateSortProcessor = (): NativeSort => {
+  const getOrCreateSortProcessor = (): NativeSort | null => {
     let processorType = ProcessorType.Sort;
 
     if (config.sort && typeof config.sort.server === 'object') {
@@ -93,36 +88,25 @@ export function Sort(
 
     const processors = config.pipeline.getStepsByType(processorType);
 
-    // my assumption is that we only have ONE sorting processor in the
-    // entire pipeline and that's why I'm displaying a warning here
-    let processor;
-
-    // A sort process is already registered
-    if (processors.length > 0) {
-      processor = processors[0];
-    } else {
-      // let's create a new sort processor
-
-      // this event listener is here because
-      // we want to subscribe to the sort store only once
-      updateSortProcessorFn = updateSortProcessor.bind(this);
-      store.on('updated', updateSortProcessorFn);
+    if (processors.length === 0) {
+      // my assumption is that we only have ONE sorting processor in the
+      // entire pipeline and that's why I'm displaying a warning here
+      let processor;
 
       if (processorType === ProcessorType.ServerSort) {
         processor = new ServerSort({
-          columns: store.state,
+          columns: state ? state.columns : [],
           ...config.sort.server,
         });
       } else {
         processor = new NativeSort({
-          columns: store.state,
+          columns: state ? state.columns : [],
         });
       }
-
-      config.pipeline.register(processor);
+      return processor;
     }
 
-    return processor;
+    return null;
   };
 
   const changeDirection = (e: JSX.TargetedMouseEvent<HTMLButtonElement>) => {
@@ -130,16 +114,12 @@ export function Sort(
     e.stopPropagation();
 
     // to sort two or more columns at the same time
-    actions.sortToggle(
+    actions.SortToggle(
       props.index,
       e.shiftKey === true && config.sort.multiColumn,
       props.compare,
     );
   };
-
-  if (!props.enabled) {
-    return null;
-  }
 
   let sortClassName = 'neutral';
 

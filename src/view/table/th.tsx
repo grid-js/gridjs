@@ -7,7 +7,8 @@ import { PluginRenderer } from '../../plugin';
 import { Resize } from '../plugin/resize/resize';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useConfig } from '../../hooks/useConfig';
-import { SortActions } from '../plugin/sort/actions';
+import * as SortActions from '../plugin/sort/actions';
+import { useStore } from '../../hooks/useStore';
 
 export function TH(
   props: {
@@ -19,7 +20,7 @@ export function TH(
   const config = useConfig();
   const thRef = useRef(null);
   const [style, setStyle] = useState({});
-  const sortActions = new SortActions(config.dispatcher);
+  const { dispatch } = useStore();
 
   useEffect(() => {
     setTimeout(() => {
@@ -36,7 +37,7 @@ export function TH(
     }, 0);
   }, [thRef]);
 
-  const isSortable = (): boolean => props.column.sort.enabled;
+  const isSortable = (): boolean => props.column.sort != undefined;
   const isResizable = (): boolean => props.column.resizable;
   const onClick = (
     e:
@@ -46,7 +47,7 @@ export function TH(
     e.stopPropagation();
 
     if (isSortable()) {
-      sortActions.sortToggle(props.index);
+      dispatch(SortActions.SortToggle(props.index));
     }
   };
 
