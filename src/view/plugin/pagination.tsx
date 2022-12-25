@@ -30,7 +30,7 @@ export function Pagination() {
     buttonsCount = 3,
     limit = 10,
     page = 0,
-    resetPageOnUpdate = true
+    resetPageOnUpdate = true,
   } = config.pagination;
 
   const processor = useRef<PaginationLimit | ServerPaginationLimit>(null);
@@ -59,7 +59,9 @@ export function Pagination() {
       // Pagination (all Limit processors) is the last step in the pipeline
       // and we assume that at this stage, we have the rows that we care about.
       // Let's grab the rows before processing Pagination and set total number of rows
-      processor.current.on('beforeProcess', (tabular) => setTotal(tabular.length));
+      processor.current.on('beforeProcess', (tabular) =>
+        setTotal(tabular.length),
+      );
     }
 
     config.pipeline.on('updated', onUpdate);

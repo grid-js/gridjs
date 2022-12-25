@@ -22,6 +22,7 @@ import { EventEmitter } from './util/eventEmitter';
 import { GridEvents } from './events';
 import { PluginManager, PluginPosition, Plugin } from './plugin';
 import Grid from './grid';
+import { Store } from './state/store';
 
 export const ConfigContext = createContext(null);
 
@@ -29,6 +30,7 @@ export const ConfigContext = createContext(null);
 export interface Config {
   // a reference to the current Grid.js instance
   instance: Grid;
+  store: Store<any>;
   eventEmitter: EventEmitter<GridEvents>;
   dispatcher: Dispatcher<any>;
   plugin: PluginManager;
@@ -157,6 +159,7 @@ export class Config {
 
   static defaultConfig(): Config {
     return {
+      store: new Store({}),
       plugin: new PluginManager(),
       dispatcher: new Dispatcher<any>(),
       tableRef: createRef(),

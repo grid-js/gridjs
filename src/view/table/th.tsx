@@ -114,9 +114,7 @@ export function TH(
       {...(isSortable() ? { tabIndex: 0 } : {})}
     >
       <div className={className('th', 'content')}>{content()}</div>
-      {isSortable() && (
-        <Sort index={props.index} {...props.column.sort} />
-      )}
+      {isSortable() && <Sort index={props.index} {...props.column.sort} />}
       {isResizable() &&
         props.index < config.header.visibleColumns.length - 1 && (
           <Resize column={props.column} thRef={thRef} />

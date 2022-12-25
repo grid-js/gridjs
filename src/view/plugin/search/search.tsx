@@ -1,14 +1,15 @@
-import { h } from 'preact';
+import { h, JSX } from 'preact';
 import GlobalSearchFilter from '../../../pipeline/filter/globalSearch';
 import { classJoin, className } from '../../../util/className';
-import { SearchStore, SearchStoreState } from './store';
-import { SearchActions } from './actions';
 import ServerGlobalSearchFilter from '../../../pipeline/filter/serverGlobalSearch';
-import { debounce } from '../../../util/debounce';
 import { TCell } from '../../../types';
 import { useConfig } from '../../../hooks/useConfig';
-import { useEffect } from 'preact/hooks';
+import { useCallback, useEffect, useState } from 'preact/hooks';
 import { useTranslator } from '../../../i18n/language';
+import * as actions from './actions';
+import { useStore } from '../../../hooks/useStore';
+import useSelector from '../../../hooks/useSelector';
+import { debounce } from '../../../util/debounce';
 
 export interface SearchConfig {
   keyword?: string;
@@ -22,62 +23,67 @@ export interface SearchConfig {
 }
 
 export function Search(props: SearchConfig) {
-  let searchProcessor: GlobalSearchFilter | ServerGlobalSearchFilter;
+  const [processor, setProcessor] = useState<
+    GlobalSearchFilter | ServerGlobalSearchFilter
+  >(undefined);
   const config = useConfig();
-  const actions = new SearchActions(config.dispatcher);
-  const store = new SearchStore(config.dispatcher);
   const _ = useTranslator();
-
-  if (props.server) {
-    searchProcessor = new ServerGlobalSearchFilter({
-      keyword: props.keyword,
-      url: props.server.url,
-      body: props.server.body,
-    });
-  } else {
-    searchProcessor = new GlobalSearchFilter({
-      keyword: props.keyword,
-      columns: config.header && config.header.columns,
-      ignoreHiddenColumns:
-        props.ignoreHiddenColumns || props.ignoreHiddenColumns === undefined,
-      selector: props.selector,
-    });
-  }
+  const { dispatch } = useStore();
+  const state = useSelector((state) => state.search);
 
   useEffect(() => {
-    const { keyword } = props;
+    if (!processor) return;
+
+    processor.setProps({
+      keyword: state?.keyword,
+    });
+  }, [state, processor]);
+
+  useEffect(() => {
+    if (props.server) {
+      setProcessor(
+        new ServerGlobalSearchFilter({
+          keyword: props.keyword,
+          url: props.server.url,
+          body: props.server.body,
+        }),
+      );
+    } else {
+      setProcessor(
+        new GlobalSearchFilter({
+          keyword: props.keyword,
+          columns: config.header && config.header.columns,
+          ignoreHiddenColumns:
+            props.ignoreHiddenColumns ||
+            props.ignoreHiddenColumns === undefined,
+          selector: props.selector,
+        }),
+      );
+    }
 
     // initial search
-    if (keyword) actions.search(keyword);
-
-    store.on('updated', storeUpdated);
-
-    // adds a new processor to the pipeline
-    config.pipeline.register(searchProcessor);
-
-    return () => {
-      config.pipeline.unregister(searchProcessor);
-      store.off('updated', storeUpdated);
-    };
+    if (props.keyword) dispatch(actions.SearchKeyword(props.keyword));
   }, []);
 
-  const storeUpdated = (state: SearchStoreState) => {
-    // updates the processor state
-    searchProcessor.setProps({
-      keyword: state.keyword,
-    });
-  };
+  useEffect(() => {
+    if (processor) config.pipeline.register(processor);
 
-  const onChange = (event) => {
-    const keyword = event.target.value;
-    actions.search(keyword);
-  };
+    return () => config.pipeline.unregister(processor);
+  }, [config, processor]);
 
-  let onInput = onChange;
-  // add debounce to input only if it's a server-side search
-  if (searchProcessor instanceof ServerGlobalSearchFilter) {
-    onInput = debounce(onInput, props.debounceTimeout || 250);
-  }
+  const debouncedOnInput = useCallback(
+    debounce(
+      (event: JSX.TargetedEvent<HTMLInputElement>) => {
+        if (event.target instanceof HTMLInputElement) {
+          dispatch(actions.SearchKeyword(event.target.value));
+        }
+      },
+      processor instanceof ServerGlobalSearchFilter
+        ? props.debounceTimeout || 250
+        : 0,
+    ),
+    [props, processor],
+  );
 
   return (
     <div className={className(classJoin('search', config.className?.search))}>
@@ -85,9 +91,9 @@ export function Search(props: SearchConfig) {
         type="search"
         placeholder={_('search.placeholder')}
         aria-label={_('search.placeholder')}
-        onInput={onInput}
+        onInput={debouncedOnInput}
         className={classJoin(className('input'), className('search', 'input'))}
-        value={store.state.keyword || ''}
+        value={state?.keyword || ''}
       />
     </div>
   );
