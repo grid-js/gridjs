@@ -12,7 +12,6 @@ import { Search, SearchConfig } from './view/plugin/search/search';
 import { Pagination, PaginationConfig } from './view/plugin/pagination';
 import Header from './header';
 import { ServerStorageOptions } from './storage/server';
-import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
 import { Language, Translator } from './i18n/language';
 import { ComponentChild, createContext, createRef, RefObject } from 'preact';
@@ -32,7 +31,6 @@ export interface Config {
   instance: Grid;
   store: Store<any>;
   eventEmitter: EventEmitter<GridEvents>;
-  dispatcher: Dispatcher<any>;
   plugin: PluginManager;
   /** container element that is used to mount the Grid.js to */
   // TODO: change this to an element reference
@@ -161,7 +159,6 @@ export class Config {
     return {
       store: new Store({}),
       plugin: new PluginManager(),
-      dispatcher: new Dispatcher<any>(),
       tableRef: createRef(),
       tempRef: createRef(),
       width: '100%',

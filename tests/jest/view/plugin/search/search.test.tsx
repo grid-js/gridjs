@@ -1,13 +1,11 @@
 import { mount } from 'enzyme';
 import { createContext } from 'preact';
 import { Config } from '../../../../../src/config';
-import Dispatcher from '../../../../../src/util/dispatcher';
 import { EventEmitter } from '../../../../../src/util/eventEmitter';
 import { GridEvents } from '../../../../../src/events';
 import PipelineUtils from '../../../../../src/pipeline/pipelineUtils';
 import { Translator } from '../../../../../src/i18n/language';
 import { Search } from '../../../../../src/view/plugin/search/search';
-import { SearchActions } from '../../../../../src/view/plugin/search/actions';
 import { Plugin, PluginPosition } from '../../../../../src/plugin';
 import Header from '../../../../../src/header';
 
@@ -23,7 +21,6 @@ describe('Search plugin', () => {
   beforeEach(() => {
     config = new Config();
     config.autoWidth = true;
-    config.dispatcher = new Dispatcher();
     config.eventEmitter = new EventEmitter<GridEvents>();
     config.translator = new Translator();
     config.pipeline = PipelineUtils.createFromConfig(config);
