@@ -2,6 +2,7 @@ import Tabular from '../tabular';
 import { VNode } from 'preact';
 import { HTMLContentProps } from '../view/htmlElement';
 import { OneDArray, TCell, TColumn } from '../types';
+import Row from '../row';
 
 export default function (
   keyword: string,
@@ -9,7 +10,13 @@ export default function (
   ignoreHiddenColumns: boolean,
   tabular: Tabular,
   selector?: (cell: TCell, rowIndex: number, cellIndex: number) => string,
+  filter?: (keyword: string, rows: Row[]) => Row[],
 ): Tabular {
+  // custom filter
+  if (filter) {
+    return new Tabular(filter(keyword, tabular.rows));
+  }
+
   // escape special regex chars
   keyword = keyword.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 

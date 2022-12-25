@@ -99,4 +99,15 @@ describe('search', () => {
       new Tabular([row1, row2, row3, row4]).rows,
     );
   });
+
+  it('should apply custom filter', () => {
+    expect(
+      search('???', columns, false, tabular, null, (keyword, rows) =>
+        rows.filter(
+          (row, ind) =>
+            ind == 1 || row.cells.some((cell) => String(cell.data) === keyword),
+        ),
+      ).rows,
+    ).toStrictEqual(new Tabular([row2, row4]).rows);
+  });
 });
