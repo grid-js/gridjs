@@ -10,7 +10,9 @@ import Header from '../header';
 import { Config, ConfigContext } from '../config';
 import log from '../util/log';
 import { PipelineProcessor } from '../pipeline/processor';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
+import * as actions from './actions';
+import { useStore } from '../hooks/useStore';
 
 export function Container(props: {
   config: Config;
@@ -20,8 +22,8 @@ export function Container(props: {
   height: string;
 }) {
   const config = props.config;
+  const {dispatch} = useStore();
   const [status, setStatus] = useState(Status.Loading);
-  const prevStatusRef = useRef(Status.Loading);
   const [header, setHeader] = useState(props.header);
   const [data, setData] = useState(null);
   let processPipelineFn: (processor: PipelineProcessor<any, any>) => void;
@@ -47,32 +49,23 @@ export function Container(props: {
   }, []);
 
   useEffect(() => {
-    // we can't jump to the Status.Rendered if previous status is not Status.Loaded
-    if (prevStatusRef.current != Status.Rendered && status == Status.Loaded) {
-      setStatus(Status.Rendered);
-
-      props.config.eventEmitter.emit('ready');
-    }
-
-    prevStatusRef.current = status;
+    dispatch(actions.SetStatusToRendered());
   }, [status]);
 
   const processPipeline = async () => {
     props.config.eventEmitter.emit('beforeLoad');
 
-    setStatus(Status.Loading);
+    dispatch(actions.SetStatus(Status.Loading));
 
     try {
       const data = await props.pipeline.process();
-      setData(data);
-      setStatus(Status.Loaded);
+      dispatch(actions.SetData(data));
 
       props.config.eventEmitter.emit('load', data);
     } catch (e) {
       log.error(e);
 
-      setData(null);
-      setStatus(Status.Error);
+      dispatch(actions.SetNoData());
     }
   };
 
