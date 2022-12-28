@@ -1,13 +1,16 @@
 import Grid from './src/grid';
 import { html } from './src/util/html';
 import { h, createElement, Component, createRef } from 'preact';
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { UserConfig, Config } from './src/config';
 import { PluginPosition } from './src/plugin';
 import { ID } from './src/util/id';
 import { className } from './src/util/className';
 import Row from './src/row';
 import Cell from './src/cell';
+import { useConfig } from './src/hooks/useConfig';
+import { useStore } from './src/hooks/useStore';
+import useSelector from './src/hooks/useSelector';
 
 export {
   Grid,
@@ -25,4 +28,8 @@ export {
   createRef,
   useEffect,
   useRef,
+  useStore,
+  useConfig,
+  useState,
+  useSelector,
 };

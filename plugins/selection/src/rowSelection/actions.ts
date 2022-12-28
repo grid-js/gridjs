@@ -1,25 +1,28 @@
-import { BaseActions } from 'gridjs';
+export const CheckRow = (rowId: string) => (state) => {
+  // rowId already exists
+  if (state.rowSelection.rowIds.indexOf(rowId) > -1) return state;
 
-export interface RowSelectionActionsType {
-  CHECK: {
-    ROW_ID: string;
+  return {
+    ...state,
+    rowSelection: {
+      rowIds: [rowId, ...state.rowSelection.rowIds],
+    },
   };
+};
 
-  UNCHECK: {
-    ROW_ID: string;
+export const UncheckRow = (rowId: string) => (state) => {
+  const index = state.rowSelection.rowIds.indexOf(rowId);
+
+  // rowId doesn't exist
+  if (index === -1) state;
+
+  const cloned = [...state.rowSelection.rowIds];
+  cloned.splice(index, 1);
+
+  return {
+    ...state,
+    rowSelection: {
+      rowIds: cloned,
+    },
   };
-}
-
-export class RowSelectionActions extends BaseActions<RowSelectionActionsType> {
-  check(rowId: string): void {
-    this.dispatch('CHECK', {
-      ROW_ID: rowId,
-    });
-  }
-
-  uncheck(rowId: string): void {
-    this.dispatch('UNCHECK', {
-      ROW_ID: rowId,
-    });
-  }
-}
+};

@@ -98,3 +98,4 @@ export function Search(props: SearchConfig) {
     </div>
   );
 }
+
