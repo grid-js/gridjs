@@ -163,6 +163,7 @@ export class Pagination extends PluginBaseComponent<
             <button
               tabIndex={0}
               role="button"
+              type="button"
               onClick={this.setPage.bind(this, 0)}
               title={this._('pagination.firstPage')}
               aria-label={this._('pagination.firstPage')}
@@ -188,6 +189,7 @@ export class Pagination extends PluginBaseComponent<
             <button
               tabIndex={0}
               role="button"
+              type="button"
               onClick={this.setPage.bind(this, i)}
               className={classJoin(
                 this.state.page === i
@@ -219,6 +221,7 @@ export class Pagination extends PluginBaseComponent<
             <button
               tabIndex={0}
               role="button"
+              type="button"
               onClick={this.setPage.bind(this, this.pages - 1)}
               title={this._('pagination.page', this.pages)}
               aria-label={this._('pagination.page', this.pages)}
@@ -285,6 +288,7 @@ export class Pagination extends PluginBaseComponent<
             <button
               tabIndex={0}
               role="button"
+              type="button"
               disabled={this.state.page === 0}
               onClick={this.setPage.bind(this, this.state.page - 1)}
               title={this._('pagination.previous')}
@@ -304,6 +308,7 @@ export class Pagination extends PluginBaseComponent<
             <button
               tabIndex={0}
               role="button"
+              type="button"
               disabled={this.pages === this.state.page + 1 || this.pages === 0}
               onClick={this.setPage.bind(this, this.state.page + 1)}
               title={this._('pagination.next')}
