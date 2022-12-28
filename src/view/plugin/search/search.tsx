@@ -74,6 +74,7 @@ export function Search(props: SearchConfig) {
   const debouncedOnInput = useCallback(
     debounce(
       (event: JSX.TargetedEvent<HTMLInputElement>) => {
+        console.log("EVENT!!!", event.target)
         if (event.target instanceof HTMLInputElement) {
           dispatch(actions.SearchKeyword(event.target.value));
         }
