@@ -1,18 +1,22 @@
+import Header from 'src/header';
 import Tabular from '../tabular';
 import { Status } from '../types';
 
 export const SetStatusToRendered = () => (state) => {
   if (state.status === Status.Loaded) {
-    return SetStatus(Status.Rendered);
+    return {
+      ...state,
+      status: Status.Rendered,
+    };
   }
 
   return state;
 };
 
-export const SetStatus = (status: Status) => (state) => {
+export const SetLoadingData = () => (state) => {
   return {
     ...state,
-    status: status,
+    status: Status.Loading,
   };
 };
 
@@ -26,10 +30,24 @@ export const SetData = (data: Tabular) => (state) => {
   };
 };
 
-export const SetNoData = () => (state) => {
+export const SetDataErrored = () => (state) => {
   return {
     ...state,
     data: null,
     status: Status.Error,
+  };
+};
+
+export const SetHeader = (header: Header) => (state) => {
+  return {
+    ...state,
+    header: header,
+  };
+};
+
+export const SetTableRef = (tableRef) => (state) => {
+  return {
+    ...state,
+    tableRef: tableRef,
   };
 };

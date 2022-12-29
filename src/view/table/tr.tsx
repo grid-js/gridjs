@@ -1,4 +1,4 @@
-import { h, JSX, Fragment, ComponentChildren } from 'preact';
+import { h, JSX, ComponentChildren } from 'preact';
 
 import Row from '../../row';
 import Cell from '../../cell';
@@ -7,18 +7,19 @@ import { TColumn } from '../../types';
 import { TD } from './td';
 import Header from '../../header';
 import { useConfig } from '../../hooks/useConfig';
+import useSelector from 'src/hooks/useSelector';
 
 export function TR(props: {
   row?: Row;
-  header?: Header;
   messageRow?: boolean;
   children?: ComponentChildren;
 }) {
   const config = useConfig();
+  const header = useSelector((state) => state.header);
 
   const getColumn = (cellIndex: number): TColumn => {
-    if (props.header) {
-      const cols = Header.leafColumns(props.header.columns);
+    if (header) {
+      const cols = Header.leafColumns(header.columns);
 
       if (cols) {
         return cols[cellIndex];
@@ -38,21 +39,15 @@ export function TR(props: {
   const getChildren = (): ComponentChildren => {
     if (props.children) {
       return props.children;
-    } else {
-      return (
-        <Fragment>
-          {props.row.cells.map((cell: Cell, i) => {
-            const column = getColumn(i);
-
-            if (column && column.hidden) return null;
-
-            return (
-              <TD key={cell.id} cell={cell} row={props.row} column={column} />
-            );
-          })}
-        </Fragment>
-      );
     }
+
+    return props.row.cells.map((cell: Cell, i) => {
+      const column = getColumn(i);
+
+      if (column && column.hidden) return null;
+
+      return <TD key={cell.id} cell={cell} row={props.row} column={column} />;
+    });
   };
 
   return (

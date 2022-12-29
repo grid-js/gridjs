@@ -1,40 +1,33 @@
-import { h, RefObject } from 'preact';
+import { h } from 'preact';
 import { className } from '../../util/className';
-import { useEffect } from 'preact/hooks';
 
 /**
  * ShadowTable renders a hidden table and is used to calculate the column's width
  * when autoWidth option is enabled
  */
-export function ShadowTable(props: { tableRef?: RefObject<HTMLTableElement> }) {
-  let tableElement: HTMLTableElement;
+export function ShadowTable(props: { tableRef: HTMLTableElement }) {
+  const shadowTable = props.tableRef.cloneNode(
+    true,
+  ) as HTMLTableElement;
 
-  useEffect(() => {
-    const tableRef = props.tableRef;
-    tableElement = tableRef.current.cloneNode(true) as HTMLTableElement;
+  shadowTable.style.position = 'absolute';
+  shadowTable.style.width = '100%';
+  shadowTable.style.zIndex = '-2147483640';
+  shadowTable.style.visibility = 'hidden';
 
-    tableElement.style.position = 'absolute';
-    tableElement.style.width = '100%';
-    tableElement.style.zIndex = '-2147483640';
-    tableElement.style.visibility = 'hidden';
-  }, []);
-
-  if (props.tableRef.current) {
-    return (
-      <div
-        ref={(nodeElement) => {
-          nodeElement && nodeElement.appendChild(tableElement);
-        }}
-      />
-    );
-  }
-
-  return null;
+  return (
+    <div
+      ref={(nodeElement) => {
+        nodeElement && nodeElement.appendChild(shadowTable);
+      }}
+    />
+  );
 }
 
-export function getShadowTableWidths(tableElement: HTMLTableElement): {
+export function getShadowTableWidths(tempRef: HTMLDivElement): {
   [columnId: string]: { minWidth: number; width: number };
 } {
+  const tableElement: HTMLTableElement = tempRef.firstChild as HTMLTableElement;
   const tableClassName = tableElement.className;
   const tableStyle = tableElement.style.cssText;
   tableElement.className = `${tableClassName} ${className('shadowTable')}`;

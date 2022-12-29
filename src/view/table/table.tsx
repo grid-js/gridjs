@@ -1,36 +1,35 @@
-import Tabular from '../../tabular';
+import { h } from 'preact';
 import { TBody } from './tbody';
 import { THead } from './thead';
-import Header from '../../header';
 import { classJoin, className } from '../../util/className';
-import { Status } from '../../types';
 import { useConfig } from '../../hooks/useConfig';
-import { h, RefObject } from 'preact';
+import { useEffect, useRef } from 'preact/hooks';
+import * as actions from '../actions';
+import { useStore } from 'src/hooks/useStore';
 
-export function Table(props: {
-  ref: RefObject<HTMLTableElement>;
-  data: Tabular;
-  status: Status;
-  header?: Header;
-  width: string;
-  height: string;
-}) {
+export function Table() {
   const config = useConfig();
+  const tableRef = useRef(null);
+  const { dispatch } = useStore();
+
+  useEffect(() => {
+    if (tableRef) dispatch(actions.SetTableRef(tableRef));
+  }, [tableRef]);
 
   return (
     <table
-      ref={props.ref}
+      ref={tableRef}
       role="grid"
       className={classJoin(className('table'), config.className.table)}
       style={{
         ...config.style.table,
         ...{
-          height: props.height,
+          height: config.height,
         },
       }}
     >
-      <THead header={props.header} />
-      <TBody data={props.data} status={props.status} header={props.header} />
+      <THead />
+      <TBody />
     </table>
   );
 }

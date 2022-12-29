@@ -2,6 +2,7 @@ import {
   CSSDeclaration,
   OneDArray,
   ProtoExtends,
+  Status,
   TColumn,
   TData,
 } from './types';
@@ -37,8 +38,6 @@ export interface Config {
   container?: Element;
   /** pointer to the main table element */
   tableRef?: RefObject<HTMLTableElement>;
-  /** gridjs-temp div which is used internally */
-  tempRef?: RefObject<HTMLDivElement>;
   data?: TData | (() => TData) | (() => Promise<TData>);
   server?: ServerStorageOptions;
   header?: Header;
@@ -157,10 +156,13 @@ export class Config {
 
   static defaultConfig(): Config {
     return {
-      store: new Store({}),
+      store: new Store({
+        status: Status.Init,
+        header: undefined,
+        data: null,
+      }),
       plugin: new PluginManager(),
       tableRef: createRef(),
-      tempRef: createRef(),
       width: '100%',
       height: 'auto',
       autoWidth: true,

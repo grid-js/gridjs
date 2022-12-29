@@ -5,6 +5,7 @@ import log from './util/log';
 import { EventEmitter } from './util/eventEmitter';
 import { GridEvents } from './events';
 import { PluginManager } from './plugin';
+import { ConfigContext } from './config';
 
 class Grid extends EventEmitter<GridEvents> {
   public config: Config;
@@ -24,12 +25,9 @@ class Grid extends EventEmitter<GridEvents> {
   }
 
   createElement(): VNode {
-    return h(Container, {
-      config: this.config,
-      pipeline: this.config.pipeline,
-      header: this.config.header,
-      width: this.config.width,
-      height: this.config.height,
+    return h(ConfigContext.Provider, {
+      value: this.config,
+      children: h(Container, {}),
     });
   }
 
@@ -47,14 +45,21 @@ class Grid extends EventEmitter<GridEvents> {
       );
     }
 
-    // clear the pipeline cache
-    this.config.pipeline.clearCache();
+    this.destroy();
 
-    // TODO: not sure if it's a good idea to render a null element but I couldn't find a better way
-    render(null, this.config.container);
+    // recreate the Grid instance
     render(this.createElement(), this.config.container);
 
     return this;
+  }
+
+  /**
+   * Deletes the Grid.js instance
+   */
+  destroy(): void {
+    this.config.pipeline.clearCache();
+    // TODO: not sure if it's a good idea to render a null element but I couldn't find a better way
+    render(null, this.config.container);
   }
 
   /**

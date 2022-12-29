@@ -7,6 +7,7 @@ import Row from '../../row';
 import { JSXInternal } from 'preact/src/jsx';
 import { PluginRenderer } from '../../plugin';
 import { useConfig } from '../../hooks/useConfig';
+import log from 'src/util/log';
 
 export function TD(
   props: {
@@ -34,6 +35,12 @@ export function TD(
             row: props.row,
           }}
         />
+      );
+    }
+
+    if (typeof props.cell.data === 'object') {
+      log.warn(
+        `The data field for cell ${props.cell.id} is not a primitive value. Did you mean to add a "formatter" function to this column?`,
       );
     }
 

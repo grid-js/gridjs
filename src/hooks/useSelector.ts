@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'preact/hooks';
-import { useConfig } from './useConfig';
+import { useStore } from './useStore';
 
 export default function useSelector<T>(selector: (state) => T) {
-  const config = useConfig();
-  const store = config.store;
+  const store = useStore();
   const [current, setCurrent] = useState(selector(store.getState()));
 
   useEffect(() => {

@@ -6,9 +6,11 @@ import Header from '../../header';
 import { TColumn } from '../../types';
 import { calculateRowColSpans } from '../../util/table';
 import { useConfig } from '../../hooks/useConfig';
+import useSelector from 'src/hooks/useSelector';
 
-export function THead(props: { header: Header }) {
+export function THead() {
   const config = useConfig();
+  const header = useSelector(state => state.header);
 
   const renderColumn = (
     column: TColumn,
@@ -34,7 +36,7 @@ export function THead(props: { header: Header }) {
 
   const renderRow = (row: TColumn[], rowIndex: number, totalRows: number) => {
     // because the only sortable columns are leaf columns (not parents)
-    const leafColumns = Header.leafColumns(props.header.columns);
+    const leafColumns = Header.leafColumns(header.columns);
 
     return (
       <TR>
@@ -53,15 +55,15 @@ export function THead(props: { header: Header }) {
   };
 
   const renderRows = () => {
-    const rows = Header.tabularFormat(props.header.columns);
+    const rows = Header.tabularFormat(header.columns);
 
     return rows.map((row, rowIndex) => renderRow(row, rowIndex, rows.length));
   };
 
-  if (props.header) {
+  if (header) {
     return (
       <thead
-        key={props.header.id}
+        key={header.id}
         className={classJoin(className('thead'), config.className.thead)}
       >
         {renderRows()}

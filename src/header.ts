@@ -5,7 +5,6 @@ import { px, width } from './util/width';
 import { getShadowTableWidths, ShadowTable } from './view/table/shadow';
 import {
   ComponentChild,
-  createRef,
   h,
   isValidElement,
   RefObject,
@@ -45,11 +44,13 @@ class Header extends Base {
    *
    * @param config
    */
-  adjustWidth(config: Config): this {
+  adjustWidth(
+    config: Config,
+    tableRef: RefObject<HTMLTableElement>,
+    tempRef: RefObject<HTMLDivElement>,
+  ): this {
     const container: Element = config.container;
-    const tableRef: RefObject<HTMLTableElement> = config.tableRef;
-    const tempRef: RefObject<HTMLDivElement> = config.tempRef;
-    const autoWidth = config.tempRef || true;
+    const autoWidth = config.autoWidth;
 
     if (!container) {
       // we can't calculate the width because the container
@@ -60,24 +61,23 @@ class Header extends Base {
     // pixels
     const containerWidth = container.clientWidth;
 
-    // let's create a shadow table with the first 10 rows of the data
-    // and let the browser to render the table with table-layout: auto
-    // no padding, margin or border to get the minimum space required
-    // to render columns. One the table is rendered and widths are known,
-    // we unmount the shadow table from the DOM and set the correct width
-    const shadowTable = createRef();
+
     let widths = {};
 
     if (tableRef.current && autoWidth) {
-      // render a ShadowTable with the first 10 rows
-      const el = h(ShadowTable, {
-        tableRef: tableRef,
-      });
-      el.ref = shadowTable;
+      // let's create a shadow table with the first 10 rows of the data
+      // and let the browser to render the table with table-layout: auto
+      // no padding, margin or border to get the minimum space required
+      // to render columns. One the table is rendered and widths are known,
+      // we unmount the shadow table from the DOM and set the correct width
+      render(
+        h(ShadowTable, {
+          tableRef: tableRef.current,
+        }),
+        tempRef.current,
+      );
 
-      render(el, tempRef.current);
-
-      widths = getShadowTableWidths(shadowTable.current);
+      widths = getShadowTableWidths(tempRef.current);
     }
 
     for (const column of flatten(Header.tabularFormat(this.columns))) {
