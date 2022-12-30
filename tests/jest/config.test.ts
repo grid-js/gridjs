@@ -1,16 +1,9 @@
 import { Config } from '../../src/config';
 import Storage from '../../src/storage/storage';
 import { Translator } from '../../src/i18n/language';
+import { PluginPosition } from '../../src/plugin';
 
 describe('Config', () => {
-  //let config: Partial<Config> = null;
-
-  //beforeEach(() => {
-  //  config = Config.fromPartialConfig({
-  //    data: [[1, 2, 3]],
-  //  });
-  //});
-
   it('should have data property', () => {
     const config = Config.fromPartialConfig({
       data: [[1, 2, 3]],
@@ -20,16 +13,16 @@ describe('Config', () => {
 
   it('assign should set the default when partial config is empty', () => {
     const config = new Config();
-    config.assign({})
-    expect(config.width).toEqual("100%");
+    config.assign({});
+    expect(config.width).toEqual('100%');
   });
 
   it('assign should set the correct default', () => {
     const config = new Config();
     config.assign({
-      width: "500px"
-    })
-    expect(config.width).toEqual("500px");
+      width: '500px',
+    });
+    expect(config.width).toEqual('500px');
   });
 
   it('should return the correct values', () => {
@@ -61,7 +54,11 @@ describe('Config', () => {
       search: true,
     });
 
-    expect(conf.plugin.get('search')).toHaveLength(1);
+    expect(conf.plugin.get('search')).toStrictEqual({
+      id: 'search',
+      position: PluginPosition.Header,
+      component: expect.any(Function),
+    });
   });
 
   it('should create a userConfig with pagination', () => {
@@ -71,7 +68,11 @@ describe('Config', () => {
       pagination: true,
     });
 
-    expect(conf.plugin.get('pagination')).toHaveLength(1);
+    expect(conf.plugin.get('pagination')).toStrictEqual({
+      id: 'pagination',
+      position: PluginPosition.Footer,
+      component: expect.any(Function),
+    });
   });
 
   it('should create a userConfig with header', () => {
@@ -100,11 +101,7 @@ describe('Config', () => {
     });
 
     expect(conf.header.columns.map((x) => x.name)).toStrictEqual(cols);
-    expect(conf.header.columns.map((x) => x.sort)).toStrictEqual([
-      {},
-      {},
-      {},
-    ]);
+    expect(conf.header.columns.map((x) => x.sort)).toStrictEqual([{}, {}, {}]);
   });
 
   it('should create a userConfig with header and custom sort', () => {
@@ -144,11 +141,12 @@ describe('Config', () => {
 
   it('should update config', () => {
     const config = Config.fromPartialConfig({
-      data: []
+      data: [],
     }).update({
       autoWidth: false,
     });
     expect(config.width).toBe('100%');
+    expect(config.height).toBe('auto');
     expect(config.autoWidth).toBeFalsy();
   });
 });

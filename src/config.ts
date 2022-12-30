@@ -93,13 +93,16 @@ export interface Config {
 }
 
 export class Config {
+  public constructor() {
+    Object.assign(this, Config.defaultConfig());
+  }
   /**
    * Assigns `updatedConfig` keys to the current config file
    *
    * @param partialConfig
    */
   assign(partialConfig: Partial<Config>): Config {
-    return Object.assign(this, Config.defaultConfig(), partialConfig);
+    return Object.assign(this, partialConfig);
   }
 
   /**
