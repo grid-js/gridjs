@@ -31,7 +31,7 @@ export function Pagination() {
     limit = 10,
     page = 0,
     resetPageOnUpdate = true,
-  } = config.pagination;
+  } = config.pagination as PaginationConfig;
 
   const processor = useRef<PaginationLimit | ServerPaginationLimit>(null);
   const [currentPage, setCurrentPage] = useState(page);

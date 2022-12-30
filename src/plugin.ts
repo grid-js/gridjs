@@ -94,7 +94,9 @@ export function PluginRenderer(props: {
       {},
       config.plugin
         .list(props.position)
-        .map((p) => h(p.component, { plugin: p, ...props.props })),
+        .map((p) => {
+          return h(p.component, { plugin: p, ...this.props.props });
+        }),
     );
   }
 

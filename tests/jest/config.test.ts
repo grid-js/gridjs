@@ -1,29 +1,47 @@
 import { Config } from '../../src/config';
 import Storage from '../../src/storage/storage';
 import { Translator } from '../../src/i18n/language';
-import { Search } from '../../src/view/plugin/search/search';
-import { Pagination } from '../../src/view/plugin/pagination';
 
 describe('Config', () => {
-  let config: Config = null;
+  //let config: Partial<Config> = null;
 
-  beforeEach(() => {
-    config = Config.fromUserConfig({
-      data: [[1, 2, 3]],
-    });
-  });
+  //beforeEach(() => {
+  //  config = Config.fromPartialConfig({
+  //    data: [[1, 2, 3]],
+  //  });
+  //});
 
   it('should have data property', () => {
+    const config = Config.fromPartialConfig({
+      data: [[1, 2, 3]],
+    });
     expect(config.data).toStrictEqual([[1, 2, 3]]);
   });
 
+  it('assign should set the default when partial config is empty', () => {
+    const config = new Config();
+    config.assign({})
+    expect(config.width).toEqual("100%");
+  });
+
+  it('assign should set the correct default', () => {
+    const config = new Config();
+    config.assign({
+      width: "500px"
+    })
+    expect(config.width).toEqual("500px");
+  });
+
   it('should return the correct values', () => {
+    const config = Config.fromPartialConfig({
+      data: [],
+    });
     expect(config.storage).toBeInstanceOf(Storage);
   });
 
   it('should create a userConfig', () => {
     const data = [[1, 2, 3]];
-    const conf = Config.fromUserConfig({
+    const conf = Config.fromPartialConfig({
       data: data,
       width: '400px',
       height: '500px',
@@ -38,56 +56,54 @@ describe('Config', () => {
 
   it('should create a userConfig with search', () => {
     const data = [[1, 2, 3]];
-    const conf = Config.fromUserConfig({
+    const conf = Config.fromPartialConfig({
       data: data,
       search: true,
     });
 
-    expect(conf.plugin.get<Search>('search').props.enabled).toBeTruthy();
+    expect(conf.plugin.get('search')).toHaveLength(1);
   });
 
   it('should create a userConfig with pagination', () => {
     const data = [[1, 2, 3]];
-    const conf = Config.fromUserConfig({
+    const conf = Config.fromPartialConfig({
       data: data,
       pagination: true,
     });
 
-    expect(
-      conf.plugin.get<Pagination>('pagination').props.enabled,
-    ).toBeTruthy();
+    expect(conf.plugin.get('pagination')).toHaveLength(1);
   });
 
   it('should create a userConfig with header', () => {
     const data = [[1, 2, 3]];
     const cols = ['a', 'b', 'c'];
-    const conf = Config.fromUserConfig({
+    const conf = Config.fromPartialConfig({
       data: data,
       columns: cols,
     });
 
     expect(conf.header.columns.map((x) => x.name)).toStrictEqual(cols);
-    expect(conf.header.columns.map((x) => x.sort.enabled)).toStrictEqual([
-      false,
-      false,
-      false,
+    expect(conf.header.columns.map((x) => x.sort)).toStrictEqual([
+      undefined,
+      undefined,
+      undefined,
     ]);
   });
 
   it('should create a userConfig with header and sort', () => {
     const data = [[1, 2, 3]];
     const cols = ['a', 'b', 'c'];
-    const conf = Config.fromUserConfig({
+    const conf = Config.fromPartialConfig({
       data: data,
       columns: cols,
       sort: true,
     });
 
     expect(conf.header.columns.map((x) => x.name)).toStrictEqual(cols);
-    expect(conf.header.columns.map((x) => x.sort.enabled)).toStrictEqual([
-      true,
-      true,
-      true,
+    expect(conf.header.columns.map((x) => x.sort)).toStrictEqual([
+      {},
+      {},
+      {},
     ]);
   });
 
@@ -97,37 +113,39 @@ describe('Config', () => {
       'a',
       {
         name: 'b',
-        sort: {
-          enabled: false,
-        },
+        sort: false,
       },
       {
         name: 'c',
         sort: null,
       },
     ];
-    const conf = Config.fromUserConfig({
+    const conf = Config.fromPartialConfig({
       data: data,
       columns: cols,
       sort: true,
     });
 
-    expect(conf.header.columns.map((x) => x.sort.enabled)).toStrictEqual([
-      true,
-      false,
-      false,
+    expect(conf.header.columns.map((x) => x.sort)).toStrictEqual([
+      {},
+      undefined,
+      undefined,
     ]);
   });
 
   it('should assign config keys', () => {
-    config.assign({
+    const config = Config.fromPartialConfig({
+      data: [],
+    }).assign({
       width: '1000px',
     });
     expect(config.width).toBe('1000px');
   });
 
   it('should update config', () => {
-    config.update({
+    const config = Config.fromPartialConfig({
+      data: []
+    }).update({
       autoWidth: false,
     });
     expect(config.width).toBe('100%');

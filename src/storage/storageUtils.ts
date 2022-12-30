@@ -1,4 +1,4 @@
-import { UserConfig } from '../config';
+import { Config } from '../config';
 import MemoryStorage from './memory';
 import Storage from './storage';
 import ServerStorage from './server';
@@ -7,25 +7,25 @@ import { decode, html } from '../util/html';
 
 class StorageUtils {
   /**
-   * Accepts the userConfig dict and tries to guess and return a Storage type
+   * Accepts a Config object and tries to guess and return a Storage type
    *
-   * @param userConfig
+   * @param config
    */
-  public static createFromUserConfig(userConfig: UserConfig): Storage<any> {
+  public static createFromConfig(config: Config): Storage<any> {
     let storage = null;
     // `data` array is provided
-    if (userConfig.data) {
-      storage = new MemoryStorage(userConfig.data);
+    if (config.data) {
+      storage = new MemoryStorage(config.data);
     }
 
-    if (userConfig.from) {
-      storage = new MemoryStorage(this.tableElementToArray(userConfig.from));
+    if (config.from) {
+      storage = new MemoryStorage(this.tableElementToArray(config.from));
       // remove the source table element from the DOM
-      userConfig.from.style.display = 'none';
+      config.from.style.display = 'none';
     }
 
-    if (userConfig.server) {
-      storage = new ServerStorage(userConfig.server);
+    if (config.server) {
+      storage = new ServerStorage(config.server);
     }
 
     if (!storage) {

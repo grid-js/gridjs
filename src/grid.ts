@@ -1,4 +1,4 @@
-import { Config, UserConfig } from './config';
+import { Config } from './config';
 import { h, render, VNode } from 'preact';
 import { Container } from './view/container';
 import log from './util/log';
@@ -11,16 +11,16 @@ class Grid extends EventEmitter<GridEvents> {
   public config: Config;
   public plugin: PluginManager;
 
-  constructor(userConfig?: UserConfig) {
+  constructor(config?: Partial<Config>) {
     super();
-    this.config = new Config({ instance: this, eventEmitter: this }).update(
-      userConfig,
-    );
+    this.config = new Config()
+      .assign({ instance: this, eventEmitter: this })
+      .update(config);
     this.plugin = this.config.plugin;
   }
 
-  public updateConfig(userConfig: Partial<UserConfig>): this {
-    this.config.update(userConfig);
+  public updateConfig(config: Partial<Config>): this {
+    this.config.update(config);
     return this;
   }
 

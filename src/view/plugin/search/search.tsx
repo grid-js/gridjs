@@ -22,11 +22,12 @@ export interface SearchConfig {
   };
 }
 
-export function Search(props: SearchConfig) {
+export function Search() {
   const [processor, setProcessor] = useState<
     GlobalSearchFilter | ServerGlobalSearchFilter
   >(undefined);
   const config = useConfig();
+  const props = config.search as SearchConfig;
   const _ = useTranslator();
   const { dispatch } = useStore();
   const state = useSelector((state) => state.search);
@@ -63,7 +64,7 @@ export function Search(props: SearchConfig) {
 
     // initial search
     if (props.keyword) dispatch(actions.SearchKeyword(props.keyword));
-  }, []);
+  }, [props]);
 
   useEffect(() => {
     if (processor) config.pipeline.register(processor);
@@ -98,4 +99,3 @@ export function Search(props: SearchConfig) {
     </div>
   );
 }
-

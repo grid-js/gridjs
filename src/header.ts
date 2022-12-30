@@ -1,6 +1,6 @@
 import { OneDArray, TColumn, TwoDArray } from './types';
 import Base from './base';
-import { Config, UserConfig } from './config';
+import { Config } from './config';
 import { px, width } from './util/width';
 import { getShadowTableWidths, ShadowTable } from './view/table/shadow';
 import {
@@ -110,7 +110,7 @@ class Header extends Base {
     return this;
   }
 
-  private setSort(userConfig: UserConfig, columns?: OneDArray<TColumn>): void {
+  private setSort(config: Config, columns?: OneDArray<TColumn>): void {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
@@ -120,7 +120,7 @@ class Header extends Base {
       }
 
       // implicit userConfig.sort flag
-      if (column.sort === undefined && userConfig.sort) {
+      if (column.sort === undefined && config.sort) {
         column.sort = {};
       }
 
@@ -134,41 +134,41 @@ class Header extends Base {
       }
 
       if (column.columns) {
-        this.setSort(userConfig, column.columns);
+        this.setSort(config, column.columns);
       }
     }
   }
 
   private setFixedHeader(
-    userConfig: UserConfig,
+    config: Config,
     columns?: OneDArray<TColumn>,
   ): void {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
       if (column.fixedHeader === undefined) {
-        column.fixedHeader = userConfig.fixedHeader;
+        column.fixedHeader = config.fixedHeader;
       }
 
       if (column.columns) {
-        this.setFixedHeader(userConfig, column.columns);
+        this.setFixedHeader(config, column.columns);
       }
     }
   }
 
   private setResizable(
-    userConfig: UserConfig,
+    config: Config,
     columns?: OneDArray<TColumn>,
   ): void {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
       if (column.resizable === undefined) {
-        column.resizable = userConfig.resizable;
+        column.resizable = config.resizable;
       }
 
       if (column.columns) {
-        this.setResizable(userConfig, column.columns);
+        this.setResizable(config, column.columns);
       }
     }
   }
@@ -196,13 +196,13 @@ class Header extends Base {
   }
 
   private populatePlugins(
-    userConfig: UserConfig,
+    config: Config,
     columns: OneDArray<TColumn>,
   ): void {
     // populate the cell columns
     for (const column of columns) {
       if (column.plugin !== undefined) {
-        userConfig.plugin.add({
+        config.plugin.add({
           id: column.id,
           ...column.plugin,
           position: PluginPosition.Cell,
@@ -244,32 +244,32 @@ class Header extends Base {
     return header;
   }
 
-  static fromUserConfig(userConfig: UserConfig): Header | null {
+  static createFromConfig(config: Config): Header | null {
     const header = new Header();
 
     // TODO: this part needs some refactoring
-    if (userConfig.from) {
-      header.columns = Header.fromHTMLTable(userConfig.from).columns;
-    } else if (userConfig.columns) {
-      header.columns = Header.fromColumns(userConfig.columns).columns;
+    if (config.from) {
+      header.columns = Header.fromHTMLTable(config.from).columns;
+    } else if (config.columns) {
+      header.columns = Header.fromColumns(config.columns).columns;
     } else if (
-      userConfig.data &&
-      typeof userConfig.data[0] === 'object' &&
-      !(userConfig.data[0] instanceof Array)
+      config.data &&
+      typeof config.data[0] === 'object' &&
+      !(config.data[0] instanceof Array)
     ) {
       // if data[0] is an object but not an Array
       // used for when a JSON payload is provided
-      header.columns = Object.keys(userConfig.data[0]).map((name) => {
+      header.columns = Object.keys(config.data[0]).map((name) => {
         return { name: name };
       });
     }
 
     if (header.columns.length) {
       header.setID();
-      header.setSort(userConfig);
-      header.setFixedHeader(userConfig);
-      header.setResizable(userConfig);
-      header.populatePlugins(userConfig, header.columns);
+      header.setSort(config);
+      header.setFixedHeader(config);
+      header.setResizable(config);
+      header.populatePlugins(config, header.columns);
       return header;
     }
 
