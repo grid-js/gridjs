@@ -2,7 +2,7 @@ import { h, ComponentChild, JSX } from 'preact';
 
 import { classJoin, className } from '../../util/className';
 import { CSSDeclaration, TColumn } from '../../types';
-import { Sort } from '../plugin/sort/sort';
+import { GenericSortConfig, Sort } from '../plugin/sort/sort';
 import { PluginRenderer } from '../../plugin';
 import { Resize } from '../plugin/resize/resize';
 import { useEffect, useRef, useState } from 'preact/hooks';
@@ -47,11 +47,20 @@ export function TH(
     e.stopPropagation();
 
     if (isSortable()) {
-      dispatch(SortActions.SortToggle(props.index));
+      const sortConfig = config.sort as GenericSortConfig;
+
+      dispatch(
+        SortActions.SortToggle(
+          props.index,
+          e.shiftKey === true && sortConfig.multiColumn,
+          props.column.sort.compare,
+        ),
+      );
     }
   };
 
   const keyDown = (e: JSX.TargetedKeyboardEvent<HTMLTableCellElement>) => {
+    // Enter key
     if (isSortable() && e.which === 13) {
       onClick(e);
     }

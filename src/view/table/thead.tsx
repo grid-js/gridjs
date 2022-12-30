@@ -10,7 +10,7 @@ import useSelector from 'src/hooks/useSelector';
 
 export function THead() {
   const config = useConfig();
-  const header = useSelector(state => state.header);
+  const header = useSelector((state) => state.header);
 
   const renderColumn = (
     column: TColumn,

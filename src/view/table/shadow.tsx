@@ -6,9 +6,7 @@ import { className } from '../../util/className';
  * when autoWidth option is enabled
  */
 export function ShadowTable(props: { tableRef: HTMLTableElement }) {
-  const shadowTable = props.tableRef.cloneNode(
-    true,
-  ) as HTMLTableElement;
+  const shadowTable = props.tableRef.cloneNode(true) as HTMLTableElement;
 
   shadowTable.style.position = 'absolute';
   shadowTable.style.width = '100%';

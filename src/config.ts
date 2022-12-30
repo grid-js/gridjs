@@ -1,10 +1,4 @@
-import {
-  CSSDeclaration,
-  OneDArray,
-  Status,
-  TColumn,
-  TData,
-} from './types';
+import { CSSDeclaration, OneDArray, Status, TColumn, TData } from './types';
 import Storage from './storage/storage';
 import Pipeline from './pipeline/pipeline';
 import Tabular from './tabular';

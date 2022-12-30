@@ -3,13 +3,7 @@ import Base from './base';
 import { Config } from './config';
 import { px, width } from './util/width';
 import { getShadowTableWidths, ShadowTable } from './view/table/shadow';
-import {
-  ComponentChild,
-  h,
-  isValidElement,
-  RefObject,
-  render,
-} from 'preact';
+import { ComponentChild, h, isValidElement, RefObject, render } from 'preact';
 import { camelCase } from './util/string';
 import { flatten } from './util/array';
 import logger from './util/log';
@@ -60,7 +54,6 @@ class Header extends Base {
 
     // pixels
     const containerWidth = container.clientWidth;
-
 
     let widths = {};
 
@@ -139,10 +132,7 @@ class Header extends Base {
     }
   }
 
-  private setFixedHeader(
-    config: Config,
-    columns?: OneDArray<TColumn>,
-  ): void {
+  private setFixedHeader(config: Config, columns?: OneDArray<TColumn>): void {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
@@ -156,10 +146,7 @@ class Header extends Base {
     }
   }
 
-  private setResizable(
-    config: Config,
-    columns?: OneDArray<TColumn>,
-  ): void {
+  private setResizable(config: Config, columns?: OneDArray<TColumn>): void {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
@@ -195,10 +182,7 @@ class Header extends Base {
     }
   }
 
-  private populatePlugins(
-    config: Config,
-    columns: OneDArray<TColumn>,
-  ): void {
+  private populatePlugins(config: Config, columns: OneDArray<TColumn>): void {
     // populate the cell columns
     for (const column of columns) {
       if (column.plugin !== undefined) {

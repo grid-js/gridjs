@@ -16,7 +16,7 @@ export function Container() {
   const { dispatch } = useStore();
   const status = useSelector((state) => state.status);
   const data = useSelector((state) => state.data);
-  const tableRef = useSelector(state => state.tableRef);
+  const tableRef = useSelector((state) => state.tableRef);
   const tempRef = createRef();
 
   useEffect(() => {
@@ -86,11 +86,7 @@ export function Container() {
 
       <FooterContainer />
 
-      <div
-        ref={tempRef}
-        id="gridjs-temp"
-        className={className('temp')}
-      />
+      <div ref={tempRef} id="gridjs-temp" className={className('temp')} />
     </div>
   );
 }

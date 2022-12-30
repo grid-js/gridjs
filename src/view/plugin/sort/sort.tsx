@@ -10,6 +10,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { useConfig } from '../../../hooks/useConfig';
 import { useTranslator } from '../../../i18n/language';
 import useSelector from '../../../hooks/useSelector';
+import { useStore } from 'src/hooks/useStore';
 
 // column specific config
 export interface SortConfig {
@@ -43,6 +44,8 @@ export function Sort(
     undefined,
   );
   const state = useSelector((state) => state.sort);
+  const { dispatch } = useStore();
+  const sortConfig = config.sort as GenericSortConfig;
 
   useEffect(() => {
     const processor = getOrCreateSortProcessor();
@@ -82,7 +85,7 @@ export function Sort(
   const getOrCreateSortProcessor = (): NativeSort | null => {
     let processorType = ProcessorType.Sort;
 
-    if (config.sort && typeof config.sort.server === 'object') {
+    if (sortConfig && typeof sortConfig.server === 'object') {
       processorType = ProcessorType.ServerSort;
     }
 
@@ -96,7 +99,7 @@ export function Sort(
       if (processorType === ProcessorType.ServerSort) {
         processor = new ServerSort({
           columns: state ? state.columns : [],
-          ...config.sort.server,
+          ...sortConfig.server,
         });
       } else {
         processor = new NativeSort({
@@ -112,22 +115,25 @@ export function Sort(
   const changeDirection = (e: JSX.TargetedMouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-
     // to sort two or more columns at the same time
-    actions.SortToggle(
-      props.index,
-      e.shiftKey === true && config.sort.multiColumn,
-      props.compare,
+    dispatch(
+      actions.SortToggle(
+        props.index,
+        e.shiftKey === true && sortConfig.multiColumn,
+        props.compare,
+      ),
     );
   };
 
-  let sortClassName = 'neutral';
+  const getSortClassName = (direction) => {
+    if (direction === 1) {
+      return 'asc';
+    } else if (direction === -1) {
+      return 'desc';
+    }
 
-  if (direction === 1) {
-    sortClassName = 'asc';
-  } else if (direction === -1) {
-    sortClassName = 'desc';
-  }
+    return 'neutral';
+  };
 
   return (
     <button
@@ -137,7 +143,7 @@ export function Sort(
       title={_(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
       className={classJoin(
         className('sort'),
-        className('sort', sortClassName),
+        className('sort', getSortClassName(direction)),
         config.className.sort,
       )}
       onClick={changeDirection}

@@ -92,11 +92,9 @@ export function PluginRenderer(props: {
     return h(
       Fragment,
       {},
-      config.plugin
-        .list(props.position)
-        .map((p) => {
-          return h(p.component, { plugin: p, ...this.props.props });
-        }),
+      config.plugin.list(props.position).map((p) => {
+        return h(p.component, { plugin: p, ...this.props.props });
+      }),
     );
   }
 

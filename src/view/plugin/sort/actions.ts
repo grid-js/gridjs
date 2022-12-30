@@ -85,7 +85,7 @@ export const SortColumn =
   };
 
 export const SortToggle =
-  (index: number, multi?: boolean, compare?: Comparator<TCell>) => (state) => {
+  (index: number, multi: boolean, compare?: Comparator<TCell>) => (state) => {
     const columns = state.sort ? [...state.sort.columns] : [];
     const column = columns.find((x) => x.index === index);
 
