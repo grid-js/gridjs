@@ -1,18 +1,13 @@
 import { h, RefObject } from 'preact';
 import { classJoin, className } from '../../../util/className';
 import { TColumn } from '../../../types';
-import { TH } from '../../table/th';
 import { throttle } from '../../../util/throttle';
-import { useState } from 'preact/hooks';
 
 export function Resize(props: {
   column: TColumn;
-  thRef: RefObject<typeof TH>;
+  thRef: RefObject<HTMLTableCellElement>;
 }) {
-  const [offsetStart, setOffsetStart] = useState(0);
-
   let moveFn: (e) => void;
-  let upFn: (e) => void;
 
   const getPageX = (e: MouseEvent | TouchEvent) => {
     if (e instanceof MouseEvent) {
@@ -25,27 +20,22 @@ export function Resize(props: {
   const start = (e: MouseEvent | TouchEvent) => {
     e.stopPropagation();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const thElement: HTMLElement = props.thRef.current;
+    const thElement = props.thRef.current;
 
-    setOffsetStart(parseInt(thElement.style.width, 10) - getPageX(e));
+    const offsetStart = parseInt(thElement.style.width, 10) - getPageX(e);
 
-    upFn = end;
-    moveFn = throttle(move, 10);
+    moveFn = throttle((e) => move(e, offsetStart), 10);
 
-    document.addEventListener('mouseup', upFn);
-    document.addEventListener('touchend', upFn);
+    document.addEventListener('mouseup', end);
+    document.addEventListener('touchend', end);
     document.addEventListener('mousemove', moveFn);
     document.addEventListener('touchmove', moveFn);
   };
 
-  const move = (e: MouseEvent | TouchEvent) => {
+  const move = (e: MouseEvent | TouchEvent, offsetStart: number) => {
     e.stopPropagation();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const thElement: HTMLElement = props.thRef.current;
+    const thElement = props.thRef.current;
 
     if (offsetStart + getPageX(e) >= parseInt(thElement.style.minWidth, 10)) {
       thElement.style.width = `${offsetStart + getPageX(e)}px`;
@@ -55,10 +45,10 @@ export function Resize(props: {
   const end = (e: MouseEvent | TouchEvent) => {
     e.stopPropagation();
 
-    document.removeEventListener('mouseup', upFn);
+    document.removeEventListener('mouseup', end);
     document.removeEventListener('mousemove', moveFn);
     document.removeEventListener('touchmove', moveFn);
-    document.removeEventListener('touchend', upFn);
+    document.removeEventListener('touchend', end);
   };
 
   return (

@@ -25,7 +25,12 @@ export function ShadowTable(props: { tableRef: HTMLTableElement }) {
 export function getShadowTableWidths(tempRef: HTMLDivElement): {
   [columnId: string]: { minWidth: number; width: number };
 } {
-  const tableElement: HTMLTableElement = tempRef.firstChild as HTMLTableElement;
+  const tableElement: HTMLTableElement = tempRef.querySelector('table') as HTMLTableElement;
+
+  if (!tableElement) {
+    return {};
+  }
+
   const tableClassName = tableElement.className;
   const tableStyle = tableElement.style.cssText;
   tableElement.className = `${tableClassName} ${className('shadowTable')}`;
@@ -38,7 +43,6 @@ export function getShadowTableWidths(tempRef: HTMLDivElement): {
   tableElement.style.outline = 'none';
 
   let obj = Array.from(
-    // TODO: should this be this.base?
     tableElement.parentNode.querySelectorAll<HTMLElement>('thead th'),
   ).reduce((prev, current) => {
     current.style.width = `${current.clientWidth}px`;
@@ -56,7 +60,6 @@ export function getShadowTableWidths(tempRef: HTMLDivElement): {
   tableElement.style.tableLayout = 'auto';
 
   obj = Array.from(
-    // TODO: should this be this.base?
     tableElement.parentNode.querySelectorAll<HTMLElement>('thead th'),
   ).reduce((prev, current) => {
     prev[current.getAttribute('data-column-id')]['width'] = current.clientWidth;
