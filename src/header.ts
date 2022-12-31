@@ -131,23 +131,6 @@ class Header extends Base {
     }
   }
 
-  private setFixedHeader(
-    fixedHeader: boolean,
-    columns?: OneDArray<TColumn>,
-  ): void {
-    const cols = columns || this.columns || [];
-
-    for (const column of cols) {
-      if (column.fixedHeader === undefined) {
-        column.fixedHeader = fixedHeader;
-      }
-
-      if (column.columns) {
-        this.setFixedHeader(fixedHeader, column.columns);
-      }
-    }
-  }
-
   private setResizable(resizable: boolean, columns?: OneDArray<TColumn>): void {
     const cols = columns || this.columns || [];
 
@@ -256,7 +239,6 @@ class Header extends Base {
     if (header.columns.length) {
       header.setID();
       header.setSort(config.sort);
-      header.setFixedHeader(config.fixedHeader);
       header.setResizable(config.resizable);
       header.populatePlugins(config.plugin, header.columns);
       return header;

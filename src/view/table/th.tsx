@@ -25,7 +25,7 @@ export function TH(
   useEffect(() => {
     setTimeout(() => {
       // sets the `top` style if the current TH is fixed
-      if (props.column.fixedHeader && thRef.current) {
+      if (config.fixedHeader && thRef.current) {
         const offsetTop = thRef.current.offsetTop;
 
         if (typeof offsetTop === 'number') {
@@ -104,7 +104,7 @@ export function TH(
       className={classJoin(
         className('th'),
         isSortable() ? className('th', 'sort') : null,
-        props.column.fixedHeader ? className('th', 'fixed') : null,
+        config.fixedHeader ? className('th', 'fixed') : null,
         config.className.th,
       )}
       onClick={onClick}

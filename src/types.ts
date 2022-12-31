@@ -33,7 +33,6 @@ export interface TColumn {
   minWidth?: string;
   sort?: SortConfig;
   columns?: OneDArray<TColumn>;
-  fixedHeader?: boolean;
   resizable?: boolean;
   hidden?: boolean;
   formatter?: (cell: TCell, row: Row, column: TColumn) => ComponentChild;

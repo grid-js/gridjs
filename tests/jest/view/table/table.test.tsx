@@ -7,15 +7,14 @@ import StorageUtils from '../../../../src/storage/storageUtils';
 import Pipeline from '../../../../src/pipeline/pipeline';
 //import StorageExtractor from '../../../../src/pipeline/extractor/storage';
 //import ArrayToTabularTransformer from '../../../../src/pipeline/transformer/arrayToTabular';
-//import { Status, TCell, TColumn } from '../../../../src/types';
+import { Status, TCell, TColumn } from '../../../../src/types';
 import { Translator } from '../../../../src/i18n/language';
 //import Tabular from '../../../../src/tabular';
 import { html } from '../../../../src/util/html';
-//import Row from '../../../../src/row';
+import Row from '../../../../src/row';
 import { Store } from '../../../../src/state/store';
 import Tabular from '../../../../src/tabular';
 //import * as TableActions from '../../../../src/view/actions';
-import { Status } from '../../../../src/types';
 
 describe('Table component', () => {
   let config: Config;
@@ -315,22 +314,16 @@ describe('Table component', () => {
       columns: ['c', 'd', 'e'],
     });
 
-    const config = Config.fromPartialConfig({
-      columns: ['c', 'd', 'e'],
-      data: [
+    config.store = new Store({
+      data: Tabular.fromArray([
         [1, 2, 3],
         ['a', 'b', 'c'],
-      ],
-      store: new Store({
-        data: Tabular.fromArray([
-          [1, 2, 3],
-          ['a', 'b', 'c'],
-        ]),
-        status: Status.Rendered,
-        header,
-      }),
-      fixedHeader: true,
+      ]),
+      status: Status.Rendered,
+      header,
     });
+
+    config.fixedHeader = true;
 
     const table = mount(
       <ConfigContext.Provider value={config}>
@@ -346,302 +339,271 @@ describe('Table component', () => {
     });
   });
 
-  //it('should only attached fixedHeader to some columns', async () => {
-  //  const config = Config.fromUserConfig({
-  //    data: [
-  //      [1, 2, 3],
-  //      ['a', 'b', 'c'],
-  //    ],
-  //    columns: [
-  //      'c',
-  //      'd',
-  //      {
-  //        name: 'e',
-  //        fixedHeader: false,
-  //      },
-  //    ],
-  //    fixedHeader: true,
-  //    dispatcher: new Dispatcher<any>(),
-  //  });
+  it('should set the correct top attribute for nested headers', async () => {
+    // to mock the offsetTop
+    Object.defineProperty(HTMLElement.prototype, 'offsetTop', {
+      configurable: true,
+      value: 50,
+    });
 
-  //  const table = mount(
-  //    <ConfigContext.Provider value={config}>
-  //      <Table
-  //        data={await config.pipeline.process()}
-  //        header={config.header}
-  //        status={Status.Rendered}
-  //        width={config.width}
-  //        height={config.height}
-  //      />
-  //    </ConfigContext.Provider>,
-  //  );
+    const header = Header.createFromConfig({
+      columns: [
+        {
+          name: 'c',
+          columns: ['c1', 'c2'],
+        },
+        'd',
+        {
+          name: 'e',
+          columns: [
+            {
+              name: 'e1',
+              columns: ['e11', 'e12'],
+            },
+            {
+              name: 'e2',
+              columns: ['e21'],
+            },
+          ],
+        },
+      ],
+    });
 
-  //  return new Promise<void>((resolve) => {
-  //    setTimeout(() => {
-  //      expect(table.html()).toMatchSnapshot();
-  //      resolve();
-  //    }, 0);
-  //  });
-  //});
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3, 4, 5, 6],
+        ['a', 'b', 'c', 'd', 'e', 'f'],
+      ]),
+      status: Status.Rendered,
+      header,
+    });
 
-  //it('should set the correct top attribute for nested headers', async () => {
-  //  // to mock the offsetTop
-  //  Object.defineProperty(HTMLElement.prototype, 'offsetTop', {
-  //    configurable: true,
-  //    value: 50,
-  //  });
+    config.fixedHeader = true;
 
-  //  const config = Config.fromUserConfig({
-  //    data: [
-  //      [1, 2, 3, 4, 5, 6],
-  //      ['a', 'b', 'c', 'd', 'e', 'f'],
-  //    ],
-  //    columns: [
-  //      {
-  //        name: 'c',
-  //        columns: ['c1', 'c2'],
-  //      },
-  //      'd',
-  //      {
-  //        name: 'e',
-  //        columns: [
-  //          {
-  //            name: 'e1',
-  //            columns: ['e11', 'e12'],
-  //          },
-  //          {
-  //            name: 'e2',
-  //            columns: ['e21'],
-  //          },
-  //        ],
-  //      },
-  //    ],
-  //    fixedHeader: true,
-  //    dispatcher: new Dispatcher<any>(),
-  //  });
+    const table = mount(
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
+    );
 
-  //  const table = mount(
-  //    <ConfigContext.Provider value={config}>
-  //      <Table
-  //        data={await config.pipeline.process()}
-  //        header={config.header}
-  //        status={Status.Rendered}
-  //        width={config.width}
-  //        height={config.height}
-  //      />
-  //    </ConfigContext.Provider>,
-  //  );
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        expect(table.html()).toMatchSnapshot();
+        resolve();
+      }, 0);
+    });
+  });
 
-  //  return new Promise<void>((resolve) => {
-  //    setTimeout(() => {
-  //      expect(table.html()).toMatchSnapshot();
-  //      resolve();
-  //    }, 0);
-  //  });
-  //});
+  it('should set the correct sort attribute for nested headers', async () => {
+    const data = [
+      [1, 2, 3, 4, 5, 6],
+      ['a', 'b', 'c', 'd', 'e', 'f'],
+    ];
 
-  //it('should set the correct sort attribute for nested headers', async () => {
-  //  const data = [
-  //    [1, 2, 3, 4, 5, 6],
-  //    ['a', 'b', 'c', 'd', 'e', 'f'],
-  //  ];
+    const flattenData = data
+      .reduce((prev, x) => [...prev, ...x], [])
+      .map((x) => x.toString());
 
-  //  const flattenData = data
-  //    .reduce((prev, x) => [...prev, ...x], [])
-  //    .map((x) => x.toString());
+    const config = Config.fromPartialConfig({
+      data: data,
+      columns: [
+        {
+          name: 'c',
+          columns: ['c1', 'c2'],
+        },
+        'd',
+        {
+          name: 'e',
+          columns: [
+            {
+              name: 'e1',
+              columns: ['e11', 'e12'],
+            },
+            {
+              name: 'e2',
+              columns: ['e21'],
+            },
+          ],
+        },
+      ],
+      sort: true,
+    });
 
-  //  const config = Config.fromUserConfig({
-  //    data: data,
-  //    columns: [
-  //      {
-  //        name: 'c',
-  //        columns: ['c1', 'c2'],
-  //      },
-  //      'd',
-  //      {
-  //        name: 'e',
-  //        columns: [
-  //          {
-  //            name: 'e1',
-  //            columns: ['e11', 'e12'],
-  //          },
-  //          {
-  //            name: 'e2',
-  //            columns: ['e21'],
-  //          },
-  //        ],
-  //      },
-  //    ],
-  //    sort: true,
-  //    dispatcher: new Dispatcher<any>(),
-  //  });
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3, 4, 5, 6],
+        ['a', 'b', 'c', 'd', 'e', 'f'],
+      ]),
+      status: Status.Rendered,
+      header: config.header,
+    });
 
-  //  const table = mount(
-  //    <ConfigContext.Provider value={config}>
-  //      <Table
-  //        data={await config.pipeline.process()}
-  //        header={config.header}
-  //        status={Status.Rendered}
-  //        width={config.width}
-  //        height={config.height}
-  //      />
-  //    </ConfigContext.Provider>,
-  //  );
+    const table = mount(
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
+    );
 
-  //  return new Promise<void>((resolve) => {
-  //    setTimeout(() => {
-  //      expect(
-  //        table
-  //          .find('td')
-  //          .map((x) => x.text())
-  //          .every((x) => x),
-  //      ).toBe(true);
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        expect(
+          table
+            .find('td')
+            .map((x) => x.text())
+            .every((x) => x),
+        ).toBe(true);
 
-  //      expect(
-  //        table
-  //          .find('td')
-  //          .map((x) => x.text())
-  //          .every((x) => flattenData.indexOf(x.toString()) > -1),
-  //      ).toBe(true);
+        expect(
+          table
+            .find('td')
+            .map((x) => x.text())
+            .every((x) => flattenData.indexOf(x.toString()) > -1),
+        ).toBe(true);
 
-  //      expect(table.html()).toMatchSnapshot();
+        expect(table.html()).toMatchSnapshot();
 
-  //      resolve();
-  //    }, 0);
-  //  });
-  //});
+        resolve();
+      }, 0);
+    });
+  });
 
-  //it('should render custom attributes for cells', async () => {
-  //  const config = Config.fromUserConfig({
-  //    data: [
-  //      [1, 2, 3],
-  //      ['a', 'b', 'c'],
-  //    ],
-  //    columns: [
-  //      {
-  //        name: 'c',
-  //        attributes: (_: TCell, __: Row, column: TColumn) =>
-  //          column.name === 'c' ? { height: '30px' } : {},
-  //      },
-  //      {
-  //        name: 'd',
-  //        attributes: (cell: TCell) =>
-  //          cell === 'b'
-  //            ? {
-  //                'data-row-c': true,
-  //              }
-  //            : {},
-  //      },
-  //      {
-  //        name: 'e',
-  //        attributes: {
-  //          rowSpan: 3,
-  //          'data-boo': 'xx',
-  //        },
-  //      },
-  //    ],
-  //    dispatcher: new Dispatcher<any>(),
-  //  });
+  it('should render custom attributes for cells', async () => {
+    const config = Config.fromPartialConfig({
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+      columns: [
+        {
+          name: 'c',
+          attributes: (_: TCell, __: Row, column: TColumn) =>
+            column.name === 'c' ? { height: '30px' } : {},
+        },
+        {
+          name: 'd',
+          attributes: (cell: TCell) =>
+            cell === 'b'
+              ? {
+                  'data-row-c': true,
+                }
+              : {},
+        },
+        {
+          name: 'e',
+          attributes: {
+            rowSpan: 3,
+            'data-boo': 'xx',
+          },
+        },
+      ],
+    });
 
-  //  const table = mount(
-  //    <ConfigContext.Provider value={config}>
-  //      <Table
-  //        data={await config.pipeline.process()}
-  //        header={config.header}
-  //        status={Status.Rendered}
-  //        width={config.width}
-  //        height={config.height}
-  //      />
-  //    </ConfigContext.Provider>,
-  //  );
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ]),
+      status: Status.Rendered,
+      header: config.header,
+    });
 
-  //  expect(table.html()).toMatchSnapshot();
-  //});
+    const table = mount(
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
+    );
 
-  //it('should only render custom attributes for the cell header', async () => {
-  //  const config = Config.fromUserConfig({
-  //    data: [
-  //      [1, 2, 3],
-  //      ['a', 'b', 'c'],
-  //    ],
-  //    columns: [
-  //      {
-  //        name: 'c',
-  //        attributes: (cell, row, col) => {
-  //          // both cell and row are empty when attributes function is called for a th
-  //          if (!cell && !row) {
-  //            return {
-  //              'data-col-c': col.id,
-  //            };
-  //          }
+    expect(table.html()).toMatchSnapshot();
+  });
 
-  //          return {};
-  //        },
-  //      },
-  //      {
-  //        name: 'd',
-  //      },
-  //      {
-  //        name: 'e',
-  //      },
-  //    ],
-  //    dispatcher: new Dispatcher<any>(),
-  //  });
+  it('should only render custom attributes for the cell header', async () => {
+    const config = Config.fromPartialConfig({
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+      columns: [
+        {
+          name: 'c',
+          attributes: (cell, row, col) => {
+            // both cell and row are empty when attributes function is called for a th
+            if (!cell && !row) {
+              return {
+                'data-col-c': col.id,
+              };
+            }
 
-  //  const table = mount(
-  //    <ConfigContext.Provider value={config}>
-  //      <Table
-  //        data={await config.pipeline.process()}
-  //        header={config.header}
-  //        status={Status.Rendered}
-  //        width={config.width}
-  //        height={config.height}
-  //      />
-  //    </ConfigContext.Provider>,
-  //  );
+            return {};
+          },
+        },
+        {
+          name: 'd',
+        },
+        {
+          name: 'e',
+        },
+      ],
+    });
 
-  //  expect(table.html()).toMatchSnapshot();
-  //});
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ]),
+      status: Status.Rendered,
+      header: config.header,
+    });
 
-  //it('should hide the columns with hidden: true', async () => {
-  //  const config = Config.fromUserConfig({
-  //    data: [
-  //      [1, 2, 3],
-  //      ['a', 'b', 'c'],
-  //    ],
-  //    columns: [
-  //      {
-  //        name: 'c',
-  //        hidden: true,
-  //      },
-  //      {
-  //        name: 'd',
-  //        hidden: true,
-  //        sort: true,
-  //      },
-  //      {
-  //        name: 'e',
-  //      },
-  //    ],
-  //    search: true,
-  //    dispatcher: new Dispatcher<any>(),
-  //  });
+    const table = mount(
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
+    );
 
-  //  const table = mount(
-  //    <ConfigContext.Provider value={config}>
-  //      <Table
-  //        data={await config.pipeline.process()}
-  //        header={config.header}
-  //        status={Status.Rendered}
-  //        width={config.width}
-  //        height={config.height}
-  //      />
-  //    </ConfigContext.Provider>,
-  //  );
+    expect(table.html()).toMatchSnapshot();
+  });
 
-  //  expect(table.html()).toMatchSnapshot();
-  //  expect(table.find('td').length).toBe(2);
-  //  expect(table.find('th').text()).toBe('e');
-  //  expect(table.find('th').length).toBe(1);
-  //});
+  it('should hide the columns with hidden: true', async () => {
+    const config = Config.fromPartialConfig({
+      data: [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ],
+      columns: [
+        {
+          name: 'c',
+          hidden: true,
+        },
+        {
+          name: 'd',
+          hidden: true,
+          sort: true,
+        },
+        {
+          name: 'e',
+        },
+      ],
+      search: true,
+    });
+
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ]),
+      status: Status.Rendered,
+      header: config.header,
+    });
+
+    const table = mount(
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
+    );
+
+    expect(table.html()).toMatchSnapshot();
+    expect(table.find('td').length).toBe(2);
+    expect(table.find('th').text()).toBe('e');
+    expect(table.find('th').length).toBe(1);
+  });
 });
