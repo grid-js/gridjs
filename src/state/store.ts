@@ -8,6 +8,7 @@ export class Store<S> {
   }
 
   getState = () => this.state;
+  getListeners = () => this.listeners;
 
   dispatch = (reducer: (state: S) => S) => {
     if (typeof reducer !== 'function')

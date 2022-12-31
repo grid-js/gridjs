@@ -5,16 +5,12 @@ import Header from '../../../../src/header';
 import { Config, ConfigContext } from '../../../../src/config';
 import StorageUtils from '../../../../src/storage/storageUtils';
 import Pipeline from '../../../../src/pipeline/pipeline';
-//import StorageExtractor from '../../../../src/pipeline/extractor/storage';
-//import ArrayToTabularTransformer from '../../../../src/pipeline/transformer/arrayToTabular';
 import { Status, TCell, TColumn } from '../../../../src/types';
 import { Translator } from '../../../../src/i18n/language';
-//import Tabular from '../../../../src/tabular';
 import { html } from '../../../../src/util/html';
 import Row from '../../../../src/row';
 import { Store } from '../../../../src/state/store';
 import Tabular from '../../../../src/tabular';
-//import * as TableActions from '../../../../src/view/actions';
 
 describe('Table component', () => {
   let config: Config;

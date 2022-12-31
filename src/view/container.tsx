@@ -8,8 +8,8 @@ import log from '../util/log';
 import { useEffect } from 'preact/hooks';
 import * as actions from './actions';
 import { useStore } from '../hooks/useStore';
-import useSelector from 'src/hooks/useSelector';
-import { useConfig } from 'src/hooks/useConfig';
+import useSelector from '../../src/hooks/useSelector';
+import { useConfig } from '../../src/hooks/useConfig';
 
 export function Container() {
   const config = useConfig();
