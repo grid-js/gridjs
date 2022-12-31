@@ -6,7 +6,7 @@ import Header from '../../header';
 import { TColumn } from '../../types';
 import { calculateRowColSpans } from '../../util/table';
 import { useConfig } from '../../hooks/useConfig';
-import useSelector from 'src/hooks/useSelector';
+import useSelector from '../../hooks/useSelector';
 
 export function THead() {
   const config = useConfig();

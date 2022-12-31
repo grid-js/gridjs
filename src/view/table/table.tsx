@@ -5,7 +5,7 @@ import { classJoin, className } from '../../util/className';
 import { useConfig } from '../../hooks/useConfig';
 import { useEffect, useRef } from 'preact/hooks';
 import * as actions from '../actions';
-import { useStore } from 'src/hooks/useStore';
+import { useStore } from '../../hooks/useStore';
 
 export function Table() {
   const config = useConfig();

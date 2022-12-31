@@ -6,7 +6,7 @@ import { Status } from '../../types';
 import { MessageRow } from './messageRow';
 import { useConfig } from '../../hooks/useConfig';
 import { useTranslator } from '../../i18n/language';
-import useSelector from 'src/hooks/useSelector';
+import useSelector from '../../hooks/useSelector';
 
 export function TBody() {
   const config = useConfig();

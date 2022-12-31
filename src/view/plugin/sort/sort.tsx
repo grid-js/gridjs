@@ -10,7 +10,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { useConfig } from '../../../hooks/useConfig';
 import { useTranslator } from '../../../i18n/language';
 import useSelector from '../../../hooks/useSelector';
-import { useStore } from 'src/hooks/useStore';
+import { useStore } from '../../../hooks/useStore';
 
 // column specific config
 export interface SortConfig {
