@@ -25,7 +25,9 @@ export function ShadowTable(props: { tableRef: HTMLTableElement }) {
 export function getShadowTableWidths(tempRef: HTMLDivElement): {
   [columnId: string]: { minWidth: number; width: number };
 } {
-  const tableElement: HTMLTableElement = tempRef.querySelector('table') as HTMLTableElement;
+  const tableElement: HTMLTableElement = tempRef.querySelector(
+    'table',
+  ) as HTMLTableElement;
 
   if (!tableElement) {
     return {};

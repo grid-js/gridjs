@@ -110,15 +110,10 @@ class Header extends Base {
       // sorting can only be enabled for columns without any children
       if (column.columns && column.columns.length > 0) {
         column.sort = undefined;
-      }
-
-      // implicit userConfig.sort flag
-      if (column.sort === undefined && config.sort) {
+      } else if (column.sort === undefined && config.sort) {
         column.sort = {};
-      }
-
-      // false, null, etc.
-      if (!column.sort) {
+      } else if (!column.sort) {
+        // false, null, etc.
         column.sort = undefined;
       } else if (typeof column.sort === 'object') {
         column.sort = {
