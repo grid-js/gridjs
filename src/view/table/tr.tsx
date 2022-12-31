@@ -7,7 +7,7 @@ import { TColumn } from '../../types';
 import { TD } from './td';
 import Header from '../../header';
 import { useConfig } from '../../hooks/useConfig';
-import useSelector from 'src/hooks/useSelector';
+import useSelector from '../../hooks/useSelector';
 
 export function TR(props: {
   row?: Row;
