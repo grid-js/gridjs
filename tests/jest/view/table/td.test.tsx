@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import { mount } from 'enzyme';
 import { TD } from '../../../../src/view/table/td';
 import Cell from '../../../../src/cell';
