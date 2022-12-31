@@ -38,7 +38,7 @@ describe('StorageResponseToArray', () => {
     };
 
     const transformer = new StorageResponseToArrayTransformer({
-      header: Header.fromUserConfig({
+      header: Header.createFromConfig({
         columns: [
           {
             name: 'name',
@@ -69,7 +69,7 @@ describe('StorageResponseToArray', () => {
     };
 
     const transformer = new StorageResponseToArrayTransformer({
-      header: Header.fromUserConfig({
+      header: Header.createFromConfig({
         columns: [
           {
             name: 'a',
@@ -119,7 +119,7 @@ describe('StorageResponseToArray', () => {
     };
 
     const transformer = new StorageResponseToArrayTransformer({
-      header: Header.fromUserConfig({
+      header: Header.createFromConfig({
         columns: [
           {
             data: (row: any) => row.name.first,

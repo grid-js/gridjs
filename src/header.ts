@@ -7,7 +7,8 @@ import { ComponentChild, h, isValidElement, RefObject, render } from 'preact';
 import { camelCase } from './util/string';
 import { flatten } from './util/array';
 import logger from './util/log';
-import { PluginPosition } from './plugin';
+import { PluginManager, PluginPosition } from './plugin';
+import { GenericSortConfig } from './view/plugin/sort/sort';
 
 class Header extends Base {
   private _columns: OneDArray<TColumn>;
@@ -103,14 +104,17 @@ class Header extends Base {
     return this;
   }
 
-  private setSort(config: Config, columns?: OneDArray<TColumn>): void {
+  private setSort(
+    sortConfig: GenericSortConfig | boolean,
+    columns?: OneDArray<TColumn>,
+  ): void {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
       // sorting can only be enabled for columns without any children
       if (column.columns && column.columns.length > 0) {
         column.sort = undefined;
-      } else if (column.sort === undefined && config.sort) {
+      } else if (column.sort === undefined && sortConfig) {
         column.sort = {};
       } else if (!column.sort) {
         // false, null, etc.
@@ -122,35 +126,38 @@ class Header extends Base {
       }
 
       if (column.columns) {
-        this.setSort(config, column.columns);
+        this.setSort(sortConfig, column.columns);
       }
     }
   }
 
-  private setFixedHeader(config: Config, columns?: OneDArray<TColumn>): void {
+  private setFixedHeader(
+    fixedHeader: boolean,
+    columns?: OneDArray<TColumn>,
+  ): void {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
       if (column.fixedHeader === undefined) {
-        column.fixedHeader = config.fixedHeader;
+        column.fixedHeader = fixedHeader;
       }
 
       if (column.columns) {
-        this.setFixedHeader(config, column.columns);
+        this.setFixedHeader(fixedHeader, column.columns);
       }
     }
   }
 
-  private setResizable(config: Config, columns?: OneDArray<TColumn>): void {
+  private setResizable(resizable: boolean, columns?: OneDArray<TColumn>): void {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
       if (column.resizable === undefined) {
-        column.resizable = config.resizable;
+        column.resizable = resizable;
       }
 
       if (column.columns) {
-        this.setResizable(config, column.columns);
+        this.setResizable(resizable, column.columns);
       }
     }
   }
@@ -177,11 +184,14 @@ class Header extends Base {
     }
   }
 
-  private populatePlugins(config: Config, columns: OneDArray<TColumn>): void {
+  private populatePlugins(
+    pluginManager: PluginManager,
+    columns: OneDArray<TColumn>,
+  ): void {
     // populate the cell columns
     for (const column of columns) {
       if (column.plugin !== undefined) {
-        config.plugin.add({
+        pluginManager.add({
           id: column.id,
           ...column.plugin,
           position: PluginPosition.Cell,
@@ -223,7 +233,7 @@ class Header extends Base {
     return header;
   }
 
-  static createFromConfig(config: Config): Header | null {
+  static createFromConfig(config: Partial<Config>): Header | null {
     const header = new Header();
 
     // TODO: this part needs some refactoring
@@ -245,10 +255,10 @@ class Header extends Base {
 
     if (header.columns.length) {
       header.setID();
-      header.setSort(config);
-      header.setFixedHeader(config);
-      header.setResizable(config);
-      header.populatePlugins(config, header.columns);
+      header.setSort(config.sort);
+      header.setFixedHeader(config.fixedHeader);
+      header.setResizable(config.resizable);
+      header.populatePlugins(config.plugin, header.columns);
       return header;
     }
 
