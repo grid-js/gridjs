@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import { mount } from 'enzyme';
 import { Config, ConfigContext } from '../../../../src/config';
 import { EventEmitter } from '../../../../src/util/eventEmitter';
