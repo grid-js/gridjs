@@ -14,6 +14,7 @@ import ptBR from './pt_BR';
 import faIR from './fa_IR';
 import nbNO from './nb_NO';
 import uaUA from './ua_UA';
+import csCZ from './cs_CZ';
 
 export {
   esES,
@@ -31,5 +32,6 @@ export {
   ptBR,
   faIR,
   nbNO,
-  uaUA
+  uaUA,
+  csCZ,
 };
