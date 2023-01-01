@@ -8,9 +8,6 @@ import {
   ProcessorType,
 } from '../../../src/pipeline/processor';
 import { flushPromises } from '../testUtil';
-import { EventEmitter } from '../../../src/util/eventEmitter';
-import { GridEvents } from '../../../src/events';
-import { PluginManager } from '../../../src/plugin';
 import { Status } from '../../../src/types';
 import * as TableActions from '../../../src/view/actions';
 import Tabular from '../../../src/tabular';
@@ -21,14 +18,16 @@ describe('Container component', () => {
   let config: Config;
 
   beforeEach(() => {
-    config = Config.fromPartialConfig({
+    config = new Config().update({
       data: [
         [1, 2, 3],
         ['a', 'b', 'c'],
       ],
-    }) as Config;
-    config.eventEmitter = new EventEmitter<GridEvents>();
-    config.plugin = new PluginManager();
+    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should render a container with table', async () => {
@@ -338,7 +337,7 @@ describe('Container component', () => {
   });
 
   it('should unregister the processors', async () => {
-    const config = Config.fromPartialConfig({
+    const config = new Config().update({
       pagination: true,
       search: true,
       sort: true,
@@ -375,6 +374,9 @@ describe('Container component', () => {
 
     container.unmount();
 
+    await flushPromises();
+    await flushPromises();
+    await flushPromises();
     await flushPromises();
 
     expect(mockUnregister.mock.calls.length).toBe(

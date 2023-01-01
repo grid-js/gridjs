@@ -73,6 +73,8 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
     processor: PipelineProcessor<any, any>,
     priority: number = null,
   ): void {
+    if (!processor) return;
+
     if (processor.type === null) {
       throw Error('Processor type is not defined');
     }

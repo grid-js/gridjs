@@ -67,7 +67,7 @@ export function Search() {
   }, [props]);
 
   useEffect(() => {
-    if (processor) config.pipeline.register(processor);
+    config.pipeline.register(processor);
 
     return () => config.pipeline.unregister(processor);
   }, [config, processor]);
