@@ -71,7 +71,7 @@ describe('Search plugin', () => {
     const input = wrapper.find('input');
     const onInput = input.props().onInput;
 
-    act(() => {
+    await act(() => {
       const htmlInputElement = document.createElement('input');
       htmlInputElement.value = '123';
       onInput({ target: htmlInputElement });
@@ -80,10 +80,14 @@ describe('Search plugin', () => {
     wrapper.update();
 
     await flushPromises();
-    await flushPromises();
-    await flushPromises();
 
-    expect(mock).toBeCalledWith('123');
+    return new Promise<void>((resolve) => {
+      // TODO: can we fix this and remove the setTimeout?
+      setTimeout(() => {
+        expect(mock).toBeCalledWith('123');
+        resolve();
+      }, 100);
+    });
   });
 
   it('should add config.className.search', async () => {
