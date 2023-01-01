@@ -3,13 +3,11 @@ import { mount } from 'enzyme';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Config, ConfigContext } from '../../../src/config';
 import { Container } from '../../../src/view/container';
-//import StorageUtils from '../../../src/storage/storageUtils';
 import {
   PipelineProcessor,
   ProcessorType,
 } from '../../../src/pipeline/processor';
 import { flushPromises } from '../testUtil';
-//import PipelineUtils from '../../../src/pipeline/pipelineUtils';
 import { EventEmitter } from '../../../src/util/eventEmitter';
 import { GridEvents } from '../../../src/events';
 import { PluginManager } from '../../../src/plugin';

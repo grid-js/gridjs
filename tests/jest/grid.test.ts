@@ -1,9 +1,38 @@
 import Grid from '../../src/grid';
+import * as Actions from '../../src/view/actions';
 import MemoryStorage from '../../src/storage/memory';
 import { mount } from 'enzyme';
 import { flushPromises } from './testUtil';
 
 describe('Grid class', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+    jest.clearAllMocks();
+  });
+
+  it('should trigger the events in the correct order', async () => {
+    const grid = new Grid({
+      columns: ['a', 'b', 'c'],
+      data: [[1, 2, 3]],
+    });
+
+    const setLoadingDataMock = jest.spyOn(Actions, 'SetLoadingData');
+    const setDataMock = jest.spyOn(Actions, 'SetData');
+    const setStatusToRenderedMock = jest.spyOn(Actions, 'SetStatusToRendered');
+
+    mount(grid.createElement());
+
+    await flushPromises();
+    await flushPromises();
+
+    expect(setLoadingDataMock).toHaveBeenCalledBefore(setDataMock);
+    expect(setDataMock).toHaveBeenCalledBefore(setStatusToRenderedMock);
+
+    expect(setLoadingDataMock).toBeCalledTimes(1);
+    expect(setDataMock).toBeCalledTimes(1);
+    expect(setStatusToRenderedMock).toBeCalledTimes(1);
+  });
+
   it('should raise an exception with empty config', () => {
     expect(() => {
       new Grid({}).render(document.createElement('div'));
@@ -48,50 +77,5 @@ describe('Grid class', () => {
 
     expect(grid.config.data).toStrictEqual(config1.data);
     expect(grid.config.width).toStrictEqual(config2.width);
-  });
-
-  it('should trigger the load and beforeLoad events', async () => {
-    const grid = new Grid({
-      data: [[1, 2, 3]],
-    });
-
-    const loadMock = jest.fn();
-    const beforeLoadMock = jest.fn();
-    grid.on('load', loadMock);
-    grid.on('beforeLoad', beforeLoadMock);
-
-    const container = mount(grid.createElement());
-
-    await container.instance().componentDidMount();
-    expect(loadMock).toBeCalled();
-    expect(beforeLoadMock).toBeCalled();
-  });
-
-  it('should trigger the events in the correct order', async () => {
-    const grid = new Grid({
-      columns: ['a', 'b', 'c'],
-      data: [[1, 2, 3]],
-    });
-
-    const loadMock = jest.fn();
-    const beforeLoadMock = jest.fn();
-    const readyMock = jest.fn();
-
-    grid.on('load', loadMock);
-    grid.on('beforeLoad', beforeLoadMock);
-    grid.on('ready', readyMock);
-
-    const container = mount(grid.createElement());
-
-    return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-
-      expect(beforeLoadMock).toHaveBeenCalledBefore(loadMock);
-      expect(loadMock).toHaveBeenCalledBefore(readyMock);
-
-      expect(beforeLoadMock).toBeCalledTimes(2);
-      expect(loadMock).toBeCalledTimes(2);
-      expect(readyMock).toBeCalledTimes(2);
-    });
   });
 });
