@@ -81,6 +81,7 @@ describe('Search plugin', () => {
 
     await flushPromises();
     await flushPromises();
+    await flushPromises();
 
     expect(mock).toBeCalledWith('123');
   });
