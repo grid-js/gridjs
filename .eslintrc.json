@@ -6,7 +6,7 @@
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": ["tsconfig.json", "*/tsconfig.release.json", "plugins/*/tsconfig.release.json", "tests/cypress/tsconfig.json"],
+    "project": ["tsconfig.json", "plugins/*/tsconfig.json", "tests/cypress/tsconfig.json"],
     "sourceType": "module"
   },
   "plugins": [
