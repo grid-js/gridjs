@@ -11,6 +11,7 @@ import { flushPromises } from '../testUtil';
 import { Status } from '../../../src/types';
 import * as TableActions from '../../../src/view/actions';
 import Tabular from '../../../src/tabular';
+import { EventEmitter } from '../../../src/util/eventEmitter';
 
 expect.extend(toHaveNoViolations);
 
@@ -314,11 +315,13 @@ describe('Container component', () => {
   });
 
   it('should remove the EventEmitter listeners', async () => {
-    config.update({
+    const config = new Config().update({
+      data: [],
       search: true,
       pagination: true,
       columns: ['Name', 'Phone Number'],
       sort: true,
+      eventEmitter: new EventEmitter<any>(),
     });
 
     const container = mount(
