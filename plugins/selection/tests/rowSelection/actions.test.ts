@@ -39,6 +39,26 @@ describe('Actions', () => {
     });
   });
 
+  it('should UNCHECK the correct item', () => {
+    const state = Actions.UncheckRow('42')({
+      rowSelection: {
+        rowIds: ['22', '11'],
+      },
+    });
+
+    expect(state).toStrictEqual({
+      rowSelection: {
+        rowIds: ['22', '11'],
+      },
+    });
+  });
+
+  it('should UNCHECK when rowIds is null', () => {
+    const state = Actions.UncheckRow('42')({});
+
+    expect(state).toStrictEqual({});
+  });
+
   it('should trigger UNCHECK when rowIds is empty', () => {
     const state = Actions.UncheckRow('42')({
       rowSelection: {

@@ -13,12 +13,13 @@ export const CheckRow = (rowId: string) => (state) => {
 };
 
 export const UncheckRow = (rowId: string) => (state) => {
-  const index = state.rowSelection.rowIds.indexOf(rowId);
+  const rowIds = state.rowSelection?.rowIds || [];
+  const index = rowIds.indexOf(rowId);
 
   // rowId doesn't exist
-  if (index === -1) state;
+  if (index === -1) return state;
 
-  const cloned = [...state.rowSelection.rowIds];
+  const cloned = [...rowIds];
   cloned.splice(index, 1);
 
   return {
