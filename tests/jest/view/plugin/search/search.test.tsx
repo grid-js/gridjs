@@ -1,12 +1,8 @@
 import { h } from 'preact';
+import { act } from 'preact/test-utils';
 import { mount } from 'enzyme';
 import { Config, ConfigContext } from '../../../../../src/config';
-import { EventEmitter } from '../../../../../src/util/eventEmitter';
-import { GridEvents } from '../../../../../src/events';
-import PipelineUtils from '../../../../../src/pipeline/pipelineUtils';
-import { Translator } from '../../../../../src/i18n/language';
 import { Search } from '../../../../../src/view/plugin/search/search';
-import Header from '../../../../../src/header';
 import * as SearchActions from '../../../../../src/view/plugin/search/actions';
 import { flushPromises } from '../../../testUtil';
 
@@ -14,12 +10,8 @@ describe('Search plugin', () => {
   let config: Config;
 
   beforeEach(() => {
-    config = new Config();
-    config.autoWidth = true;
-    config.eventEmitter = new EventEmitter<GridEvents>();
-    config.translator = new Translator();
-    config.pipeline = PipelineUtils.createFromConfig(config);
-    config.header = Header.fromUserConfig({
+    config = new Config().update({
+      data: [['a', 'b', 'c']],
       columns: ['Name', 'Phone Number'],
     });
   });
@@ -31,9 +23,15 @@ describe('Search plugin', () => {
   it('should render the search box', async () => {
     const mock = jest.spyOn(SearchActions, 'SearchKeyword');
 
+    config.update({
+      search: {
+        keyword: 'boo',
+      },
+    });
+
     const search = mount(
       <ConfigContext.Provider value={config}>
-        <Search keyword={'boo'} />
+        <Search />
       </ConfigContext.Provider>,
     );
 
@@ -43,6 +41,10 @@ describe('Search plugin', () => {
 
   it('should not call search if keyword is undefined', async () => {
     const mock = jest.spyOn(SearchActions, 'SearchKeyword');
+
+    config.update({
+      search: true,
+    });
 
     mount(
       <ConfigContext.Provider value={config}>
@@ -56,36 +58,44 @@ describe('Search plugin', () => {
   it('should call search action after input change', async () => {
     const mock = jest.spyOn(SearchActions, 'SearchKeyword');
 
+    config.update({
+      search: true,
+    });
+
     const wrapper = mount(
       <ConfigContext.Provider value={config}>
         <Search />
       </ConfigContext.Provider>,
     );
 
-    // https://github.com/preactjs/enzyme-adapter-preact-pure/issues/45
     const input = wrapper.find('input');
-    //console.log('INPUT', input.getDOMNode<HTMLInputElement>())
-    //input.getDOMNode<HTMLInputElement>().value = '123';
-    input.simulate('input', { target: { value: '1234' } });
+    const onInput = input.props().onInput;
 
-    return flushPromises().then(() => {
-      setTimeout(() => {
-        expect(mock).toBeCalledWith('123');
-      }, 0);
+    act(() => {
+      const htmlInputElement = document.createElement('input');
+      htmlInputElement.value = '123';
+      onInput({ target: htmlInputElement });
     });
+
+    wrapper.update();
+
+    await flushPromises();
+    await flushPromises();
+
+    expect(mock).toBeCalledWith('123');
   });
 
   it('should add config.className.search', async () => {
+    config.update({
+      search: true,
+      className: {
+        search: 'test-search-class-name',
+      },
+    });
+
     const search = mount(
-      <ConfigContext.Provider
-        value={{
-          ...config,
-          className: {
-            search: 'test-search-class-name',
-          },
-        }}
-      >
-        <Search keyword={'boo'} />
+      <ConfigContext.Provider value={config}>
+        <Search />
       </ConfigContext.Provider>,
     );
 
