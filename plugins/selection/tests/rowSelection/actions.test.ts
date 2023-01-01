@@ -1,43 +1,68 @@
-import { Dispatcher } from 'gridjs';
-import { RowSelectionActions } from '../../src/rowSelection/actions';
+import * as Actions from '../../src/rowSelection/actions';
 
 describe('Actions', () => {
-  const dispatcher = new Dispatcher();
-
-  beforeEach(() => {
-    dispatcher.dispatch = jest.fn();
-  });
-
   it('should trigger CHECK', () => {
-    const actions = new RowSelectionActions(dispatcher);
-    actions.check('42');
+    const state = Actions.CheckRow('42')({});
 
-    expect(dispatcher.dispatch).toBeCalledTimes(1);
-    expect(dispatcher.dispatch).toBeCalledWith({
-      payload: {
-        ROW_ID: '42',
+    expect(state).toStrictEqual({
+      rowSelection: {
+        rowIds: ['42'],
       },
-      type: 'CHECK',
     });
   });
 
-  it('should trigger CHECK twice', () => {
-    const actions = new RowSelectionActions(dispatcher);
-    actions.check('1');
-    actions.check('2');
-    expect(dispatcher.dispatch).toBeCalledTimes(2);
+  it('should trigger CHECK when rowIds already exists', () => {
+    const state = Actions.CheckRow('42')({
+      rowSelection: {
+        rowIds: ['24'],
+      },
+    });
+
+    expect(state).toStrictEqual({
+      rowSelection: {
+        rowIds: ['42', '24'],
+      },
+    });
   });
 
   it('should trigger UNCHECK', () => {
-    const actions = new RowSelectionActions(dispatcher);
-    actions.uncheck('24');
-
-    expect(dispatcher.dispatch).toBeCalledTimes(1);
-    expect(dispatcher.dispatch).toBeCalledWith({
-      payload: {
-        ROW_ID: '24',
+    const state = Actions.UncheckRow('42')({
+      rowSelection: {
+        rowIds: ['42'],
       },
-      type: 'UNCHECK',
+    });
+
+    expect(state).toStrictEqual({
+      rowSelection: {
+        rowIds: [],
+      },
+    });
+  });
+
+  it('should trigger UNCHECK when rowIds is empty', () => {
+    const state = Actions.UncheckRow('42')({
+      rowSelection: {
+        rowIds: [],
+      },
+    });
+
+    expect(state).toStrictEqual({
+      rowSelection: {
+        rowIds: [],
+      },
+    });
+  });
+
+  it('should CHECK and UNCHECK', () => {
+    let state = {};
+    state = Actions.CheckRow('42')(state);
+    state = Actions.CheckRow('24')(state);
+    state = Actions.UncheckRow('42')(state);
+
+    expect(state).toStrictEqual({
+      rowSelection: {
+        rowIds: ['24'],
+      },
     });
   });
 });

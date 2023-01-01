@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import * as actions from './actions';
 import { useStore, className, useEffect, useState, useSelector } from 'gridjs';
 import { Row } from 'gridjs';

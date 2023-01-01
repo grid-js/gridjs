@@ -1,11 +1,13 @@
 export const CheckRow = (rowId: string) => (state) => {
+  const rowIds = state.rowSelection?.rowIds || [];
+
   // rowId already exists
-  if (state.rowSelection.rowIds.indexOf(rowId) > -1) return state;
+  if (rowIds.indexOf(rowId) > -1) return state;
 
   return {
     ...state,
     rowSelection: {
-      rowIds: [rowId, ...state.rowSelection.rowIds],
+      rowIds: [rowId, ...rowIds],
     },
   };
 };
