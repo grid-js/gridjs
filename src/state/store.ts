@@ -1,4 +1,4 @@
-export class Store<S> {
+export class Store<S = Record<string, unknown>> {
   private state: S;
   private listeners: (() => void)[] = [];
   private isDispatching = false;
