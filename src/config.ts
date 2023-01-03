@@ -22,7 +22,7 @@ export const ConfigContext = createContext(null);
 export interface Config {
   // a reference to the current Grid.js instance
   instance: Grid;
-  store: Store<any>;
+  store: Store<unknown>;
   eventEmitter: EventEmitter<GridEvents>;
   plugin: PluginManager;
   /** container element that is used to mount the Grid.js to */
