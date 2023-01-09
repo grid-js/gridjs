@@ -87,7 +87,7 @@
     "postcss-nested": "^5.0.6",
     "postcss-scss": "^4.0.4",
     "postcss-sort-media-queries": "^4.1.0",
-    "prettier": "~2.7.1",
+    "prettier": "~2.8.2",
     "rimraf": "~3.0.2",
     "sass": "^1.54.5",
     "source-map-loader": "^4.0.0",
