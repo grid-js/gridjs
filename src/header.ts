@@ -62,7 +62,7 @@ class Header extends Base {
       // let's create a shadow table with the first 10 rows of the data
       // and let the browser to render the table with table-layout: auto
       // no padding, margin or border to get the minimum space required
-      // to render columns. One the table is rendered and widths are known,
+      // to render columns. Once the table is rendered and widths are known,
       // we unmount the shadow table from the DOM and set the correct width
       render(
         h(ShadowTable, {
