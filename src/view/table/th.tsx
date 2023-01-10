@@ -23,18 +23,16 @@ export function TH(
   const { dispatch } = useStore();
 
   useEffect(() => {
-    setTimeout(() => {
-      // sets the `top` style if the current TH is fixed
-      if (config.fixedHeader && thRef.current) {
-        const offsetTop = thRef.current.offsetTop;
+    // sets the `top` style if the current TH is fixed
+    if (config.fixedHeader && thRef.current) {
+      const offsetTop = thRef.current.offsetTop;
 
-        if (typeof offsetTop === 'number') {
-          setStyle({
-            top: offsetTop,
-          });
-        }
+      if (typeof offsetTop === 'number') {
+        setStyle({
+          top: offsetTop,
+        });
       }
-    }, 0);
+    }
   }, [thRef]);
 
   const isSortable = (): boolean => props.column.sort != undefined;
