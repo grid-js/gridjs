@@ -1,21 +1,21 @@
-name: Code Coverage
-
+name: 'coverage'
 on:
-  pull_request:
-    branches:
-      - master
-      - main
-
+    pull_request:
+        branches:
+            - master
+            - main
 jobs:
-  coverage:
-    runs-on: ubuntu-latest
-    env:
-      CI_JOB_NUMBER: 1
-    steps:
-      - uses: actions/checkout@v2
-      - run: npm install
-      - run: npm run install:plugins
-      - uses: artiomtr/jest-coverage-report-action@v1.3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          test_script: npm run test:jest
+    coverage:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - run: npm install
+            - run: npm run install:plugins
+            - uses: ArtiomTr/jest-coverage-report-action@v2
+              id: coverage
+              with:
+                  output: report-markdown
+                  test-script: npm run test:jest
+            - uses: marocchino/sticky-pull-request-comment@v2
+              with:
+                  message: ${{ steps.coverage.outputs.report }}

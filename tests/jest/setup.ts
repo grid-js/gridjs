@@ -1,44 +1,38 @@
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference types="enzyme-adapter-preact-pure"/>
-import 'enzyme-adapter-preact-pure';
 
 import { JSDOM } from 'jsdom';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-preact-pure';
 
-// Setup JSDOM
-const dom = new JSDOM('', {
+const jsdom = new JSDOM('', {
+  url: 'http://localhost/',
   // Enable `requestAnimationFrame` which Preact uses internally.
   pretendToBeVisual: true,
 });
+const { window } = jsdom;
 
-// eslint-disable-next-line
-// @ts-ignore
-global.Event = dom.window.Event;
+function copyProps(src, target) {
+  Object.defineProperties(target, {
+    ...Object.getOwnPropertyDescriptors(src),
+    ...Object.getOwnPropertyDescriptors(target),
+  });
+}
 
-// eslint-disable-next-line
-// @ts-ignore
-global.Node = dom.window.Node;
+global.window = window;
+global.document = window.document;
+global.Node = window.Node;
+global.Event = window.Event;
+global.Element = window.Element;
+global.HTMLElement = window.HTMLElement;
 
-// eslint-disable-next-line
-// @ts-ignore
-global.Element = dom.window.Element;
-
-// eslint-disable-next-line
-// @ts-ignore
-global.HTMLElement = dom.window.HTMLElement;
-
-// eslint-disable-next-line
-// @ts-ignore
-global.window = dom.window;
-
-// eslint-disable-next-line
-// @ts-ignore
-global.document = dom.window.document;
-
-// eslint-disable-next-line
-// @ts-ignore
-global.requestAnimationFrame = dom.window.requestAnimationFrame;
+global.requestAnimationFrame = function (callback) {
+  return setTimeout(callback, 0);
+};
+global.cancelAnimationFrame = function (id) {
+  clearTimeout(id);
+};
+copyProps(window, global);
 
 // Setup Enzyme
 configure({ adapter: new Adapter() });

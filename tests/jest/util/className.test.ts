@@ -14,12 +14,12 @@ describe('className', () => {
       expect(classJoin('boo', 'foo', 'bar')).toBe('boo foo bar');
     });
 
-    it('should return null when inputs are null and undefined', () => {
-      expect(classJoin(null, undefined, null)).toBe(null);
+    it('should return empty string when inputs are null and undefined', () => {
+      expect(classJoin(null, undefined, null)).toBe('');
     });
 
-    it('should return null when inputs are null', () => {
-      expect(classJoin(null, null)).toBe(null);
+    it('should return empty string when inputs are null', () => {
+      expect(classJoin(null, null)).toBe('');
     });
   });
 

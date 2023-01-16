@@ -2,7 +2,7 @@ import Header from '../../src/header';
 
 describe('Header class', () => {
   it('should return a tabular header cell (single row)', () => {
-    const header = Header.fromUserConfig({
+    const header = Header.createFromConfig({
       columns: [
         {
           name: 'h1',
@@ -23,7 +23,7 @@ describe('Header class', () => {
   });
 
   it('should return a tabular header cell (two levels)', () => {
-    const header = Header.fromUserConfig({
+    const header = Header.createFromConfig({
       columns: [
         {
           name: 'h1',
@@ -55,7 +55,7 @@ describe('Header class', () => {
   });
 
   it('should return a tabular header cell (complex definition)', () => {
-    const header = Header.fromUserConfig({
+    const header = Header.createFromConfig({
       columns: [
         {
           name: 'h1',
@@ -127,7 +127,7 @@ describe('Header class', () => {
   });
 
   it('should return a tabular header cell (three levels)', () => {
-    const header = Header.fromUserConfig({
+    const header = Header.createFromConfig({
       columns: [
         {
           name: 'h1',
@@ -170,7 +170,7 @@ describe('Header class', () => {
   });
 
   it('should set the hidden columns', () => {
-    const header = Header.fromUserConfig({
+    const header = Header.createFromConfig({
       columns: [
         {
           name: 'h1',

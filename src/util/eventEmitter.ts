@@ -50,6 +50,10 @@ export class EventEmitter<EventTypes> {
     }
   }
 
+  listeners(): { [event: string]: ((...args) => void)[] } {
+    return this.callbacks;
+  }
+
   on<EventName extends keyof EventTypes>(
     event: EventName,
     listener: (...args: EventArgs<EventTypes[EventName]>) => void,

@@ -1,22 +1,14 @@
 import { mount } from 'enzyme';
-import { createContext, h } from 'preact';
-import { Config } from '../../../../src/config';
-import { Plugin, PluginPosition } from '../../../../src/plugin';
+import { h } from 'preact';
+import { Config, ConfigContext } from '../../../../src/config';
 import { Pagination } from '../../../../src/view/plugin/pagination';
-import Header from '../../../../src/header';
 
 describe('Pagination plugin', () => {
   let config: Config;
-  const configContext = createContext(null);
-  const plugin: Plugin<any> = {
-    id: 'mypagination',
-    position: PluginPosition.Footer,
-    component: {},
-  };
 
   beforeEach(() => {
-    config = Config.fromUserConfig({
-      header: Header.fromColumns(['a', 'b', 'c']),
+    config = new Config().update({
+      columns: ['a', 'b', 'c'],
       data: [
         [1, 2, 3],
         [4, 5, 6],
@@ -30,20 +22,15 @@ describe('Pagination plugin', () => {
   });
 
   it('should render the pagination with no records', async () => {
-    config = Config.fromUserConfig({
-      header: Header.fromColumns(['a', 'b', 'c']),
+    config.update({
       data: [],
+      pagination: true,
     });
 
     const pagination = mount(
-      <configContext.Provider
-        value={{
-          ...config,
-          data: [],
-        }}
-      >
-        <Pagination plugin={plugin} enabled={true} />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Pagination />
+      </ConfigContext.Provider>,
     );
 
     await config.pipeline.process();
@@ -51,46 +38,60 @@ describe('Pagination plugin', () => {
   });
 
   it('should render the pagination with one page', async () => {
-    const pagination = mount(
-      <configContext.Provider value={config}>
-        <Pagination plugin={plugin} enabled={true} limit={3} />
-      </configContext.Provider>,
-    );
+    config.update({
+      pagination: {
+        limit: 3,
+      },
+    });
 
+    const pagination = mount(
+      <ConfigContext.Provider value={config}>
+        <Pagination />
+      </ConfigContext.Provider>,
+    );
     await config.pipeline.process();
+
     expect(pagination.html()).toMatchSnapshot();
   });
 
   it('should render the pagination with three page', async () => {
+    config.update({
+      pagination: {
+        limit: 1,
+      },
+    });
+
     const pagination = mount(
-      <configContext.Provider value={config}>
-        <Pagination plugin={plugin} enabled={true} limit={1} />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Pagination />
+      </ConfigContext.Provider>,
     );
 
-    await config.pipeline.process();
     pagination.update();
+    await config.pipeline.process();
 
     expect(pagination.html()).toMatchSnapshot();
   });
 
   it('should add config.className.pagination', async () => {
+    config.update({
+      pagination: {
+        limit: 1,
+      },
+      className: {
+        pagination: 'my-pagination-class',
+        paginationButton: 'my-button',
+        paginationButtonNext: 'my-next-button',
+        paginationButtonPrev: 'my-prev-button',
+        paginationSummary: 'my-page-summary',
+        paginationButtonCurrent: 'my-current-button',
+      },
+    });
+
     const pagination = mount(
-      <configContext.Provider
-        value={{
-          ...config,
-          className: {
-            pagination: 'my-pagination-class',
-            paginationButton: 'my-button',
-            paginationButtonNext: 'my-next-button',
-            paginationButtonPrev: 'my-prev-button',
-            paginationSummary: 'my-page-summary',
-            paginationButtonCurrent: 'my-current-button',
-          },
-        }}
-      >
-        <Pagination plugin={plugin} enabled={true} limit={1} />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Pagination />
+      </ConfigContext.Provider>,
     );
 
     await config.pipeline.process();

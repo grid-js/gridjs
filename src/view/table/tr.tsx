@@ -1,23 +1,25 @@
-import { h, JSX, Fragment, ComponentChildren } from 'preact';
+import { h, JSX, ComponentChildren } from 'preact';
 
 import Row from '../../row';
 import Cell from '../../cell';
-import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';
 import { TColumn } from '../../types';
 import { TD } from './td';
 import Header from '../../header';
+import { useConfig } from '../../hooks/useConfig';
+import useSelector from '../../hooks/useSelector';
 
-export interface TRProps extends BaseProps {
+export function TR(props: {
   row?: Row;
-  header?: Header;
   messageRow?: boolean;
-}
+  children?: ComponentChildren;
+}) {
+  const config = useConfig();
+  const header = useSelector((state) => state.header);
 
-export class TR extends BaseComponent<TRProps> {
-  private getColumn(cellIndex: number): TColumn {
-    if (this.props.header) {
-      const cols = Header.leafColumns(this.props.header.columns);
+  const getColumn = (cellIndex: number): TColumn => {
+    if (header) {
+      const cols = Header.leafColumns(header.columns);
 
       if (cols) {
         return cols[cellIndex];
@@ -25,46 +27,35 @@ export class TR extends BaseComponent<TRProps> {
     }
 
     return null;
-  }
+  };
 
-  private handleClick(e: JSX.TargetedMouseEvent<HTMLTableRowElement>): void {
-    if (this.props.messageRow) return;
-    this.config.eventEmitter.emit('rowClick', e, this.props.row);
-  }
+  const handleClick = (
+    e: JSX.TargetedMouseEvent<HTMLTableRowElement>,
+  ): void => {
+    if (props.messageRow) return;
+    config.eventEmitter.emit('rowClick', e, props.row);
+  };
 
-  private getChildren(): ComponentChildren {
-    if (this.props.children) {
-      return this.props.children;
-    } else {
-      return (
-        <Fragment>
-          {this.props.row.cells.map((cell: Cell, i) => {
-            const column = this.getColumn(i);
-
-            if (column && column.hidden) return null;
-
-            return (
-              <TD
-                key={cell.id}
-                cell={cell}
-                row={this.props.row}
-                column={column}
-              />
-            );
-          })}
-        </Fragment>
-      );
+  const getChildren = (): ComponentChildren => {
+    if (props.children) {
+      return props.children;
     }
-  }
 
-  render() {
-    return (
-      <tr
-        className={classJoin(className('tr'), this.config.className.tr)}
-        onClick={this.handleClick.bind(this)}
-      >
-        {this.getChildren()}
-      </tr>
-    );
-  }
+    return props.row.cells.map((cell: Cell, i) => {
+      const column = getColumn(i);
+
+      if (column && column.hidden) return null;
+
+      return <TD key={cell.id} cell={cell} row={props.row} column={column} />;
+    });
+  };
+
+  return (
+    <tr
+      className={classJoin(className('tr'), config.className.tr)}
+      onClick={handleClick}
+    >
+      {getChildren()}
+    </tr>
+  );
 }

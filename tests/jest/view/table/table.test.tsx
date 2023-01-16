@@ -1,22 +1,19 @@
+import { h } from 'preact';
 import { mount } from 'enzyme';
-import { createContext, h } from 'preact';
 import { Table } from '../../../../src/view/table/table';
 import Header from '../../../../src/header';
-import { Config } from '../../../../src/config';
+import { Config, ConfigContext } from '../../../../src/config';
 import StorageUtils from '../../../../src/storage/storageUtils';
 import Pipeline from '../../../../src/pipeline/pipeline';
-import StorageExtractor from '../../../../src/pipeline/extractor/storage';
-import ArrayToTabularTransformer from '../../../../src/pipeline/transformer/arrayToTabular';
 import { Status, TCell, TColumn } from '../../../../src/types';
-import Dispatcher from '../../../../src/util/dispatcher';
 import { Translator } from '../../../../src/i18n/language';
-import Tabular from '../../../../src/tabular';
 import { html } from '../../../../src/util/html';
 import Row from '../../../../src/row';
+import { Store } from '../../../../src/state/store';
+import Tabular from '../../../../src/tabular';
 
 describe('Table component', () => {
   let config: Config;
-  const configContext = createContext(null);
 
   beforeEach(() => {
     config = new Config();
@@ -25,26 +22,20 @@ describe('Table component', () => {
       ['a', 'b', 'c'],
     ];
 
+    config.store = new Store({
+      data: Tabular.fromArray(config.data),
+    });
     config.autoWidth = true;
-    config.storage = StorageUtils.createFromUserConfig(config);
-    config.dispatcher = new Dispatcher();
+    config.storage = StorageUtils.createFromConfig(config);
     config.translator = new Translator();
-    config.pipeline = new Pipeline([
-      new StorageExtractor({ storage: config.storage }),
-      new ArrayToTabularTransformer(),
-    ]);
+    config.pipeline = new Pipeline([]);
   });
 
   it('should render a table', async () => {
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
@@ -55,15 +46,15 @@ describe('Table component', () => {
       loading: 'my-loading-class',
     };
 
+    config.store = new Store({
+      data: null,
+      status: Status.Loading,
+    });
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={new Tabular()}
-          status={Status.Loading}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.find('.my-loading-class').hostNodes().name()).toBe('td');
@@ -74,104 +65,115 @@ describe('Table component', () => {
   });
 
   it('should render a table with header', async () => {
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ]),
+      header: Header.createFromConfig({ columns: ['h1', 'h2', 'h3'] }),
+    });
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should render a table with width', async () => {
+    config.width = '300px';
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ]),
+      header: Header.createFromConfig({ columns: ['h1', 'h2', 'h3'] }),
+      status: Status.Rendered,
+    });
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          width="300px"
-          height={config.height}
-          header={Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] })}
-          status={Status.Rendered}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should render a table with column width', async () => {
-    const header = Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] });
+    const header = Header.createFromConfig({ columns: ['h1', 'h2', 'h3'] });
     header.columns[0].width = '10%';
     header.columns[2].width = '300px';
 
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ]),
+      status: Status.Rendered,
+      header,
+    });
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should render a table with column sort', async () => {
-    const header = Header.fromUserConfig({ columns: ['h1', 'h2', 'h3'] });
-    header.columns[0].sort = {
-      enabled: true,
-    };
-    header.columns[2].sort = {
-      enabled: true,
-    };
+    const header = Header.createFromConfig({ columns: ['h1', 'h2', 'h3'] });
+    header.columns[0].sort = {};
+    header.columns[2].sort = {};
+
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ]),
+      status: Status.Rendered,
+      header,
+    });
 
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should render a table without autoFix', async () => {
-    const header = Header.fromUserConfig({
+    const header = Header.createFromConfig({
       columns: ['h1', 'h2', 'h3'],
       autoWidth: false,
     });
 
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ]),
+      status: Status.Rendered,
+      header,
+    });
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should render a table without data', async () => {
-    const header = Header.fromUserConfig({
+    const header = Header.createFromConfig({
       columns: ['h1', 'h2', 'h3'],
     });
 
@@ -179,43 +181,43 @@ describe('Table component', () => {
       notfound: 'my-notfound-class',
     };
 
+    config.store = new Store({
+      data: Tabular.fromArray([]),
+      status: Status.Rendered,
+      header,
+    });
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={Tabular.fromArray<TCell>([])}
-          header={header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should render a table with null', async () => {
-    const header = Header.fromUserConfig({
+    const header = Header.createFromConfig({
       columns: ['h1', 'h2', 'h3'],
     });
 
+    config.store = new Store({
+      data: null,
+      status: Status.Rendered,
+      header,
+    });
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={null}
-          header={header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should attach styles', async () => {
-    const header = Header.fromUserConfig({
+    const header = Header.createFromConfig({
       columns: ['h1', 'h2', 'h3'],
     });
 
@@ -229,23 +231,23 @@ describe('Table component', () => {
       },
     };
 
+    config.store = new Store({
+      data: null,
+      status: Status.Rendered,
+      header,
+    });
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={null}
-          header={header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should render header with complex content', async () => {
-    const header = Header.fromUserConfig({
+    const header = Header.createFromConfig({
       columns: [
         {
           id: 'h1',
@@ -259,23 +261,23 @@ describe('Table component', () => {
       ],
     });
 
+    config.store = new Store({
+      data: null,
+      status: Status.Rendered,
+      header,
+    });
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={null}
-          header={header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should render header with TColumn object', async () => {
-    const header = Header.fromUserConfig({
+    const header = Header.createFromConfig({
       columns: [
         {
           name: html('<h1>h1</h1>'),
@@ -288,80 +290,41 @@ describe('Table component', () => {
       ],
     });
 
+    config.store = new Store({
+      data: null,
+      status: Status.Rendered,
+      header,
+    });
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={null}
-          header={header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should attach the fixedHeader classname', async () => {
-    const config = Config.fromUserConfig({
-      data: [
-        [1, 2, 3],
-        ['a', 'b', 'c'],
-      ],
+    const header = Header.createFromConfig({
       columns: ['c', 'd', 'e'],
-      fixedHeader: true,
-      dispatcher: new Dispatcher<any>(),
     });
 
-    const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={config.header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
-    );
-
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        expect(table.html()).toMatchSnapshot();
-        resolve();
-      }, 0);
-    });
-  });
-
-  it('should only attached fixedHeader to some columns', async () => {
-    const config = Config.fromUserConfig({
-      data: [
+    config.store = new Store({
+      data: Tabular.fromArray([
         [1, 2, 3],
         ['a', 'b', 'c'],
-      ],
-      columns: [
-        'c',
-        'd',
-        {
-          name: 'e',
-          fixedHeader: false,
-        },
-      ],
-      fixedHeader: true,
-      dispatcher: new Dispatcher<any>(),
+      ]),
+      status: Status.Rendered,
+      header,
     });
 
+    config.fixedHeader = true;
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={config.header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     return new Promise<void>((resolve) => {
@@ -379,11 +342,7 @@ describe('Table component', () => {
       value: 50,
     });
 
-    const config = Config.fromUserConfig({
-      data: [
-        [1, 2, 3, 4, 5, 6],
-        ['a', 'b', 'c', 'd', 'e', 'f'],
-      ],
+    const header = Header.createFromConfig({
       columns: [
         {
           name: 'c',
@@ -404,20 +363,23 @@ describe('Table component', () => {
           ],
         },
       ],
-      fixedHeader: true,
-      dispatcher: new Dispatcher<any>(),
     });
 
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3, 4, 5, 6],
+        ['a', 'b', 'c', 'd', 'e', 'f'],
+      ]),
+      status: Status.Rendered,
+      header,
+    });
+
+    config.fixedHeader = true;
+
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={config.header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     return new Promise<void>((resolve) => {
@@ -438,7 +400,7 @@ describe('Table component', () => {
       .reduce((prev, x) => [...prev, ...x], [])
       .map((x) => x.toString());
 
-    const config = Config.fromUserConfig({
+    const config = Config.fromPartialConfig({
       data: data,
       columns: [
         {
@@ -461,19 +423,21 @@ describe('Table component', () => {
         },
       ],
       sort: true,
-      dispatcher: new Dispatcher<any>(),
+    });
+
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3, 4, 5, 6],
+        ['a', 'b', 'c', 'd', 'e', 'f'],
+      ]),
+      status: Status.Rendered,
+      header: config.header,
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={config.header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     return new Promise<void>((resolve) => {
@@ -500,7 +464,7 @@ describe('Table component', () => {
   });
 
   it('should render custom attributes for cells', async () => {
-    const config = Config.fromUserConfig({
+    const config = Config.fromPartialConfig({
       data: [
         [1, 2, 3],
         ['a', 'b', 'c'],
@@ -528,26 +492,28 @@ describe('Table component', () => {
           },
         },
       ],
-      dispatcher: new Dispatcher<any>(),
+    });
+
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ]),
+      status: Status.Rendered,
+      header: config.header,
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={config.header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should only render custom attributes for the cell header', async () => {
-    const config = Config.fromUserConfig({
+    const config = Config.fromPartialConfig({
       data: [
         [1, 2, 3],
         ['a', 'b', 'c'],
@@ -573,26 +539,28 @@ describe('Table component', () => {
           name: 'e',
         },
       ],
-      dispatcher: new Dispatcher<any>(),
+    });
+
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ]),
+      status: Status.Rendered,
+      header: config.header,
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={config.header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();
   });
 
   it('should hide the columns with hidden: true', async () => {
-    const config = Config.fromUserConfig({
+    const config = Config.fromPartialConfig({
       data: [
         [1, 2, 3],
         ['a', 'b', 'c'],
@@ -612,19 +580,21 @@ describe('Table component', () => {
         },
       ],
       search: true,
-      dispatcher: new Dispatcher<any>(),
+    });
+
+    config.store = new Store({
+      data: Tabular.fromArray([
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+      ]),
+      status: Status.Rendered,
+      header: config.header,
     });
 
     const table = mount(
-      <configContext.Provider value={config}>
-        <Table
-          data={await config.pipeline.process()}
-          header={config.header}
-          status={Status.Rendered}
-          width={config.width}
-          height={config.height}
-        />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Table />
+      </ConfigContext.Provider>,
     );
 
     expect(table.html()).toMatchSnapshot();

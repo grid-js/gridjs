@@ -1,10 +1,4 @@
-import {
-  CSSDeclaration,
-  OneDArray,
-  ProtoExtends,
-  TColumn,
-  TData,
-} from './types';
+import { CSSDeclaration, OneDArray, Status, TColumn, TData } from './types';
 import Storage from './storage/storage';
 import Pipeline from './pipeline/pipeline';
 import Tabular from './tabular';
@@ -12,31 +6,30 @@ import { Search, SearchConfig } from './view/plugin/search/search';
 import { Pagination, PaginationConfig } from './view/plugin/pagination';
 import Header from './header';
 import { ServerStorageOptions } from './storage/server';
-import Dispatcher from './util/dispatcher';
 import { GenericSortConfig } from './view/plugin/sort/sort';
 import { Language, Translator } from './i18n/language';
-import { Component, ComponentChild, createRef, RefObject } from 'preact';
+import { ComponentChild, createContext, createRef, RefObject } from 'preact';
 import StorageUtils from './storage/storageUtils';
 import PipelineUtils from './pipeline/pipelineUtils';
 import { EventEmitter } from './util/eventEmitter';
 import { GridEvents } from './events';
 import { PluginManager, PluginPosition, Plugin } from './plugin';
 import Grid from './grid';
+import { Store } from './state/store';
 
-// Config type used internally
+export const ConfigContext = createContext(null);
+
 export interface Config {
   // a reference to the current Grid.js instance
   instance: Grid;
+  store: Store;
   eventEmitter: EventEmitter<GridEvents>;
-  dispatcher: Dispatcher<any>;
   plugin: PluginManager;
   /** container element that is used to mount the Grid.js to */
   // TODO: change this to an element reference
   container?: Element;
   /** pointer to the main table element */
-  tableRef?: RefObject<Component>;
-  /** gridjs-temp div which is used internally */
-  tempRef?: RefObject<HTMLDivElement>;
+  tableRef?: RefObject<HTMLTableElement>;
   data?: TData | (() => TData) | (() => Promise<TData>);
   server?: ServerStorageOptions;
   header?: Header;
@@ -50,9 +43,17 @@ export interface Config {
   width: string;
   /** sets the height of the table */
   height: string;
-  pagination: PaginationConfig;
-  sort: GenericSortConfig;
+  pagination: PaginationConfig | boolean;
+  sort: GenericSortConfig | boolean;
   translator: Translator;
+  /** fixes the table header to the top of the table */
+  fixedHeader: boolean;
+  /** Resizable columns? */
+  resizable: boolean;
+  columns: OneDArray<TColumn | string | ComponentChild>;
+  search: SearchConfig | boolean;
+  language: Language;
+  plugins?: Plugin<any>[];
   style?: Partial<{
     table: CSSDeclaration;
     td: CSSDeclaration;
@@ -85,96 +86,59 @@ export interface Config {
   }>;
 }
 
-// Config type used by the consumers
-interface UserConfigExtend {
-  /** fixes the table header to the top of the table */
-  fixedHeader: boolean;
-  /** Resizable columns? */
-  resizable: boolean;
-  columns: OneDArray<TColumn | string | ComponentChild>;
-  search: SearchConfig | boolean;
-  pagination: PaginationConfig | boolean;
-  // implicit option to enable the sort plugin globally
-  sort: GenericSortConfig | boolean;
-  language: Language;
-  plugins?: Plugin<any>[];
-}
-
-export type UserConfig = ProtoExtends<
-  Partial<Config>,
-  Partial<UserConfigExtend>
->;
-
 export class Config {
-  // this is the config file passed by the user
-  // we need this for Config.update()
-  private _userConfig: UserConfig;
-
-  constructor(config?: Partial<Config>) {
-    Object.assign(this, {
-      ...Config.defaultConfig(),
-      ...config,
-    });
-
-    this._userConfig = {};
+  public constructor() {
+    Object.assign(this, Config.defaultConfig());
   }
-
   /**
    * Assigns `updatedConfig` keys to the current config file
    *
-   * @param updatedConfig
+   * @param partialConfig
    */
-  assign(updatedConfig: Partial<Config>): Config {
-    for (const key of Object.keys(updatedConfig)) {
-      // because we don't want to update the _userConfig cache
-      if (key === '_userConfig') continue;
-
-      this[key] = updatedConfig[key];
-    }
-
-    return this;
+  assign(partialConfig: Partial<Config>): Config {
+    return Object.assign(this, partialConfig);
   }
 
   /**
-   * Updates the config from a UserConfig
+   * Updates the config from a partial Config
    *
-   * @param userConfig
+   * @param partialConfig
    */
-  update(userConfig: Partial<UserConfig>): Config {
-    if (!userConfig) return this;
+  update(partialConfig: Partial<Config>): Config {
+    if (!partialConfig) return this;
 
-    this._userConfig = {
-      ...this._userConfig,
-      ...userConfig,
-    };
-
-    this.assign(Config.fromUserConfig(this._userConfig));
+    this.assign(
+      Config.fromPartialConfig({
+        ...this,
+        ...partialConfig,
+      }),
+    );
 
     return this;
   }
 
-  static defaultConfig(): Config {
+  static defaultConfig(): Partial<Config> {
     return {
+      store: new Store({
+        status: Status.Init,
+        header: undefined,
+        data: null,
+      }),
       plugin: new PluginManager(),
-      dispatcher: new Dispatcher<any>(),
       tableRef: createRef(),
-      tempRef: createRef(),
       width: '100%',
       height: 'auto',
       autoWidth: true,
       style: {},
       className: {},
-    } as Config;
+    };
   }
 
-  static fromUserConfig(userConfig: UserConfig): Config {
-    const config = new Config(userConfig as Config);
-
-    // to set the initial _userConfig object
-    config._userConfig = userConfig;
+  static fromPartialConfig(partialConfig: Partial<Config>): Partial<Config> {
+    const config = new Config().assign(partialConfig);
 
     // Sort
-    if (typeof userConfig.sort === 'boolean' && userConfig.sort) {
+    if (typeof partialConfig.sort === 'boolean' && partialConfig.sort) {
       config.assign({
         sort: {
           multiColumn: true,
@@ -184,11 +148,11 @@ export class Config {
 
     // Header
     config.assign({
-      header: Header.fromUserConfig(config),
+      header: Header.createFromConfig(config),
     });
 
     config.assign({
-      storage: StorageUtils.createFromUserConfig(userConfig),
+      storage: StorageUtils.createFromConfig(config),
     });
 
     config.assign({
@@ -197,37 +161,30 @@ export class Config {
 
     // Translator
     config.assign({
-      translator: new Translator(userConfig.language),
+      translator: new Translator(config.language),
     });
 
-    // Search
-    config.plugin.add({
-      id: 'search',
-      position: PluginPosition.Header,
-      component: Search,
-      props: {
-        enabled:
-          userConfig.search === true || userConfig.search instanceof Object,
-        ...(userConfig.search as SearchConfig),
-      },
-    });
+    if (config.search) {
+      // Search
+      config.plugin.add({
+        id: 'search',
+        position: PluginPosition.Header,
+        component: Search,
+      });
+    }
 
-    // Pagination
-    config.plugin.add({
-      id: 'pagination',
-      position: PluginPosition.Footer,
-      component: Pagination,
-      props: {
-        enabled:
-          userConfig.pagination === true ||
-          userConfig.pagination instanceof Object,
-        ...(userConfig.pagination as PaginationConfig),
-      },
-    });
+    if (config.pagination) {
+      // Pagination
+      config.plugin.add({
+        id: 'pagination',
+        position: PluginPosition.Footer,
+        component: Pagination,
+      });
+    }
 
     // Additional plugins
-    if (userConfig.plugins) {
-      userConfig.plugins.forEach((p) => config.plugin.add(p));
+    if (config.plugins) {
+      config.plugins.forEach((p) => config.plugin.add(p));
     }
 
     return config;

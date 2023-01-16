@@ -1,99 +1,96 @@
-import { ComponentChild, h, JSX } from 'preact';
+import { h, ComponentChild, JSX } from 'preact';
 
 import Cell from '../../cell';
-import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';
 import { CSSDeclaration, TColumn } from '../../types';
 import Row from '../../row';
 import { JSXInternal } from 'preact/src/jsx';
 import { PluginRenderer } from '../../plugin';
+import { useConfig } from '../../hooks/useConfig';
+import log from '../../util/log';
 
-export interface TDProps
-  extends BaseProps,
-    JSX.HTMLAttributes<HTMLTableCellElement> {
-  cell: Cell;
-  row?: Row;
-  column?: TColumn;
-  style?: CSSDeclaration;
-  messageCell?: boolean;
-}
+export function TD(
+  props: {
+    cell: Cell;
+    row?: Row;
+    column?: TColumn;
+    style?: CSSDeclaration;
+    messageCell?: boolean;
+  } & Omit<JSX.HTMLAttributes<HTMLTableCellElement>, 'style'>,
+) {
+  const config = useConfig();
 
-export class TD extends BaseComponent<TDProps> {
-  private content(): ComponentChild {
-    if (
-      this.props.column &&
-      typeof this.props.column.formatter === 'function'
-    ) {
-      return this.props.column.formatter(
-        this.props.cell.data,
-        this.props.row,
-        this.props.column,
-      );
+  const content = (): ComponentChild => {
+    if (props.column && typeof props.column.formatter === 'function') {
+      return props.column.formatter(props.cell.data, props.row, props.column);
     }
 
-    if (this.props.column && this.props.column.plugin) {
+    if (props.column && props.column.plugin) {
       return (
         <PluginRenderer
-          pluginId={this.props.column.id}
+          pluginId={props.column.id}
           props={{
-            column: this.props.column,
-            cell: this.props.cell,
-            row: this.props.row,
+            column: props.column,
+            cell: props.cell,
+            row: props.row,
           }}
         />
       );
     }
 
-    return this.props.cell.data;
-  }
+    if (typeof props.cell.data === 'object') {
+      log.warn(
+        `The data field for cell ${props.cell.id} is not a primitive value. Did you mean to add a "formatter" function to this column?`,
+      );
+    }
 
-  private handleClick(e: JSX.TargetedMouseEvent<HTMLTableCellElement>): void {
-    if (this.props.messageCell) return;
-    this.config.eventEmitter.emit(
+    return props.cell.data;
+  };
+
+  const handleClick = (
+    e: JSX.TargetedMouseEvent<HTMLTableCellElement>,
+  ): void => {
+    if (props.messageCell) return;
+
+    config.eventEmitter.emit(
       'cellClick',
       e,
-      this.props.cell,
-      this.props.column,
-      this.props.row,
+      props.cell,
+      props.column,
+      props.row,
     );
-  }
+  };
 
-  private getCustomAttributes(
+  const getCustomAttributes = (
     column: TColumn | null,
-  ): JSXInternal.HTMLAttributes<HTMLTableCellElement> {
+  ): JSXInternal.HTMLAttributes<HTMLTableCellElement> => {
     if (!column) return {};
 
     if (typeof column.attributes === 'function') {
-      return column.attributes(
-        this.props.cell.data,
-        this.props.row,
-        this.props.column,
-      );
+      return column.attributes(props.cell.data, props.row, props.column);
     } else {
       return column.attributes;
     }
-  }
+  };
 
-  render() {
-    return (
-      <td
-        role={this.props.role}
-        colSpan={this.props.colSpan}
-        data-column-id={this.props.column && this.props.column.id}
-        className={classJoin(
-          className('td'),
-          this.props.className,
-          this.config.className.td,
-        )}
-        style={{
-          ...this.props.style,
-          ...this.config.style.td,
-        }}
-        onClick={this.handleClick.bind(this)}
-        {...this.getCustomAttributes(this.props.column)}
-      >
-        {this.content()}
-      </td>
-    );
-  }
+  return (
+    <td
+      role={props.role}
+      colSpan={props.colSpan}
+      data-column-id={props.column && props.column.id}
+      className={classJoin(
+        className('td'),
+        props.className,
+        config.className.td,
+      )}
+      style={{
+        ...props.style,
+        ...config.style.td,
+      }}
+      onClick={handleClick}
+      {...getCustomAttributes(props.column)}
+    >
+      {content()}
+    </td>
+  );
 }

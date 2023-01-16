@@ -1,48 +1,31 @@
-import { createRef, h } from 'preact';
-
-import { BaseComponent } from './base';
 import { classJoin, className } from '../util/className';
+import { h } from 'preact';
 import { PluginPosition, PluginRenderer } from '../plugin';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { useConfig } from '../hooks/useConfig';
 
-interface HeaderContainerState {
-  isActive: boolean;
-}
+export function HeaderContainer() {
+  const [isActive, setIsActive] = useState(true);
+  const headerRef = useRef(null);
+  const config = useConfig();
 
-export class HeaderContainer extends BaseComponent<
-  Record<string, any>,
-  HeaderContainerState
-> {
-  private headerRef = createRef();
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      isActive: true,
-    };
-  }
-
-  componentDidMount() {
-    if (this.headerRef.current.children.length === 0) {
-      this.setState({
-        isActive: false,
-      });
+  useEffect(() => {
+    if (headerRef.current.children.length === 0) {
+      setIsActive(false);
     }
+  }, [headerRef]);
+
+  if (isActive) {
+    return (
+      <div
+        ref={headerRef}
+        className={classJoin(className('head'), config.className.header)}
+        style={{ ...config.style.header }}
+      >
+        <PluginRenderer position={PluginPosition.Header} />
+      </div>
+    );
   }
 
-  render() {
-    if (this.state.isActive) {
-      return (
-        <div
-          ref={this.headerRef}
-          className={classJoin(className('head'), this.config.className.header)}
-          style={{ ...this.config.style.header }}
-        >
-          <PluginRenderer position={PluginPosition.Header} />
-        </div>
-      );
-    }
-
-    return null;
-  }
+  return null;
 }

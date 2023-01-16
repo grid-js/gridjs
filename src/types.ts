@@ -4,8 +4,6 @@ import { SortConfig } from './view/plugin/sort/sort';
 import { JSXInternal } from 'preact/src/jsx';
 import { Plugin } from './plugin';
 
-export type ProtoExtends<T, U> = U & Omit<T, keyof U>;
-
 export type OneDArray<T> = T[];
 export type TwoDArray<T> = T[][];
 
@@ -35,7 +33,6 @@ export interface TColumn {
   minWidth?: string;
   sort?: SortConfig;
   columns?: OneDArray<TColumn>;
-  fixedHeader?: boolean;
   resizable?: boolean;
   hidden?: boolean;
   formatter?: (cell: TCell, row: Row, column: TColumn) => ComponentChild;

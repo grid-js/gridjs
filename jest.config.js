@@ -7,13 +7,10 @@ module.exports = {
   testEnvironment: 'node',
   setupFilesAfterEnv: ["jest-extended/all"],
   roots: roots,
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.test.json',
-    },
-  },
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.tsx?$': ['ts-jest', {
+      ...require('./tsconfig.test.json')
+    }],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   setupFiles: ['./tests/jest/setup.ts'],

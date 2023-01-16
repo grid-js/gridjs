@@ -1,19 +1,17 @@
-import { mount } from 'enzyme';
 import { h } from 'preact';
+import { mount } from 'enzyme';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { Config } from '../../../src/config';
+import { Config, ConfigContext } from '../../../src/config';
 import { Container } from '../../../src/view/container';
-import StorageUtils from '../../../src/storage/storageUtils';
-import Header from '../../../src/header';
 import {
   PipelineProcessor,
   ProcessorType,
 } from '../../../src/pipeline/processor';
 import { flushPromises } from '../testUtil';
-import PipelineUtils from '../../../src/pipeline/pipelineUtils';
+import { Status } from '../../../src/types';
+import * as TableActions from '../../../src/view/actions';
+import Tabular from '../../../src/tabular';
 import { EventEmitter } from '../../../src/util/eventEmitter';
-import { GridEvents } from '../../../src/events';
-import { PluginManager } from '../../../src/plugin';
 
 expect.extend(toHaveNoViolations);
 
@@ -21,39 +19,37 @@ describe('Container component', () => {
   let config: Config;
 
   beforeEach(() => {
-    config = Config.fromUserConfig({
+    config = new Config().update({
       data: [
         [1, 2, 3],
         ['a', 'b', 'c'],
       ],
     });
-    config.eventEmitter = new EventEmitter<GridEvents>();
-    config.plugin = new PluginManager();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should render a container with table', async () => {
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width={config.width}
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
 
-    await container.instance().componentDidMount();
+    await flushPromises();
+    await flushPromises();
+
     expect(container.html()).toMatchSnapshot();
-    expect(container.state('status')).toBe(3);
+    expect(config.store.getState().status).toBe(Status.Rendered);
   });
 
   it('should attach styles', async () => {
     config.update({
-      search: {
-        enabled: true,
-      },
-      pagination: {
-        enabled: true,
-      },
+      width: '500px',
+      search: true,
+      pagination: true,
       style: {
         container: {
           border: '1px solid #ccc',
@@ -77,44 +73,33 @@ describe('Container component', () => {
     });
 
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width="500px"
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
 
-    await container.instance().componentDidMount();
+    await flushPromises();
+
     expect(container.html()).toMatchSnapshot();
   });
 
   it('should attach classNames', async () => {
     config.update({
-      search: {
-        enabled: true,
-      },
-      pagination: {
-        enabled: true,
-      },
+      width: '500px',
+      search: true,
+      pagination: true,
       columns: [
         {
           name: 'c1',
-          sort: {
-            enabled: false,
-          },
+          sort: false,
         },
         {
           name: 'c2',
-          sort: {
-            enabled: true,
-          },
+          sort: true,
         },
         {
           name: 'c3',
-          sort: {
-            enabled: true,
-          },
+          sort: true,
         },
       ],
       className: {
@@ -131,80 +116,62 @@ describe('Container component', () => {
     });
 
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width="500px"
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
 
-    return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      expect(container.html()).toMatchSnapshot();
-    });
+    await flushPromises();
+
+    expect(container.html()).toMatchSnapshot();
   });
 
   it('should render a container with searchable table', async () => {
     config.update({
-      search: {
-        enabled: true,
-      },
+      search: true,
     });
 
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width={config.width}
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
-    await container.instance().componentDidMount();
+
+    await flushPromises();
+
     expect(container.html()).toMatchSnapshot();
   });
 
   it('should render a container with sortable and paginated table', async () => {
     config.update({
-      search: {
-        enabled: true,
-      },
+      search: true,
       pagination: {
-        enabled: true,
         limit: 5,
       },
       columns: [
         {
           name: 'c1',
-          sort: {
-            enabled: false,
-          },
+          sort: false,
         },
         {
           name: 'c2',
-          sort: {
-            enabled: true,
-          },
+          sort: true,
         },
         {
           name: 'c3',
-          sort: {
-            enabled: true,
-          },
+          sort: true,
         },
       ],
     });
 
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        header={config.header}
-        width={config.width}
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
-    await container.instance().componentDidMount();
+
+    await flushPromises();
+
     expect(container.html()).toMatchSnapshot();
   });
 
@@ -226,106 +193,76 @@ describe('Container component', () => {
     config.pipeline.register(new ErrorProcessor());
 
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width={config.width}
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
 
-    await container.instance().componentDidMount();
+    await flushPromises();
+
     expect(container.html()).toMatchSnapshot();
   });
 
   it('should not violate accessibility test', async () => {
     config.update({
       pagination: {
-        enabled: true,
         limit: 1,
       },
-      search: {
-        enabled: true,
-      },
+      search: true,
       sort: true,
     });
 
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width={config.width}
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
 
     container.update();
-    await container.instance().componentDidMount();
+
+    await flushPromises();
 
     expect(await axe(container.html())).toHaveNoViolations();
   });
 
   it('should render a container with null array', async () => {
-    config.data = [];
-    config.storage = StorageUtils.createFromUserConfig(config);
-    config.pipeline = PipelineUtils.createFromConfig(config);
-
-    config.header = new Header();
-    config.header.columns = [
-      {
-        name: 'hello',
-      },
-      {
-        name: 'cool',
-      },
-      {
-        name: 'actions',
-      },
-    ];
-
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width={config.width}
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
 
-    return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      expect(container.html()).toMatchSnapshot();
-    });
+    await flushPromises();
+
+    config.store.dispatch(TableActions.SetData(Tabular.fromArray([])));
+    config.store.dispatch(TableActions.SetStatusToRendered());
+
+    await flushPromises();
+
+    expect(container.html()).toMatchSnapshot();
   });
 
   it('should render a container with array of objects without columns input', async () => {
-    const config = Config.fromUserConfig({
-      eventEmitter: new EventEmitter<GridEvents>(),
+    const config = Config.fromPartialConfig({
       data: [
-        { name: 'boo', phoneNumber: '123' },
-        { name: 'foo', phoneNumber: '456' },
-        { name: 'bar', phoneNumber: '789' },
+        [1, 2, 3],
+        ['a', 'b', 'c'],
       ],
-    });
+    }) as Config;
 
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width={config.width}
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
 
-    return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      expect(container.html()).toMatchSnapshot();
-    });
+    await flushPromises();
+
+    expect(container.html()).toMatchSnapshot();
   });
 
   it('should render a container with array of objects with string columns', async () => {
-    const config = Config.fromUserConfig({
-      eventEmitter: new EventEmitter<GridEvents>(),
+    const config = Config.fromPartialConfig({
       columns: ['Name', 'Phone Number'],
       data: [
         { name: 'boo', phoneNumber: '123' },
@@ -335,23 +272,19 @@ describe('Container component', () => {
     });
 
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width={config.width}
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
 
-    return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      expect(container.html()).toMatchSnapshot();
-    });
+    await flushPromises();
+    await flushPromises();
+
+    expect(container.html()).toMatchSnapshot();
   });
 
   it('should render a container with array of objects with object columns', async () => {
-    const config = Config.fromUserConfig({
-      eventEmitter: new EventEmitter<GridEvents>(),
+    const config = Config.fromPartialConfig({
       columns: [
         {
           name: 'Name',
@@ -370,66 +303,62 @@ describe('Container component', () => {
     });
 
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width={config.width}
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
 
-    return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      expect(container.html()).toMatchSnapshot();
-    });
+    await flushPromises();
+    await flushPromises();
+
+    expect(container.html()).toMatchSnapshot();
   });
 
   it('should remove the EventEmitter listeners', async () => {
-    config.update({
-      search: {
-        enabled: true,
-      },
-      pagination: {
-        enabled: true,
-      },
+    const config = new Config().update({
+      data: [],
+      search: true,
+      pagination: true,
       columns: ['Name', 'Phone Number'],
       sort: true,
+      eventEmitter: new EventEmitter<any>(),
     });
 
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width={config.width}
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
 
-    const mockOn = jest.spyOn(EventEmitter.prototype, 'on');
-    const mockOff = jest.spyOn(EventEmitter.prototype, 'off');
+    await flushPromises();
 
-    return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      container.unmount();
-      expect(mockOff.mock.calls.length).toBe(mockOn.mock.calls.length);
-    });
+    container.unmount();
+
+    await flushPromises();
+    expect(Object.values(config.eventEmitter.listeners)).toHaveLength(0);
+    expect(Object.values(config.store.getListeners())).toHaveLength(0);
   });
 
   it('should unregister the processors', async () => {
-    config.update({
-      pagination: {
-        enabled: true,
-      },
-      search: {
-        enabled: true,
-      },
-      columns: ['Name', 'Phone Number'],
+    const config = new Config().update({
+      pagination: true,
+      search: true,
       sort: true,
-    });
-
-    config.header = Header.fromUserConfig({
-      columns: ['Name', 'Phone Number'],
-      sort: true,
+      columns: [
+        {
+          name: 'Name',
+          id: 'name',
+        },
+        {
+          name: 'Phone Number',
+          id: 'phone',
+        },
+      ],
+      data: [
+        { name: 'boo', phone: '123' },
+        { name: 'foo', phone: '456' },
+        { name: 'bar', phone: '789' },
+      ],
     });
 
     const mockRegister = jest.fn();
@@ -439,20 +368,22 @@ describe('Container component', () => {
     config.pipeline.unregister = mockUnregister;
 
     const container = mount(
-      <Container
-        config={config}
-        pipeline={config.pipeline}
-        width={config.width}
-        height={config.height}
-      />,
+      <ConfigContext.Provider value={config}>
+        <Container />
+      </ConfigContext.Provider>,
     );
 
-    return flushPromises().then(async () => {
-      await container.instance().componentDidMount();
-      container.unmount();
-      expect(mockUnregister.mock.calls.length).toBe(
-        mockRegister.mock.calls.length,
-      );
-    });
+    await flushPromises();
+
+    container.unmount();
+
+    await flushPromises();
+    await flushPromises();
+    await flushPromises();
+    await flushPromises();
+
+    expect(mockUnregister.mock.calls.length).toBe(
+      mockRegister.mock.calls.length,
+    );
   });
 });

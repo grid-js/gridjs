@@ -1,21 +1,14 @@
 import { OneDArray, TColumn, TwoDArray } from './types';
 import Base from './base';
-import { Config, UserConfig } from './config';
+import { Config } from './config';
 import { px, width } from './util/width';
-import { ShadowTable } from './view/table/shadow';
-import {
-  Component,
-  ComponentChild,
-  createRef,
-  h,
-  isValidElement,
-  RefObject,
-  render,
-} from 'preact';
+import { getShadowTableWidths, ShadowTable } from './view/table/shadow';
+import { ComponentChild, h, isValidElement, RefObject, render } from 'preact';
 import { camelCase } from './util/string';
 import { flatten } from './util/array';
 import logger from './util/log';
-import { PluginPosition } from './plugin';
+import { PluginManager, PluginPosition } from './plugin';
+import { GenericSortConfig } from './view/plugin/sort/sort';
 
 class Header extends Base {
   private _columns: OneDArray<TColumn>;
@@ -46,11 +39,13 @@ class Header extends Base {
    *
    * @param config
    */
-  adjustWidth(config: Config): this {
+  adjustWidth(
+    config: Config,
+    tableRef: RefObject<HTMLTableElement>,
+    tempRef: RefObject<HTMLDivElement>,
+  ): this {
     const container: Element = config.container;
-    const tableRef: RefObject<Component> = config.tableRef;
-    const tempRef: RefObject<HTMLDivElement> = config.tempRef;
-    const autoWidth = config.tempRef || true;
+    const autoWidth = config.autoWidth;
 
     if (!container) {
       // we can't calculate the width because the container
@@ -61,24 +56,22 @@ class Header extends Base {
     // pixels
     const containerWidth = container.clientWidth;
 
-    // let's create a shadow table with the first 10 rows of the data
-    // and let the browser to render the table with table-layout: auto
-    // no padding, margin or border to get the minimum space required
-    // to render columns. One the table is rendered and widths are known,
-    // we unmount the shadow table from the DOM and set the correct width
-    const shadowTable = createRef();
     let widths = {};
 
     if (tableRef.current && autoWidth) {
-      // render a ShadowTable with the first 10 rows
-      const el = h(ShadowTable, {
-        tableRef: tableRef,
-      });
-      el.ref = shadowTable;
+      // let's create a shadow table with the first 10 rows of the data
+      // and let the browser to render the table with table-layout: auto
+      // no padding, margin or border to get the minimum space required
+      // to render columns. Once the table is rendered and widths are known,
+      // we unmount the shadow table from the DOM and set the correct width
+      render(
+        h(ShadowTable, {
+          tableRef: tableRef.current,
+        }),
+        tempRef.current,
+      );
 
-      render(el, tempRef.current);
-
-      widths = shadowTable.current.widths();
+      widths = getShadowTableWidths(tempRef.current);
     }
 
     for (const column of flatten(Header.tabularFormat(this.columns))) {
@@ -111,72 +104,43 @@ class Header extends Base {
     return this;
   }
 
-  private setSort(userConfig: UserConfig, columns?: OneDArray<TColumn>): void {
+  private setSort(
+    sortConfig: GenericSortConfig | boolean,
+    columns?: OneDArray<TColumn>,
+  ): void {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
       // sorting can only be enabled for columns without any children
       if (column.columns && column.columns.length > 0) {
-        column.sort = {
-          enabled: false,
-        };
-      }
-
-      // implicit userConfig.sort flag
-      if (column.sort === undefined && userConfig.sort) {
-        column.sort = {
-          enabled: true,
-        };
-      }
-
-      // false, null, etc.
-      if (!column.sort) {
-        column.sort = {
-          enabled: false,
-        };
+        column.sort = undefined;
+      } else if (column.sort === undefined && sortConfig) {
+        column.sort = {};
+      } else if (!column.sort) {
+        // false, null, etc.
+        column.sort = undefined;
       } else if (typeof column.sort === 'object') {
         column.sort = {
-          enabled: true,
           ...column.sort,
         };
       }
 
       if (column.columns) {
-        this.setSort(userConfig, column.columns);
+        this.setSort(sortConfig, column.columns);
       }
     }
   }
 
-  private setFixedHeader(
-    userConfig: UserConfig,
-    columns?: OneDArray<TColumn>,
-  ): void {
-    const cols = columns || this.columns || [];
-
-    for (const column of cols) {
-      if (column.fixedHeader === undefined) {
-        column.fixedHeader = userConfig.fixedHeader;
-      }
-
-      if (column.columns) {
-        this.setFixedHeader(userConfig, column.columns);
-      }
-    }
-  }
-
-  private setResizable(
-    userConfig: UserConfig,
-    columns?: OneDArray<TColumn>,
-  ): void {
+  private setResizable(resizable: boolean, columns?: OneDArray<TColumn>): void {
     const cols = columns || this.columns || [];
 
     for (const column of cols) {
       if (column.resizable === undefined) {
-        column.resizable = userConfig.resizable;
+        column.resizable = resizable;
       }
 
       if (column.columns) {
-        this.setResizable(userConfig, column.columns);
+        this.setResizable(resizable, column.columns);
       }
     }
   }
@@ -204,15 +168,14 @@ class Header extends Base {
   }
 
   private populatePlugins(
-    userConfig: UserConfig,
+    pluginManager: PluginManager,
     columns: OneDArray<TColumn>,
   ): void {
     // populate the cell columns
     for (const column of columns) {
       if (column.plugin !== undefined) {
-        userConfig.plugin.add({
+        pluginManager.add({
           id: column.id,
-          props: {},
           ...column.plugin,
           position: PluginPosition.Cell,
         });
@@ -253,32 +216,31 @@ class Header extends Base {
     return header;
   }
 
-  static fromUserConfig(userConfig: UserConfig): Header | null {
+  static createFromConfig(config: Partial<Config>): Header | null {
     const header = new Header();
 
     // TODO: this part needs some refactoring
-    if (userConfig.from) {
-      header.columns = Header.fromHTMLTable(userConfig.from).columns;
-    } else if (userConfig.columns) {
-      header.columns = Header.fromColumns(userConfig.columns).columns;
+    if (config.from) {
+      header.columns = Header.fromHTMLTable(config.from).columns;
+    } else if (config.columns) {
+      header.columns = Header.fromColumns(config.columns).columns;
     } else if (
-      userConfig.data &&
-      typeof userConfig.data[0] === 'object' &&
-      !(userConfig.data[0] instanceof Array)
+      config.data &&
+      typeof config.data[0] === 'object' &&
+      !(config.data[0] instanceof Array)
     ) {
       // if data[0] is an object but not an Array
       // used for when a JSON payload is provided
-      header.columns = Object.keys(userConfig.data[0]).map((name) => {
+      header.columns = Object.keys(config.data[0]).map((name) => {
         return { name: name };
       });
     }
 
     if (header.columns.length) {
       header.setID();
-      header.setSort(userConfig);
-      header.setFixedHeader(userConfig);
-      header.setResizable(userConfig);
-      header.populatePlugins(userConfig, header.columns);
+      header.setSort(config.sort);
+      header.setResizable(config.resizable);
+      header.populatePlugins(config.plugin, header.columns);
       return header;
     }
 

@@ -1,28 +1,6 @@
-import { BaseComponent, BaseProps } from './view/base';
-import { Component, ComponentProps, Fragment, h } from 'preact';
+import { Fragment, FunctionComponent, h } from 'preact';
+import { useConfig } from './hooks/useConfig';
 import log from './util/log';
-
-/**
- * BaseProps for all plugins
- */
-export interface PluginBaseProps<T extends PluginBaseComponentCtor> {
-  plugin: Plugin<T>;
-}
-
-/**
- * BaseComponent for all plugins
- */
-export abstract class PluginBaseComponent<
-  P extends PluginBaseProps<any> = any,
-  S = unknown,
-> extends BaseComponent<P, S> {}
-
-export interface PluginBaseComponentCtor<
-  P extends PluginBaseProps<any> = any,
-  S = unknown,
-> {
-  new (props: P, context?: any): Component<P, S>;
-}
 
 export enum PluginPosition {
   Header,
@@ -30,11 +8,10 @@ export enum PluginPosition {
   Cell,
 }
 
-export interface Plugin<T extends PluginBaseComponentCtor> {
+export interface Plugin<T extends FunctionComponent> {
   id: string;
   position: PluginPosition;
   component: T;
-  props?: Partial<ComponentProps<T>>;
   order?: number;
 }
 
@@ -45,23 +22,17 @@ export class PluginManager {
     this.plugins = [];
   }
 
-  get<T extends PluginBaseComponentCtor>(id: string): Plugin<T> | null {
-    const plugins = this.plugins.filter((p) => p.id === id);
-
-    if (plugins.length > 0) {
-      return plugins[0];
-    }
-
-    return null;
+  get<T extends FunctionComponent>(id: string): Plugin<T> | undefined {
+    return this.plugins.find((p) => p.id === id);
   }
 
-  add<T extends PluginBaseComponentCtor>(plugin: Plugin<T>): this {
+  add<T extends FunctionComponent<any>>(plugin: Plugin<T>): this {
     if (!plugin.id) {
       log.error('Plugin ID cannot be empty');
       return this;
     }
 
-    if (this.get(plugin.id) !== null) {
+    if (this.get(plugin.id)) {
       log.error(`Duplicate plugin ID: ${plugin.id}`);
       return this;
     }
@@ -71,13 +42,16 @@ export class PluginManager {
   }
 
   remove(id: string): this {
-    this.plugins.splice(this.plugins.indexOf(this.get(id)), 1);
+    const plugin = this.get(id);
+
+    if (plugin) {
+      this.plugins.splice(this.plugins.indexOf(plugin), 1);
+    }
+
     return this;
   }
 
-  list<T extends PluginBaseComponentCtor>(
-    position?: PluginPosition,
-  ): Plugin<T>[] {
+  list<T extends FunctionComponent>(position?: PluginPosition): Plugin<T>[] {
     let plugins: Plugin<T>[];
 
     if (position != null || position != undefined) {
@@ -86,48 +60,43 @@ export class PluginManager {
       plugins = this.plugins;
     }
 
-    return plugins.sort((a, b) => a.order - b.order);
+    return plugins.sort((a, b) => (a.order && b.order ? a.order - b.order : 1));
   }
 }
 
-export interface PluginRendererProps extends BaseProps {
+export function PluginRenderer(props: {
   props?: any;
   // to render a single plugin
   pluginId?: string;
   // to render all plugins in this PluginPosition
   position?: PluginPosition;
-}
+}) {
+  const config = useConfig();
 
-export class PluginRenderer extends BaseComponent<PluginRendererProps> {
-  render() {
-    if (this.props.pluginId) {
-      // render a single plugin
-      const plugin = this.config.plugin.get(this.props.pluginId);
+  if (props.pluginId) {
+    // render a single plugin
+    const plugin = config.plugin.get(props.pluginId);
 
-      if (!plugin) return null;
+    if (!plugin) return null;
 
-      return h(
-        Fragment,
-        {},
-        h(plugin.component, {
-          plugin: plugin,
-          ...plugin.props,
-          ...this.props.props,
-        }),
-      );
-    } else if (this.props.position !== undefined) {
-      // render using a specific plugin position
-      return h(
-        Fragment,
-        {},
-        this.config.plugin
-          .list(this.props.position)
-          .map((p) =>
-            h(p.component, { plugin: p, ...p.props, ...this.props.props }),
-          ),
-      );
-    }
-
-    return null;
+    return h(
+      Fragment,
+      {},
+      h(plugin.component, {
+        plugin: plugin,
+        ...props.props,
+      }),
+    );
+  } else if (props.position !== undefined) {
+    // render using a specific plugin position
+    return h(
+      Fragment,
+      {},
+      config.plugin.list(props.position).map((p) => {
+        return h(p.component, { plugin: p, ...this.props.props });
+      }),
+    );
   }
+
+  return null;
 }

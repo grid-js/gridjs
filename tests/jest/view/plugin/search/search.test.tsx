@@ -1,33 +1,17 @@
+import { h } from 'preact';
+import { act } from 'preact/test-utils';
 import { mount } from 'enzyme';
-import { createContext, h } from 'preact';
-import { Config } from '../../../../../src/config';
-import Dispatcher from '../../../../../src/util/dispatcher';
-import { EventEmitter } from '../../../../../src/util/eventEmitter';
-import { GridEvents } from '../../../../../src/events';
-import PipelineUtils from '../../../../../src/pipeline/pipelineUtils';
-import { Translator } from '../../../../../src/i18n/language';
+import { Config, ConfigContext } from '../../../../../src/config';
 import { Search } from '../../../../../src/view/plugin/search/search';
-import { SearchActions } from '../../../../../src/view/plugin/search/actions';
-import { Plugin, PluginPosition } from '../../../../../src/plugin';
-import Header from '../../../../../src/header';
+import * as SearchActions from '../../../../../src/view/plugin/search/actions';
+import { flushPromises } from '../../../testUtil';
 
 describe('Search plugin', () => {
   let config: Config;
-  const configContext = createContext(null);
-  const plugin: Plugin<any> = {
-    id: 'mysearch',
-    position: PluginPosition.Header,
-    component: {},
-  };
 
   beforeEach(() => {
-    config = new Config();
-    config.autoWidth = true;
-    config.dispatcher = new Dispatcher();
-    config.eventEmitter = new EventEmitter<GridEvents>();
-    config.translator = new Translator();
-    config.pipeline = PipelineUtils.createFromConfig(config);
-    config.header = Header.fromUserConfig({
+    config = new Config().update({
+      data: [['a', 'b', 'c']],
       columns: ['Name', 'Phone Number'],
     });
   });
@@ -37,12 +21,18 @@ describe('Search plugin', () => {
   });
 
   it('should render the search box', async () => {
-    const mock = jest.spyOn(SearchActions.prototype, 'search');
+    const mock = jest.spyOn(SearchActions, 'SearchKeyword');
+
+    config.update({
+      search: {
+        keyword: 'boo',
+      },
+    });
 
     const search = mount(
-      <configContext.Provider value={config}>
-        <Search plugin={plugin} enabled={true} keyword={'boo'} />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Search />
+      </ConfigContext.Provider>,
     );
 
     expect(mock).toBeCalledWith('boo');
@@ -50,47 +40,68 @@ describe('Search plugin', () => {
   });
 
   it('should not call search if keyword is undefined', async () => {
-    const mock = jest.spyOn(SearchActions.prototype, 'search');
+    const mock = jest.spyOn(SearchActions, 'SearchKeyword');
+
+    config.update({
+      search: true,
+    });
 
     mount(
-      <configContext.Provider value={config}>
-        <Search plugin={plugin} enabled={true} />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Search />
+      </ConfigContext.Provider>,
     );
 
     expect(mock).not.toBeCalled();
   });
 
   it('should call search action after input change', async () => {
-    const mock = jest.spyOn(SearchActions.prototype, 'search');
+    const mock = jest.spyOn(SearchActions, 'SearchKeyword');
+
+    config.update({
+      search: true,
+    });
 
     const wrapper = mount(
-      <configContext.Provider value={config}>
-        <Search plugin={plugin} enabled={true} />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Search />
+      </ConfigContext.Provider>,
     );
 
-    // https://github.com/preactjs/enzyme-adapter-preact-pure/issues/45
     const input = wrapper.find('input');
-    input.getDOMNode<HTMLInputElement>().value = '123';
+    const onInput = input.props().onInput;
 
-    input.simulate('input');
+    await act(() => {
+      const htmlInputElement = document.createElement('input');
+      htmlInputElement.value = '123';
+      onInput({ target: htmlInputElement });
+    });
 
-    expect(mock).toBeCalledWith('123');
+    wrapper.update();
+
+    await flushPromises();
+
+    return new Promise<void>((resolve) => {
+      // TODO: can we fix this and remove the setTimeout?
+      setTimeout(() => {
+        expect(mock).toBeCalledWith('123');
+        resolve();
+      }, 100);
+    });
   });
 
   it('should add config.className.search', async () => {
+    config.update({
+      search: true,
+      className: {
+        search: 'test-search-class-name',
+      },
+    });
+
     const search = mount(
-      <configContext.Provider
-        value={{
-          ...config,
-          className: {
-            search: 'test-search-class-name',
-          },
-        }}
-      >
-        <Search plugin={plugin} enabled={true} keyword={'boo'} />
-      </configContext.Provider>,
+      <ConfigContext.Provider value={config}>
+        <Search />
+      </ConfigContext.Provider>,
     );
 
     expect(

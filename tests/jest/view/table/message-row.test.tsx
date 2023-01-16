@@ -1,13 +1,12 @@
+import { h } from 'preact';
 import { mount } from 'enzyme';
-import { createContext, h } from 'preact';
-import { Config } from '../../../../src/config';
+import { Config, ConfigContext } from '../../../../src/config';
 import { EventEmitter } from '../../../../src/util/eventEmitter';
 import { TableEvents } from '../../../../src/view/table/events';
 import { MessageRow } from '../../../../src/view/table/messageRow';
 
 describe('MessageRow component', () => {
   let config: Config;
-  const configContext = createContext(null);
 
   beforeEach(() => {
     config = new Config();
@@ -15,9 +14,9 @@ describe('MessageRow component', () => {
 
   it('should match the snapshot', () => {
     const td = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <MessageRow message="boo" />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
     expect(td.html()).toMatchSnapshot();
   });
@@ -27,9 +26,9 @@ describe('MessageRow component', () => {
     const onClick = jest.fn();
 
     const rows = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <MessageRow message="boo" />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     ).find('tr');
 
     config.eventEmitter.on('rowClick', onClick);

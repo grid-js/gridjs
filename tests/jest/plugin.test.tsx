@@ -1,23 +1,23 @@
+import { h } from 'preact';
 import {
-  PluginBaseComponent,
-  PluginBaseProps,
   PluginManager,
   PluginPosition,
   PluginRenderer,
 } from '../../src/plugin';
-import { createContext, h } from 'preact';
 import { mount } from 'enzyme';
-import { Config } from '../../src/config';
+import { Config, ConfigContext } from '../../src/config';
+import { useConfig } from '../../src/hooks/useConfig';
+
+interface DummyConfig extends Config {
+  dummy: {
+    text: string;
+  };
+}
 
 describe('Plugin', () => {
-  interface DummyPluginProps extends PluginBaseProps<DummyPlugin> {
-    text?: string;
-  }
-
-  class DummyPlugin extends PluginBaseComponent<DummyPluginProps> {
-    render() {
-      return h('b', {}, this.props.text || 'hello!');
-    }
+  function DummyPlugin<T extends DummyConfig>() {
+    const config = useConfig() as T;
+    return h('b', {}, config.dummy.text || 'hello!');
   }
 
   it('should add and remove plugins', () => {
@@ -28,13 +28,13 @@ describe('Plugin', () => {
     manager.add({
       id: 'dummy',
       position: PluginPosition.Header,
-      component: DummyPlugin.prototype,
+      component: DummyPlugin,
     });
 
     manager.add({
       id: 'dummy2',
       position: PluginPosition.Header,
-      component: DummyPlugin.prototype,
+      component: DummyPlugin,
     });
 
     expect(manager.list()).toHaveLength(2);
@@ -137,48 +137,48 @@ describe('Plugin', () => {
     expect(plugin.component).toBe(component);
     expect(plugin.position).toBe(PluginPosition.Header);
 
-    expect(manager.get('doesnexist')).toBeNull();
+    expect(manager.get('doesnexist')).toBeUndefined();
   });
 
   it('should render the plugins', async () => {
-    const configContext = createContext(null);
-    const config = Config.fromUserConfig({
+    const config = new Config().update({
       data: [[1, 2, 3]],
-    });
+    }) as DummyConfig;
+
+    config.dummy = {
+      text: 'dummyplugin',
+    };
 
     config.plugin.add({
       id: 'dummyheader',
       position: PluginPosition.Header,
       component: DummyPlugin,
-      props: { text: 'dummyheader' },
     });
 
     config.plugin.add({
       id: 'dummyfooter',
       position: PluginPosition.Footer,
       component: DummyPlugin,
-      props: { text: 'dummyfooter' },
     });
 
     const renderer = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <PluginRenderer position={PluginPosition.Header} />
         <PluginRenderer position={PluginPosition.Footer} />
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(renderer.html()).toMatchSnapshot();
   });
 
   it('should create a userConfig with custom plugin', () => {
-    const config = Config.fromUserConfig({
+    const config = new Config().update({
       data: [[1, 2, 3]],
       plugins: [
         {
           id: 'dummyheader',
           position: PluginPosition.Header,
           component: DummyPlugin,
-          props: { text: 'dummyheader' },
         },
       ],
     });

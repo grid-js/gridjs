@@ -1,74 +1,60 @@
 import { h } from 'preact';
-
 import Row from '../../row';
 import { TR } from './tr';
-import Tabular from '../../tabular';
-import { BaseComponent, BaseProps } from '../base';
 import { classJoin, className } from '../../util/className';
 import { Status } from '../../types';
-import Header from '../../header';
 import { MessageRow } from './messageRow';
+import { useConfig } from '../../hooks/useConfig';
+import { useTranslator } from '../../i18n/language';
+import useSelector from '../../hooks/useSelector';
 
-interface TBodyProps extends BaseProps {
-  data: Tabular;
-  status: Status;
-  header?: Header;
-}
+export function TBody() {
+  const config = useConfig();
+  const data = useSelector((state) => state.data);
+  const status = useSelector((state) => state.status);
+  const header = useSelector((state) => state.header);
+  const _ = useTranslator();
 
-export class TBody extends BaseComponent<TBodyProps> {
-  private headerLength(): number {
-    if (this.props.header) {
-      return this.props.header.visibleColumns.length;
+  const headerLength = () => {
+    if (header) {
+      return header.visibleColumns.length;
     }
     return 0;
-  }
+  };
 
-  render() {
-    return (
-      <tbody
-        className={classJoin(className('tbody'), this.config.className.tbody)}
-      >
-        {this.props.data &&
-          this.props.data.rows.map((row: Row) => {
-            return <TR key={row.id} row={row} header={this.props.header} />;
-          })}
+  return (
+    <tbody className={classJoin(className('tbody'), config.className.tbody)}>
+      {data &&
+        data.rows.map((row: Row) => {
+          return <TR key={row.id} row={row} />;
+        })}
 
-        {this.props.status === Status.Loading &&
-          (!this.props.data || this.props.data.length === 0) && (
-            <MessageRow
-              message={this._('loading')}
-              colSpan={this.headerLength()}
-              className={classJoin(
-                className('loading'),
-                this.config.className.loading,
-              )}
-            />
+      {status === Status.Loading && (!data || data.length === 0) && (
+        <MessageRow
+          message={_('loading')}
+          colSpan={headerLength()}
+          className={classJoin(className('loading'), config.className.loading)}
+        />
+      )}
+
+      {status === Status.Rendered && data && data.length === 0 && (
+        <MessageRow
+          message={_('noRecordsFound')}
+          colSpan={headerLength()}
+          className={classJoin(
+            className('notfound'),
+            config.className.notfound,
           )}
+        />
+      )}
 
-        {this.props.status === Status.Rendered &&
-          this.props.data &&
-          this.props.data.length === 0 && (
-            <MessageRow
-              message={this._('noRecordsFound')}
-              colSpan={this.headerLength()}
-              className={classJoin(
-                className('notfound'),
-                this.config.className.notfound,
-              )}
-            />
-          )}
-
-        {this.props.status === Status.Error && (
-          <MessageRow
-            message={this._('error')}
-            colSpan={this.headerLength()}
-            className={classJoin(
-              className('error'),
-              this.config.className.error,
-            )}
-          />
-        )}
-      </tbody>
-    );
-  }
+      {status === Status.Error && (
+        <MessageRow
+          message={_('error')}
+          colSpan={headerLength()}
+          className={classJoin(className('error'), config.className.error)}
+        />
+      )}
+    </tbody>
+  );
 }

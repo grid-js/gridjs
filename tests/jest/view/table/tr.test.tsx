@@ -1,6 +1,6 @@
+import { h } from 'preact';
 import { mount } from 'enzyme';
-import { createContext, h } from 'preact';
-import { Config } from '../../../../src/config';
+import { Config, ConfigContext } from '../../../../src/config';
 import { EventEmitter } from '../../../../src/util/eventEmitter';
 import { TableEvents } from '../../../../src/view/table/events';
 import { TD } from '../../../../src/view/table/td';
@@ -9,7 +9,6 @@ import Cell from '../../../../src/cell';
 
 describe('TR component', () => {
   let config: Config;
-  const configContext = createContext(null);
 
   beforeEach(() => {
     config = new Config();
@@ -17,11 +16,11 @@ describe('TR component', () => {
 
   it('should match the snapshot', () => {
     const tr = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <TR>
           <TD cell={new Cell('boo')} />
         </TR>
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
     expect(tr.html()).toMatchSnapshot();
   });
@@ -31,11 +30,11 @@ describe('TR component', () => {
     const onClick = jest.fn();
 
     const rows = mount(
-      <configContext.Provider value={config}>
+      <ConfigContext.Provider value={config}>
         <TR>
           <TD cell={new Cell('boo')} />
         </TR>
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     ).find('tr');
 
     config.eventEmitter.on('rowClick', onClick);
@@ -47,7 +46,7 @@ describe('TR component', () => {
 
   it('should attach the custom tr className', async () => {
     const tr = mount(
-      <configContext.Provider
+      <ConfigContext.Provider
         value={{
           ...config,
           ...{
@@ -60,7 +59,7 @@ describe('TR component', () => {
         <TR>
           <TD cell={new Cell('boo')} />
         </TR>
-      </configContext.Provider>,
+      </ConfigContext.Provider>,
     );
 
     expect(tr.find('tr.custom-tr-classname')).toHaveLength(1);
