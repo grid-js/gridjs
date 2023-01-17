@@ -1,6 +1,6 @@
 export class Store<S = Record<string, unknown>> {
   private state: S;
-  private listeners: (() => void)[] = [];
+  private listeners: ((current?: S, prev?: S) => void)[] = [];
   private isDispatching = false;
 
   constructor(initialState: S) {
@@ -18,6 +18,7 @@ export class Store<S = Record<string, unknown>> {
 
     this.isDispatching = true;
 
+    const prevState = this.state;
     try {
       this.state = reducer(this.state);
     } finally {
@@ -25,13 +26,13 @@ export class Store<S = Record<string, unknown>> {
     }
 
     for (const listener of this.listeners) {
-      listener();
+      listener(this.state, prevState);
     }
 
     return this.state;
   };
 
-  subscribe = (listener: () => void): (() => void) => {
+  subscribe = (listener: (current?: S, prev?: S) => void): (() => void) => {
     if (typeof listener !== 'function')
       throw new Error('Listener is not a function');
 
