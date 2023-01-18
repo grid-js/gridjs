@@ -7,7 +7,6 @@ import Row from '../../row';
 import { JSXInternal } from 'preact/src/jsx';
 import { PluginRenderer } from '../../plugin';
 import { useConfig } from '../../hooks/useConfig';
-import log from '../../util/log';
 
 export function TD(
   props: {
