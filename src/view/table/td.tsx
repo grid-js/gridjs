@@ -38,12 +38,6 @@ export function TD(
       );
     }
 
-    if (typeof props.cell.data === 'object') {
-      log.warn(
-        `The data field for cell ${props.cell.id} is not a primitive value. Did you mean to add a "formatter" function to this column?`,
-      );
-    }
-
     return props.cell.data;
   };
 
