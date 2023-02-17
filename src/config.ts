@@ -16,6 +16,8 @@ import { GridEvents } from './events';
 import { PluginManager, PluginPosition, Plugin } from './plugin';
 import Grid from './grid';
 import { Store } from './state/store';
+import Row from './row';
+import Cell from './cell';
 
 export const ConfigContext = createContext(null);
 
@@ -67,8 +69,8 @@ export interface Config {
     th: string;
     thead: string;
     tbody: string;
-    tr: string;
-    td: string;
+    tr: string | ((row: Row, header: boolean) => string);
+    td: string | ((cell: Cell, column: string, row: Row) => string);
     container: string;
     footer: string;
     header: string;

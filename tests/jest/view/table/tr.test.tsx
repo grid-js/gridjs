@@ -64,4 +64,30 @@ describe('TR component', () => {
 
     expect(tr.find('tr.custom-tr-classname')).toHaveLength(1);
   });
+
+  it('should attach the custom tr className callback', async () => {
+    const rowStyleGenerator = jest.fn();
+    const tr = mount(
+      <ConfigContext.Provider
+        value={{
+          ...config,
+          ...{
+            className: {
+              tr: () => {
+                rowStyleGenerator()
+                return 'custom-tr-classname-callback'
+              }
+            },
+          },
+        }}
+      >
+        <TR>
+          <TD cell={new Cell('boo')} />
+        </TR>
+      </ConfigContext.Provider>,
+    );
+
+    expect(rowStyleGenerator).toHaveBeenCalledTimes(1);
+    expect(tr.find('tr.custom-tr-classname-callback')).toHaveLength(1);
+  });
 });

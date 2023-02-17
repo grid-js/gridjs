@@ -66,6 +66,13 @@ export function TD(
     }
   };
 
+  let tdClassName: string = "";
+  if (typeof config.className.td === 'function') {
+    tdClassName = config.className.td(props.cell, props.column?.id, props.row)
+  } else {
+    tdClassName = config.className.td
+  }
+
   return (
     <td
       role={props.role}
@@ -74,7 +81,7 @@ export function TD(
       className={classJoin(
         className('td'),
         props.className,
-        config.className.td,
+        tdClassName,
       )}
       style={{
         ...props.style,
