@@ -38,7 +38,9 @@ export function Resize(props: {
     const thElement = props.thRef.current;
 
     if (offsetStart + getPageX(e) >= parseInt(thElement.style.minWidth, 10)) {
-      thElement.style.width = `${offsetStart + getPageX(e)}px`;
+      const width = offsetStart + getPageX(e);
+      thElement.style.width = `${width}px`;
+      localStorage.setItem(`columnWidth${props.column.id}`, width.toString()); // save column width in local storage
     }
   };
 

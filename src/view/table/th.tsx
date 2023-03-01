@@ -33,6 +33,12 @@ export function TH(
         });
       }
     }
+    if (thRef.current && isResizable()) {
+      const width = localStorage.getItem(`columnWidth${props.column.id}`); // get column width from local storage
+      if (width) {
+        thRef.current.style.width = `${width}px`;
+      }
+    }
   }, [thRef]);
 
   const isSortable = (): boolean => props.column.sort != undefined;
