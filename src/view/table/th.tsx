@@ -33,11 +33,18 @@ export function TH(
         });
       }
     }
+
     if (thRef.current && isResizable()) {
       const width = localStorage.getItem(`columnWidth${props.column.id}`); // get column width from local storage
-      if (width) {
+      if (width && !isNaN(Number(width))) {
         thRef.current.style.width = `${width}px`;
       }
+      else {
+        thRef.current.style.width = `${props.column.width}px`;
+      }
+    }
+    else if (thRef.current) {
+      thRef.current.style.width = `${props.column.width}px`;
     }
   }, [thRef]);
 
@@ -116,7 +123,6 @@ export function TH(
         ...config.style.th,
         ...{
           minWidth: props.column.minWidth,
-          width: props.column.width,
         },
         ...style,
         ...props.style,
