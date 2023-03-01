@@ -6,10 +6,12 @@ import { EventEmitter } from './util/eventEmitter';
 import { GridEvents } from './events';
 import { PluginManager } from './plugin';
 import { ConfigContext } from './config';
+import {xPath} from "./util/xpath";
 
 class Grid extends EventEmitter<GridEvents> {
   public config: Config;
   public plugin: PluginManager;
+  public uniqueIdentifier: string; // this is used in order to have different column widths (saved in localstorage) for different pages and configurations, this way you can have multiple tables, routes, ...
 
   constructor(config?: Partial<Config>) {
     super();
@@ -82,6 +84,20 @@ class Grid extends EventEmitter<GridEvents> {
 
     this.config.container = container;
     render(this.createElement(), container);
+
+    const newUniqueIdentifier = xPath(this.config.container, true) + window.location.host + window.location.pathname; // use xpath of container because that will be unique for every table on the same page
+
+    if (this.uniqueIdentifier) {
+      // transfer all column widths to new key (because identifier changed)
+
+      const storage = {...window.localStorage};
+      for (const item in storage) {
+        window.localStorage.setItem(newUniqueIdentifier + item.split(this.uniqueIdentifier)[1], storage[item]);
+        window.localStorage.removeItem(item);
+      }
+    }
+
+    this.uniqueIdentifier = newUniqueIdentifier;
 
     return this;
   }

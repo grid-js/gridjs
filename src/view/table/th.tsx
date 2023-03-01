@@ -35,16 +35,16 @@ export function TH(
     }
 
     if (thRef.current && isResizable()) {
-      const width = localStorage.getItem(`columnWidth${props.column.id}`); // get column width from local storage
+      const width = localStorage.getItem(`${config.instance.uniqueIdentifier}${props.column.id}`); // get column width from local storage
       if (width && !isNaN(Number(width))) {
-        thRef.current.style.width = `${width}px`;
+        thRef.current.style.width = `${width}`;
       }
       else {
-        thRef.current.style.width = `${props.column.width}px`;
+        thRef.current.style.width = `${props.column.width}`;
       }
     }
     else if (thRef.current) {
-      thRef.current.style.width = `${props.column.width}px`;
+      thRef.current.style.width = `${props.column.width}`;
     }
   }, [thRef]);
 

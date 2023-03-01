@@ -2,11 +2,14 @@ import { h, RefObject } from 'preact';
 import { classJoin, className } from '../../../util/className';
 import { TColumn } from '../../../types';
 import { throttle } from '../../../util/throttle';
+import {useConfig} from "../../../hooks/useConfig";
 
 export function Resize(props: {
   column: TColumn;
   thRef: RefObject<HTMLTableCellElement>;
 }) {
+  const config = useConfig();
+
   let moveFn: (e) => void;
 
   const getPageX = (e: MouseEvent | TouchEvent) => {
@@ -40,7 +43,7 @@ export function Resize(props: {
     if (offsetStart + getPageX(e) >= parseInt(thElement.style.minWidth, 10)) {
       const width = offsetStart + getPageX(e);
       thElement.style.width = `${width}px`;
-      localStorage.setItem(`columnWidth${props.column.id}`, width.toString()); // save column width in local storage
+      localStorage.setItem(`${config.instance.uniqueIdentifier}${props.column.id}`, width.toString()); // save column width in local storage
     }
   };
 
