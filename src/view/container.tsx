@@ -10,6 +10,7 @@ import * as actions from './actions';
 import { useStore } from '../hooks/useStore';
 import useSelector from '../../src/hooks/useSelector';
 import { useConfig } from '../../src/hooks/useConfig';
+import { SearchConfig } from '../../src/view/plugin/search/search';
 
 export function Container() {
   const config = useConfig();
@@ -25,7 +26,11 @@ export function Container() {
     // is available in the state
     dispatch(actions.SetHeader(config.header));
 
-    processPipeline();
+    if ((config.search as SearchConfig)?.keyword) {
+      //skipping initial pipeline as search keyword is present and search plugin will handle the initial data laod
+    } else {
+      processPipeline();
+    }
     config.pipeline.on('updated', processPipeline);
 
     return () => config.pipeline.off('updated', processPipeline);
