@@ -85,6 +85,10 @@ export function Pagination() {
     // when a processor is updated for some reason
     if (resetPageOnUpdate && updatedProcessor !== processor.current) {
       setCurrentPage(0);
+      
+      processor.current.setProps({
+        page: 0,
+      });
     }
   };
 
