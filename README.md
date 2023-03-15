@@ -35,7 +35,7 @@ Piece of :cake:
 ## Getting Started
 
 - [Install](https://gridjs.io/docs/install)
-- [Getting Started](https://gridjs.io/docs/index)
+- [Getting Started](https://gridjs.io/docs/)
 - [Examples](https://gridjs.io/docs/examples/hello-world)
 
 ## Documentation :book:
