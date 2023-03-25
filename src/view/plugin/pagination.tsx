@@ -86,9 +86,11 @@ export function Pagination() {
     if (resetPageOnUpdate && updatedProcessor !== processor.current) {
       setCurrentPage(0);
       
-      processor.current.setProps({
-        page: 0,
-      });
+      if (processor.current.props.page !== 0) {
+        processor.current.setProps({
+          page: 0,
+        });
+      }
     }
   };
 
