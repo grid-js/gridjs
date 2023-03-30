@@ -10,9 +10,15 @@ interface RowSelectionProps {
   cell?: Cell;
 }
 
+export function RowSelectionSingle(props: RowSelectionProps){
+  return RowSelection(props, true);
+}
 
+export function RowSelectionMultiple(props: RowSelectionProps){
+  return RowSelection(props, false);
+}
 
-export function RowSelection(props: RowSelectionProps) {
+export function RowSelection(props: RowSelectionProps, singleSelect:boolean=false) {
   const { dispatch } = useStore();
   const state = useSelector((state) => state.rowSelection);
   const [isChecked, setIsChecked] = useState(false);
@@ -24,22 +30,29 @@ export function RowSelection(props: RowSelectionProps) {
     this.base.parentElement &&
     (this.base.parentElement.parentElement as Element);
 
+
+  const isSingleSelect:boolean = singleSelect;
+
+
   useEffect(() => {
     // store/dispatcher is required only if we are rendering a TD (not a TH)
     if (props.cell?.data && isDataCell(props)) {
       // mark this checkbox as checked if cell.data is true
       check();
     }
+    
   }, []);
 
   useEffect(() => {
-    const parent = getParentTR();
-
-    if (!parent) return;
 
     const rowIds = state?.rowIds || [];
     const isChecked = rowIds.indexOf(props.row.id) > -1;
+
     setIsChecked(isChecked);
+
+    const parent = getParentTR();
+
+    if (!parent) return;
 
     if (isChecked) {
       parent.classList.add(selectedClassName);
@@ -49,7 +62,7 @@ export function RowSelection(props: RowSelectionProps) {
   }, [state]);
 
   const check = () => {
-    dispatch(actions.CheckRow(props.row.id));
+    dispatch(actions.CheckRow(props.row.id, isSingleSelect));
     props.cell?.update(true);
   };
 
