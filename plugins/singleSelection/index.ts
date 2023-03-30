@@ -1,4 +1,4 @@
-import { RowSelection } from './src/rowSelection/rowSelection';
+import { RowSelection, RowSelectionSingle, RowSelectionMultiple } from './src/rowSelection/rowSelection';
 import * as RowSelectionActions from './src/rowSelection/actions';
 
-export { RowSelection, RowSelectionActions };
+export { RowSelection, RowSelectionSingle, RowSelectionMultiple, RowSelectionActions };
