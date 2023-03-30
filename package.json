@@ -49,6 +49,12 @@
       "import": "./plugins/selection/dist/selection.mjs",
       "require": "./plugins/selection/dist/selection.js"
     },
+    "./plugins/single-selection": {
+      "browser": "./plugins/selection/dist/single.selection.module.js",
+      "umd": "./plugins/selection/dist/single.selection.umd.js",
+      "import": "./plugins/selection/dist/single.selection.mjs",
+      "require": "./plugins/selection/dist/single.selection.js"
+    },    
     "./package.json": "./package.json",
     "./": "./"
   },
@@ -107,7 +113,7 @@
     "build:grid": "microbundle build --raw --external none --tsconfig tsconfig.release.json",
     "build:i18n": "microbundle build --raw --cwd l10n --tsconfig l10n/tsconfig.release.json",
     "build:watch": "npm run build:grid -- -w",
-    "build:plugins": "microbundle build --raw --cwd plugins/selection --tsconfig plugins/selection/tsconfig.release.json",
+    "build:plugins": "microbundle build --raw --cwd plugins/selection --tsconfig plugins/selection/tsconfig.release.json && microbundle build --raw --cwd plugins/singleSelection --tsconfig plugins/singleSelection/tsconfig.release.json",
     "postbuild": "node build/node-13-exports.js",
     "prebuild:themes": "sass src/theme/mermaid/index.scss dist/theme/mermaid.css",
     "build:themes-dev": "postcss dist/theme/mermaid.css --output dist/theme/mermaid.css --env development --verbose",
