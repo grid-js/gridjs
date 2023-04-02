@@ -48,13 +48,7 @@
       "umd": "./plugins/selection/dist/selection.umd.js",
       "import": "./plugins/selection/dist/selection.mjs",
       "require": "./plugins/selection/dist/selection.js"
-    },
-    "./plugins/single-selection": {
-      "browser": "./plugins/selection/dist/single.selection.module.js",
-      "umd": "./plugins/selection/dist/single.selection.umd.js",
-      "import": "./plugins/selection/dist/single.selection.mjs",
-      "require": "./plugins/selection/dist/single.selection.js"
-    },    
+    }, 
     "./package.json": "./package.json",
     "./": "./"
   },
