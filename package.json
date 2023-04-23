@@ -20,12 +20,6 @@
   "homepage": "https://gridjs.io",
   "repository": "https://github.com/grid-js/gridjs",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist/*",
-    "dist/theme/*",
-    "l10n/dist/*",
-    "plugins/!(node_modules)/dist/*"
-  ],
   "exports": {
     ".": {
       "browser": "./dist/gridjs.module.js",
