@@ -36,3 +36,4 @@ tests/dev-server/build
 tests/dev-server/size-plugin.json
 tests/cypress/snapshots
 tests/cypress/videos
+/examples/HTML5Application/nbproject/private/
