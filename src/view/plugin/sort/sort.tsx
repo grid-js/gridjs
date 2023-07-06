@@ -15,6 +15,8 @@ import { useStore } from '../../../hooks/useStore';
 // column specific config
 export interface SortConfig {
   compare?: Comparator<TCell>;
+  // 1 ascending, -1 descending
+  direction?: 1 | -1;
 }
 
 // generic sort config:
@@ -69,6 +71,11 @@ export function Sort(
     if (!currentColumn) {
       setDirection(0);
     } else {
+      // if the direction is not set, initialize the selected
+      // column direction with the passed prop (default to ascending)
+      if (direction === 0) {
+        currentColumn.direction = props.direction ?? 1;
+      }
       setDirection(currentColumn.direction);
     }
   }, [state]);
