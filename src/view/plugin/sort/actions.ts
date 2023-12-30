@@ -8,7 +8,7 @@ export const SortColumn =
     compare?: Comparator<TCell>,
   ) =>
   (state) => {
-    let columns = state.sort ? [...state.sort.columns] : [];
+    let columns = state.sort ? structuredClone(state.sort.columns) : [];
     const count = columns.length;
     const column = columns.find((x) => x.index === index);
     const exists = column !== undefined;
@@ -86,7 +86,7 @@ export const SortColumn =
 
 export const SortToggle =
   (index: number, multi: boolean, compare?: Comparator<TCell>) => (state) => {
-    const columns = state.sort ? [...state.sort.columns] : [];
+    const columns = state.sort ? structuredClone(state.sort.columns) : [];
     const column = columns.find((x) => x.index === index);
 
     if (!column) {

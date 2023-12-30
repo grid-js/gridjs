@@ -1,7 +1,7 @@
 import { h, JSX } from 'preact';
 
 import { classJoin, className } from '../../../util/className';
-import { ProcessorType } from '../../../pipeline/processor';
+import { PipelineProcessor, ProcessorType } from '../../../pipeline/processor';
 import NativeSort from '../../../pipeline/sort/native';
 import { Comparator, TCell, TColumnSort } from '../../../types';
 import * as actions from './actions';
@@ -38,25 +38,52 @@ export function Sort(
   } & SortConfig,
 ) {
   const config = useConfig();
+  const { dispatch } = useStore();
   const _ = useTranslator();
   const [direction, setDirection] = useState(0);
-  const [processor, setProcessor] = useState<NativeSort | ServerSort>(
-    undefined,
-  );
-  const state = useSelector((state) => state.sort);
-  const { dispatch } = useStore();
   const sortConfig = config.sort as GenericSortConfig;
+  const state = useSelector((state) => state.sort);
+  const processorType =
+    typeof sortConfig?.server === 'object'
+      ? ProcessorType.ServerSort
+      : ProcessorType.Sort;
 
+  const getSortProcessor = () => {
+    const processors = config.pipeline.getStepsByType(processorType);
+    if (processors.length) {
+      return processors[0];
+    }
+    return undefined;
+  };
+
+  const createSortProcessor = () => {
+    if (processorType === ProcessorType.ServerSort) {
+      return new ServerSort({
+        columns: state ? state.columns : [],
+        ...sortConfig.server,
+      });
+    }
+
+    return new NativeSort({
+      columns: state ? state.columns : [],
+    });
+  };
+
+  const getOrCreateSortProcessor = (): PipelineProcessor<any, any> => {
+    const existingSortProcessor = getSortProcessor();
+    if (existingSortProcessor) {
+      return existingSortProcessor;
+    }
+
+    return createSortProcessor();
+  };
+  
   useEffect(() => {
     const processor = getOrCreateSortProcessor();
-    if (processor) setProcessor(processor);
-  }, []);
-
-  useEffect(() => {
-    config.pipeline.register(processor);
+    config.pipeline.tryRegister(processor);
 
     return () => config.pipeline.unregister(processor);
-  }, [config, processor]);
+  }, [config]);
 
   /**
    * Sets the internal state of component
@@ -74,6 +101,8 @@ export function Sort(
   }, [state]);
 
   useEffect(() => {
+    const processor = getSortProcessor();
+
     if (!processor) return;
     if (!state) return;
 
@@ -81,36 +110,6 @@ export function Sort(
       columns: state.columns,
     });
   }, [state]);
-
-  const getOrCreateSortProcessor = (): NativeSort | null => {
-    let processorType = ProcessorType.Sort;
-
-    if (sortConfig && typeof sortConfig.server === 'object') {
-      processorType = ProcessorType.ServerSort;
-    }
-
-    const processors = config.pipeline.getStepsByType(processorType);
-
-    if (processors.length === 0) {
-      // my assumption is that we only have ONE sorting processor in the
-      // entire pipeline and that's why I'm displaying a warning here
-      let processor;
-
-      if (processorType === ProcessorType.ServerSort) {
-        processor = new ServerSort({
-          columns: state ? state.columns : [],
-          ...sortConfig.server,
-        });
-      } else {
-        processor = new NativeSort({
-          columns: state ? state.columns : [],
-        });
-      }
-      return processor;
-    }
-
-    return null;
-  };
 
   const changeDirection = (e: JSX.TargetedMouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -125,7 +124,7 @@ export function Sort(
     );
   };
 
-  const getSortClassName = (direction) => {
+  const getSortClassName = (direction: number) => {
     if (direction === 1) {
       return 'asc';
     } else if (direction === -1) {
