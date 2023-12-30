@@ -10,6 +10,7 @@ import * as actions from './actions';
 import { useStore } from '../hooks/useStore';
 import useSelector from '../../src/hooks/useSelector';
 import { useConfig } from '../../src/hooks/useConfig';
+import { throttle } from 'src/util/throttle';
 
 export function Container() {
   const config = useConfig();
@@ -18,6 +19,23 @@ export function Container() {
   const data = useSelector((state) => state.data);
   const tableRef = useSelector((state) => state.tableRef);
   const tempRef = createRef();
+
+  const processPipeline = throttle(async () => {
+    dispatch(actions.SetLoadingData());
+
+    try {
+      const data = await config.pipeline.process();
+      dispatch(actions.SetData(data));
+
+      // TODO: do we need this setTimemout?
+      setTimeout(() => {
+        dispatch(actions.SetStatusToRendered());
+      }, 0);
+    } catch (e) {
+      log.error(e);
+      dispatch(actions.SetDataErrored());
+    }
+  }, config.processingThrottleMs, false);
 
   useEffect(() => {
     // set the initial header object
@@ -40,23 +58,6 @@ export function Container() {
       );
     }
   }, [data, config, tempRef]);
-
-  const processPipeline = async () => {
-    dispatch(actions.SetLoadingData());
-
-    try {
-      const data = await config.pipeline.process();
-      dispatch(actions.SetData(data));
-
-      // TODO: do we need this setTimemout?
-      setTimeout(() => {
-        dispatch(actions.SetStatusToRendered());
-      }, 0);
-    } catch (e) {
-      log.error(e);
-      dispatch(actions.SetDataErrored());
-    }
-  };
 
   return (
     <div

@@ -36,6 +36,8 @@ export interface Config {
   /** to parse a HTML table and load the data */
   from: HTMLElement;
   storage: Storage<any>;
+  /** Pipeline process throttle timeout in milliseconds */
+  processingThrottleMs: number;
   pipeline: Pipeline<Tabular>;
   /** to automatically calculate the columns width */
   autoWidth: boolean;
@@ -128,6 +130,7 @@ export class Config {
       tableRef: createRef(),
       width: '100%',
       height: 'auto',
+      processingThrottleMs: 50,
       autoWidth: true,
       style: {},
       className: {},
