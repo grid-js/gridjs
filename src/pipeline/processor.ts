@@ -2,6 +2,7 @@
 // e.g. Extractor = 0 will be processed before Transformer = 1
 import { generateUUID, ID } from '../util/id';
 import { EventEmitter } from '../util/eventEmitter';
+import { deepEqual } from '../util/deepEqual';
 
 export enum ProcessorType {
   Initiator,
@@ -29,7 +30,7 @@ export abstract class PipelineProcessor<
   P extends Partial<PipelineProcessorProps>,
 > extends EventEmitter<PipelineProcessorEvents<T, P>> {
   public readonly id: ID;
-  private readonly _props: P;
+  private _props: P;
 
   abstract get type(): ProcessorType;
   protected abstract _process(...args): T | Promise<T>;
@@ -62,8 +63,16 @@ export abstract class PipelineProcessor<
   }
 
   setProps(props: Partial<P>): this {
-    Object.assign(this._props, props);
-    this.emit('propsUpdated', this);
+    const updatedProps = {
+      ...this._props,
+      ...props,
+    };
+
+    if (!deepEqual(updatedProps, this._props)) {
+      this._props = updatedProps;
+      this.emit('propsUpdated', this);
+    }
+
     return this;
   }
 

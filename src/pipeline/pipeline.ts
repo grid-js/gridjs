@@ -47,7 +47,7 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
   // -1 means all new processors should be processed
   private lastProcessorIndexUpdated = -1;
 
-  constructor(steps?: PipelineProcessor<any, any>[]) {
+  constructor(steps?: PipelineProcessor<T, P>[]) {
     super();
 
     if (steps) {
@@ -70,13 +70,19 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
    * @param priority
    */
   register(
-    processor: PipelineProcessor<any, any>,
+    processor: PipelineProcessor<T, P>,
     priority: number = null,
-  ): void {
-    if (!processor) return;
+  ): PipelineProcessor<T, P> {
+    if (!processor) {
+      throw Error('Processor is not defined');
+    }
 
     if (processor.type === null) {
       throw Error('Processor type is not defined');
+    }
+
+    if (this.findProcessorIndexByID(processor.id) > -1) {
+      throw Error(`Processor ID ${processor.id} is already defined`);
     }
 
     // binding the propsUpdated callback to the Pipeline
@@ -84,6 +90,26 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
 
     this.addProcessorByPriority(processor, priority);
     this.afterRegistered(processor);
+
+    return processor;
+  }
+
+  /**
+   * Tries to register a new processor
+   * @param processor
+   * @param priority
+   */
+  tryRegister(
+    processor: PipelineProcessor<T, P>,
+    priority: number = null,
+  ): PipelineProcessor<T, P> | undefined {
+    try {
+      return this.register(processor, priority);
+    } catch (_) {
+      // noop
+    }
+
+    return undefined;
   }
 
   /**
@@ -91,8 +117,9 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
    *
    * @param processor
    */
-  unregister(processor: PipelineProcessor<any, any>): void {
+  unregister(processor: PipelineProcessor<T, P>): void {
     if (!processor) return;
+    if (this.findProcessorIndexByID(processor.id) === -1) return;
 
     const subSteps = this._steps.get(processor.type);
 
