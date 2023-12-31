@@ -16,8 +16,10 @@ export enum ProcessorType {
   Limit,
 }
 
-interface PipelineProcessorEvents<T, P> {
-  propsUpdated: (processor: PipelineProcessor<T, P>) => void;
+interface PipelineProcessorEvents {
+  propsUpdated: <T, P>(
+    processor: PipelineProcessor<T, P>,
+  ) => void;
   beforeProcess: (...args) => void;
   afterProcess: (...args) => void;
 }
@@ -28,7 +30,7 @@ export interface PipelineProcessorProps {}
 export abstract class PipelineProcessor<
   T,
   P extends Partial<PipelineProcessorProps>,
-> extends EventEmitter<PipelineProcessorEvents<T, P>> {
+> extends EventEmitter<PipelineProcessorEvents> {
   public readonly id: ID;
   private _props: P;
 

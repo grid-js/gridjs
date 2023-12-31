@@ -67,9 +67,11 @@ export function Search() {
   }, [props]);
 
   useEffect(() => {
-    config.pipeline.register(processor);
+    if (processor) {
+      config.pipeline.register<object, object>(processor);
+    }
 
-    return () => config.pipeline.unregister(processor);
+    return () => config.pipeline.unregister<object, object>(processor);
   }, [config, processor]);
 
   const debouncedOnInput = useCallback(

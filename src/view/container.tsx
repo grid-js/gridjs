@@ -8,9 +8,9 @@ import log from '../util/log';
 import { useEffect } from 'preact/hooks';
 import * as actions from './actions';
 import { useStore } from '../hooks/useStore';
-import useSelector from '../../src/hooks/useSelector';
-import { useConfig } from '../../src/hooks/useConfig';
-import { throttle } from 'src/util/throttle';
+import useSelector from '../hooks/useSelector';
+import { useConfig } from '../hooks/useConfig';
+import { throttle } from '../util/throttle';
 
 export function Container() {
   const config = useConfig();

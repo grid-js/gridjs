@@ -3,13 +3,13 @@ import { ID } from '../util/id';
 import log from '../util/log';
 import { EventEmitter } from '../util/eventEmitter';
 
-interface PipelineEvents<T> {
+interface PipelineEvents<R> {
   /**
    * Generic updated event. Triggers the callback function when the pipeline
    * is updated, including when a new processor is registered, a processor's props
    * get updated, etc.
    */
-  updated: (processor: PipelineProcessor<any, any>) => void;
+  updated: <T, P>(processor: PipelineProcessor<T, P>) => void;
   /**
    * Triggers the callback function when a new
    * processor is registered successfully
@@ -27,27 +27,29 @@ interface PipelineEvents<T> {
    * afterProcess will not be called if there is an
    * error in the pipeline (i.e a step throw an Error)
    */
-  afterProcess: (prev: T) => void;
+  afterProcess: (prev: R) => void;
   /**
    * Triggers the callback function when the pipeline
    * fails to process all steps or at least one step
    * throws an Error
    */
-  error: (prev: T) => void;
+  error: <T>(prev: T) => void;
 }
 
-class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
+class Pipeline<R> extends EventEmitter<PipelineEvents<R>> {
   // available steps for this pipeline
-  private readonly _steps: Map<ProcessorType, PipelineProcessor<T, P>[]> =
-    new Map<ProcessorType, PipelineProcessor<T, P>[]>();
+  private readonly _steps: Map<
+    ProcessorType,
+    PipelineProcessor<unknown, unknown>[]
+  > = new Map<ProcessorType, PipelineProcessor<unknown, unknown>[]>();
   // used to cache the results of processors using their id field
-  private cache: Map<string, any> = new Map<string, any>();
+  private cache: Map<string, unknown> = new Map<string, unknown>();
   // keeps the index of the last updated processor in the registered
   // processors list and will be used to invalidate the cache
   // -1 means all new processors should be processed
   private lastProcessorIndexUpdated = -1;
 
-  constructor(steps?: PipelineProcessor<T, P>[]) {
+  constructor(steps?: PipelineProcessor<unknown, unknown>[]) {
     super();
 
     if (steps) {
@@ -59,7 +61,7 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
    * Clears the `cache` array
    */
   clearCache(): void {
-    this.cache = new Map<string, any>();
+    this.cache = new Map<string, object>();
     this.lastProcessorIndexUpdated = -1;
   }
 
@@ -69,7 +71,7 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
    * @param processor
    * @param priority
    */
-  register(
+  register<T, P>(
     processor: PipelineProcessor<T, P>,
     priority: number = null,
   ): PipelineProcessor<T, P> {
@@ -99,7 +101,7 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
    * @param processor
    * @param priority
    */
-  tryRegister(
+  tryRegister<T, P>(
     processor: PipelineProcessor<T, P>,
     priority: number = null,
   ): PipelineProcessor<T, P> | undefined {
@@ -117,7 +119,7 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
    *
    * @param processor
    */
-  unregister(processor: PipelineProcessor<T, P>): void {
+  unregister<T, P>(processor: PipelineProcessor<T, P>): void {
     if (!processor) return;
     if (this.findProcessorIndexByID(processor.id) === -1) return;
 
@@ -138,7 +140,7 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
    * @param processor
    * @param priority
    */
-  private addProcessorByPriority(
+  private addProcessorByPriority<T, P>(
     processor: PipelineProcessor<T, P>,
     priority: number,
   ): void {
@@ -169,8 +171,8 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
   /**
    * Flattens the _steps Map and returns a list of steps with their correct priorities
    */
-  get steps(): PipelineProcessor<T, P>[] {
-    let steps: PipelineProcessor<T, P>[] = [];
+  get steps(): PipelineProcessor<unknown, unknown>[] {
+    let steps: PipelineProcessor<unknown, unknown>[] = [];
 
     for (const type of this.getSortedProcessorTypes()) {
       const subSteps = this._steps.get(type);
@@ -190,7 +192,7 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
    *
    * @param type
    */
-  getStepsByType(type: ProcessorType): PipelineProcessor<T, P>[] {
+  getStepsByType(type: ProcessorType): PipelineProcessor<unknown, unknown>[] {
     return this.steps.filter((process) => process.type === type);
   }
 
@@ -209,7 +211,7 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
    *
    * @param data
    */
-  async process(data?: T): Promise<T> {
+  async process(data?: R): Promise<R> {
     const lastProcessorIndexUpdated = this.lastProcessorIndexUpdated;
     const steps = this.steps;
 
@@ -224,11 +226,11 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
           // updated processor was before "processor".
           // This is to ensure that we always have correct and up to date
           // data from processors and also to skip them when necessary
-          prev = await processor.process(prev);
+          prev = (await processor.process(prev)) as R;
           this.cache.set(processor.id, prev);
         } else {
           // cached results already exist
-          prev = this.cache.get(processor.id);
+          prev = this.cache.get(processor.id) as R;
         }
       }
     } catch (e) {
@@ -263,7 +265,9 @@ class Pipeline<T, P = unknown> extends EventEmitter<PipelineEvents<T>> {
    * This is used to invalid or skip a processor in
    * the process() method
    */
-  private setLastProcessorIndex(processor: PipelineProcessor<T, P>): void {
+  private setLastProcessorIndex<T, P>(
+    processor: PipelineProcessor<T, P>,
+  ): void {
     const processorIndex = this.findProcessorIndexByID(processor.id);
 
     if (this.lastProcessorIndexUpdated > processorIndex) {

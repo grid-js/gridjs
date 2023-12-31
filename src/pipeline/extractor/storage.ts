@@ -10,7 +10,7 @@ interface StorageExtractorProps extends PipelineProcessorProps {
 }
 
 class StorageExtractor extends PipelineProcessor<
-  Promise<StorageResponse>,
+  StorageResponse,
   StorageExtractorProps
 > {
   get type(): ProcessorType {
