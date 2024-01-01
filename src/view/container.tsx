@@ -35,7 +35,7 @@ export function Container() {
       log.error(e);
       dispatch(actions.SetDataErrored());
     }
-  }, config.processingThrottleMs, false);
+  }, config.processingThrottleMs);
 
   useEffect(() => {
     // set the initial header object

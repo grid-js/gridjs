@@ -130,7 +130,7 @@ export class Config {
       tableRef: createRef(),
       width: '100%',
       height: 'auto',
-      processingThrottleMs: 50,
+      processingThrottleMs: 100,
       autoWidth: true,
       style: {},
       className: {},
