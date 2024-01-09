@@ -17,9 +17,7 @@ export enum ProcessorType {
 }
 
 interface PipelineProcessorEvents {
-  propsUpdated: <T, P>(
-    processor: PipelineProcessor<T, P>,
-  ) => void;
+  propsUpdated: <T, P>(processor: PipelineProcessor<T, P>) => void;
   beforeProcess: (...args) => void;
   afterProcess: (...args) => void;
 }

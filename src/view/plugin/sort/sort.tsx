@@ -77,7 +77,7 @@ export function Sort(
 
     return createSortProcessor();
   };
-  
+
   useEffect(() => {
     const processor = getOrCreateSortProcessor();
     config.pipeline.tryRegister(processor);

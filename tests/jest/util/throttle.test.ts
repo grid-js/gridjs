@@ -9,9 +9,9 @@ describe('throttle', () => {
     const throttled = throttle(fn, wait);
 
     throttled('a');
-    sleep(wait - 5)
+    sleep(wait - 5);
     throttled('b');
-    sleep(wait - 10)
+    sleep(wait - 10);
     throttled('c');
 
     await sleep(wait);
