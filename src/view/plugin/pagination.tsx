@@ -46,11 +46,15 @@ export function Pagination() {
         url: server.url,
         body: server.body,
       });
+
+      config.pipeline.register(processor.current);
     } else {
       processor.current = new PaginationLimit({
         limit: limit,
         page: currentPage,
       });
+
+      config.pipeline.register(processor.current);
     }
 
     if (processor.current instanceof ServerPaginationLimit) {
@@ -65,7 +69,6 @@ export function Pagination() {
     }
 
     config.pipeline.on('updated', onUpdate);
-    config.pipeline.register(processor.current);
 
     // we need to make sure that the state is set
     // to the default props when an error happens
@@ -75,7 +78,7 @@ export function Pagination() {
     });
 
     return () => {
-      config.pipeline.unregister(processor.current);
+      config.pipeline.unregister<object, object>(processor.current);
       config.pipeline.off('updated', onUpdate);
     };
   }, []);

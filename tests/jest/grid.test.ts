@@ -12,6 +12,7 @@ describe('Grid class', () => {
 
   it('should trigger the events in the correct order', async () => {
     const grid = new Grid({
+      processingThrottleMs: 0,
       columns: ['a', 'b', 'c'],
       data: [[1, 2, 3]],
     });
