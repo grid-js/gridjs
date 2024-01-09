@@ -20,6 +20,7 @@ describe('Container component', () => {
 
   beforeEach(() => {
     config = new Config().update({
+      processingThrottleMs: 0,
       data: [
         [1, 2, 3],
         ['a', 'b', 'c'],
@@ -244,6 +245,7 @@ describe('Container component', () => {
 
   it('should render a container with array of objects without columns input', async () => {
     const config = Config.fromPartialConfig({
+      processingThrottleMs: 0,
       data: [
         [1, 2, 3],
         ['a', 'b', 'c'],
@@ -285,6 +287,7 @@ describe('Container component', () => {
 
   it('should render a container with array of objects with object columns', async () => {
     const config = Config.fromPartialConfig({
+      processingThrottleMs: 0,
       columns: [
         {
           name: 'Name',
@@ -341,6 +344,7 @@ describe('Container component', () => {
 
   it('should unregister the processors', async () => {
     const config = new Config().update({
+      processingThrottleMs: 0,
       pagination: true,
       search: true,
       sort: true,

@@ -67,9 +67,9 @@ export function Search() {
   }, [props]);
 
   useEffect(() => {
-    if (processor) {
-      config.pipeline.register<object, object>(processor);
-    }
+    if (!processor) return undefined;
+
+    config.pipeline.register<object, object>(processor);
 
     return () => config.pipeline.unregister<object, object>(processor);
   }, [config, processor]);
