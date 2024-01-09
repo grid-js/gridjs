@@ -265,6 +265,7 @@ describe('Container component', () => {
 
   it('should render a container with array of objects with string columns', async () => {
     const config = Config.fromPartialConfig({
+      processingThrottleMs: 0,
       columns: ['Name', 'Phone Number'],
       data: [
         { name: 'boo', phoneNumber: '123' },
