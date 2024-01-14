@@ -15,7 +15,7 @@ export default function useSelector<T>(selector: (state) => T) {
     });
 
     return unsubscribe;
-  }, [store, current]);
+  }, []);
 
   return current;
 }
