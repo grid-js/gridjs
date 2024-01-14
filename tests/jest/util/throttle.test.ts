@@ -8,16 +8,16 @@ describe('throttle', () => {
     const fn = jest.fn();
     const throttled = throttle(fn, wait);
 
-    throttled('a');
+    throttled('a', 'b', 'c');
     sleep(wait - 5);
-    throttled('b');
+    throttled('b', 'a', 'c');
     sleep(wait - 10);
-    throttled('c');
+    throttled('c', 'b', 'a');
 
     await sleep(wait);
 
     expect(fn).toBeCalledTimes(1);
-    expect(fn).toBeCalledWith(['c']);
+    expect(fn).toBeCalledWith('c', 'b', 'a');
   });
 
   it('should execute the first call', async () => {

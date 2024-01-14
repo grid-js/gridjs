@@ -19,7 +19,7 @@ export const throttle = (fn: (...args) => void, wait = 100) => {
 
     if (elapsed >= wait) {
       // If enough time has passed since the last call, execute the function immediately
-      execute(args);
+      execute(...args);
     } else {
       // If not enough time has passed, schedule the function call after the remaining delay
       if (timeoutId) {
@@ -27,7 +27,7 @@ export const throttle = (fn: (...args) => void, wait = 100) => {
       }
 
       timeoutId = setTimeout(() => {
-        execute(args);
+        execute(...args);
         timeoutId = null;
       }, wait - elapsed);
     }
