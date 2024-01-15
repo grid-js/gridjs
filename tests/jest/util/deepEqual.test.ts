@@ -21,8 +21,14 @@ describe('deepEqual', () => {
     expect(result).toBeFalse();
   });
 
-  it('should return true when objects have functions', () => {
+  it('should return false when objects have functions', () => {
     const result = deepEqual({ a: 42, c: jest.fn() }, { a: 42, c: jest.fn() });
     expect(result).toBeFalse();
+  });
+
+  it('should return true when objects have same functions', () => {
+    const fn = jest.fn();
+    const result = deepEqual({ a: 42, c: fn }, { a: 42, c: fn });
+    expect(result).toBeTrue();
   });
 });
