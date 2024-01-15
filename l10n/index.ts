@@ -15,6 +15,7 @@ import faIR from './fa_IR';
 import nbNO from './nb_NO';
 import uaUA from './ua_UA';
 import csCZ from './cs_CZ';
+import svSE from './sv_SE';
 
 export {
   esES,
@@ -34,4 +35,5 @@ export {
   nbNO,
   uaUA,
   csCZ,
+  svSE,
 };
