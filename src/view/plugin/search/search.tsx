@@ -32,6 +32,8 @@ export function Search() {
   const { dispatch } = useStore();
   const state = useSelector((state) => state.search);
 
+  const [searchInput, setSearchInput] = useState(props.keyword || '');
+
   useEffect(() => {
     if (!processor) return;
 
@@ -74,6 +76,13 @@ export function Search() {
     return () => config.pipeline.unregister<object, object>(processor);
   }, [config, processor]);
 
+  const handleSearchInput = (event: JSX.TargetedEvent<HTMLInputElement>) => {
+    if (event.target instanceof HTMLInputElement) {
+      setSearchInput(event.target.value);
+      debouncedOnInput(event);
+    }
+  }
+
   const debouncedOnInput = useCallback(
     debounce(
       (event: JSX.TargetedEvent<HTMLInputElement>) => {
@@ -94,9 +103,9 @@ export function Search() {
         type="search"
         placeholder={_('search.placeholder')}
         aria-label={_('search.placeholder')}
-        onInput={debouncedOnInput}
+        onInput={handleSearchInput}
         className={classJoin(className('input'), className('search', 'input'))}
-        value={state?.keyword || ''}
+        value={searchInput || ''}
       />
     </div>
   );
