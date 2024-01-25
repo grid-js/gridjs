@@ -31,7 +31,8 @@
       "browser": "./dist/gridjs.module.js",
       "umd": "./dist/gridjs.umd.js",
       "import": "./dist/gridjs.mjs",
-      "require": "./dist/gridjs.js"
+      "require": "./dist/gridjs.js",
+      "types": "./dist/index.d.ts"
     },
     "./legacy": {
       "browser": "./dist/gridjs.production.es.min.js",
