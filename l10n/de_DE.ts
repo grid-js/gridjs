@@ -7,7 +7,7 @@ export default {
     sortDesc: 'Spalte absteigend sortieren',
   },
   pagination: {
-    previous: 'Vorherige',
+    previous: 'Zurück',
     next: 'Nächste',
     navigate: (page, pages) => `Seite ${page} von ${pages}`,
     page: (page) => `Seite ${page}`,
