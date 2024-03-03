@@ -1,16 +1,26 @@
-export const CheckRow = (rowId: string) => (state) => {
-  const rowIds = state.rowSelection?.rowIds || [];
+export const CheckRow =
+  (rowId: string, singleSelection: boolean) => (state) => {
+    const rowIds = state.rowSelection?.rowIds || [];
 
-  // rowId already exists
-  if (rowIds.indexOf(rowId) > -1) return state;
+    // rowId already exists
+    if (rowIds.indexOf(rowId) > -1) return state;
 
-  return {
-    ...state,
-    rowSelection: {
-      rowIds: [rowId, ...rowIds],
-    },
+    if (singleSelection) {
+      return {
+        ...state,
+        rowSelection: {
+          rowIds: [rowId],
+        },
+      };
+    }
+
+    return {
+      ...state,
+      rowSelection: {
+        rowIds: [rowId, ...rowIds],
+      },
+    };
   };
-};
 
 export const UncheckRow = (rowId: string) => (state) => {
   const rowIds = state.rowSelection?.rowIds || [];

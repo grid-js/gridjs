@@ -1,6 +1,6 @@
 {
   "name": "selection",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "private": true,
   "description": "Adds row and cell selection to Grid.js",
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
