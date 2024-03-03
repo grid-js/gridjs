@@ -20,12 +20,6 @@
   "homepage": "https://gridjs.io",
   "repository": "https://github.com/grid-js/gridjs",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist/*",
-    "dist/theme/*",
-    "l10n/dist/*",
-    "plugins/!(node_modules)/dist/*"
-  ],
   "exports": {
     ".": {
       "browser": "./dist/gridjs.module.js",
@@ -104,6 +98,7 @@
     "install:plugins": "find ./plugins ! -path '*/node_modules/*' ! -path './package.json' -name 'package.json' -execdir npm install \\;",
     "clean": "rimraf coverage dist tmp l10n/dist 'plugins/!(node_modules)/dist'",
     "prebuild": "npm run clean",
+    "prepare": "run-s install:plugins build",
     "build": "run-p build:grid build:i18n build:plugins build:themes",
     "build:grid": "microbundle build --raw --external none --tsconfig tsconfig.release.json",
     "build:i18n": "microbundle build --raw --cwd l10n --tsconfig l10n/tsconfig.release.json",
