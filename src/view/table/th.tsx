@@ -33,6 +33,19 @@ export function TH(
         });
       }
     }
+
+    if (thRef.current && isResizable()) {
+      const width = localStorage.getItem(`${config.instance.uniqueIdentifier}${props.column.id}`); // get column width from local storage
+      if (width && !isNaN(Number(width))) {
+        thRef.current.style.width = `${width}`;
+      }
+      else {
+        thRef.current.style.width = `${props.column.width}`;
+      }
+    }
+    else if (thRef.current) {
+      thRef.current.style.width = `${props.column.width}`;
+    }
   }, [thRef]);
 
   const isSortable = (): boolean => props.column.sort != undefined;
@@ -110,7 +123,6 @@ export function TH(
         ...config.style.th,
         ...{
           minWidth: props.column.minWidth,
-          width: props.column.width,
         },
         ...style,
         ...props.style,
