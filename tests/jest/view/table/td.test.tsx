@@ -38,4 +38,46 @@ describe('TD component', () => {
     expect(cells.length).toEqual(1);
     expect(onClick).toHaveBeenCalledTimes(1);
   });
+
+  it('should attach the custom td className', async () => {
+    const td = mount(
+      <ConfigContext.Provider
+        value={{
+          ...config,
+          ...{
+            className: {
+              td: 'custom-td-classname',
+            },
+          },
+        }}
+      >
+        <TD cell={new Cell('boo')} />
+      </ConfigContext.Provider>,
+    );
+
+    expect(td.find('td.custom-td-classname')).toHaveLength(1);
+  });
+
+  it('should attach the custom td className callback', async () => {
+    const cellStyleGenerator = jest.fn();
+
+    const td = mount(
+      <ConfigContext.Provider value={{
+        ...config,
+        ...{
+          className: {
+            td: () => {
+              cellStyleGenerator()
+              return 'custom-td-classname-callback'
+            }
+          },
+        },
+      }}>
+        <TD cell={new Cell('boo')} />
+      </ConfigContext.Provider>,
+    );
+
+    expect(cellStyleGenerator).toHaveBeenCalledTimes(1);
+    expect(td.find('td.custom-td-classname-callback')).toHaveLength(1);
+  });
 });

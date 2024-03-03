@@ -50,9 +50,16 @@ export function TR(props: {
     });
   };
 
+  let trClassName: string = "";
+  if (typeof config.className.tr === 'function') {
+    trClassName = config.className.tr(props.row, this.header)
+  } else {
+    trClassName = config.className.tr
+  }
+
   return (
     <tr
-      className={classJoin(className('tr'), config.className.tr)}
+      className={classJoin(className('tr'), trClassName)}
       onClick={handleClick}
     >
       {getChildren()}
