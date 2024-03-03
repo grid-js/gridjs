@@ -167,6 +167,9 @@ export class Config {
       translator: new Translator(config.language),
     });
 
+    // clear existing plugins list to prevent duplicate errors
+    config.plugin = new PluginManager();
+
     if (config.search) {
       // Search
       config.plugin.add({
