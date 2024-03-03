@@ -1,4 +1,5 @@
 import { deepEqual } from '../../../src/util/deepEqual';
+import { html } from '../../../src/util/html';
 
 describe('deepEqual', () => {
   it('should return true when objects are the same', () => {
@@ -29,6 +30,14 @@ describe('deepEqual', () => {
   it('should return true when objects have same functions', () => {
     const fn = jest.fn();
     const result = deepEqual({ a: 42, c: fn }, { a: 42, c: fn });
+    expect(result).toBeTrue();
+  });
+
+  it('should return true when objects are VNodes', () => {
+    const result = deepEqual(
+      html('<span>Grid.js</span>'),
+      html('<span>Grid.js</span>'),
+    );
     expect(result).toBeTrue();
   });
 });

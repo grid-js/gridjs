@@ -31,6 +31,31 @@ export function deepEqual<A, B>(obj1: A, obj2: B) {
     }
     return true;
   }
+  // If objects are VNodes, compare their props only
+  if (
+    // eslint-disable-next-line no-prototype-builtins
+    obj1.hasOwnProperty('constructor') &&
+    // eslint-disable-next-line no-prototype-builtins
+    obj2.hasOwnProperty('constructor') &&
+    // eslint-disable-next-line no-prototype-builtins
+    obj1.hasOwnProperty('props') &&
+    // eslint-disable-next-line no-prototype-builtins
+    obj2.hasOwnProperty('props') &&
+    // eslint-disable-next-line no-prototype-builtins
+    obj1.hasOwnProperty('key') &&
+    // eslint-disable-next-line no-prototype-builtins
+    obj2.hasOwnProperty('key') &&
+    // eslint-disable-next-line no-prototype-builtins
+    obj1.hasOwnProperty('ref') &&
+    // eslint-disable-next-line no-prototype-builtins
+    obj2.hasOwnProperty('ref') &&
+    // eslint-disable-next-line no-prototype-builtins
+    obj1.hasOwnProperty('type') &&
+    // eslint-disable-next-line no-prototype-builtins
+    obj2.hasOwnProperty('type')
+  ) {
+    return deepEqual(obj1['props'], obj2['props']);
+  }
   // If objects are both objects, compare their properties recursively
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
