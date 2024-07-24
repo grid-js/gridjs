@@ -38,6 +38,7 @@ export function Container() {
   }, config.processingThrottleMs);
 
   useEffect(() => {
+    config.eventEmitter.emit('ready');
     // set the initial header object
     // we update the header width later when "data"
     // is available in the state
