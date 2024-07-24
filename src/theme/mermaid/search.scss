@@ -1,9 +1,17 @@
+@import 'colors';
+
 .gridjs {
   &-search {
     float: left;
 
     &-input {
       width: 250px;
+    }
+    button, select {
+      padding: 10px 14px;
+      border: 1px solid $gray4;
+      background-color: $white;
+      border-radius: 6px
     }
   }
 }

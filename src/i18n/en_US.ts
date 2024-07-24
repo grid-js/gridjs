@@ -1,6 +1,7 @@
 export default {
   search: {
     placeholder: 'Type a keyword...',
+    button: 'Search',
   },
   sort: {
     sortAsc: 'Sort column ascending',
