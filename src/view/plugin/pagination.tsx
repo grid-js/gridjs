@@ -227,7 +227,7 @@ export function Pagination() {
   };
 
   function handlePageChange(event: JSX.TargetedMouseEvent<HTMLSelectElement>) {
-    if (event.target instanceof HTMLInputElement) {
+    if (event.target instanceof HTMLSelectElement) {
       setPage(parseInt(event.target.value, 10));
     }
   }
