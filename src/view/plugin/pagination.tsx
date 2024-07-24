@@ -1,4 +1,4 @@
-import { h, Fragment } from 'preact';
+import { h, Fragment, JSX } from 'preact';
 import PaginationLimit from '../../pipeline/limit/pagination';
 import { classJoin, className } from '../../util/className';
 import ServerPaginationLimit from '../../pipeline/limit/serverPagination';
@@ -14,6 +14,7 @@ export interface PaginationConfig {
   prevButton?: boolean;
   buttonsCount?: number;
   resetPageOnUpdate?: boolean;
+  showDropdown?: boolean;
   server?: {
     url?: (prevUrl: string, page: number, limit: number) => string;
     body?: (prevBody: BodyInit, page: number, limit: number) => BodyInit;
@@ -27,6 +28,7 @@ export function Pagination() {
     summary = true,
     nextButton = true,
     prevButton = true,
+    showDropdown = false,
     buttonsCount = 3,
     limit = 10,
     page = 0,
@@ -224,6 +226,12 @@ export function Pagination() {
     );
   };
 
+  function handlePageChange(event: JSX.TargetedMouseEvent<HTMLSelectElement>) {
+    if (event.target instanceof HTMLInputElement) {
+      setPage(parseInt(event.target.value, 10));
+    }
+  }
+
   return (
     <div
       className={classJoin(
@@ -252,6 +260,18 @@ export function Pagination() {
         )}
 
         {renderPages()}
+
+        {showDropdown && (<select
+          value={currentPage}
+          onChange={handlePageChange}
+          aria-label={_('pagination.selectPage')}
+        >
+          {Array.from({ length: pages() }, (_, index) => (
+            <option key={index} value={index} selected={index === currentPage}>
+              {index + 1}
+            </option>
+          ))}
+        </select>)}
 
         {nextButton && (
           <button

@@ -25,15 +25,24 @@
       outline: none;
       user-select: none;
     }
-
-    button:focus {
+    select {
+      padding: 6px 14px;
+      border: 1px solid $gray4;
+      background-color: $white;
+      border-right: none;
+      outline: none;
+      user-select: none;
+    }
+    button:focus,
+    select:focus {
       box-shadow: 0 0 0 2px rgba(149, 189, 243, 0.5);
       position: relative;
       margin-right: -1px;
       border-right: 1px solid $gray4;
     }
 
-    button:hover {
+    button:hover,
+    select:hover {
       background-color: $gray2;
       color: $darkBlue1;
       outline: none;
@@ -41,7 +50,10 @@
 
     button:disabled,
     button[disabled],
-    button:hover:disabled {
+    button:hover:disabled,
+    select:disabled,
+    select[disabled],
+    select:hover:disabled {
       cursor: default;
       background-color: $white;
       color: $gray5;
