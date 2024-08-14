@@ -123,6 +123,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "fast-sort": "^3.4.1",
     "preact": "^10.10.6"
   },
   "changelog": {

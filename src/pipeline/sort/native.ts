@@ -7,6 +7,7 @@ import {
 } from '../processor';
 import Row from '../../row';
 import log from '../../util/log';
+import { inPlaceSort, ISortByObjectSorter } from 'fast-sort';
 
 interface NativeSortProps extends PipelineProcessorProps {
   columns: {
@@ -67,7 +68,26 @@ class NativeSort extends PipelineProcessor<Tabular, NativeSortProps> {
 
   protected _process(data: Tabular): Tabular {
     const sortedRows = [...data.rows];
-    sortedRows.sort(this.compareWrapper.bind(this));
+    /* sortedRows.sort(this.compareWrapper.bind(this)); */
+    let sortBys: ISortByObjectSorter<Row>[] = [];
+    for (const column of this.props.columns) {
+      let sortBy: ISortByObjectSorter = {};
+      if (column.direction === -1) {
+        sortBy.desc = (r: Row): TCell => {
+          return r.cells[column.index].data;
+        };
+      }
+      else {
+        sortBy.asc = (r: Row): TCell => {
+          return r.cells[column.index].data;
+        };
+      }
+      if (typeof column.compare === 'function') {
+        sortBy.comparer = column.compare;
+      }
+      sortBys.push(sortBy);
+    }
+    inPlaceSort(sortedRows).by(sortBys);
 
     const sorted = new Tabular(sortedRows);
     // we have to set the tabular length manually
