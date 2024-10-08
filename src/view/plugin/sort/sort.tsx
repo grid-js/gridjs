@@ -142,7 +142,7 @@ export function Sort(
   };
 
   return (
-    <button
+    <span
       // because the corresponding <th> has tabIndex=0
       tabIndex={-1}
       aria-label={_(`sort.sort${direction === 1 ? 'Desc' : 'Asc'}`)}
