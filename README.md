@@ -41,7 +41,7 @@ Piece of :cake:
 ## Documentation :book:
 
 Full documentation of Grid.js installation, config, API and examples are available
-on Grid.js website [grid.js/docs](https://gridjs.io/docs/index). 
+on Grid.js website [grid.js/docs](https://gridjs.io/docs). 
 
 ## Community
 
