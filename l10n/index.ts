@@ -16,6 +16,7 @@ import nbNO from './nb_NO';
 import uaUA from './ua_UA';
 import csCZ from './cs_CZ';
 import svSE from './sv_SE';
+import daDK frpm './da_DK';
 
 export {
   esES,
@@ -36,4 +37,5 @@ export {
   uaUA,
   csCZ,
   svSE,
+  daDK,
 };
