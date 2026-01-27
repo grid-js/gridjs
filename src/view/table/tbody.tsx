@@ -37,7 +37,7 @@ export function TBody() {
         />
       )}
 
-      {status === Status.Rendered && data && data.length === 0 && (
+      {(status === Status.Rendered || status === Status.Loaded) && data && data.length === 0 && (
         <MessageRow
           message={_('noRecordsFound')}
           colSpan={headerLength()}
