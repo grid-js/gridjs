@@ -58,6 +58,7 @@
   "umd:main": "dist/gridjs.umd.js",
   "source": "index.ts",
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@types/enzyme": "^3.10.12",
     "@types/jest": "^29.2.4",
     "@types/jest-axe": "^3.5.5",
