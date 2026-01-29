@@ -4,7 +4,7 @@ import { classJoin, className } from '../../../util/className';
 import ServerGlobalSearchFilter from '../../../pipeline/filter/serverGlobalSearch';
 import { TCell } from '../../../types';
 import { useConfig } from '../../../hooks/useConfig';
-import { useCallback, useEffect, useState } from 'preact/hooks';
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { useTranslator } from '../../../i18n/language';
 import * as actions from './actions';
 import { useStore } from '../../../hooks/useStore';
@@ -15,6 +15,7 @@ export interface SearchConfig {
   keyword?: string;
   ignoreHiddenColumns?: boolean;
   debounceTimeout?: number;
+  showSearchButton?: boolean;
   selector?: (cell: TCell, rowIndex: number, cellIndex: number) => string;
   server?: {
     url?: (prevUrl: string, keyword: string) => string;
@@ -31,6 +32,7 @@ export function Search() {
   const _ = useTranslator();
   const { dispatch } = useStore();
   const state = useSelector((state) => state.search);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!processor) return;
@@ -74,30 +76,66 @@ export function Search() {
     return () => config.pipeline.unregister<object, object>(processor);
   }, [config, processor]);
 
+  const performSearch = (keyword: string) => {
+    dispatch(actions.SearchKeyword(keyword));
+  };
+
+  // Method to handle debounced input
   const debouncedOnInput = useCallback(
     debounce(
       (event: JSX.TargetedEvent<HTMLInputElement>) => {
+        if (props.debounceTimeout < 0) {
+          return;
+        }
         if (event.target instanceof HTMLInputElement) {
-          dispatch(actions.SearchKeyword(event.target.value));
+          performSearch(event.target.value);
         }
       },
-      processor instanceof ServerGlobalSearchFilter
-        ? props.debounceTimeout || 250
-        : 0,
+      processor instanceof ServerGlobalSearchFilter ? props.debounceTimeout || 250 : 0,
     ),
     [props, processor],
   );
 
+  // Method to handle keydown event for Enter key
+  const handleKeyDown = (event: JSX.TargetedKeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (event.target instanceof HTMLInputElement) {
+        performSearch(event.target.value);
+      }
+    }
+  };
+
+  // Method to handle search button click
+  const handleSearchClick = () => {
+    if (inputRef.current) {
+      performSearch(inputRef.current.value);
+    }
+  };
+
+
   return (
-    <div className={className(classJoin('search', config.className?.search))}>
+    <div className={classJoin(className('search'), config.className?.search)}>
       <input
         type="search"
+        ref={inputRef}
         placeholder={_('search.placeholder')}
         aria-label={_('search.placeholder')}
         onInput={debouncedOnInput}
+        onKeyDown={handleKeyDown}
         className={classJoin(className('input'), className('search', 'input'))}
         defaultValue={state?.keyword || ''}
       />
+      {props.showSearchButton && (
+        <button
+          className={classJoin(
+            className('button'),
+            className('search', 'button'),
+          )}
+          onClick={handleSearchClick}
+        >
+          {_('search.button')}
+        </button>
+      )}
     </div>
   );
 }
