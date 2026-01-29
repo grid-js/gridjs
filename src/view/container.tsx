@@ -53,6 +53,8 @@ export function Container() {
     if (config.header && status === Status.Loaded && data?.length) {
       // now that we have the data, let's adjust columns width
       // NOTE: that we only calculate the columns width once
+      config.eventEmitter.emit('ready');
+
       dispatch(
         actions.SetHeader(config.header.adjustWidth(config, tableRef, tempRef)),
       );
