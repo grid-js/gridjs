@@ -3,9 +3,10 @@ import { useConfig } from './hooks/useConfig';
 import log from './util/log';
 
 export enum PluginPosition {
+  None,
   Header,
   Footer,
-  Cell,
+  Cell
 }
 
 export interface Plugin<T extends FunctionComponent> {
@@ -77,7 +78,7 @@ export function PluginRenderer(props: {
     // render a single plugin
     const plugin = config.plugin.get(props.pluginId);
 
-    if (!plugin) return null;
+    if (!plugin || plugin.position === PluginPosition.None) return null;
 
     return h(
       Fragment,
@@ -87,7 +88,7 @@ export function PluginRenderer(props: {
         ...props.props,
       }),
     );
-  } else if (props.position !== undefined) {
+  } else if (props.position !== undefined && props.position !== PluginPosition.None) {
     // render using a specific plugin position
     return h(
       Fragment,
